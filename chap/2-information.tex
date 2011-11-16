@@ -16,6 +16,8 @@ method and used in our work
 \section{\kl and maximum likelihood}
 \label{sec:kl and maximum likelihood}
 
+\firstyear
+
 \kl measures the ``distance'' or ``divergence'' between statistical
 populations defined by their underlying probability densities. The divergence
 is measured in terms of the information defined by the log likelihood ratio
@@ -29,16 +31,20 @@ where $g$ is the true density of the data generating mechanism, and
 $f(\cdot;\bth)$ is the density of a candidate model specified by parameter
 vector $\bth$. The integration above is over the support of $g$.
 
+\firstyearend
+
 \subsection{Properties of \kl and its relation to \protect\mle}
 \label{sub:Properties of kl and its relation to mle}
+
+\firstyear
 
 One important observation is that $\dkl(g,f(\cdot;\bth))\ge0$ with equality if
 and only if $g(x) = f(x;\tbth)$ almost everywhere for some value of $\bth =
 \tbth$ \parencite{Kullback1951}. In terms of equation~\eqref{eq:kld}, this
 means that the \kl is always positive unless for some value of $\bth$,
-$f(\cdot;\bth)$ is the true data generating density. This result naturally
-suggests one to find the estimator $\tbth$ which minimize the \kl. Under
-suitable conditions, rewrite equation~\eqref{eq:kld},
+$f(\cdot;\bth) = g(\cdot)$, which is the true data generating density. This
+result naturally suggests one to find the estimator $\tbth$ which minimizes
+the \kl. Under suitable conditions, rewrite equation~\eqref{eq:kld},
 \begin{align}
   \dkl(g,f(\cdot;\bth))
   & = \int g(x)\log g(x)\dd x - \int g(x)\log f(x;\bth)\dd x \notag\\
@@ -52,10 +58,12 @@ $\ell_n(\bth;\bfx)$ denote the log-likelihood of an i.i.d. sample $\bfx =
 Law of Large Numbers,
 \begin{equation}
   \frac{\ell_n(\bth;\bfx)}{n}
-  \overset{\mathrm{a.s.}}{\longrightarrow} \Exp_g\log f(X;\bth), \quad\text{for } n\to\infty,
+  \overset{\mathrm{a.s.}}{\longrightarrow}
+  \Exp_g\log f(X;\bth), \quad\text{for } n\to\infty\text{ and fixed }\bth,
   \label{eq:kl consistency}
 \end{equation}
-provided that this expectation exits. Hence,
+provided that this expectation exits. Hence \parencite[see][for
+details]{Kullback1951},
 \begin{equation}
   \hbth \overset{\mathrm{a.s}}{\longrightarrow} \tbth,
   \quad\text{for } n\to\infty.
@@ -63,6 +71,8 @@ provided that this expectation exits. Hence,
 where $\hbth$ is the \mle. That is, the \mle aims to minimize the \kl from the
 candidate model to the true data generating density. This also justifies the
 use of \mle from a information-theoretic perspective.
+
+\firstyearend
 
 \section{Akaike's information criterion}
 \label{sec:Akaike's information criterion}
@@ -86,16 +96,18 @@ aims at finding models that have less parameters while fitting the data well.
 There are other kind of penalized criteria for choosing models. And many of
 them are closely related to the \aic method.
 
-There are precise mathematical reasons bind the \aic's way of penalizing
-complexity and measuring fit of data. These are closed related to the behavior
-of the \mle and its relation to the \textcite{Kullback1951}'s measure of the
-statistical divergence from one probability density to another. In the next
-subsection we outline the derivation of \aic. This shall provide us a basis
-for the discussion of the suitability of the \aic and related methods for
-model selection.
+There are precise mathematical reasons behind the \aic's way of penalizing
+complexity and measuring the fit of data. These are closely related to the
+behavior of the \mle and its relation to the \textcite{Kullback1951}'s measure
+of the statistical divergence from one probability density to another. In the
+next subsection we outline the derivation of \aic. This shall provide us a
+basis for the discussion of the suitability of the \aic and related methods
+for model selection.
 
 \subsection{Derivation of \protect\aic}
 \label{sub:Derivation of aic}
+
+\firstyear
 
 The \aic method and its formula has been derived and justified by various
 authors \parencite[e.g.][]{Stone1982, Sawa1978, Chow1981, Bozdogan1987,
@@ -123,8 +135,8 @@ $D_{\mathrm{KL}}(g,f(\cdot;\tbth))$. However, even in the unlikely case that
 $g(x) = f(x;\tbth)$, we still have to estimate $\tbth$. As suggested in the
 last section, given i.i.d sample $\bfx = (x_1,\dots,x_n)^T$, we shall use the
 \mle ($\hbth$) as a consistent estimator for $\tbth$. The \aic method is in
-essence to estimate the expected \kl from $f(\cdot; \hbth)$ to $g$. Recall
-equation~\eqref{eq:kl exp ll}, and the additive property of \kl and
+essence used to estimate the expected \kl from $f(\cdot; \hbth)$ to $g$.
+Recall equation~\eqref{eq:kl exp ll}, and the additive property of \kl and
 log-likelihood, the \aic method aim to estimate the following quality,
 \begin{equation}
   \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hbth(\bfY)),
@@ -166,6 +178,8 @@ expected \kl\footnote{More precisely, it is the relative \kl being estimated,
   the term $\int g(x)\log g(x)\dd x$ in equation~\eqref{eq:kl exp ll} is not
   and cannot be estimated.}.
 
+\firstyearend
+
 In summary, \aic is fully justified when the candidate models are already good
 approximations to the true data generating mechanism and give the sample size
 is sufficient large. But one can hardly justify that the candidate models are
@@ -182,6 +196,8 @@ situations.
 \subsection{A Bayesian analysis of \protect\aic}
 \label{sub:A Bayesian analysis of aic}
 
+\firstyear
+
 The \aic method is often compared with the Bayesian model selection as one of
 the most important frequentist model selection method, in particular in
 contrast with the \bic method. It is interest to note that
@@ -194,8 +210,8 @@ very close in the sense that the difference in their parameters are not quite
 visible through the observed data. Under this setting, it was then shown that
 the log of posterior model probability from a normal priors for mean vector is
 approximated by $(-1/2)$\aic up to an additive constant. However we don't see
-this setting a general case in data analysis as argued by Akaike. Instead, in
-realistic cases the difficulties of model selection problem often come from
+this setting in a general cases in data analysis as argued by Akaike. Instead,
+in realistic cases the difficulties of model selection problem often come from
 the fact that we have very limited data.
 
 On the other hand, as seen in \textcite{Akaike1980}, using likelihood function
@@ -214,8 +230,12 @@ selection methods should be considered based on the purposes (inference of the
 past or prediction of the future, or otherwise). There is no reason to argue
 that one is absolutely superior to another.
 
+\firstyearend
+
 \subsection{Corrected \protect\aic}
 \label{sub:Corrected aic}
+
+\firstyear
 
 In this subsection we briefly review one of the most widely used extension and
 modification of \aic method, the corrected \aic. This and other similar
@@ -251,7 +271,7 @@ models, the use of \aicc is not justified for high dimension, high noise and
 limited data. The use of \aic based methods for such models was first
 introduced by \textcite{Hawkins1986}. However, their work, and some recent use
 of \aic or \aicc mainly focus on low noise data. In our case, the data has
-much higher noise and it seems to violated the assumption of \aicc even more.
+much higher noise and it seems to violate the assumption of \aicc even more.
 The model has a nonlinear structure and the high level noise can hardly be
 approximated by normal distribution. In such situation, it was shown that
 indeed for either simulated data or real data, \aicc does not perform well. It
@@ -261,3 +281,5 @@ much more analytical work which may or may not results in improved results.
 Instead, in our work using Bayesian model selection for these models are
 approached. The results are encouraging while the implementations still has
 limitations.
+
+\firstyearend
