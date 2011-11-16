@@ -1,16 +1,17 @@
 \chapter{Introduction}
 \label{cha:Introduction}
 
-Model selection problem arise in various scientific researches. It is actually
-about making decisions about which model we should use to describe the data
-observed. Therefore, we insist a decision-oriented perspective of the model
-selection problem. Two kinds of approaches to model selection are discussed in
-this report. The first is the information-theoretic approach and the second is
-the Bayesian approach. The decision-oriented perspective is applicable to both
-cases as we will see in the rest of this report. It shall be noted that the
-two approaches are closely related. For example a modest literal on the choice
-of priors in Bayesian statistics used results from the information theory. And
-some information approaches have their Bayesian interpretation.
+Model selection problems arise in various scientific research areas. It is
+actually about making decisions about which model we should use to describe
+the data observed. Therefore, we insist a decision-oriented perspective of the
+model selection problem. Two kinds of approaches to model selection are
+discussed in this report. The first is the information-theoretic approach and
+the second is the Bayesian approach. The decision-oriented perspective is
+applicable to both cases as we will see in the rest of this report. It shall
+be noted that the two approaches are closely related. For example a modest
+amount of literal on the choice of priors in Bayesian statistics used results
+from the information theory. And some information approaches have a Bayesian
+interpretation.
 
 In our own work, Bayesian model comparison, selection and averaging were
 applied to a class of model called compartmental models. The results were
@@ -42,3 +43,31 @@ First it should be applicable to a wide range of models, with either high
 dimensions or complex model specifications. Second it should be easier to
 implement while give comparable results compared to some currently advanced
 methods.
+
+\section{A word on ``true model''}
+\label{sec:A word on true model}
+
+The problem of the existence of a ``true model'' as the data generating
+mechanism is often questionable. Even it exists, the applicability of model
+selection techniques is often challenged by the fact that the ``true model''
+is not one of the candidate models at all.
+
+There are two folds of this problem. First, if the ``true model'' exist, and
+is not one of the candidate models, is model selection still meaningful? We
+believe that, strictly speaking, for real problem, there is no
+\emph{parametric} model that can describe the data completely. In this sense,
+the ``true model'' is never in the space of model parameterization, except for
+the trivial case: for finite data $\bfx = (x_1,\dots,x_n)^T$ and a model $(X_1
+= x_1,\dots,X_n = x_n)^T$. However, more than often, some parametric models
+serves the purpose as an approximation to the underlying mechanism of the data
+generating process well. And model selection techniques provide opportunity to
+identify the best approximation among them.
+
+Second, it is often encountered in reality that, all the candidate models are
+far from the ``truth''. In this case, the effects of misspecification need to
+be assessed. Some techniques were argued to be more robust to these scenarios.
+However, there is no simple way to assess this problem. Instead, these effects
+often need to be considered on a per problem basis. In this report, the focus
+is on the implementation of model selection techniques. However, whenever they
+are applied to the real problems, the applicability of them should be
+considered carefully.
