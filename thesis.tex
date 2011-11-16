@@ -1,0 +1,32 @@
+\documentclass[11pt, a4paper, lines = 48, linespread = 1.05, hyper,
+bib, biblatexstyle = authoryear,
+mainfont = Minion, sansfont = Cronos, mathfont = MinionMath,
+monofont = Consolas, monoscale = MatchLowercase,
+]{mthesis}
+
+\input{macros}
+\addbibresource{thesis.bib}
+\setuphyper{pdftitle     = {Model selection and its computation techniques}}
+\setuphyper{pdfauthor    = {Yan Zhou}}
+\setuphyper{pdfsubject   = {Bayesian model selection}}
+\setuphyper{pdfkeywords  = {Bayesian, model selection, Monte Carlo methods}}
+
+\title{Model selection and its computation techniques}
+\author{Yan Zhou}
+
+\begin{document}
+
+  \frontmatter
+  \maketitle
+  \tableofcontents
+
+  \mainmatter
+  \input{chap/1-introduction}
+  \input{chap/2-information}
+  \input{chap/3-bayesian}
+  \input{chap/4-computation}
+
+  \backmatter
+  \printbibliography
+
+\end{document}

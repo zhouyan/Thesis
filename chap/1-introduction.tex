@@ -1,0 +1,44 @@
+\chapter{Introduction}
+\label{cha:Introduction}
+
+Model selection problem arise in various scientific researches. It is actually
+about making decisions about which model we should use to describe the data
+observed. Therefore, we insist a decision-oriented perspective of the model
+selection problem. Two kinds of approaches to model selection are discussed in
+this report. The first is the information-theoretic approach and the second is
+the Bayesian approach. The decision-oriented perspective is applicable to both
+cases as we will see in the rest of this report. It shall be noted that the
+two approaches are closely related. For example a modest literal on the choice
+of priors in Bayesian statistics used results from the information theory. And
+some information approaches have their Bayesian interpretation.
+
+In our own work, Bayesian model comparison, selection and averaging were
+applied to a class of model called compartmental models. The results were
+compared with classical model selection using (corrected) Akaike's information
+criterion (\aicc). Our work is attached at the end this report. It was shown
+that Bayesian modeling had significant improvement over classical information
+criteria based model selection. However, there were also many difficulties and
+limitations encountered in this work.
+
+The literature review in this report serves two purpose. First, the methods we
+used and those compared or contrast to, are reviewed and justified in this
+report. We aim to answer questions like ``why the \aic based methods would not
+work for this kind of complex models'' or ``why we need Bayesian modeling for
+these models''. The second purpose is to review the computation difficulties
+and limitations we met in the current work and therefore motivated our future
+research on new computation techniques for Bayesian modeling.
+
+Chapter~\ref{cha:Information-theoretic model selection} review the
+information-theoretic model selection methods. They are still widely used in
+many areas due to their simplicity in computation. However the limitations are
+clearly demonstrated in our work and justified in this report.
+Chapter~\ref{cha:Bayesian model selection} review the basic methodology of
+Bayesian model comparison and selection. Chapter~\ref{cha:Bayesian computation
+  with Monte Carlo methods} review Monte Carlo methods for Bayesian
+computation. It will be shown that the current methods either suffers from
+difficulties of implementation or unsatisfied inference results. We are
+therefore motivated to seek new methods that satisfy the following criteria.
+First it should be applicable to a wide range of models, with either high
+dimensions or complex model specifications. Second it should be easier to
+implement while give comparable results compared to some currently advanced
+methods.
