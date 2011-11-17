@@ -20,20 +20,23 @@ distribution. \parencite{DelMoral2006}
 The path sampling technique constructs a continuous \emph{path} to bridge two
 distributions, and estimates the logarithm ratio of normalizing constants
 between the distributions by an simple identity introduced in
-Section~\ref{sec:Path sampling estimator}. The exact meaning of ``path'' will
+section~\ref{sec:Path sampling estimator}. The exact meaning of ``path'' will
 be introduced in the same section. However, it is worth mention here that,
 when implementing the path sampling estimator, this path is often constructed
-as a sequence of distributions. \parencite{Gelman1998}
+as a sequence of distributions and numerical integration is used to
+approximate the estimator. See section~\ref{sec:Path sampling estimator}.
+\parencite{Gelman1998}
 
 These two techniques can be combined together for the estimating of ratios of
 normalizing constants. One way to think of it is that, the path sampling
 estimator is one of the ways to use the output from a \smc algorithm to
 estimate the (logarithm) ratio of normalizing constants. The other way to
 think of it is that, the \smc algorithm provides a simple way to construct a
-sequence of distributions to approximate the path required by path sampling
-estimator. 
+sequence of distributions, which can be used to approximate the expectations
+with respect to each of the distribution in a given sequence (the ``path'' of
+path sampling) through importance sampling.
 
-In Section~\ref{sec:smc algorithm}, the \smc algorithm is introduced. In the
+In section~\ref{sec:smc algorithm}, the \smc algorithm is introduced. In the
 section follows, \ref{sec:Path sampling estimator}, the path sampling identity
 is presented. In the section follows, a simple example is provided to
 illustrate the idea.
@@ -52,21 +55,23 @@ suppose we have $N$ particles following distribution $\eta_{n-1}$, and we
 move these particles in a sensible way to a new distribution $\eta_n$ such
 that $\eta_n$ is an efficient importance distribution for $\pi_n$. This is
 done by moving the $N$ particles by a sensible Markov kernel $K_n$ such that
-particles are moved into high density region of $\pi_n$, and resampling when
-the degeneracy of the particles becomes large.
+particles are moved into high density region of $\pi_n$.
 
 It should be intuitively clear that, in general to do any kind of
 estimations, we need be able to compute the importance weights at each time
 $n$, and thus $\eta_n$ need to be evaluated point-wise. Typically this is
-impossible as 
+impossible in many situations. Note that
 \begin{equation}
-  \eta_n(x_n) = \int\eta_1(x_1)\prod_{j=2}^nK_j(x_{j-1},x_j) \dd x_{1:n-1}
+  \eta_n(x_n) = \int\eta_1(x_1)\prod_{j=2}^nK_j(x_{j-1},x_j) \dd x_{1:n-1}.
+  \label{eq:marginal importance}
 \end{equation}
-The \smc algorithm introduce an auxiliary backward Markov chain kernel to
-solve this problem for the case where all $E_n$ has the same dimension. The
-purpose of the backward kernel is that by construction, the target
-distributions increase in dimension while they admit $\pi_n$'s as their
-marginal distributions.
+And if the kernel $K_j$ in the integration is constructed by an \mha, it can
+be difficult to compute $K_j$ point-wise, leave alone the integration. The
+\smc algorithm introduce an auxiliary backward Markov chain kernel to solve
+this problem for the case where all $E_n$ has the same dimension. The purpose
+of the backward kernel is that by construction, the target distributions
+increase in dimension while they admit $\pi_n$'s as their marginal
+distributions.
 
 In the presentations below, it will be made clear that, the computation of
 importance weights is made possible by introducing this auxiliary backward
@@ -142,20 +147,29 @@ NW_n^{(i)}$ and the new particle set has equal weights
 
 To decide when to perform resampling, one can define \ess as
 $(\sum_{i=1}^N(W_n^{(i)})^2)^{-1}$, and it can be used as a criterion for
-whether or not resampling is required at time $n$.  \parencite{Liu1998}
+whether or not resampling is required at time $n$ \parencite{Liu1998}.
+Intuitively, with the discrepancy between $\eta_n$ and $\pi_n$ increasing,
+many particulars will have smaller and smaller weights. Carrying on a lot of
+particulars with very small weights is apparently a waste. In this sense, it
+is sensible to use a quality measuring the variance of normalized weights to
+decide when to do resampling, since the mean of normalized weights is fixed to
+be $1/N$. Mathematically, it was argued in \textcite{Liu1998} that the
+effective sample size (\ess) is approximately proportional to the inverse of
+the variance of importance sampling estimator associated with the weights. And
+therefore it is used as an indicator of requirement of resampling.
 
 \paragraph{Summary of the algorithm} In short the algorithm for a sequence
 $\pi_n$, $n = 1,\dots,p$, can be represented as below,
 \parencite{DelMoral2006}
 \begin{enumerate}
   \item Set $n=1$, draw $X_1^{(i)}$ from $\eta_1$ for $i = 1,\dots,N$.  And
-    evaluate $\{W_1^{(i)}\}$ by Equations~\eqref{eq:ini_weight}
+    evaluate $\{W_1^{(i)}\}$ by equations~\eqref{eq:ini_weight}
     and~\eqref{eq:ini_weight_norm}.
   \item If $\ESS < T$, where $T$ is a predefined threshold, resample.
   \item Set $n = n + 1$, if $n = p + 1$, stop and exit the algorithm.
     Otherwise, draw $X_n^{(i)}$ from $K_n(X_{n-1}^{(i)},\cdot)$, and compute
     $\{\tilde{w}_n(X_{n-1}^{(i)},
-      X_n^{(i)}\}$ by Equation~\eqref{eq:incr_weight}. The new normalized
+      X_n^{(i)}\}$ by equation~\eqref{eq:incr_weight}. The new normalized
     weights, $\{W_n^{(i)}\}$ is computed by
     \begin{equation}
       W_n^{(i)} = \frac{W_{n-1}^{(i)}\tilde{w}_n(X_{n-1}^{(i)},X_n^{(i)})}
@@ -174,38 +188,36 @@ the backward kernel $L_{n-1}$.
 In general, the \smc algorithm construct $N$ inhomogeneous Markov chains
 $\{X_{1:n}^{(i)}\}$. In most cases the marginal distributions for $X_{1:n}$,
 $\eta_n \ne \pi_n$. As similar to regular importance sampling, the optimal
-forward kernel (also called proposal) is that $K_n(x_{n-1},x_n) =
-\pi_n(x_n)$. This choice is clearly impossible (or otherwise the \smc method
-is entirely unneeded). A few classes of kernels was used in the literature.
+forward kernel (also called proposal) is that $K_n(x_{n-1},x_n) = \pi_n(x_n)$
+in the sense of minimizing variance of the estimator. This choice is clearly
+impossible (or otherwise the \smc method is entirely unneeded). A few classes
+of kernels was used in the literature.
 
 \paragraph{Independent proposals} It is possible to construct
 $K_n(x_{n-1},x_n) = K_n(x_n)$ where $K_n$ is a density function. The
 parameters can be determined by using information from $\{X_{n-1}^{(i)}\}$
-\parencite[e.g.][]{West1993}. Independent proposals appear to be dependent
-on good behavior of the sequence $\{\pi_n\}$. It is difficult to construct
-independent proposals which approximate $\pi_n$ well in many cases. For
-example, with a multi modes $\pi_n$, a standard distribution like Normal
-can hardly be efficient. Therefore, it is sensible to construct local moves.
+\parencite[e.g.][]{West1993}. Independent proposals appear to be dependent on
+good behavior of the sequence $\{\pi_n\}$. One way to construct proposals
+adaptively is proposed by \textcite{Jasra2008}. However, it is still difficult
+to construct independent proposals which approximate $\pi_n$ well in many
+cases. For example, with a multi modes $\pi_n$, a standard distribution like
+Normal can hardly be efficient. Therefore, it is sensible to construct local
+moves.
 
 \paragraph{Local random-walk moves} An alternative to above is using
 $K_n(x_{n-1},x_n)$ a random-walk kernel \parencite[e.g.][]{Givens1996}.  It
 worth noting that the local random-walk here is very different from the
-Metropolis random-walk. In the \mcmc case, The entire sequence of
-random-walks explores a single target distribution and past moves provide
-information about this distribution. In contrast, in the \smc case, at each
-iteration, the target is a new distribution $\pi_n$ and information about
-this distribution is not used in typical situations.  In addition, the
-construct of the random-walk is difficult in the sense that standard rules
-to determine the kernel bandwidths may not apply here.
+Metropolis random-walk. In the \mcmc case, The entire sequence of random-walks
+explores a single target distribution and past moves provide information about
+this distribution. In contrast, in the \smc case, at each iteration, the
+target is a new distribution $\pi_n$ and information about this distribution
+is not used in many situations unless $\pi_n$ is close enough to $\pi_{n-1}$.
 
 \paragraph{Markov chain Monte Carlo moves} As proposed in
 \textcite{DelMoral2006}, it is natural to set $K_n$ as an \mcmc kernel of
 invariant distribution $\pi_n$. It is sensible in the cases either $K_n$
 mixes fast enough or $\pi_n$ evolves slowly so that we can expect $\eta_n$
 to be close to $\pi_n$.
-
-Yet another type of moves is \emph{approximate Gibbs moves}, which we will
-not discuss here. In the example provided later, the \mcmc move is used.
 
 \subsection{Choice of backward kernels}
 \label{sub:Choice of backward kernels}
@@ -217,7 +229,8 @@ sampling on space $\prod_{i=1}^n E_i$ (or $E^n$ for the case of common
 support $E$) instead of $E_n$. Intuitively the variance of the importance
 weights is increased. So the optimal backward kernel will reduce this ``side
 effect''. Indeed, as shown in \textcite{DelMoral2006}, the optimal backward
-kernel is
+kernel in the sense of minimizing the asymptotic conditional variance of the
+estimator if resampling is carried out every iteration is
 \begin{equation}
   L_{n-1}^{\mathrm{opt}}(x_n,x_{n-1})
   = \frac{\eta_{n-1}(x_{n-1})K_n(x_{n-1},x_n)}{\eta_n(x_n)}
@@ -269,42 +282,51 @@ performed at each iteration \parencite{DelMoral2006}.
 \section{Path sampling estimator}
 \label{sec:Path sampling estimator}
 
-The path sampling estimator for the logarithm ration of normalizing
-constants is based on a simple identity. Give a sequence of distributions
-say, $\gamma_t(\theta)$ known up to a normalizing constants, say $Z_t$,
-where $t$ is a continuous index taken value at $[0,1]$. The path sampling
-estimate of the log of ratio of normalizing constants is based on the simple
-identity
+The path sampling estimator for the logarithm ratio of normalizing constants
+is based on a simple identity. Given a sequence of distributions say,
+$\gamma_t(\theta)$ known up to normalizing constants, say $Z_t$, where $t$ is
+a continuous index taken value on $[0,1]$. The path sampling estimator of the
+logarithm of ratio of normalizing constants is based on,
+\begin{equation}
+  Z_t = \int_{\Theta}\gamma_t(\theta)\dd \theta
+\end{equation}
+where $\Theta$ is the support of $\theta$. Provided the regularity condition
+which allows the change order of integration and differentiation below,
 \begin{align}
-  Z_t &= \int\gamma_t(\theta) \\
   \frac{\diff}{\diff t}\log(Z_t)
-  &= \frac{1}{Z_t}\frac{\diff}{\diff t}Z_t \\
-  &= \int\frac{1}{Z_t}\frac{\diff}{\diff t}\gamma_t(\theta)\dd\theta \\
+  &= \frac{1}{Z_t}\frac{\diff}{\diff t}Z_t \notag\\
+  &= \int_{\Theta}\frac{1}{Z_t}
+  \frac{\diff}{\diff t}\gamma_t(\theta)\dd\theta \notag\\
   &= \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log\gamma_t(\theta)}
 \end{align}
-where the expectation is taken with respect to $\theta$ with $t$ fixed.
-Thus, the path sampling estimator of $\log(Z_1/Z_0)$ can be written as,
+where the expectation is taken with respect to $\theta$ with $t$ fixed.  Thus,
+the path sampling estimator of $\log(Z_1/Z_0)$ can be written as,
 \begin{equation}
   \int_0^1 \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log \gamma_t(\theta)}.
   \label{eq:z_path}
 \end{equation}
 Note that the index $t$ does not necessarily take values on $[0,1]$, though
-for simplicity we use this range and give $t$ a uniform distribution.
+for simplicity and without losing generality, this range is used here.
 
-One way to implement the estimator above is sampling from the joint space of
-$(t, \theta)$ and interpret the above integration as the expectation of the
-joint random variables. An alternative way is to use a sequence $0 \le t_1 <
-\dots < t_m \le 1$, and numerical integrations with trapezoidal rule.  In
-other words, a sequence of distributions $\gamma_{t_n}$ are constructed.
-They can be approximated using the \smc sampler as described in
-Section~\ref{sec:smc algorithm}. This later method is the main theme of this
-report.
+One way to implement the estimator above is interpreting $t$ as a realization
+of a uniform random variable $T$ on $[0,1]$. Then the above integration can be
+interpreted as the expectation of $(T,\theta)$ on the joint space
+$[0,1]\times\Theta$. To obtain an estimate, one can sample from the joint
+space of $(T, \Theta)$ and use the simple Monte Carlo approximation. An
+alternative way is to use a sequence $0 \le t_1 < \dots < t_m \le 1$, and
+numerical integration with trapezoidal rule. In other words, a sequence of
+distributions $\gamma_{t_n}$ are constructed. Their expectations can be
+approximated using the importance distributions from a \smc sampler as
+described in section~\ref{sec:smc algorithm}. This later method is the main
+theme of this report.
 
 \section{Example}
 \label{sec:Example}
 
-Consider two models, with likelihoods as Normal and Laplace (i.e. double
-exponential) distribution respectively. Explicitly, model 1, denote by
+To illustrate the use of \smc sampler and path sampling identity for the
+estimating of ratio of normalizing constants, consider two models, with
+likelihoods as Normal and Laplace (i.e. double exponential) distribution
+respectively. Explicitly, model 1, denote by
 $\calM_1$, has a likelihood
 $\calN(\mu_1,\lambda_1^{-1})$, i.e.,
 \begin{equation}
@@ -326,11 +348,9 @@ Explicitly, the true model is written as,
   X_i \sim p\calN(0,1) + (1-p)\calL(0, \sqrt{2}/2),
   \label{eq:data_density}
 \end{equation}
-where $p\in[0,1]$. By construction, the two components have the same
-variance. In this report, we will first consider two simple case, $p = 0$ or
-$1$, namely the data comes from either a Normal distribution or a Laplace
-distribution. Then a set of data come from a mixture of the two, with $p =
-0.5$ is considered.
+where $p\in[0,1]$. By construction, the two components have the same variance.
+In this example, we will consider two simple case, $p = 0$ or $1$, namely the
+data comes from either a Normal distribution or a Laplace distribution.
 
 \subsection{The Normal model}
 
@@ -362,16 +382,15 @@ where
 \end{align}
 
 \subsubsection{Algorithm setting}
-\label{ssub:normal_alg}
 
 Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as
-in Equation~\ref{eq:prior_normal}. Let
+in equation~\ref{eq:prior_normal}. Let
 \begin{equation}
   \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\x))^{p_k}\pi_0(\mu,\lambda)
   \label{eq:normal_targets}
 \end{equation}
 where $L$ is the likelihood function, as in
-Equation~\eqref{eq:likelihood_normal}, and $\{p_k\in[0,1]\}$ is sequence
+equation~\eqref{eq:likelihood_normal}, and $\{p_k\in[0,1]\}$ is a sequence
 chosen. The \smc sampler starts with $\pi_0$ and the initial importance
 distribution is set to be $\pi_0$ as well.
 
@@ -382,9 +401,10 @@ following,
     proposal.
   \item Updating $\mu$ through additive Normal random-walk proposal.
 \end{enumerate}
-More specifically, let $\calLN(m,s^2)$ denote the Log-Normal distribution
-with parameters $m$ and $s^2$. At time $k$, corresponding to step $k$, and
-target $\pi_k(\mu,\lambda)$,
+This kernel is constructed such that the random-walk moves mimic the shape of
+the target distributions. More specifically, let $\calLN(m,s^2)$ denote the
+Log-Normal distribution with parameters $m$ and $s^2$. At time $k$,
+corresponding to step $k$, and target $\pi_k(\mu,\lambda)$,
 \begin{enumerate}
   \item Given $\lambda_k$, draw $v$ from $\calLN(0,\sigma_{\lambda}^2)$ and
     propose $\lambda_{k+1}=v\lambda_k$.
@@ -430,7 +450,7 @@ target $\pi_k(\mu,\lambda)$,
     {q(\mu_{k+1},\lambda_{k+1}|\mu_k,\lambda_k)} =
     \frac{\lambda_{k+1}}{\lambda_k} = v
   \end{equation}
-  and hence Equation~\eqref{eq:accept_prob}.
+  and hence equation~\eqref{eq:accept_prob}.
 \end{remark}
 
 \begin{remark}
@@ -441,6 +461,13 @@ target $\pi_k(\mu,\lambda)$,
     \mu_0        &= 0 & n_0              &= 0.1 \\
     \sigma_{\mu} &= 1 & \sigma_{\lambda} &= 1
   \end{align*}
+  The value of $\alpha$ and $\beta$ are chosen mainly fro numerical stability
+  reason. If $\alpha = 0.01$ or smaller is chosen, then the majority of
+  $\lambda$ sampled for the initial distribution will be zero or subnormal.
+  The value of $n_0$ is chosen such that the prior distribution is relatively
+  flat compared to the posterior distribution. And the \mha bandwidth
+  $\sigma_{\mu}$ and $\sigma_{\lambda}$ are chosen such that the acceptance
+  rates are within a reasonable range (around $30\%$).
 \end{remark}
 
 \subsection{The Laplace model}
@@ -471,16 +498,15 @@ where
 \end{align}
 
 \subsubsection{Algorithm setting}
-\label{ssub:laplace_alg}
 
 Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as
-in Equation~\ref{eq:prior_laplace}. Let
+in equation~\ref{eq:prior_laplace}. Let
 \begin{equation}
   \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\x))^{p_k}\pi_0(\mu,\lambda)
   \label{eq:laplace_targets}
 \end{equation}
 where $L$ is the kernel likelihood, as in
-Equation~\eqref{eq:likelihood_laplace}, and $\{p_k\in[0,1]\}$ is a sequence
+equation~\eqref{eq:likelihood_laplace}, and $\{p_k\in[0,1]\}$ is a sequence
 chosen. The \smc sampler starts with $\pi_0$ and the initial importance
 distribution is set to be $\pi_0$ as well. The setting is similar to the
 normal case, except for the forward kernel:
@@ -494,3 +520,132 @@ normal case, except for the forward kernel:
   For the numerical results, same parameters are used as in the Normal
   model.
 \end{remark}
+
+\subsection{Numerical results}
+\label{sub:Numerical results}
+
+Three sets of data are simulated, one from the Normal distribution, one from
+the Laplace distribution, and another form a mixture of the two with the
+weight of the Normal distribution being $0.5$. Recall that, the two
+component of the mixtures both has zero mean and unit variance, as in
+Equation~\eqref{eq:data_density}. The number of particles is $1000$ and the
+number of data generated is $100$.
+
+\subsubsection{Normal data}
+
+The data is simulated from density as in Equation~\eqref{eq:data_density},
+with $p = 1$. In other words, the data comes from $\calN(0,1)$. The sequence
+of distribution used to construct the \smc algorithm are
+Equations~\eqref{eq:normal_targets} and~\eqref{eq:laplace_targets} for the
+two models, respectively. They are in the common for with different
+likelihood functions,
+\begin{equation*}
+  \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\x))^{p_k}\pi_0(\mu,\lambda).
+\end{equation*}
+The sequence $\{p_k\in[0,1]\}$ is chosen to be $p_k = k / 1000$, $k = 0, 1,
+\dots, 1000$.
+
+\paragraph{Estimating means of distributions} Just to illustrate how the
+\smc algorithm evolves, the estimated means of parameters for distributions
+$\pi_k$ in the Normal model are plotted in
+Figure~\ref{fig:normal_dist_mean}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics{fig/5-ndm}
+  \caption{\smc estimates of means of distribution parameters for Normal
+    model, Normal data}
+  \label{fig:normal_dist_mean}
+\end{figure}
+
+\paragraph{Estimation of the normalizing constants} Let $Z_k$ denote the
+normalizing constants of target distribution $\pi_k$ at iteration $k$. The
+computation of likelihood function and prior $\pi_0$ was normalized,
+therefore, the ratio $Z_{1000}/Z_0$ is exactly the normalizing constants of
+the posterior distribution $\pi(\mu,\lambda)$ as in
+Equations~\eqref{eq:normal_posterior} and~\eqref{eq:laplace_posterior}. The
+estimates of the normalizing constants using both \smc estimator in
+Equation~\eqref{eq:z_smc} and path sampling estimator in
+Equation~\eqref{eq:z_path} for the two models are plotted in
+Figure~\ref{fig:normal_z}. Also shown in Figure~\ref{fig:normal_qq} is the
+QQ-plot of the data against the theoretical quantile of the two model, with
+parameters estimated form the \smc sampler. The first plot showed that both
+\smc and path sampling estimates can perfectly distinguish between the two
+models, as expected. However, the \smc estimates have considerably larger
+variance than the path sampling estimates. The second plot showed that
+Normal model indeed fit the data much better than the Laplace model.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics{fig/5-nz}
+  \caption{Normalizing constants estimates of Normal data, using \smc and
+    path sampling}
+  \label{fig:normal_z}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics{fig/5-nqq}
+  \caption{QQ-plots of data against the two model, Normal data}
+  \label{fig:normal_qq}
+\end{figure}
+
+\subsubsection{Laplace data}
+
+The data is simulated from the Laplace density, $\calL(0, \sqrt{2}/2)$. The
+algorithm is as described in the last section. Analogy to
+Figure~\ref{fig:normal_z} and~\ref{fig:normal_qq}, the estimates of
+normalizing constants and QQ-plots for the data against the model are shown
+in Figure~\ref{fig:laplace_z} and~\ref{fig:laplace_qq}. The results are
+similar to the Normal data, except that this time the Laplace model is
+preferable, as expected.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics{fig/5-lz}
+  \caption{Normalizing constants estimates of Laplace data, using \smc and
+    path sampling}
+  \label{fig:laplace_z}
+\end{figure}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics{fig/5-lqq}
+  \caption{QQ-plots of data against the two model, Laplace data}
+  \label{fig:laplace_qq}
+\end{figure}
+
+\subsection{Discussion}
+\label{sub:Discussion}
+
+As demonstrated in this chapter, it is possible to use \smc sampler and path
+sampling estimator to do Bayesian model comparison. There are some aspects of
+the estimator worth further investigation in the research follows here.
+
+\paragraph{Quality of the estimator} In \textcite{DelMoral2006} and references
+thereby, a central limited theorem was established for the importance sampling
+estimator for $\Exp[\phi(x_n)]$, where $\phi(\cdot)$ is an arbitrary and $X_n$
+is are from the distribution $\pi_n$ at step $n$ of \smc iterations. The
+results was obtained under the assumption of certain resampling schemes.
+However, to access the quality of path sampling estimator requires more than
+that. It may be of interest at some stage to examine the Monte Carlo properly
+of the estimator properly.
+
+\paragraph{Efficiency} The \smc sampler requires considerable computation
+resources. Though it is argued to be of order $O(N)$ where $N$ is the number
+of particles, it often requires much more computation time than a \mcmc
+algorithm with $N$ iterations. The main factor is that increasing the number
+of distributions in \smc sampler will improve the numerical integration of
+path sampling estimator. It will be of interest to investigate how to
+construct the ``path'' effectively. And literatures in numerical integration
+is a possible source for inspiration. Further, in the simple examples, the
+same \mha is used for each iteration when doing the forward moves. However, it
+will probably be more efficient to construct the forward kernel adaptively.
+
+\paragraph{Estimating Bayes factor directly} In the simple example, the
+normalizing constants are estimated for each posterior distribution
+individually. It is possible to construct a path passing through the posterior
+distributions of both models. And the ratio of normalizing constants can be
+obtained directly. More interesting is the use these techniques in a
+trans-dimensional setting. However the later part will not be the concern in
+the near future.
