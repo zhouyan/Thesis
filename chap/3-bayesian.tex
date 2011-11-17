@@ -59,7 +59,7 @@ densities are always denoted by the same letters, unless otherwise specified
 (table~\ref{tab:notations}). For any other densities or probabilities, we use
 the generic notation $\Pr(\cdot)$, for example $\Pr(D)$ and $\Pr(D|\kappa=k)$.
 This enables us to use unique letters to distinguish important densities while
-no introducing too much notations. Since there are not integrations or
+not introducing too much notation. Since there are no integrations or
 expectations with respect to the data in the remaining, this use shall not
 cause problems for understanding. For random variables denoted by lowercase
 Greek letters, we use the same letters to denote their values. The upper case
@@ -100,22 +100,22 @@ will usually be actions taken once we have decided which model to use. For
 example we may use the chosen model for inference of the past or prediction of
 the future. It is the consequences of these actions of interest instead of the
 chosen model itself. Therefore, from a decision-theoretic perspective, the
-``best'' model should maximize the utility for some unknown of the interest.
-However, this much complicated the problem. And in practice, it is common to
-ignore the following actions and our interest is the true model, say
-$\calM_t$. In this case, it is natural to define a zero-one utility function,
-say $u(\calM_i,\calM_t)$, such that $u(\calM_i,\calM_t) = 1$ for $\calM_t =
-\calM_i$ and $0$ otherwise.
+``best'' model should maximize the utility for some quality of the interest.
+However, this is very complicated the problem. And in practice, it is common
+to ignore the actions following the model selection decision and our interest
+is the true model, say $\calM_t$. In this case, it is natural to define a
+zero-one utility function, say $u(\calM_i,\calM_t)$, such that
+$u(\calM_i,\calM_t) = 1$ for $\calM_t = \calM_i$ and $0$ otherwise.
 
-It is easy to see that the model $\calM_i$ maximize the expected utility given
-data $D$ is the model with highest posterior probability $\Pr(\calM_i|D)$
-\parencite[see][chap.~6]{Bernardo2000}. This model is thus our ``best'' model
-in this setting. It should be noted this argument is only valid if the true
-model $\calM_t \in \calM$. Otherwise, the utility is always zero for all
-models. However, the precise meaning of a true model is not well defined.
-Again, we will not focus on these philosophical problems. In what follows, we
-presume that our aim is to find the model with the highest posterior
-probability.
+It is easy to see that the model $\calM_i$ that maximizes the expected utility
+given data $D$ is the model with highest posterior probability
+$\Pr(\calM_i|D)$ \parencite[see][chap.~6]{Bernardo2000}. This model is thus
+our ``best'' model in this setting. It should be noted this argument is only
+valid if the true model $\calM_t \in \calM$. Otherwise, the utility is always
+zero for all models. However, the precise meaning of a true model is not well
+defined.  Again, we will not focus on these philosophical problems. In what
+follows, we presume that our aim is to find the model with the highest
+posterior probability.
 
 Since the set $\calM$ is countable, it is natural to define a discrete random
 variable by the injective mapping $\kappa:\calM\to\bbN$, such that
@@ -169,7 +169,7 @@ model probability $p^*(\kappa=k|D)$,
 Therefore to compare the posterior probabilities of two models, say $\kappa =
 k_1$ and $k_2$, one only need to compute their ratio,
 \begin{align*}
-  \frac{p^*(\kappa = k_1)}{p^*(\kappa = k_2)} &= \frac
+  \frac{p^*(\kappa = k_1|D)}{p^*(\kappa = k_2|D)} &= \frac
   {\int f(D|\bth_{k_1},\kappa=k_1)\pi(\bth_{k_1}|\kappa=k_1)\dd\bth_k}
   {\int f(D|\bth_{k_2},\kappa=k_2)\pi(\bth_{k_2}|\kappa=k_2)\dd\bth_k}
   \frac{p(\kappa=k_1)}{p(\kappa=k_2)} \\
@@ -183,12 +183,12 @@ where
   {\int f(D|\bth_{k_2},\kappa=k_2)\pi(\bth_{k_2}|\kappa=k_2)\dd\bth_k}
   \label{eq:bayes factor}
 \end{equation}
-is called the Bayes factor. That is the prior odds ratio is transfered into
-the posterior odds ratio by the Bayes factor \parencite{Kass1995}. The Bayes
-factor is the principle tool for Bayesian model comparison and model
+is called the Bayes factor. That is how the prior odds ratio is transformed
+into the posterior odds ratio by the Bayes factor \parencite{Kass1995}. The
+Bayes factor is the principle tool for Bayesian model comparison and model
 selection. As it is made clear in the above equation, to compute the Bayes
-factor, all need to be done is the computation of following quality for each
-value of $\kappa$,
+factor, all that needs to be done is the computation of following quality for
+each value of $\kappa$,
 \begin{equation}
   \Pr(D|\kappa = k)
   = \int f(D|\bth_{k_1},\kappa=k_1)\pi(\bth_{k_1}|\kappa=k_1)\dd\bth_k,
@@ -277,7 +277,7 @@ each model individually. Let
 \begin{equation}
   h(\bth) = - \log f(D|\bth)\pi(\bth)
 \end{equation}
-and let $\tbth$ denote the value of $\bth$ that minimize $h(\bth)$. Then,
+and let $\tbth$ denote the value of $\bth$ that minimizes $h(\bth)$. Then,
 \begin{equation}
   \Pr(D) = \int f(D|\bth)\pi(\bth)\dd\bth = \int\exp\{-h(\bth)\}\dd\bth
 \end{equation}
@@ -311,7 +311,7 @@ where $k$ is the number of parameters, or the dimension of $\bth$. Thus,
 \end{equation}
 With i.i.d samples, for $n\to\infty$, $H/n \approx i$, where $i$ is the Fisher
 information matrix. It follows that $\lvert H \rvert \approx n^k \lvert i
-\rvert$ for large $n$. Omit the $O(1)$ terms,
+\rvert$ for large $n$. Omitting the $O(1)$ terms,
 \begin{equation}
   -2\log\Pr(D) \approx -2\log f(D|\tbth) + k\log(n).
 \end{equation}
