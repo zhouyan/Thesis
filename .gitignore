@@ -5,7 +5,7 @@
 *.fdb_latexmk
 *.log
 *.out
-*.pdf
+thesis.pdf
 *.run.xml
 *.synctex.gz
 *.toc
