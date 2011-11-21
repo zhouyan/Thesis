@@ -318,9 +318,10 @@ to~\eqref{eq:path_derive1},
   &= \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log\gamma_t(\theta)}
 \end{align}
 where the expectation is taken with respect to $\pi_t(\theta)$ with $t$ fixed.
-Thus, the path sampling estimator of $\log(Z_1/Z_0)$ can be written as,
+Thus, the path sampling estimator of $\lambda=\log(Z_1/Z_0)$ can be based on
+the following identity
 \begin{equation}
-  \widehat{\log(Z_t)} =
+  \lambda=
   \int_0^1 \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log \gamma_t(\theta)}.
   \label{eq:z_path}
 \end{equation}
@@ -331,13 +332,55 @@ One way to implement the estimator above is interpreting $t$ as a realization
 of a uniform random variable $T$ on $[0,1]$. Then the above integration can be
 interpreted as the expectation of $(T,\theta)$ on the joint space
 $[0,1]\times\Theta$. To obtain an estimate, one can sample from the joint
-space of $(T, \Theta)$ and use the simple Monte Carlo approximation. An
-alternative way is to use a sequence $0 \le t_1 < \dots < t_m \le 1$, and
+space of $(T, \Theta)$ and use the simple Monte Carlo approximation.
+
+An alternative way is to use a sequence $0 = t_0 < t_1 < \dots < t_m = 1$, and
 numerical integration with trapezoidal rule. In other words, a sequence of
-distributions $\gamma_{t_n}$ are constructed. Their expectations can be
-approximated using the importance distributions from a \smc sampler as
-described in section~\ref{sec:smc algorithm}. This later method is the main
-theme of this report.
+unnormalized distributions $\gamma_{t_n}$ are constructed. If we let
+distribution sequence $\{\pi_n\}$ in the \smc setting as described in the
+previous section be $\{\gamma_{t_n}/Z_{t_n}\}$, then we can estimate
+$\Exp_{t_n}[\frac{\diff}{\diff t_n}\gamma_{t_n}(\theta)]$ by
+\begin{equation}
+  \Exp_{t_n}[\frac{\diff}{\diff t_n}\gamma_{t_n}(\theta)]
+  \approx \sum_{i=1}^NW_n^{(i)}X_n^{(i)},
+\end{equation}
+where $\{W_n^{(i)},X_n^{(i)}\}$ is the particle set approximating the
+expectation of $\pi_n$ as described in the previous section. Denote the right
+hand side of above approximation by $U_n$, then we can approximate the path
+sampling estimate by
+\begin{equation}
+  \hat{\lambda} = \sum_{n = 1}^m \frac{1}{2}(t_{n} - t_{n-1})(U_n + U_{n-1})
+\end{equation}
+
+\section{Combining sequential Monte Carlo and path sampling}
+\label{sec:Combining sequential Monte Carlo and path sampling}
+
+As shown in the end of the last section, there is a way to combine the two
+methods together to estimate the ratio or normalizing constants. There are
+several motivations for proposing this methods.
+
+First, as any Monte Carlo methods used in Bayesian statistics and other
+fields, exploring the distributions (posteriors in Bayesian statistics) is an
+important part of the inference process. Sequential Monte Carlo method
+provides a solid framework as an alternative to \mcmc for exploring properties
+of complex distributions. Further, it can outperform \mcmc in some situations.
+For example, for a distribution with multiple modes separated by low
+probability areas, a single chain \mha is likely to be slow to explore the
+whole parameter space. The \smc algorithm does not suffer this issue provided
+a large enough particle set and smooth enough move between iterations.
+
+Second, the path sampling estimator has some attractive properties compared to
+harmonic mean estimator described in section~\ref{sub:Importance sampling and
+  harmonic mean based estimators} \parencite[see][]{Gelman1998}. It was argued
+by those authors as a natural evolution from importance sampling, and we agree
+with them on this. However, if we approach the path sampling by simulating
+from the joint space of $(T,\theta)$ using existing methods like \mcmc, then
+we suffer the same issues discussed in chapter~\ref{cha:Bayesian computation
+  with Monte Carlo methods}.
+
+Instead, we propose to combine these two techniques together to obtain a good
+estimator for ratio of normalizing constants. In the next section, an example
+is constructed to demonstrate the use of the proposed method.
 
 \section{Example}
 \label{sec:Example}
@@ -548,15 +591,15 @@ Three sets of data are simulated, one from the Normal distribution, one from
 the Laplace distribution, and another form a mixture of the two with the
 weight of the Normal distribution being $0.5$. Recall that, the two
 component of the mixtures both has zero mean and unit variance, as in
-Equation~\eqref{eq:data_density}. The number of particles is $1000$ and the
+equation~\eqref{eq:data_density}. The number of particles is $1000$ and the
 number of data generated is $100$.
 
 \subsubsection{Normal data}
 
-The data is simulated from density as in Equation~\eqref{eq:data_density},
+The data is simulated from density as in equation~\eqref{eq:data_density},
 with $p = 1$. In other words, the data comes from $\calN(0,1)$. The sequence
 of distribution used to construct the \smc algorithm are
-Equations~\eqref{eq:normal_targets} and~\eqref{eq:laplace_targets} for the
+equations~\eqref{eq:normal_targets} and~\eqref{eq:laplace_targets} for the
 two models, respectively. They are in the common for with different
 likelihood functions,
 \begin{equation*}
@@ -583,10 +626,10 @@ normalizing constants of target distribution $\pi_k$ at iteration $k$. The
 computation of likelihood function and prior $\pi_0$ was normalized,
 therefore, the ratio $Z_{1000}/Z_0$ is exactly the normalizing constants of
 the posterior distribution $\pi(\mu,\lambda)$ as in
-Equations~\eqref{eq:normal_posterior} and~\eqref{eq:laplace_posterior}. The
+equations~\eqref{eq:normal_posterior} and~\eqref{eq:laplace_posterior}. The
 estimates of the normalizing constants using both \smc estimator in
-Equation~\eqref{eq:z_smc} and path sampling estimator in
-Equation~\eqref{eq:z_path} for the two models are plotted in
+equation~\eqref{eq:z_smc} and path sampling estimator in
+equation~\eqref{eq:z_path} for the two models are plotted in
 Figure~\ref{fig:normal_z}. Also shown in Figure~\ref{fig:normal_qq} is the
 QQ-plot of the data against the theoretical quantile of the two model, with
 parameters estimated form the \smc sampler. The first plot showed that both
@@ -599,7 +642,7 @@ Normal model indeed fit the data much better than the Laplace model.
   \centering
   \includegraphics{fig/5-nz}
   \caption{Normalizing constants estimates of Normal data, using \smc and
-    path sampling}
+    path sampling. The estimates from $100$ simulations are plotted.}
   \label{fig:normal_z}
 \end{figure}
 
@@ -624,7 +667,7 @@ preferable, as expected.
   \centering
   \includegraphics{fig/5-lz}
   \caption{Normalizing constants estimates of Laplace data, using \smc and
-    path sampling}
+    path sampling. The estimates from $100$ simulations are plotted.}
   \label{fig:laplace_z}
 \end{figure}
 
@@ -675,7 +718,23 @@ obtained directly. More interesting is the use these techniques in a
 trans-dimensional setting. However the later part will not be the concern in
 the near future.
 
-In summary, establish a reasonable general framework for using the proposed
-methods to do Bayesian model comparison shall be the first step in the future
-research. Various aspects of the methods, its optimization, etc. will be
-concerns of later stage.
+\section{Summary}
+\label{sec:5-Summary}
+
+The first of further research will be establishing a general
+framework for using the proposed methods to do Bayesian model comparison. This
+includes solving a few problems,
+\begin{enumerate}
+  \item How to get the method work? This is a more technical problem. We need
+    to get the methods work for less trivial problems and see how it works.
+  \item Under what condition it will work? There is no method that can solve
+    all problems. Every method is only valid under some assumptions or
+    conditions.
+  \item What is the property of the estimator in general? This will be a more
+    difficult problem. Though theories on \smc and path sampling are both
+    established in literature, the properties of the estimator obtained by
+    combining them together are not known completely. At this stage it is
+    difficult to tell when or how such theorems will be established.
+\end{enumerate}
+Further research following the problems raised above may contain optimization,
+etc.
