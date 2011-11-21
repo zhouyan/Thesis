@@ -10,3 +10,5 @@ thesis.pdf
 *.synctex.gz
 *.toc
 *.swp
+/diff.html
+/ansi2html.sh

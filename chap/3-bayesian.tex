@@ -1,21 +1,21 @@
 \chapter{Bayesian model selection}
 \label{cha:Bayesian model selection}
 
-The Bayes' theorem, in its simplest form is stated as below,
+Bayes' theorem, in its simplest form is stated as below,
 \begin{equation}
   \Pr(H|D) = \frac{\Pr(D|H)\Pr(H)}{\Pr(D)}
   \label{eq:bayes}
 \end{equation}
 where $D$ is the data and $H$ is a hypothesis. Like any other probability
-theories, technically the Bayes' theorem merely provides a form of accounting
-for the uncertainty. However, what is far more important is its philosophical
-interpretation of probability, namely the subjective perspective. Though early
-development of Bayesian statistics showed interest of using likelihood
-function as objective input to the modeling process \parencite{Jeffreys1961,
-  Jeffreys1946}, it is nowadays widely accepted that a subjective view is more
-appropriated \parencite[][chap.~1]{Bernardo2000}. The subjectivity and
-objectivity of probability is a more philosophical problem that we will not
-elaborate in this report.
+theories, technically the Bayes' theorem merely provides a method of
+accounting for the uncertainty. However, what is far more important is the
+associated philosophical interpretation of probability, namely the subjective
+perspective. Though early development of Bayesian statistics showed interest
+of using likelihood function as objective input to the modeling process
+\parencite{Jeffreys1961, Jeffreys1946}, it is nowadays widely accepted that a
+subjective view is more appropriated \parencite[][chap.~1]{Bernardo2000}. The
+subjectivity and objectivity of probability is a more philosophical problem
+that we will not elaborate in this report.
 
 However, it shall be emphasized that within the Bayesian framework, we shall
 think more in the term of ``beliefs''. It shall be noted that the Bayesian
@@ -73,20 +73,27 @@ Greek letters are reserved for parameter spaces.
     Densities & Full expression & Meaning \\
     \midrule
     $f$ & $f(D|\bth_k,\kappa=k)$
-      & The likelihood function of data $D$ conditional on the model parameter $\bth_k$ and model specified by the
-      indicator $\kappa = k$. \\
+    & The likelihood function of data $D$ conditional on the model parameter
+    $\bth_k$ and model specified by the
+    indicator $\kappa = k$. \\
     $\eta$ & $\eta(D,\bth_k,\kappa=k)$
-      & The joint density of the data and the hyperparameter $(\bth_{\kappa},\kappa)$. \\
+    & The joint density of the data and the hyperparameter
+    $(\bth_{\kappa},\kappa)$. \\
     $\pi$ & $\pi(\bth_k|\kappa=k)$
-      & The prior distribution of the model parameter $\bth_k$ conditional on the model. \\
+    & The prior distribution of the model parameter $\bth_k$ conditional on
+    the model. \\
     $p$ & $p(\kappa = k)$
-      & The prior distribution of the model indicator random variable $\kappa$. \\
+    & The prior distribution of the model indicator random variable
+    $\kappa$. \\
     $\pi^*$ & $\pi^*(\bth_k|D,\kappa=k)$
-      & The posterior distribution of the model parameter conditional on the data and the model. \\
+    & The posterior distribution of the model parameter conditional on the
+    data and the model. \\
     $p^*$ & $p^*(\kappa=k|D)$
-      & The posterior distribution of the model indicator conditional on the data. \\
+    & The posterior distribution of the model indicator conditional on the
+    data. \\
     $\mu$ & $\mu(\bth_k,\kappa=k|D)$
-      & The full posterior distribution of the hyperparameter $(\bth_{\kappa},\kappa)$ conditional on the data. \\
+    & The full posterior distribution of the hyperparameter
+    $(\bth_{\kappa},\kappa)$ conditional on the data. \\
     \bottomrule
   \end{tabularx}
 \end{table}
@@ -94,16 +101,16 @@ Greek letters are reserved for parameter spaces.
 \section{Bayesian model choice problem}
 \label{sec:Bayesian model choice problem}
 
-Consider a (possible infinite) countable set of models $\calM = \{\calM_i,
-  k\in I\}$, and our aim is to choose a ``best'' model from this set. There
-will usually be actions taken once we have decided which model to use. For
-example we may use the chosen model for inference of the past or prediction of
-the future. It is the consequences of these actions of interest instead of the
+Consider a (possibly infinite) countable set of models $\calM = \{\calM_i,
+  k\in I\}$. Our aim is to choose a ``best'' model from this set. There will
+usually be actions taken once we have decided which model to use. For example
+we may use the chosen model for inference of the past or prediction of the
+future. It is the consequences of these actions of interest instead of the
 chosen model itself. Therefore, from a decision-theoretic perspective, the
 ``best'' model should maximize the utility for some quality of the interest.
-However, this is very complicated the problem. And in practice, it is common
-to ignore the actions following the model selection decision and our interest
-is the true model, say $\calM_t$. In this case, it is natural to define a
+However, this is a very complicated problem. And in practice, it is common to
+ignore the actions following the model selection decision and our interest is
+the true model, say $\calM_t$. In this case, it is natural to define a
 zero-one utility function, say $u(\calM_i,\calM_t)$, such that
 $u(\calM_i,\calM_t) = 1$ for $\calM_t = \calM_i$ and $0$ otherwise.
 
@@ -214,9 +221,8 @@ often too difficult to elicit a precise distribution from prior information.
 Therefore it is necessary to make at least partly arbitrary choice of the
 prior distribution \parencites{Robert2007}[][chap.~3]{Kass1995}.
 
-In general the choice of priors should be considered carefully on a per
-problem basis and there is not much general methodology for eliciting prior
-distributions. Nonetheless there are a few classes of prior distributions
+More than often the choice of priors need to be considered carefully on a per
+problem basis. Nonetheless there are a few classes of prior distributions
 frequently used in the Bayesian modeling. In the particular problem of
 Bayesian model comparison and selection, it shall be noted that the Bayes
 factor is more sensitive to the choice of prior than point or interval
@@ -339,14 +345,14 @@ approaches to model selection. There are other criticism of the \bic strategy.
 For example \textcite[][chap.~7]{Robert2007} argued that the \bic strategy
 eliminated the subjective input into the Bayes modeling since the value of
 \bic does not depend on the prior distribution. However this is equally argued
-as an advantage of this strategy in the case that sensitive priors are hard to
-specify.
+as an advantage of this strategy in the case that priors, to which Bayes
+factors can be very sensitive, are hard to specify.
 
 \section{Variable dimension models}
 \label{sec:Variable dimension models}
 
-Recall the notions in section~\ref{sec:Bayesian model choice problem}, instead
-of using the marginal likelihood for Bayesian model selection, the posterior
+Recall the end of section~\ref{sec:Bayesian model choice problem}, instead of
+using the marginal likelihood for Bayesian model selection, the posterior
 density $\mu(\bth_k,\kappa=k|D)$ can also be directly used for model
 inference. Since the posterior model probability $p^*(\kappa=k|D)$ is simply
 the marginal density of $\mu$. Therefore if we have knowledges of $\mu$,
@@ -367,7 +373,7 @@ representation has some theoretical difficulties. Limited by the scope of this
 report, we will not discuss the details such as the measure-theoretic
 difficulty in the notions of prior density for a direct sum space.
 Nonetheless, it shall be noted that in the context of Bayesian model
-selection, the model parameter space $\bTh_k$ is independent of each other.
+selection, the model parameter spaces $\bTh_k$ are independent of each other.
 And thus a prior density $\pi(\bth_k|\kappa =k)$ need to be specified for each
 model. However, it is often preferred to use some parameters common to all
 models and thus reduce the modeling and computation difficulties. As it will
