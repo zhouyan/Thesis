@@ -37,9 +37,10 @@ with respect to each of the distribution in a given sequence (the ``path'' of
 path sampling) through importance sampling.
 
 In section~\ref{sec:smc algorithm}, the \smc algorithm is introduced. In the
-section follows, \ref{sec:Path sampling estimator}, the path sampling identity
-is presented. In the section follows, a simple example is provided to
-illustrate the idea.
+following section~\ref{sec:Path sampling estimator}, the path sampling
+identity is presented. What follows is a simple example is provided to
+illustrate the idea. This chapter is completed by a discussion of future
+research direction for the proposed method.
 
 \section{\smc algorithm}
 \label{sec:smc algorithm}
@@ -55,23 +56,24 @@ suppose we have $N$ particles following distribution $\eta_{n-1}$, and we
 move these particles in a sensible way to a new distribution $\eta_n$ such
 that $\eta_n$ is an efficient importance distribution for $\pi_n$. This is
 done by moving the $N$ particles by a sensible Markov kernel $K_n$ such that
-particles are moved into high density region of $\pi_n$.
+particles are moved into high density region of $\pi_n$. This technique is
+called sequential importance sampling in some literature
+\parencite[e.g.][]{DelMoral2006}.
 
-It should be intuitively clear that, in general to do any kind of
-estimations, we need be able to compute the importance weights at each time
-$n$, and thus $\eta_n$ need to be evaluated point-wise. Typically this is
-impossible in many situations. Note that
+It should be intuitively clear that, in general to do any kind of estimations,
+we need be able to evaluate the importance weights at each time $n$, and thus
+$\eta_n$ need to be evaluated point-wise. Typically this is impossible in many
+situations. Note that
 \begin{equation}
   \eta_n(x_n) = \int\eta_1(x_1)\prod_{j=2}^nK_j(x_{j-1},x_j) \dd x_{1:n-1}.
   \label{eq:marginal importance}
 \end{equation}
 And if the kernel $K_j$ in the integration is constructed by an \mha, it can
-be difficult to compute $K_j$ point-wise, leave alone the integration. The
-\smc algorithm introduce an auxiliary backward Markov chain kernel to solve
-this problem for the case where all $E_n$ has the same dimension. The purpose
-of the backward kernel is that by construction, the target distributions
-increase in dimension while they admit $\pi_n$'s as their marginal
-distributions.
+be difficult to compute $K_j$ point-wise, and thus the integral. The \smc
+algorithm introduce an auxiliary backward Markov chain kernel to solve this
+problem for the case where all $E_n$ has the same dimension. The purpose of
+the backward kernel is that by construction, the target distributions increase
+in dimension while they admit $\pi_n$'s as their marginal distributions.
 
 In the presentations below, it will be made clear that, the computation of
 importance weights is made possible by introducing this auxiliary backward
@@ -185,7 +187,8 @@ the backward kernel $L_{n-1}$.
 \subsection{Choice of forward kernels}
 \label{sub:Choice of forward kernels}
 
-In general, the \smc algorithm construct $N$ inhomogeneous Markov chains
+In general, if resampling is not performed at each iteration, then between two
+resampling steps, the \smc algorithm construct $N$ inhomogeneous Markov chains
 $\{X_{1:n}^{(i)}\}$. In most cases the marginal distributions for $X_{1:n}$,
 $\eta_n \ne \pi_n$. As similar to regular importance sampling, the optimal
 forward kernel (also called proposal) is that $K_n(x_{n-1},x_n) = \pi_n(x_n)$
@@ -284,9 +287,10 @@ performed at each iteration \parencite{DelMoral2006}.
 
 The path sampling estimator for the logarithm ratio of normalizing constants
 is based on a simple identity. Given a sequence of distributions say,
-$\gamma_t(\theta)$ known up to normalizing constants, say $Z_t$, where $t$ is
-a continuous index taken value on $[0,1]$. The path sampling estimator of the
-logarithm of ratio of normalizing constants is based on,
+$\pi_t(\theta)$ known up to normalizing constants, say $\pi_t(\theta) =
+\gamma_t(\theta)/Z_t$, where $t$ is a continuous index taken values on
+$[0,1]$. The path sampling estimator of the logarithm of ratio of normalizing
+constants is based on,
 \begin{equation}
   Z_t = \int_{\Theta}\gamma_t(\theta)\dd \theta
 \end{equation}
@@ -296,12 +300,27 @@ which allows the change order of integration and differentiation below,
   \frac{\diff}{\diff t}\log(Z_t)
   &= \frac{1}{Z_t}\frac{\diff}{\diff t}Z_t \notag\\
   &= \int_{\Theta}\frac{1}{Z_t}
-  \frac{\diff}{\diff t}\gamma_t(\theta)\dd\theta \notag\\
+  \frac{\diff}{\diff t}\gamma_t(\theta)\dd\theta.
+  \label{eq:path_derive1}
+\end{align}
+Note that
+\begin{equation}
+  \frac{\diff}{\diff t}\log\gamma_t(\theta)
+  = \frac{1}{\gamma_t(\theta)}\frac{\diff}{\diff t}\gamma_t(\theta)
+  \quad\text{and}\quad
+  \frac{\gamma_t(\theta)}{Z_t} = \pi_t.
+\end{equation}
+Provided that $\gamma_t(\theta)>0$, substitute the above equations
+to~\eqref{eq:path_derive1},
+\begin{align}
+  \frac{\diff}{\diff t}\log(Z_t)
+  &= \int_{\Theta}\log\gamma_t(\theta)\pi_t(\theta)\dd\theta \notag\\
   &= \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log\gamma_t(\theta)}
 \end{align}
-where the expectation is taken with respect to $\theta$ with $t$ fixed.  Thus,
-the path sampling estimator of $\log(Z_1/Z_0)$ can be written as,
+where the expectation is taken with respect to $\pi_t(\theta)$ with $t$ fixed.
+Thus, the path sampling estimator of $\log(Z_1/Z_0)$ can be written as,
 \begin{equation}
+  \widehat{\log(Z_t)} =
   \int_0^1 \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log \gamma_t(\theta)}.
   \label{eq:z_path}
 \end{equation}
@@ -461,13 +480,14 @@ corresponding to step $k$, and target $\pi_k(\mu,\lambda)$,
     \mu_0        &= 0 & n_0              &= 0.1 \\
     \sigma_{\mu} &= 1 & \sigma_{\lambda} &= 1
   \end{align*}
-  The value of $\alpha$ and $\beta$ are chosen mainly fro numerical stability
+  The value of $\alpha$ and $\beta$ are chosen mainly for numerical stability
   reason. If $\alpha = 0.01$ or smaller is chosen, then the majority of
-  $\lambda$ sampled for the initial distribution will be zero or subnormal.
-  The value of $n_0$ is chosen such that the prior distribution is relatively
-  flat compared to the posterior distribution. And the \mha bandwidth
-  $\sigma_{\mu}$ and $\sigma_{\lambda}$ are chosen such that the acceptance
-  rates are within a reasonable range (around $30\%$).
+  $\lambda$ sampled for the initial distribution will be zero or near zero
+  (call subnormal numbers in computing literatures). The value of $n_0$ is
+  chosen such that the prior distribution is relatively flat compared to the
+  posterior distribution. And the \mha bandwidth $\sigma_{\mu}$ and
+  $\sigma_{\lambda}$ are chosen such that the acceptance rates are within a
+  reasonable range (around $30\%$).
 \end{remark}
 
 \subsection{The Laplace model}
@@ -517,7 +537,7 @@ normal case, except for the forward kernel:
 \end{enumerate}
 
 \begin{remark}
-  For the numerical results, same parameters are used as in the Normal
+  For the numerical results, the same parameters are used as in the Normal
   model.
 \end{remark}
 
@@ -634,13 +654,18 @@ of the estimator properly.
 \paragraph{Efficiency} The \smc sampler requires considerable computation
 resources. Though it is argued to be of order $O(N)$ where $N$ is the number
 of particles, it often requires much more computation time than a \mcmc
-algorithm with $N$ iterations. The main factor is that increasing the number
-of distributions in \smc sampler will improve the numerical integration of
-path sampling estimator. It will be of interest to investigate how to
-construct the ``path'' effectively. And literatures in numerical integration
-is a possible source for inspiration. Further, in the simple examples, the
-same \mha is used for each iteration when doing the forward moves. However, it
-will probably be more efficient to construct the forward kernel adaptively.
+algorithm with $N$ iterations. As always in practice, there is a trade-off
+between quality of estimates and time consumed by the computation. Therefore
+the methods proposed here will be less of interest if it only provide marginal
+improvement in the quality of estimates compared to \mcmc, while it requires
+far more computation resources. The efficiency or optimization of the proposed
+methods will be of interest at some stage, though not immediately. It will be
+of interest to investigate how to construct the ``path'' effectively. And
+literatures in numerical integration is a possible source for inspiration.
+Further, in the simple examples, the same \mha is used for each iteration when
+doing the forward moves. However, it will probably be more efficient to
+construct the forward kernel adaptively. And the well established literatures
+in \mcmc are likely to be useful.
 
 \paragraph{Estimating Bayes factor directly} In the simple example, the
 normalizing constants are estimated for each posterior distribution
@@ -649,3 +674,8 @@ distributions of both models. And the ratio of normalizing constants can be
 obtained directly. More interesting is the use these techniques in a
 trans-dimensional setting. However the later part will not be the concern in
 the near future.
+
+In summary, establish a reasonable general framework for using the proposed
+methods to do Bayesian model comparison shall be the first step in the future
+research. Various aspects of the methods, its optimization, etc. will be
+concerns of later stage.
