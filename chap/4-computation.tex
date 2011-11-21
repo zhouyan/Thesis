@@ -18,7 +18,9 @@ and also recall the marginal likelihood, equation~\eqref{eq:marginal
 where $\bth_i$ is the parameter vector. Our goal is to compute the Bayes
 factor as in equation~\eqref{eq:bayes factor}. In rare situations, the
 computations of the above equations can be done analytically. However for most
-complex models, this is usually intractable. Therefore either approximations
+complex models, this is usually intractable.
+\firstyear
+Therefore either approximations
 based on large sample theories or numerical methods are required. One of the
 most widely used approximations, namely \bic is reviewed in
 section~\ref{sub:Bayesian information criterion}, together with its
@@ -26,6 +28,7 @@ limitations. Numerical integrations are often inefficient for modest or high
 dimensional models, as without knowing where the integral mass cumulating most
 methods will converge very slow. In fact, the rates of convergence usually
 diminishes in as the dimension increases.
+\endfirstyear
 
 All these limitations and the advance in computing technologies motivated the
 research in using Monte Carlo methods solving Bayesian computation problems
@@ -486,6 +489,7 @@ the following subsections. In general, the goal is to simulate samples
 $(\kappa, \bth_{\kappa})^i$ from posterior density $\mu$. The difficulty is
 that the dimension of the parameter is not fixed.
 
+\firstyear
 \subsection{Pseudo-priors method}
 \label{sub:Pseudo-priors method}
 
@@ -522,6 +526,7 @@ requires the simulations from all models at all steps, which is very costly
 when the size of model set is large. The other issue is the constructing of
 pseudo-priors. There is always the possibility that some part of the model
 parameter space $\bTh_k$ may be omitted \parencites[see][chap.~7]{Robert2007}.
+\endfirstyear
 
 \subsection{Reversible jump \protect\mcmc}
 \label{sub:Reversible jump mcmc}
