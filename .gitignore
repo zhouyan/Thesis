@@ -10,6 +10,6 @@ thesis.pdf
 *.synctex.gz
 *.toc
 *.swp
+*.bcf
 /diff.html
 /ansi2html.sh
-/thesis.bcf
