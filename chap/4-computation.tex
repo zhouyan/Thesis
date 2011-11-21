@@ -33,22 +33,22 @@ during the last three decades. In the next section, we will review some of the
 most important Monte Carlo methods with emphasize on their applications to
 Bayesian computations, in particular for computing the Bayes factor through
 computing the marginal likelihood. Our goal is not only to provide a review of
-the state of art, but also to demonstrate and justify their limitations.
+the state of art, but also to demonstrate and explain their limitations.
 
-However as introduced in section~\ref{sec:Variable dimension models}, Bayesian
-model selection problems can also be viewed as a particular case of variable
-dimension models. In such settings, more advanced techniques are required for
-computing the full posterior distributions. These techniques are briefly
-reviewed in section~\ref{sec:Simulation for variable dimension models}. The
-limitations of existing methods for estimating marginal likelihood and
-challenges of implementation Monte Carlo methods for simulation from the full
-posterior distribution, both motivate us to seek alternative computation
-techniques for Bayesian model selection.
+However, as introduced in section~\ref{sec:Variable dimension models},
+Bayesian model selection problems can also be viewed as a particular case of
+variable dimension models. In such settings, more advanced techniques are
+required for computing the full posterior distributions. These techniques are
+briefly reviewed in section~\ref{sec:Simulation for variable dimension
+  models}. The limitations of existing methods for estimating marginal
+likelihood and challenges of implementation Monte Carlo methods for simulation
+from the full posterior distribution, both motivate us to seek alternative
+computation techniques for Bayesian model selection.
 
 \section{Estimating Bayes factors}
 \label{sec:Estimating Bayes factors}
 
-The estimation of marginal likelihood is performed for each model
+The estimation of marginal likelihood can be performed for each model
 individually, therefore in the following we drop the model index $i$ and
 $\calM_i$, rewrite equation~\eqref{eq:marginal likelihood} as,
 \begin{align}
@@ -139,9 +139,9 @@ this estimator has a small bias, the variance and mean square errors are
 improved \parencite{Casella1998}. As suggest in
 \textcite[][sec.~3.3]{Robert2004}, to minimize the variance of the estimator
 in equation~\eqref{eq:is estimator}, the density $g$ should be chosen such
-$|h|f/g$ is almost constant with finite variance. That is density $g$ is
-preferable to be proportional to $|h|f$ and have heavier tails. Now, back to
-our problem of evaluating the marginal likelihood $\Pr(D)$, replace $f$ by
+$|h|f/g$ is almost constant with finite variance. That is it is preferable for
+the density $g$ to be proportional to $|h|f$ and have heavier tails. Now, back
+to our problem of evaluating the marginal likelihood $\Pr(D)$, replace $f$ by
 $\pi(\bth)$ and $h$ by $f(D|\bth)$, it is therefore suggested to use the
 posterior density $\pi^*(\bth|D) \propto f(D|\bth)\pi(\bth)$ as density $g$ in
 equation~\eqref{eq:is est}. This leads to the \emph{harmonic mean} estimator
@@ -207,27 +207,27 @@ samples through,
 The above equation provides a way of monitoring the convergence of the
 estimator.
 
-The estimator in equation~\eqref{eq:harmonic mean modified} is used in our
-working paper. It is proved to perform good enough for our purpose and it is
-relative easy to compute. However, the choice of a sensitive density $\gamma$
-is not always easy in general. The multivariate normal or $t$ densities as
-proposed by \textcite{Gelfand1994} is not always justified. Since in the
-context of Bayesian modeling, the posterior distribution is usually known at
-least up to a normalizing constant, it is (in principle) not very difficult to
-choose $\gamma$ to satisfy the condition for a finite variance. But the
-properties of the posterior distributions is usually not known (otherwise we
-may not have to use Monte Carlo methods for its simulating or we can use a
-good approximations for computing the Bayes factor), therefore high efficiency
-is hardly achieved. \textcite{Meng1996} considered an optimal choice of
-$\gamma$ and proposed a method to compute this iteratively.
+The estimator in equation~\eqref{eq:harmonic mean modified} is used in
+\textcite{Zhou2011}. It was proved to perform good enough for our purpose and
+it was relative easy to compute. However, the choice of a sensible density
+$\gamma$ is not always easy in general. The multivariate normal or $t$
+densities as proposed by \textcite{Gelfand1994} is not always justified. Since
+in the context of Bayesian modeling, the posterior distribution is usually
+known at least up to a normalizing constant, it is (in principle) not very
+difficult to choose $\gamma$ to satisfy the condition for a finite variance.
+But the properties of the posterior distributions are usually not known
+(otherwise we may not have to use Monte Carlo methods for its simulating or we
+can use a good approximations for computing the Bayes factor), therefore high
+efficiency is hard achieve. \textcite{Meng1996} considered an optimal choice
+of $\gamma$ and proposed a method to compute this iteratively.
 
 \subsubsection{Other methods and a summary}
 \label{ssub:Other methods and a summary a}
 
-Besides the estimator discussed above, which is one use in our work, there are
-some other efforts on stabilizing the harmonic mean estimator. For example
-\textcite{Hesterberg1995} proposed using a mixture of the posterior density
-$\pi^*(\bth|D)$ and a heavy tailed density, say $\omega(\bth)$,
+Besides the estimator discussed above, there are some other approaches to
+stabilizing the harmonic mean estimator. For example \textcite{Hesterberg1995}
+proposed using a mixture of the posterior density $\pi^*(\bth|D)$ and a heavy
+tailed density, say $\omega(\bth)$,
 \[
   (1-\rho)\pi^*(\bth|D) + \rho\omega(\bth),\quad \rho\ll 1,
 \]
@@ -235,7 +235,7 @@ as the importance density \parencite[see also][]{Owen2000}.
 \textcite{Raftery2006} also discussed a method for improving the harmonic mean
 by parameter reduction. This method requires analytical form for integrating
 at least some parameter out of the unnormalized posterior distribution. Such
-analysis are in general intractable for complex models, especially for
+analysis is in general intractable for complex models, especially for
 irregular likelihood function. \textcite{Chib1995} and \textcite{Chib2001}
 considered specified methods for estimating the marginal likelihood when the
 posterior samples come from Gibbs sampling and \mha, respectively. The former
@@ -250,13 +250,10 @@ the efficiency of these methods are still in question. In practice, one cannot
 simulate infinite samples and the estimations are always based on finite
 samples. Optimizing the estimators often require some analytical form of high
 dimension integrations, and thus are not always applicable for complex models.
-In addition, it should be noted that this is not the same problem as the
-convergence of \mcmc chains, which we will discuss in the next section. It is
-observed during our work of applying Bayesian model comparison for
-compartmental models, that obtaining good estimates of the marginal likelihood
-often requires far more computation time than estimating posterior mean of
+It was observed that obtaining good estimates of the marginal likelihood often
+requires far more computation time than estimating posterior mean of
 parameters. Moreover, even a good estimator for marginal likelihoods
-$\Pr(D|\calM_i)$ are obtained for each model, the Bayes factor as a ration of
+$\Pr(D|\calM_i)$ are obtained for each model, the Bayes factor as a ratio of
 them is still biased. And this bias is often not well studied.
 
 Despite all these limitations, these methods are still widely used due to the
@@ -269,8 +266,8 @@ simulating from the posterior distributions using Markov chain Monte Carlo
 \subsection{Markov chain Monte Carlo sampling}
 \label{sub:Markov chain Monte Carlo sampling}
 
-Methods for simulate samples from the posterior distribution $\pi^*(\bth|D)$
-has been developed in numerous literatures. Among them the using dependent
+Methods for simulating samples from the posterior distribution $\pi^*(\bth|D)$
+have been developed in numerous literatures. Among them the using dependent
 samples generated by Markov chain transition kernels with limiting
 distribution $\pi^*$ (\mcmc) is perhaps the most important type. In the
 setting of this report, it is natural to treat these methods as means to
@@ -368,7 +365,7 @@ transition, at time $t$, given $x^t$,
 \end{enumerate}
 The probability $\rho(x,y)$ is called the \emph{the Metropolis-Hastings
   acceptance probability}. The conditions for the Markov chains produced by
-\mha having the limiting distribution $f$ is quite minimal
+\mha having the limiting distribution $f$ are quite minimal
 \parencite[see][chap.~7]{Robert2004}. Instead of discuss the general form of
 \mha in details, we focus on some practical implementations of this algorithm
 \parencite[also see][for the speed of convergence of the \mha]{Mengersen1996}.
@@ -412,35 +409,13 @@ leads to extreme small acceptance rates. On the other hand, if the chain moves
 slow, it will take long time for the chain to explore the whole parameter
 space.
 
-Our work used a random walk \mha. However, in our design, sufficient prior
-knowledge enabled us to design a sensible dependent prior densities that
-resulted in a single mode posterior density. In addition, in early works we
-used \bugs\footnote{\bugs can be found on
-  \url{http://www.mrc-bsu.cam.ac.uk/bugs/}. The actual implementation we used
-  is an \unix version, \jags, which can be found on
-  \url{http://www-ice.iarc.fr/~martyn/software/jags/}} for implementation of a
-\mcmc algorithm for our model in a small scale of data sets.  \bugs actually
-used a slice sampler for our model as it is too complex for \bugs to construct
-other samplers and it fall backed to most generic sampler it knew. However,
-those works provided us a good knowledge of the posterior distributions and
-its parameters, which enabled us to tune the random walk algorithm specific
-for our purpose. (We did not use \bugs on all data sets as it is too slow and
-a high dimension slice sampler is even harder to construct than \mha, see
-\textcite{Roberts2002}.) However, this is not a general solution to most
-problems. For more complex models, especially while there are multiply modes
-separated by small probability areas in high dimensions, the random walk
-algorithm is most likely to fail. In future research, we will seek alternative
-ways of simulating posterior densities which is more reliable and can be
-applied to more general complex models. This will be discussed later in this
-report.
-
-\paragraph{Use in the computing of marginal likelihood} The output from a \mha
-can be used for computing the marginal likelihood with the same methods as in
-subsection~\ref{sub:Importance sampling and harmonic mean based estimators},
-provided the convergence condition of the Markov chains are met.
-\textcite{Chib2001} demonstrated a method of computing the marginal likelihood
-specifically by using output from \mha. Their method is based on the simple
-identity,
+\paragraph{Use in the computing of marginal likelihoods} The output from a
+\mha can be used for computing the marginal likelihood with the same methods
+as in subsection~\ref{sub:Importance sampling and harmonic mean based
+  estimators}, provided the convergence condition of the Markov chains are
+met. \textcite{Chib2001} demonstrated a method of computing the marginal
+likelihood specifically by using output from \mha. Their method is based on
+the simple identity,
 \begin{equation}
   \Pr(D) = \frac{f(D|\bth)\pi(\bth)}{\pi(\bth|D)}
 \end{equation}
@@ -484,7 +459,7 @@ its use in some cases.
     parameters varies \parencite[see][chap.~10]{Robert2004}.
 \end{enumerate}
 
-\paragraph{Use in the computing of marginal likelihood} The output from a
+\paragraph{Use in the computing of marginal likelihoods} The output from a
 Gibbs sampling can be used for computing of the marginal likelihood in the
 same way as \mha. In addition to the harmonic mean based methods discussed in
 subsection~\ref{sub:Importance sampling and harmonic mean based estimators},
@@ -499,7 +474,7 @@ problem in section~\ref{sec:Variable dimension models} is very attractive. The
 methods of computing the Bayes factor based on estimators in marginal
 likelihood is shown to have some major limitations. The instability of various
 estimators is the major problem. Though the estimator in
-equation~\eqref{eq:harmonic mean modified} can perform good if the density
+equation~\eqref{eq:harmonic mean modified} can perform well if the density
 $\gamma$ is properly chosen. However the choice of $\gamma$ itself is in
 question and sensible choice is not always easy. Alternatively, using variable
 dimension models representation, if a posterior sample from
@@ -554,7 +529,7 @@ parameter space $\bTh_k$ may be omitted \parencites[see][chap.~7]{Robert2007}.
 The reversible jump \mcmc techniques (\rjmcmc) introduced by
 \textcite{Green1995} is based on existence of the detailed balance,
 \begin{equation}
-  \int_A\int_B\pi(x)K(x,\diff y)\dd x = \int_B\int_A\pi(y)K(y,x)\dd y,
+  \int_A\int_B\pi(x)K(x,y)\dd y \dd x = \int_B\int_A\pi(y)K(y,x)\dd x \dd y,
   \label{eq:detailed balance}
 \end{equation}
 where $\pi$ is some target distribution, and $K$ is an aperiodic and
@@ -639,11 +614,12 @@ posterior densities for difference models have to be known up to the
 \subsection{Challenges of implementations of \protect\rjmcmc}
 \label{sub:Challenges of implementations of rjmcmc}
 
-Though \textcite{Green2009} argued that the challenges of implementation of
-\rjmcmc is just a ``myth''. We still outlines some difficulties of these
-techniques. The ability of simulation the posterior density $\mu(\bth_k,\kappa
-= k)$ is obviously very appealing to the Bayesian model selection problem. And
-the \rjmcmc techniques is under active development today.
+Though \textcite{Green2009} argued that the additional challenges of
+implementation of \rjmcmc is just a ``myth'', we still outlines some
+difficulties of these techniques. The ability of simulation the posterior
+density $\mu(\bth_k,\kappa = k)$ is obviously very appealing to the Bayesian
+model selection problem. And the \rjmcmc techniques is under active
+development today.
 
 The main difficulties lie in the choice of cross-model proposals and the
 bijection $T$. Though the mapping $T$ theoretically is quite flexible, its
