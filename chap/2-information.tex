@@ -6,12 +6,12 @@ decision-theoretic perspective uses the divergence of the chosen model from
 the true model as a measure of the loss when using a approximated model in
 place of the true data generating mechanism. The Akaike's information
 criterion (\aic) is perhaps the most important and widely used model selection
-method among those information-theoretic approaches. Its foundation is built
+method among these information-theoretic approaches. Its foundation is built
 upon the \kl and its relation to the maximum likelihood estimator (\mle).
 These are introduced in section~\ref{sec:kl and maximum likelihood}. It is
 followed by a discussion of the \aic model selection method. We complete this
-chapter by review of a model selection approaches closely related to the \aic
-method and used in our work
+chapter by review of a selection of approaches closely related to the \aic
+method.
 
 \section{\kl and maximum likelihood}
 \label{sec:kl and maximum likelihood}
@@ -84,9 +84,9 @@ Akaike in a series of papers \parencite{Akaike1973, Akaike1974, Akaike1977,
   Akaike1981}. From a likelihood principle perspective, \aic acts as a balance
 between good fit (high log-likelihood) and complexity (the dimension of the
 parameter vector is used as a penalty term in the formula). The \aic method
-aims at finding models that have less parameters while fitting the data well.
-There are other kind of penalized criteria for choosing models. And many of
-them are closely related to the \aic method.
+aims at finding models that have fewere parameters while fitting the data
+well.  There are other kind of penalized criteria for choosing models. And
+many of them are closely related to the \aic method.
 
 There are precise mathematical reasons behind the \aic's way of penalizing
 complexity and measuring the fit of data. These are closely related to the
@@ -101,7 +101,7 @@ for model selection.
 
 The \aic method and its formula has been derived and justified by various
 authors \parencite[e.g.][]{Stone1982, Sawa1978, Chow1981, Bozdogan1987,
-  Akaike1973, Claeskens2008}. To summary, we start with the same
+  Akaike1973, Claeskens2008}. To summarize, we start with the same
 information-theoretic approach as in \textcite{Akaike1973}, and use Taylor
 expansions to approximate the expected loss of using a parametric density with
 \mle as the parameter value in place of the true data generating density. In
@@ -127,12 +127,12 @@ last section, given i.i.d sample $\bfx = (x_1,\dots,x_n)^T$, we shall use the
 \mle ($\hbth$) as a consistent estimator for $\tbth$. The \aic method is in
 essence used to estimate the expected \kl from $f(\cdot; \hbth)$ to $g$.
 Recall equation~\eqref{eq:kl exp ll}, and the additive property of \kl and
-log-likelihood, the \aic method aim to estimate the following quality,
+log-likelihood, the \aic method aim to estimate the following quantity,
 \begin{equation}
   \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hbth(\bfY)),
 \end{equation}
 where $\bfX = (X_1,\dots,X_n)^T$, $X_i \sim g$, and $\bfY =
-(Y_1,\dots,Y_n)^T$, $Y_i \sim g$ is a random sample. We emphasize that
+(Y_1,\dots,Y_n)^T$, $Y_i \sim g$ is a simple random sample. We emphasize that
 $\hbth$, the \mle, is a function of the data without involving $\bfX$.
 Therefore, the outer expectation can also be viewed as taken with respect to
 $\hbth$. Let $\ell_n(\bth;\bfy)$ be the log-likelihood computed with data
@@ -169,8 +169,8 @@ expected \kl\footnote{More precisely, it is the relative \kl being estimated,
   and cannot be estimated.}.
 
 In summary, \aic is fully justified when the candidate models are already good
-approximations to the true data generating mechanism and give the sample size
-is sufficient large. But one can hardly justify that the candidate models are
+approximations to the true data generating mechanism and the sample size is
+sufficient large. But one can hardly justify that the candidate models are
 ``good'' approximations while the true model, if it exists at all, is unknown.
 There have been many efforts to improve the \aic methods in the situations
 that the candidate models are not ``good enough'' approximations or the sample
@@ -185,7 +185,7 @@ situations.
 \label{sub:A Bayesian analysis of aic}
 
 The \aic method is often compared with the Bayesian model selection as one of
-the most important frequentist model selection method, in particular in
+the most important frequentist model selection methods, in particular in
 contrast with the \bic method. It is interest to note that
 \textcite{Akaike1978} has a Bayesian interpretation of the \aic procedure for
 the special case of a multivariate Gaussian model. In that case, \aic can be
@@ -196,17 +196,17 @@ very close in the sense that the difference in their parameters are not quite
 visible through the observed data. Under this setting, it was then shown that
 the log of posterior model probability from a normal priors for mean vector is
 approximated by $(-1/2)$\aic up to an additive constant. However we don't see
-this setting in a general cases in data analysis as argued by Akaike. Instead,
-in realistic cases the difficulties of model selection problem often come from
-the fact that we have very limited data.
+this setting as the general cases in data analysis as argued by Akaike.
+Instead, in realistic cases the difficulties of model selection problem often
+come from the fact that we have very limited data.
 
 On the other hand, as seen in \textcite{Akaike1980}, using likelihood function
 and \aic estimates as the source of objectivity of the Bayesian modeling leads
-to the \bic procedure. Though, from a subjective Bayesian perspective, the
-desire of objectivity itself is hardly justified. In addition, as noted by
-\textcite{Kass1995}, the Bayesian justification of \aic is only valid when the
-precision of the prior distribution is comparable to that of the likelihood.
-This assumption is hardly true in reality.
+to the \bic procedure. However, those with a subjective Bayesian perspective
+is not likely to be convinced by the desire of objectivity itself. In
+addition, as noted by \textcite{Kass1995}, the Bayesian justification of \aic
+is only valid when the precision of the prior distribution is comparable to
+that of the likelihood. This assumption is hardly ever true in reality.
 
 In both cases, we found that though the motivations of these Akaike's work are
 likely purely for the defense of \aic rather than a general assessment of the
@@ -252,14 +252,12 @@ However in our work of studying model selection problems for compartment
 models, the use of \aicc is not justified for high dimension, high noise and
 limited data. The use of \aic based methods for such models was first
 introduced by \textcite{Hawkins1986}. However, their work, and some recent use
-of \aic or \aicc mainly focus on low noise data. In our case, the data has
-much higher noise and it seems to violate the assumption of \aicc even more.
-The model has a nonlinear structure and the high level noise can hardly be
-approximated by normal distribution. In such situation, it was shown that
-indeed for either simulated data or real data, \aicc does not perform well. It
-is possible to derive specific \aic based information criterion for our model,
-just like \textcite{Hurvich1989} did for theirs. Nonetheless this will involve
-much more analytical work which may or may not results in improved results.
-Instead, in our work using Bayesian model selection for these models are
-approached. The results are encouraging while the implementations still has
-limitations.
+of \aic or \aicc mainly focus on low noise data. If the model has a nonlinear
+structure and high level noise, it can hardly be approximated by normal
+distribution. In such situations, as shown in \textcite{Zhou2011} for \pet
+data, \aicc does not perform well. It is possible to derive specific \aic
+based information criterion for specific models, like \textcite{Hurvich1989}
+did for theirs. Nonetheless this will involve much more analytical work which
+may or may not results in improved results. Instead, in the our work, using
+Bayesian model selection for \pet data are approached. The results are
+encouraging while the implementations still has limitations.
