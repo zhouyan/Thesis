@@ -16,8 +16,6 @@ method and used in our work
 \section{\kl and maximum likelihood}
 \label{sec:kl and maximum likelihood}
 
-\firstyear
-
 \kl measures the ``distance'' or ``divergence'' between statistical
 populations defined by their underlying probability densities. The divergence
 is measured in terms of the information defined by the log likelihood ratio
@@ -31,12 +29,8 @@ where $g$ is the true density of the data generating mechanism, and
 $f(\cdot;\bth)$ is the density of a candidate model specified by parameter
 vector $\bth$. The integration above is over the support of $g$.
 
-\firstyearend
-
 \subsection{Properties of \kl and its relation to \protect\mle}
 \label{sub:Properties of kl and its relation to mle}
-
-\firstyear
 
 One important observation is that $\dkl(g,f(\cdot;\bth))\ge0$ with equality if
 and only if $g(x) = f(x;\tbth)$ almost everywhere for some value of $\bth =
@@ -72,8 +66,6 @@ where $\hbth$ is the \mle. That is, the \mle aims to minimize the \kl from the
 candidate model to the true data generating density. This also justifies the
 use of \mle from a information-theoretic perspective.
 
-\firstyearend
-
 \section{Akaike's information criterion}
 \label{sec:Akaike's information criterion}
 
@@ -106,8 +98,6 @@ for model selection.
 
 \subsection{Derivation of \protect\aic}
 \label{sub:Derivation of aic}
-
-\firstyear
 
 The \aic method and its formula has been derived and justified by various
 authors \parencite[e.g.][]{Stone1982, Sawa1978, Chow1981, Bozdogan1987,
@@ -178,8 +168,6 @@ expected \kl\footnote{More precisely, it is the relative \kl being estimated,
   the term $\int g(x)\log g(x)\dd x$ in equation~\eqref{eq:kl exp ll} is not
   and cannot be estimated.}.
 
-\firstyearend
-
 In summary, \aic is fully justified when the candidate models are already good
 approximations to the true data generating mechanism and give the sample size
 is sufficient large. But one can hardly justify that the candidate models are
@@ -195,8 +183,6 @@ situations.
 
 \subsection{A Bayesian analysis of \protect\aic}
 \label{sub:A Bayesian analysis of aic}
-
-\firstyear
 
 The \aic method is often compared with the Bayesian model selection as one of
 the most important frequentist model selection method, in particular in
@@ -230,12 +216,8 @@ selection methods should be considered based on the purposes (inference of the
 past or prediction of the future, or otherwise). There is no reason to argue
 that one is absolutely superior to another.
 
-\firstyearend
-
 \subsection{Corrected \protect\aic}
 \label{sub:Corrected aic}
-
-\firstyear
 
 In this subsection we briefly review one of the most widely used extension and
 modification of \aic method, the corrected \aic. This and other similar
@@ -281,5 +263,3 @@ much more analytical work which may or may not results in improved results.
 Instead, in our work using Bayesian model selection for these models are
 approached. The results are encouraging while the implementations still has
 limitations.
-
-\firstyearend
