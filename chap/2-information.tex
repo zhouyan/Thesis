@@ -3,7 +3,7 @@
 
 The information-theoretic approach to model selection from a
 decision-theoretic perspective uses the divergence of the chosen model from
-the true model as a measure of the loss when using a approximated model in
+the true model as a measure of the loss when using an approximated model in
 place of the true data generating mechanism. The Akaike's information
 criterion (\aic) is perhaps the most important and widely used model selection
 method among these information-theoretic approaches. Its foundation is built
@@ -18,7 +18,7 @@ followed by a discussion of the \aic model selection method.
 populations defined by their underlying probability densities. The divergence
 is measured in terms of the information defined by the log-likelihood ratio
 \parencite{Kullback1951}. The common definition of \kl for continuous
-distributions in literature is \parencite[see][]{Claeskens2008},
+distributions in literature is \parencite[e.g.,][]{Claeskens2008},
 \begin{equation}
   \dkl(g, f(\cdot;\bth)) = \int g(x)\log\frac{g(x)}{f(x;\bth)}\dd x,
   \label{eq:kld}
@@ -44,7 +44,7 @@ the \kl. Under suitable conditions, rewrite equation~\eqref{eq:kld},
   \label{eq:kl exp ll}
 \end{align}
 where $\Exp_g\log f(X;\bth)$ is the expected log-likelihood with respect to
-$X$. Therefore $\tbth$ will maximize the expected log-likelihood. Letting
+$g(X)$. Therefore $\tbth$ will maximize the expected log-likelihood. Letting
 $\ell_n(\bth;\bfx)$ denote the log-likelihood of an i.i.d. sample $\bfx =
 (x_1,\dots,x_n)^T$ from density $g$, evaluated at $\bth$, then by the Strong
 Law of Large Numbers,
@@ -67,31 +67,32 @@ use of \mle from a information-theoretic perspective.
 \section{Akaike's information criterion}
 \label{sec:Akaike's information criterion}
 
-The general formula of the Akaike's information criterion, namely \aic, for a
+The general formula of the Akaike's information criterion (\aic) for a
 candidate parametric model $\calM$ is
 \begin{equation}
   \text{\aic} = -2\ell_n(\hbth;\bfx) + 2k
 \end{equation}
 where $\ell_n(\bth;\bfx)$ is the log-likelihood for a size $n$ sample
 $\bfx=(x_1,\dots,x_n)^T$, evaluated at $\bth$. The value $\hbth = \hbth(\bfx)$
-is the maximum likelihood estimator, \mle, under model $\calM$\footnote{More
+is the maximum likelihood estimator (\mle) under model $\calM$.\footnote{More
   precisely it is a class of models whose densities belong to the same
-  parametric family.}. And $k$ is the dimension of the parameter vector. The
+  parametric family.} And $k$ is the dimension of the parameter vector. The
 model with the smallest \aic value is selected. It is first introduced by
 Akaike in a series of papers \parencite{Akaike1973, Akaike1974, Akaike1977,
   Akaike1981}. From a likelihood principle perspective, \aic acts as a balance
-between good fit (high log-likelihood) and complexity (the dimension of the
-parameter vector is used as a penalty term in the formula). The \aic method
-aims at finding models that have fewer parameters while fitting the data
-well.  There are other kind of penalized criteria for choosing models. And
-many of them are closely related to the \aic method.
+between good fit (high log-likelihood) and complexity in the sense that the
+dimension of the parameter vector is used as a penalty term in the formula.
+The \aic method aims to find models that have fewer parameters while fitting
+the data well. There are other kind of penalized criteria for choosing models.
+And many of them are closely related to the \aic method.
 
 \firstyear
+
 There are precise mathematical reasons behind the \aic's way of penalizing
 complexity and measuring the fit of data. These are closely related to the
 behavior of the \mle and its relation to the \textcite{Kullback1951}'s measure
 of the statistical divergence from one probability density to another. In the
-next subsection we outline the derivation of \aic. This shall provide us a
+next subsection the derivation of \aic is outlined. This shall provide us a
 basis for the discussion of the suitability of the \aic and related methods
 for model selection.
 
@@ -111,13 +112,13 @@ estimated parameter vector. The case in which $n$ is small is considered by
 subsection~\ref{sub:Corrected aic}.
 
 As pointed out by \textcite{Bozdogan1987}, though the development of \aic had
-its origin in the time series modeling, it is a direct extension of the
+its origin in the time series modeling, it is a direct extension to the
 information-theoretic interpretation of the \mle (see
 subsection~\ref{sub:Properties of kl and its relation to mle}). For a class of
 parametric models with density $f(\cdot;\bth)$, we aim to find the ``best'' in
-the sense that the \kl is minimized among all possible value of $\bth$, i.e.,
-to find the value of $\tbth$, which maximize the expected log-likelihood. From
-a decision-theoretic point of view this model also minimize the expected loss
+the sense that the \kl is minimized among all possible values of $\bth$, i.e.,
+to find the value of $\tbth$, which maximizes the expected log-likelihood. From
+a decision-theoretic point of view this model also minimizes the expected loss
 measured by the \kl \parencite{Akaike1973}. Ideally, if we can find $\tbth$,
 then the next step will be choosing the model with the minimum of
 $D_{\mathrm{KL}}(g,f(\cdot;\tbth))$. However, even in the unlikely case that
@@ -153,32 +154,30 @@ where
 
 That is, $\Sigma$ is the theoretical covariance matrix of $\hbth(\bfY)$ when
 $\bfY$ follows the true data generating density. This is a more general
-results than that found in \textcite{Akaike1973}. In the special case, the
-true density $g = f(\cdot;\tbth)$, $I(\tbth)$ becomes the Fisher information
-matrix, and $I(\tbth) = \Sigma^{-1}$. In this case equation~\eqref{eq:aic
-  general} leads to the original \aic by using $\ell_n(\hbth;\bfy)$ as an
-unbiased consistent estimator for its own expectation. This ideal situation
-does not exist in reality anyway. But as shown in \textcite{Shibata1989}, $k$,
-the dimension of the estimated parameter vector is a good estimator of
-$\tr(I(\tbth)\Sigma)$ when the model is a ``good'' approximation of the true
-data generating mechanism. This also leads to the exact formula of \aic. In
-either case, a large sample is required to produce a good estimate of the
-expected \kl\footnote{More precisely, it is the relative \kl being estimated,
-  the term $\int g(x)\log g(x)\dd x$ in equation~\eqref{eq:kl exp ll} is not
-  and cannot be estimated.}.
+results than that found in \textcite{Akaike1973}. In the special case where $g
+= f(\cdot;\tbth)$, $I(\tbth)$ becomes the Fisher information matrix, and
+$I(\tbth) = \Sigma^{-1}$. In this case equation~\eqref{eq:aic general} leads
+to the original \aic by using $\ell_n(\hbth;\bfy)$ as an unbiased consistent
+estimator for its own expectation. This ideal situation does not exist in
+reality anyway. But as shown in \textcite{Shibata1989}, $k$, the dimension of
+the estimated parameter vector is a good estimator of $\tr(I(\tbth)\Sigma)$
+when the model is a ``good'' approximation of the true data generating
+mechanism. This also leads to the exact formula of \aic. In either case, a
+large sample is required to produce a good estimate of the expected
+\kl.\footnote{More precisely, it is the relative \kl being estimated, the term
+  $\int g(x)\log g(x)\dd x$ in equation~\eqref{eq:kl exp ll} is not and cannot
+  be estimated.}
 
 In summary, \aic is fully justified when the candidate models are already good
 approximations to the true data generating mechanism and the sample size is
-sufficient large. But one can hardly justify that the candidate models are
+sufficient large. But one can hardly determine if the candidate models are
 ``good'' approximations while the true model, if it exists at all, is unknown.
 There have been many efforts to improve the \aic methods in the situations
 that the candidate models are not ``good enough'' approximations or the sample
 size is small. One of the information criteria of this kind are reviewed in
 the subsection~\ref{sub:Corrected aic}. However, when the model is high
 dimensional and the available data is limited, simple information criteria
-like \aic can hardly work. As we will discuss later, even with an improved
-version of \aic, our work shows that \aic does not work well in these
-situations.
+like \aic can hardly work.
 \endfirstyear
 
 \subsection{A Bayesian analysis of \protect\aic}
@@ -249,17 +248,17 @@ models, other form of improved \aic can be derived. In general,
 extensively in the literature even in nonlinear cases
 \parencite[e.g.][]{Turkheimer2003}.
 
-However in our work of studying model selection problems for compartment
-models, the use of \aicc is not justified for high dimension, high noise and
-limited data. The use of \aic based methods for such models was first
-introduced by \textcite{Hawkins1986}. However, their work, and some recent use
-of \aic or \aicc mainly focus on low noise data. If the model has a nonlinear
-structure and high level noise, it can hardly be approximated by normal
-distribution. In such situations, as shown in \textcite{Zhou2011} for \pet
-data, \aicc does not perform well. It is possible to derive specific \aic
+However, to illustrate the limitation of the \aicc method, in
+\textcite{Zhou2011} which we examined the model selection for compartment
+models, the use of \aicc was shown inefficient for high dimension, high noise
+and limited size of data. The use of \aic based methods for such models was
+first introduced by \textcite{Hawkins1986}. However, their work, and some
+recent use of \aic or \aicc mainly focus on low noise data. If the model has a
+nonlinear structure and high level noise, it can hardly be approximated by
+normal distribution. In such situations, as shown in \textcite{Zhou2011} for
+\pet data, \aicc does not perform well. It is possible to derive specific \aic
 based information criterion for specific models, like \textcite{Hurvich1989}
 did for theirs. Nonetheless this will involve much more analytical work which
 may or may not results in improved results. Instead, in the our work, using
 Bayesian model selection for \pet data are approached. The results are
-encouraging while the implementations still has limitations.
-\endfirstyear
+encouraging while the implementations still has limitations.  \endfirstyear
