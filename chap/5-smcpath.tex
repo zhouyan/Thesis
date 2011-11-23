@@ -9,11 +9,7 @@ we propose a new method for the estimation, namely using sequential Monte
 Carlo techniques and path sampling identity. As we will see shortly, this
 techniques is not limited to the application in Bayesian model selection
 problem, but more generally for problems where the ratio of normalizing
-constants of two distributions is of interest. In fact, it does not need us to
-consider the Bayes factor as a special case here to improve the estimation as
-in section~\ref{sub:Importance sampling and harmonic mean based estimators}.
-Therefore, we will discuss the estimation of ratios of normalizing constant in
-general in this chapter.
+constants of two distributions is of interest.
 
 The sequential Monte Carlo (\smc) technique constructs an importance
 distribution for a target distribution of interest iteratively. The basic idea
@@ -743,3 +739,32 @@ the near future.
 
 \subsection{Future research direction}
 \label{sub:Future research direction}
+
+The first step of researches follows here will be establishing a general
+framework for using the proposed methods to do Bayesian model comparison. This
+includes solving a few main problems.
+
+\begin{enumerate}
+  \item A more general strategy to implement the algorithms. This is a more
+    technical problem. We need to get the methods working for less trivial
+    problems. In addition, it will be of interest to investigate the
+    performance when applied to real Bayesian modeling problems. Interesting
+    problems includes: how does the performance change if we increase the
+    number of particles or/and the number of iterations?
+  \item The conditions and assumptions for the method to be applicable. There
+    is no method that can solve all problems. Every method is only valid under
+    some assumptions or conditions. Analogy to \mcmc, where some algorithms
+    will not converge at all, some construction of \smc algorithms may not
+    lead to finite variance estimator.
+  \item The theoretical properties of the estimator. This will be a more
+    difficult problem. However, theories on both \smc and path sampling are
+    both established in literature, for example the Central Limit Theorem for
+    \smc estimator mentioned earlier. The theories need to be developed
+    further for the proposed estimator. Some simple results could be obtained
+    based on results in \textcite{DelMoral2004}. One of the main interest here
+    is problem analogy to the convergence speed problem in \mcmc algorithms.
+\end{enumerate}
+
+Further research following the problems raised above includes optimizations,
+etc. It will be of interest to see if there is a way to improve the quality
+and efficiency of the algorithms in the context of Bayesian model selection.
