@@ -18,17 +18,14 @@ and also recall the marginal likelihood, equation~\eqref{eq:marginal
 where $\bth_i$ is the parameter vector. Our goal is to compute the Bayes
 factor as in equation~\eqref{eq:bayes factor}. In rare situations, the
 computations of the above equations can be done analytically. However for most
-complex models, this is usually intractable.
-\firstyear
-Therefore either approximations
+complex models, this is usually intractable. Therefore either approximations
 based on large sample theories or numerical methods are required. One of the
 most widely used approximations, namely \bic is reviewed in
 section~\ref{sub:Bayesian information criterion}, together with its
 limitations. Numerical integrations are often inefficient for modest or high
 dimensional models, as without knowing where the integral mass cumulating most
 methods will converge very slow. In fact, the rates of convergence usually
-diminishes in as the dimension increases.
-\endfirstyear
+diminishes as the dimension increases.
 
 All these limitations and the advance in computing technologies motivated the
 research in using Monte Carlo methods solving Bayesian computation problems
@@ -45,7 +42,7 @@ required for computing the full posterior distributions. These techniques are
 briefly reviewed in section~\ref{sec:Simulation for variable dimension
   models}. The limitations of existing methods for estimating marginal
 likelihood and challenges of implementation Monte Carlo methods for simulation
-from the full posterior distribution, both motivate us to seek alternative
+from the full posterior distributions, both motivate us to seek alternative
 computation techniques for Bayesian model selection.
 
 \section{Estimating Bayes factors}
@@ -72,23 +69,20 @@ evaluating the integral,
   \label{eq:classical mc}
 \end{equation}
 where $f$ is a density function. It is natural to use a random sample
-generated from density $f$, $\bfX_m = (X^{(1)},\dots,X^{(m)})$, to
-approximate $\Exp_f h(X)$ by the empirical average of the realization of
-$\bfX_m$, say $\bfx_m = (x^{(1)},\dots,x^{(m)})$,
+generated from density $f$, $\bfX_m = (\mcvec{X}{m})$, to approximate $\Exp_f
+h(X)$ by the empirical average of the realization of $\bfX_m$, say $\bfx_m =
+(\mcvec{x}{m})$,
 \begin{equation}
-  \bar{h}_m = \frac{1}{m}\sum_{j=1}^m h(x^j),
+  \bar{h}_m = \frac{1}{m}\sum_{j=1}^m h(x^{(j)}),
   \label{eq:is convergence}
 \end{equation}
 since $\bar{h}_m$ converges almost surely to $\Exp_f h(X)$ by the Strong Law
 of Large Numbers. Clearly this method can only be applied in the cases that
 the density $f$ can be easily simulated. In the case of computing marginal
 likelihood $\Pr(D)$, this means that one needs to simulate samples from the
-prior distribution $\pi(\bth)$. Though it may be easy to simulate form the
-prior distribution, the prior and posterior distributions are likely to be
-very normal distribution, the joint density for parameters can still be in a
-form cannot be simulated from easily or efficiently. In addition, the use of
-samples from $f$ to estimate equation~\eqref{eq:classical mc} is in general
-suboptimal in the sense that the variance of the estimator is not minimized
+prior distribution $\pi(\bth)$. In addition, the use of samples from $f$ to
+estimate equation~\eqref{eq:classical mc} is in general suboptimal in the
+sense that the variance of the estimator is not minimized
 \parencite[see][sec.~3.3]{Robert2004}. Also other Bayesian inference problems,
 for example estimating the posterior means of parameters will require
 separated simulations unless prior and posterior distributions are close so
@@ -102,16 +96,18 @@ developed.
 \label{sub:Importance sampling and harmonic mean based estimators}
 
 The method of \emph{importance sampling} is an evaluation of
-equation~\eqref{eq:classical mc} based on generating a sample $\bfX_m = \Xm$
-from a given distribution $g$ and approximating $\Exp_f h(X)$ by the
-realization $\bfx_m = \xm$ through,
+equation~\eqref{eq:classical mc} based on generating a sample $\bfX_m =
+\mcvec{X}{m}$ from a given distribution $g$ and approximating $\Exp_f h(X)$ by
+the draws $\bfx_m = \mcvec{x}{m}$ through,
 \begin{equation}
-  \bar{h}_m = \frac{1}{m}\sum_{j=1}^m \frac{f(x^j)}{g(x^j)}h(x^j).
+  \bar{h}_m = \frac{1}{m}\sum_{j=1}^m
+  \frac{f(x^{(j)})}{g(x^{(j)})} h(x^{(j)}).
   \label{eq:is estimator}
 \end{equation}
 This is based on the identity,
 \begin{equation}
-  \Exp_f h(X) = \int h(x)\frac{f(x)}{g(x)}g(x)\dd x, \quad \text{for } \supp f \subset \supp g,
+  \Exp_f h(X) = \int h(x)\frac{f(x)}{g(x)}g(x)\dd x,
+  \quad \text{for } \supp f \subset \supp g,
 \end{equation}
 which is called the \emph{importance sampling fundamental identity}. The
 estimator in equation~\eqref{eq:is estimator} converges to $\Exp_f h(X)$ also
@@ -123,8 +119,8 @@ only if, \parencite[see][sec.~3.3]{Robert2004},
   \int h^2(x)\frac{f^2(x)}{g(x)}\dd x < \infty.
   \label{eq:finite var}
 \end{equation}
-This suggest that the density $g$ shall have tails heavier than density $f$.
-To access inequality~\eqref{eq:finite var} evaluating of a more complex
+This suggests that the density $g$ shall have tails heavier than density $f$.
+To access inequality~\eqref{eq:finite var}, evaluating of a more complex
 integration than original problem is required. Some very restrictive
 sufficient conditions for finite variance estimator was mentioned in
 \textcite{Geweke1989}. In addition a more critical problem is that, in order
@@ -134,7 +130,8 @@ posterior densities. A more practical approach is use an alternative
 estimator,
 \begin{equation}
   \bar{h}_m =
-  \frac{\sum_{j = 1}^m h(x^j) f(x^j) / g(x^j)}{\sum_{j=1}^m f(x^j)/g(x^j)},
+  \frac{\sum_{j = 1}^m h(x^{(j)}) f(x^{(j)}) / g(x^{(j)})}
+  {\sum_{j=1}^m f(x^{(j)})/g(x^{(j)})},
   \label{eq:is est}
 \end{equation}
 which also converges to $\Exp_f h(X)$ by Strong Law of Large Numbers. Though
@@ -142,50 +139,50 @@ this estimator has a small bias, the variance and mean square errors are
 improved \parencite{Casella1998}. As suggest in
 \textcite[][sec.~3.3]{Robert2004}, to minimize the variance of the estimator
 in equation~\eqref{eq:is estimator}, the density $g$ should be chosen such
-$|h|f/g$ is almost constant with finite variance. That is it is preferable for
-the density $g$ to be proportional to $|h|f$ and have heavier tails. Now, back
-to our problem of evaluating the marginal likelihood $\Pr(D)$, replace $f$ by
-$\pi(\bth)$ and $h$ by $f(D|\bth)$, it is therefore suggested to use the
-posterior density $\pi^*(\bth|D) \propto f(D|\bth)\pi(\bth)$ as density $g$ in
-equation~\eqref{eq:is est}. This leads to the \emph{harmonic mean} estimator
-of $\Pr(D)$ \parencite{Newton1994}, using sample $\bTh_m= \bThm$ from the
-posterior density $\pi^*(\bth|D)$,
+that $|h|f/g$ is almost constant with a finite variance. That is it is
+preferable for the density $g$ to be proportional to $|h|f$ and have heavier
+tails. Now, back to our problem of evaluating the marginal likelihood
+$\Pr(D)$, replace $f$ by $\pi(\bth)$ and $h$ by $f(D|\bth)$, it is therefore
+suggested to use the posterior density $\pi^*(\bth|D) \propto
+f(D|\bth)\pi(\bth)$ as density $g$ in equation~\eqref{eq:is est}. This leads
+to the \emph{harmonic mean} estimator of $\Pr(D)$ \parencite{Newton1994},
+using sample $\bth_m= \mcvec{\bth}{m}$ from the posterior density
+$\pi^*(\bth|D)$,
 \begin{equation}
   \widehat{\Pr(D)} =
-  \Round[Big]{\frac{1}{m}\sum_{j=1}^m\frac{1}{f(D|\bth^j)}}^{-1},
+  \Round[Big]{\frac{1}{m}\sum_{j=1}^m\frac{1}{f(D|\bth^{(j)})}}^{-1},
   \label{eq:harmonic mean}
 \end{equation}
-where $\bth_m = \bthm$ is a realization of $\bTh_m$. Unfortunately optimality
-for the estimator in equation~\eqref{eq:is estimator} does not transfer to the
-estimator in equation~\eqref{eq:is est}. And the harmonic mean estimator in
-equation~\eqref{eq:harmonic mean} suffers the instability problem.
-Intuitively, values of $\bth^j$ with small likelihood will result large
-influence of the final estimates. In fact this estimator does not always has a
-finite variance and therefore in general does not satisfy the Central Limit
-Theorem. However sampling from the posterior density provides other
-advantages, for example the posterior means can be simultaneously estimated,
-which are the Bayesian estimators for quadratic loss functions. Therefore more
-stable estimators based on samples from the posterior distribution was
-proposed. A simple modification to equation~\eqref{eq:harmonic mean} is to
-instead compute,
+Unfortunately optimality for the estimator in equation~\eqref{eq:is estimator}
+does not transfer to the estimator in equation~\eqref{eq:is est}. And the
+harmonic mean estimator in equation~\eqref{eq:harmonic mean} suffers the
+instability problem. Intuitively, values of $\bth^{(j)}$ with small likelihood
+will result large influence of the final estimates. In fact this estimator
+does not always has a finite variance and therefore in general does not
+satisfy the Central Limit Theorem. However sampling from the posterior density
+provides other advantages, for example the posterior means can be
+simultaneously estimated, which are the Bayesian estimators for quadratic loss
+functions. Therefore more stable estimators based on samples from the
+posterior distribution was proposed. A simple modification to
+equation~\eqref{eq:harmonic mean} is to instead compute,
 \begin{equation}
   \widehat{\Pr(D)} = \Round[Big]{
-    \frac{1}{m}\frac{\gamma(\bth^j)}{f(D|\bth^j)\pi(\bth^j)}}^{-1},
+    \frac{1}{m}\frac{\gamma(\bth^{(j)})}
+    {f(D|\bth^{(j)})\pi(\bth^{(j)})}}^{-1},
   \label{eq:harmonic mean modified}
 \end{equation}
 where $\gamma$ is a proper density function. This can also be viewed as the
 Monte Carlo estimator of,
 \begin{equation}
   \frac{1}{\Pr(D)}
-  = \Exp_{\pi^*}\frac{\gamma(\bTh)}{f(D|\bTh)\pi(\bTh)}
+  = \Exp_{\pi^*}\frac{\gamma(\bth)}{f(D|\bth)\pi(\bth)}
   = \int\frac{\gamma(\bth)}{f(D|\bth)\pi(\bth)}\pi^*(\bth)\dd\bth,
 \end{equation}
 that is, a classical Monte Carlo integration. Thus the condition for the
 estimator in equation~\eqref{eq:harmonic mean modified} having a finite
 variance is,
 \begin{equation}
-  \Exp_{\pi^*}\Round[Big]{
-    \frac{\gamma(\bTh)}{f(D|\bTh)\pi(\bTh)}}^2 < \infty,
+  \Exp_{\pi^*}\Round[Big]{\frac{\gamma(\bth)}{f(D|\bth)\pi(\bth)}}^2 < \infty,
 \end{equation}
 or equivalently
 \begin{equation}
@@ -200,11 +197,11 @@ if the tails of $\gamma$ is thin enough compared to the unnormalized posterior
 distribution $f(D|\bth)\pi(\bth)$. \textcite{Gelfand1994} suggested using
 multivariate normal distributions with moments estimated from the posterior
 samples as a natural choice of $\gamma$. In addition the variance of the
-estimator can also be estimated $1/\widehat{\Pr(D)}$ from the posterior
+estimator can also be estimated for $1/\widehat{\Pr(D)}$ from the posterior
 samples through,
 \begin{equation}
   v_m = \frac{1}{m^2}\sum_{j=1}^m \Round[Big]{
-    \frac{\gamma(\bth^j)}{f(D|\bth^j)\pi(\bth^j)}
+    \frac{\gamma(\bth^{(j)})}{f(D|\bth^{(j)})\pi(\bth^{(j)})}
     - \frac{1}{\widehat{\Pr(D)}}}^2.
 \end{equation}
 The above equation provides a way of monitoring the convergence of the
@@ -221,8 +218,8 @@ difficult to choose $\gamma$ to satisfy the condition for a finite variance.
 But the properties of the posterior distributions are usually not known
 (otherwise we may not have to use Monte Carlo methods for its simulating or we
 can use a good approximations for computing the Bayes factor), therefore high
-efficiency is hard achieve. \textcite{Meng1996} considered an optimal choice
-of $\gamma$ and proposed a method to compute this iteratively.
+efficiency is hard to achieve. \textcite{Meng1996} considered an optimal
+choice of $\gamma$ and proposed a method to compute this iteratively.
 
 \subsubsection{Other methods and a summary}
 \label{ssub:Other methods and a summary a}
@@ -265,7 +262,6 @@ implementation. In the next subsection we review some algorithms for
 simulating from the posterior distributions using Markov chain Monte Carlo
 (\mcmc) methods, and their limitations.
 
-
 \subsection{Markov chain Monte Carlo sampling}
 \label{sub:Markov chain Monte Carlo sampling}
 
@@ -295,8 +291,8 @@ rigorous mathematical treatment. \textcite[][chap.~6]{Robert2004} is a compact
 reference for many results of Markov chains related particularly to \mcmc
 algorithms. The last not least, the classical paper by \textcite{Tierney1994}
 has two sections of key results of Markov chains in the setting of \mcmc
-algorithms \parencites(also see)(for discussions of results in this
-paper){Besag1994,Chan1994,Doss1994,Robert1994}. These references provide all
+algorithms \parencite[also see][for discussions of results in this
+paper]{Besag1994,Chan1994,Doss1994,Robert1994}. These references provide all
 the results we will use in the following.
 
 We will always consider a time-homogeneous Markov chain with transition kernel
@@ -342,8 +338,9 @@ chain.
 The properties of Markov chains discussed above form the foundation of design
 of \mcmc algorithms. Two most important types of \mcmc algorithms are \mha
 \parencite{Hastings1970,Metropolis1953} and Gibbs sampling
-\parencite{Geman1993}. We review them in the context of Bayes model comparison
-and selection in the following two subsections.
+\parencite{Geman1993}. We will review these two techniques in the following
+subsections. In addition, the use them for Bayesian model selection
+computation are also reviewed.
 
 \subsubsection{\mha}
 \label{ssub:mha}
@@ -351,9 +348,9 @@ and selection in the following two subsections.
 In its most general form, the \mha produce a Markov chain with limiting
 distribution $f$ with a conditional density $q(\cdot|x)$ called the
 \emph{instrumental} or \emph{proposal} distribution through the following
-transition, at time $t$, given $x^t$,
+transition. At time $t$, given $x^t$,
 \begin{enumerate}
-  \item Generate $Y_t \sim q(y|x^t)$.
+  \item Draw $Y_t \sim q(y|x^t)$.
   \item Take
     \[
       X^{t+1} = \begin{cases}
