@@ -6,7 +6,14 @@ As already introduced through chapter~\ref{cha:Bayesian model selection}, the
 main interest is to estimate the Bayesian factor. In more general setting, it
 is the same as estimating the ratio of normalizing constants. In this chapter,
 we propose a new method for the estimation, namely using sequential Monte
-Carlo techniques and path sampling identity.
+Carlo techniques and path sampling identity. As we will see shortly, this
+techniques is not limited to the application in Bayesian model selection
+problem, but more generally for problems where the ratio of normalizing
+constants of two distributions is of interest. In fact, it does not need us to
+consider the Bayes factor as a special case here to improve the estimation as
+in section~\ref{sub:Importance sampling and harmonic mean based estimators}.
+Therefore, we will discuss the estimation of ratios of normalizing constant in
+general in this chapter.
 
 The sequential Monte Carlo (\smc) technique constructs an importance
 distribution for a target distribution of interest iteratively. The basic idea
@@ -23,9 +30,8 @@ between the distributions by an simple identity introduced in
 section~\ref{sec:Path sampling estimator}. The exact meaning of ``path'' will
 be introduced in the same section. However, it is worth mention here that,
 when implementing the path sampling estimator, this path is often constructed
-as a sequence of distributions and numerical integration is used to
-approximate the estimator. See section~\ref{sec:Path sampling estimator}.
-\parencite{Gelman1998}
+as a finite sequence of distributions and numerical integration is used to
+approximate the estimator. \parencite{Gelman1998}
 
 These two techniques can be combined together for the estimating of ratios of
 normalizing constants. One way to think of it is that, the path sampling
@@ -34,31 +40,31 @@ estimate the (logarithm) ratio of normalizing constants. The other way to
 think of it is that, the \smc algorithm provides a simple way to construct a
 sequence of distributions, which can be used to approximate the expectations
 with respect to each of the distribution in a given sequence (the ``path'' of
-path sampling) through importance sampling.
+path sampling) through importance sampling. And these approximations can be
+used to implement the path sampling estimator.
 
 In section~\ref{sec:smc algorithm}, the \smc algorithm is introduced. In the
 following section~\ref{sec:Path sampling estimator}, the path sampling
-identity is presented. What follows is a simple example is provided to
-illustrate the idea. This chapter is completed by a discussion of future
-research direction for the proposed method.
+identity is presented. What follows is a simple example to illustrate the
+idea. This chapter is completed by a discussion of future research direction
+for the proposed method.
 
-\section{\smc algorithm}
+\section{Sequential Monte Carlo sampler}
 \label{sec:smc algorithm}
 
-In this section, the \smc algorithm is introduced. Consider a sequence of
-distributions indexed by discrete time $n$, say $\pi_n$. Usually the
-distributions are known up to a normalizing constant, say $Z_n$, and $\pi_n
-= \gamma_n/Z_n$. The \smc algorithm is based on the sequential importance
-sampling techniques. At time $n = 1$, we start with $\pi_1$ and construct an
-efficient importance distribution, say $\eta_1$, and we sample $N$ random
-numbers from distribution $\eta_1$, called particles. At time $n > 1$,
-suppose we have $N$ particles following distribution $\eta_{n-1}$, and we
-move these particles in a sensible way to a new distribution $\eta_n$ such
-that $\eta_n$ is an efficient importance distribution for $\pi_n$. This is
-done by moving the $N$ particles by a sensible Markov kernel $K_n$ such that
-particles are moved into high density region of $\pi_n$. This technique is
-called sequential importance sampling in some literature
-\parencite[e.g.][]{DelMoral2006}.
+Consider a sequence of distributions indexed by a discrete time index $n$, say
+$\{\pi_n\}$. Usually the distributions are known up to a normalizing constant,
+say $Z_n$, and $\pi_n = \gamma_n/Z_n$. The \smc algorithm is based on the
+sequential importance sampling techniques. At time $n = 1$, we start with
+$\pi_1$ and construct an efficient importance distribution, say $\eta_1$, and
+we sample $N$ random numbers from distribution $\eta_1$, called particles. At
+time $n > 1$, suppose we have $N$ particles following distribution
+$\eta_{n-1}$, and we move these particles in a sensible way to a new
+distribution $\eta_n$ such that $\eta_n$ is an efficient importance
+distribution for $\pi_n$. This is done by moving the $N$ particles by a
+sensible Markov kernel $K_n$ such that particles are moved into high density
+region of $\pi_n$. This technique is called sequential importance sampling in
+some literature \parencite[e.g.][]{DelMoral2006}.
 
 It should be intuitively clear that, in general to do any kind of estimations,
 we need be able to evaluate the importance weights at each time $n$, and thus
@@ -68,18 +74,19 @@ situations. Note that
   \eta_n(x_n) = \int\eta_1(x_1)\prod_{j=2}^nK_j(x_{j-1},x_j) \dd x_{1:n-1}.
   \label{eq:marginal importance}
 \end{equation}
-And if the kernel $K_j$ in the integration is constructed by an \mha, it can
-be difficult to compute $K_j$ point-wise, and thus the integral. The \smc
-algorithm introduce an auxiliary backward Markov chain kernel to solve this
-problem for the case where all $E_n$ has the same dimension. The purpose of
-the backward kernel is that by construction, the target distributions increase
-in dimension while they admit $\pi_n$'s as their marginal distributions.
+For example, if the kernel $K_j$ in the integration is constructed by an \mha,
+it can be difficult to compute $K_j$ point-wise, and thus the integral. The
+\smc algorithm introduces an auxiliary backward Markov chain kernel to solve
+this problem for the case where all $E_n$ has the same dimension. The purpose
+of the backward kernel is that by construction, the target distributions
+increase in dimension while they admit $\pi_n$'s as their marginal
+distributions.
 
-In the presentations below, it will be made clear that, the computation of
-importance weights is made possible by introducing this auxiliary backward
-kernel. At each time $n$, let $L_{n-1}(x_n,x_{n-1})$ be a Markov kernel. It
-is called backward in the sense that it is a transition kernel from $x_n$ to
-$x_{n-1}$, which is backward in time. And construct,
+More importantly, in the presentations below, it will be made clear that, the
+computation of importance weights is made possible by introducing this
+auxiliary backward kernel. At each time $n$, let $L_{n-1}(x_n,x_{n-1})$ be a
+Markov kernel. It is called backward in the sense that it is a transition
+kernel from $x_n$ to $x_{n-1}$, which is backward in time. And construct,
 \begin{equation}
   \tilde{\pi}_n(x_{1:n}) = \frac{\tilde{\gamma}_n(x_{1:n})}{Z_n}
 \end{equation}
@@ -130,12 +137,11 @@ Applying the above equation for particles $\{W_{n-1}^{(i)}, X_{n-1}^{(i)}\}$
 and newly generated $\{X_n^{(i)}\}$, the incremental weights ($\tilde{w}$)
 and normalized weights $\{W_n^{(i)}\}$ can therefore be calculated.
 
-\paragraph{Degeneracy} The degeneracy problem mentioned earlier can be
-measured by the variance of the normalized weights, as similar in the case
-of regular importance sampling. Intuitively, as the time index $n$
-increases, the discrepancy between $\eta_n$ and $\tilde{\pi}_n$ increases as
-well, and the variance of the normalized important weights tends to
-increase.
+\paragraph{Degeneracy} Intuitively, as the time index $n$ increases, the
+discrepancy between $\eta_n$ and $\tilde{\pi}_n$ increases as well, and the
+variance of the normalized important weights tends to increase. This is called
+the \emph{degeneracy} problem. This can be measured by the variance of
+normalized weights, as similar in the regular importance sampling.
 
 One way to solve this problem is to resample the particles. The resampling
 process consists of selecting new particles and weights such that the
@@ -147,35 +153,40 @@ such that $\sum_{i=1}^N N_n^{(i)} = N$, $\Exp[N_n^{(i)}|X_{1:n}] =
 NW_n^{(i)}$ and the new particle set has equal weights
 \parencite{Douc2005,DelMoral2006}.
 
-To decide when to perform resampling, one can define \ess as
-$(\sum_{i=1}^N(W_n^{(i)})^2)^{-1}$, and it can be used as a criterion for
-whether or not resampling is required at time $n$ \parencite{Liu1998}.
-Intuitively, with the discrepancy between $\eta_n$ and $\pi_n$ increasing,
-many particulars will have smaller and smaller weights. Carrying on a lot of
-particulars with very small weights is apparently a waste. In this sense, it
-is sensible to use a quality measuring the variance of normalized weights to
-decide when to do resampling, since the mean of normalized weights is fixed to
-be $1/N$. Mathematically, it was argued in \textcite{Liu1998} that the
-effective sample size (\ess) is approximately proportional to the inverse of
-the variance of importance sampling estimator associated with the weights. And
-therefore it is used as an indicator of requirement of resampling.
+To decide when to perform resampling, one can define a quantity called
+\emph{effective sample size} (\ess),
+\begin{equation}
+  \text{\ess} = \frac{1}{\sum_{i=1}^N(W_n^{(i)})^2},
+\end{equation}
+and it can be used as a criterion for whether or not resampling is required at
+time $n$ \parencite{Liu1998}.  Intuitively, with the discrepancy between
+$\eta_n$ and $\pi_n$ increasing, many particulars will have smaller and
+smaller weights. Carrying on a lot of particulars with very small weights is
+apparently a waste. In this sense, it is sensible to use a quantity measuring
+the variance of normalized weights to decide when to do resampling, since the
+mean of normalized weights is fixed to be $1/N$. Mathematically, it was argued
+in \textcite{Liu1998} that the effective sample size (\ess) is approximately
+proportional to the inverse of the variance of importance sampling estimator
+associated with the weights. And therefore it is used as an indicator of
+requirement of resampling.
 
 \paragraph{Summary of the algorithm} In short the algorithm for a sequence
-$\pi_n$, $n = 1,\dots,p$, can be represented as below,
+$\{\pi_n\}$, $n = 1,\dots,p$, can be represented as below,
 \parencite{DelMoral2006}
 \begin{enumerate}
-  \item Set $n=1$, draw $X_1^{(i)}$ from $\eta_1$ for $i = 1,\dots,N$.  And
-    evaluate $\{W_1^{(i)}\}$ by equations~\eqref{eq:ini_weight}
+  \item Set $n=1$, draw $\{X_1^{(i)}\}$ from $\eta_1$ for $i = 1,\dots,N$.
+    And evaluate $\{W_1^{(i)}\}$ by equations~\eqref{eq:ini_weight}
     and~\eqref{eq:ini_weight_norm}.
   \item If $\text{\ess} < T$, where $T$ is a predefined threshold, resample.
   \item Set $n = n + 1$, if $n = p + 1$, stop and exit the algorithm.
-    Otherwise, draw $X_n^{(i)}$ from $K_n(X_{n-1}^{(i)},\cdot)$, and compute
-    $\{\tilde{w}_n(X_{n-1}^{(i)},
-      X_n^{(i)}\}$ by equation~\eqref{eq:incr_weight}. The new normalized
-    weights, $\{W_n^{(i)}\}$ is computed by
+    Otherwise, draw $X_n^{(i)}$ from $K_n(X_{n-1}^{(i)},\cdot)$ for $i =
+    1,\dots,N$, and compute $\{\tilde{w}_n(X_{n-1}^{(i)}, X_n^{(i)}\}$ by
+    equation~\eqref{eq:incr_weight}. The new normalized weights,
+    $\{W_n^{(i)}\}$ is computed by
     \begin{equation}
       W_n^{(i)} = \frac{W_{n-1}^{(i)}\tilde{w}_n(X_{n-1}^{(i)},X_n^{(i)})}
       {\sum_{j=1}^NW_{n-1}^{(j)}\tilde{w}_n(X_{n-1}^{(j)},X_n^{(j)})}
+      \qquad i = 1,\dots,N
     \end{equation}
   \item Go to step 3.
 \end{enumerate}
@@ -215,17 +226,26 @@ explores a single target distribution and past moves provide information about
 this distribution. In contrast, in the \smc case, at each iteration, the
 target is a new distribution $\pi_n$ and information about this distribution
 is not used in many situations unless $\pi_n$ is close enough to $\pi_{n-1}$.
+Sometimes this requirement can be easily met by reconstruction of the sequence
+$\{\pi_n\}$. In some other problems the sequence $\{\pi_n\}$ is more naturally
+defined by the problem and the requirement for $\pi_{n-1}$ being close to
+$\pi_n$ becomes difficult to met.
 
 \paragraph{Markov chain Monte Carlo moves} As proposed in
 \textcite{DelMoral2006}, it is natural to set $K_n$ as an \mcmc kernel of
 invariant distribution $\pi_n$. It is sensible in the cases either $K_n$
 mixes fast enough or $\pi_n$ evolves slowly so that we can expect $\eta_n$
-to be close to $\pi_n$.
+to be close to $\pi_n$. The massive amount of literatures in \mcmc, for
+example some references mentioned in chapter~\ref{cha:Bayesian computation
+  with Monte Carlo methods} can be used to construct efficient \mcmc kernels
+that mixes fast enough. This is one of the advantage that make this approach
+attractive. Another property of this kind of kernels is shown in the next
+subsection when we discuss the choice of backward kernels.
 
 \subsection{Choice of backward kernels}
 \label{sub:Choice of backward kernels}
 
-It should be noted that the choice of backward kernel should be optimized
+It should be noted that the choice of backward kernels should be optimized
 with respect to the chosen forward kernel. Recall that we introduced this
 backward kernel to enable the evaluation of weights by doing importance
 sampling on space $\prod_{i=1}^n E_i$ (or $E^n$ for the case of common
@@ -243,11 +263,10 @@ and the important weights weights are
   w_n(x_{1:n}) = \frac{\gamma_n(x_n)}{\eta_n(x_n)}
 \end{equation}
 which is exactly the importance sampling weights in marginal space. However,
-as for the same reason we need this backward kernel, the above optimal
-kernels cannot be computed point-wise, since itself relies on the marginal
-distribution $\eta_n$. Several sub-optimal kernels were shown in
-\textcite{DelMoral2006}. The one of most interest to this report is as
-below.
+as for the same reason we need this backward kernel, the above optimal kernels
+cannot be computed point-wise, since itself relies on the marginal
+distribution $\eta_n$. Several suboptimal kernels were shown in
+\textcite{DelMoral2006}. The one of most interest to this report is as below.
 
 It was shown that with the \mcmc kernel and $\pi_n$ be close enough to
 $\pi_{n-1}$, a good approximation to optimal backward kernel is given by
@@ -287,42 +306,42 @@ performed at each iteration \parencite{DelMoral2006}.
 
 The path sampling estimator for the logarithm ratio of normalizing constants
 is based on a simple identity. Given a sequence of distributions say,
-$\pi_t(\theta)$ known up to normalizing constants, say $\pi_t(\theta) =
-\gamma_t(\theta)/Z_t$, where $t$ is a continuous index taken values on
-$[0,1]$. The path sampling estimator of the logarithm of ratio of normalizing
-constants is based on,
+$\pi_t(\bth)$ known up to normalizing constants, say $\pi_t(\bth) =
+\gamma_t(\bth)/Z_t$, where $t$ is a continuous index taken values on $[0,1]$.
+The path sampling estimator of the logarithm of ratio of normalizing constants
+is based on,
 \begin{equation}
-  Z_t = \int_{\Theta}\gamma_t(\theta)\dd \theta
+  Z_t = \int_{\bTh}\gamma_t(\bth)\dd\bth
 \end{equation}
-where $\Theta$ is the support of $\theta$. Provided the regularity condition
+where $\bth$ is the support of $\bth$. Provided the regularity condition
 which allows the change order of integration and differentiation below,
 \begin{align}
   \frac{\diff}{\diff t}\log(Z_t)
   &= \frac{1}{Z_t}\frac{\diff}{\diff t}Z_t \notag\\
-  &= \int_{\Theta}\frac{1}{Z_t}
-  \frac{\diff}{\diff t}\gamma_t(\theta)\dd\theta.
+  &= \int_{\bTh}\frac{1}{Z_t}
+  \frac{\diff}{\diff t}\gamma_t(\bth)\dd\bth.
   \label{eq:path_derive1}
 \end{align}
 Note that
 \begin{equation}
-  \frac{\diff}{\diff t}\log\gamma_t(\theta)
-  = \frac{1}{\gamma_t(\theta)}\frac{\diff}{\diff t}\gamma_t(\theta)
+  \frac{\diff}{\diff t}\log\gamma_t(\bth)
+  = \frac{1}{\gamma_t(\bth)}\frac{\diff}{\diff t}\gamma_t(\bth)
   \quad\text{and}\quad
-  \frac{\gamma_t(\theta)}{Z_t} = \pi_t.
+  \frac{\gamma_t(\bth)}{Z_t} = \pi_t.
 \end{equation}
-Provided that $\gamma_t(\theta)>0$, substitute the above equations
+Provided that $\gamma_t(\bth)>0$, substitute the above equations
 to~\eqref{eq:path_derive1},
 \begin{align}
   \frac{\diff}{\diff t}\log(Z_t)
-  &= \int_{\Theta}\log\gamma_t(\theta)\pi_t(\theta)\dd\theta \notag\\
-  &= \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log\gamma_t(\theta)}
+  &= \int_{\bTh}\log\gamma_t(\bth)\pi_t(\bth)\dd\bth \notag\\
+  &= \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log\gamma_t(\bth)}
 \end{align}
-where the expectation is taken with respect to $\pi_t(\theta)$ with $t$ fixed.
+where the expectation is taken with respect to $\pi_t(\bth)$ with $t$ fixed.
 Thus, the path sampling estimator of $\lambda=\log(Z_1/Z_0)$ can be based on
 the following identity
 \begin{equation}
   \lambda=
-  \int_0^1 \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log \gamma_t(\theta)}.
+  \int_0^1 \Exp_t\Square[Big]{\frac{\diff}{\diff t}\log \gamma_t(\bth)}.
   \label{eq:z_path}
 \end{equation}
 Note that the index $t$ does not necessarily take values on $[0,1]$, though
@@ -330,18 +349,18 @@ for simplicity and without losing generality, this range is used here.
 
 One way to implement the estimator above is interpreting $t$ as a realization
 of a uniform random variable $T$ on $[0,1]$. Then the above integration can be
-interpreted as the expectation of $(T,\theta)$ on the joint space
-$[0,1]\times\Theta$. To obtain an estimate, one can sample from the joint
-space of $(T, \Theta)$ and use the simple Monte Carlo approximation.
+interpreted as the expectation of $(T,\bth)$ on the joint space
+$[0,1]\times\bTh$. To obtain an estimate, one can sample from the joint
+space of $(T, \bTh)$ and use the simple Monte Carlo approximation.
 
 An alternative way is to use a sequence $0 = t_0 < t_1 < \dots < t_m = 1$, and
 numerical integration with trapezoidal rule. In other words, a sequence of
 unnormalized distributions $\gamma_{t_n}$ are constructed. If we let
 distribution sequence $\{\pi_n\}$ in the \smc setting as described in the
 previous section be $\{\gamma_{t_n}/Z_{t_n}\}$, then we can estimate
-$\Exp_{t_n}[\frac{\diff}{\diff t_n}\gamma_{t_n}(\theta)]$ by
+$\Exp_{t_n}[\frac{\diff}{\diff t_n}\gamma_{t_n}(\bth)]$ by
 \begin{equation}
-  \Exp_{t_n}[\frac{\diff}{\diff t_n}\gamma_{t_n}(\theta)]
+  \Exp_{t_n}[\frac{\diff}{\diff t_n}\gamma_{t_n}(\bth)]
   \approx \sum_{i=1}^NW_n^{(i)}X_n^{(i)},
 \end{equation}
 where $\{W_n^{(i)},X_n^{(i)}\}$ is the particle set approximating the
@@ -374,7 +393,7 @@ harmonic mean estimator described in section~\ref{sub:Importance sampling and
   harmonic mean based estimators} \parencite[see][]{Gelman1998}. It was argued
 by those authors as a natural evolution from importance sampling, and we agree
 with them on this. However, if we approach the path sampling by simulating
-from the joint space of $(T,\theta)$ using existing methods like \mcmc, then
+from the joint space of $(T,\bth)$ using existing methods like \mcmc, then
 we suffer the same issues discussed in chapter~\ref{cha:Bayesian computation
   with Monte Carlo methods}.
 
@@ -526,11 +545,15 @@ corresponding to step $k$, and target $\pi_k(\mu,\lambda)$,
   The value of $\alpha$ and $\beta$ are chosen mainly for numerical stability
   reason. If $\alpha = 0.01$ or smaller is chosen, then the majority of
   $\lambda$ sampled for the initial distribution will be zero or near zero
-  (call subnormal numbers in computing literatures). The value of $n_0$ is
-  chosen such that the prior distribution is relatively flat compared to the
-  posterior distribution. And the \mha bandwidth $\sigma_{\mu}$ and
-  $\sigma_{\lambda}$ are chosen such that the acceptance rates are within a
-  reasonable range (around $30\%$).
+  (call subnormal numbers in computing literatures).\footnote{More precisely,
+    as subnormal number is one between zero and smallest positive floating
+    point number with non-zero leading significant bit (in \ieee
+    representation of floating point number). However, we don't think this is
+    important here and ``near zero'' describe the numerical stability problem
+    well enough.} The value of $n_0$ is chosen such that the prior
+  distribution is relatively flat compared to the posterior distribution. And
+  the \mha bandwidth $\sigma_{\mu}$ and $\sigma_{\lambda}$ are chosen such
+  that the acceptance rates are within a reasonable range (around $30\%$).
 \end{remark}
 
 \subsection{The Laplace model}

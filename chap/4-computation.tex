@@ -69,14 +69,14 @@ evaluating the integral,
   \label{eq:classical mc}
 \end{equation}
 where $f$ is a density function. It is natural to use a random sample
-generated from density $f$, $\bfX_m = (\mcvec{X}{m})$, to approximate $\Exp_f
-h(X)$ by the empirical average of the realization of $\bfX_m$, say $\bfx_m =
-(\mcvec{x}{m})$,
+generated from density $f$, $\bfX_N = (\mcvec{X}{N})$, to approximate $\Exp_f
+h(X)$ by the empirical average of the realization of $\bfX_N$, say $\bfx_N =
+(\mcvec{x}{N})$,
 \begin{equation}
-  \bar{h}_m = \frac{1}{m}\sum_{j=1}^m h(x^{(j)}),
+  \bar{h}_N = \frac{1}{N}\sum_{j=1}^N h(x^{(j)}),
   \label{eq:is convergence}
 \end{equation}
-since $\bar{h}_m$ converges almost surely to $\Exp_f h(X)$ by the Strong Law
+since $\bar{h}_N$ converges almost surely to $\Exp_f h(X)$ by the Strong Law
 of Large Numbers. Clearly this method can only be applied in the cases that
 the density $f$ can be easily simulated. In the case of computing marginal
 likelihood $\Pr(D)$, this means that one needs to simulate samples from the
@@ -96,11 +96,11 @@ developed.
 \label{sub:Importance sampling and harmonic mean based estimators}
 
 The method of \emph{importance sampling} is an evaluation of
-equation~\eqref{eq:classical mc} based on generating a sample $\bfX_m =
-\mcvec{X}{m}$ from a given distribution $g$ and approximating $\Exp_f h(X)$ by
-the draws $\bfx_m = \mcvec{x}{m}$ through,
+equation~\eqref{eq:classical mc} based on generating a sample $\bfX_N =
+\mcvec{X}{N}$ from a given distribution $g$ and approximating $\Exp_f h(X)$ by
+the draws $\bfx_N = \mcvec{x}{N}$ through,
 \begin{equation}
-  \bar{h}_m = \frac{1}{m}\sum_{j=1}^m
+  \bar{h}_N = \frac{1}{N}\sum_{j=1}^N
   \frac{f(x^{(j)})}{g(x^{(j)})} h(x^{(j)}).
   \label{eq:is estimator}
 \end{equation}
@@ -129,9 +129,9 @@ properly normalized density $f$, which is hardly the case for complex
 posterior densities. A more practical approach is use an alternative
 estimator,
 \begin{equation}
-  \bar{h}_m =
-  \frac{\sum_{j = 1}^m h(x^{(j)}) f(x^{(j)}) / g(x^{(j)})}
-  {\sum_{j=1}^m f(x^{(j)})/g(x^{(j)})},
+  \bar{h}_N =
+  \frac{\sum_{j = 1}^N h(x^{(j)}) f(x^{(j)}) / g(x^{(j)})}
+  {\sum_{j=1}^N f(x^{(j)})/g(x^{(j)})},
   \label{eq:is est}
 \end{equation}
 which also converges to $\Exp_f h(X)$ by Strong Law of Large Numbers. Though
@@ -146,11 +146,11 @@ $\Pr(D)$, replace $f$ by $\pi(\bth)$ and $h$ by $f(D|\bth)$, it is therefore
 suggested to use the posterior density $\pi^*(\bth|D) \propto
 f(D|\bth)\pi(\bth)$ as density $g$ in equation~\eqref{eq:is est}. This leads
 to the \emph{harmonic mean} estimator of $\Pr(D)$ \parencite{Newton1994},
-using sample $\bth_m= \mcvec{\bth}{m}$ from the posterior density
+using sample $\bth_N= \mcvec{\bth}{N}$ from the posterior density
 $\pi^*(\bth|D)$,
 \begin{equation}
   \widehat{\Pr(D)} =
-  \Round[Big]{\frac{1}{m}\sum_{j=1}^m\frac{1}{f(D|\bth^{(j)})}}^{-1},
+  \Round[Big]{\frac{1}{N}\sum_{j=1}^N\frac{1}{f(D|\bth^{(j)})}}^{-1},
   \label{eq:harmonic mean}
 \end{equation}
 Unfortunately optimality for the estimator in equation~\eqref{eq:is estimator}
@@ -167,7 +167,7 @@ posterior distribution was proposed. A simple modification to
 equation~\eqref{eq:harmonic mean} is to instead compute,
 \begin{equation}
   \widehat{\Pr(D)} = \Round[Big]{
-    \frac{1}{m}\frac{\gamma(\bth^{(j)})}
+    \frac{1}{N}\sum_{j=1}^N\frac{\gamma(\bth^{(j)})}
     {f(D|\bth^{(j)})\pi(\bth^{(j)})}}^{-1},
   \label{eq:harmonic mean modified}
 \end{equation}
@@ -200,7 +200,7 @@ samples as a natural choice of $\gamma$. In addition the variance of the
 estimator can also be estimated for $1/\widehat{\Pr(D)}$ from the posterior
 samples through,
 \begin{equation}
-  v_m = \frac{1}{m^2}\sum_{j=1}^m \Round[Big]{
+  v_N = \frac{1}{N^2}\sum_{j=1}^N \Round[Big]{
     \frac{\gamma(\bth^{(j)})}{f(D|\bth^{(j)})\pi(\bth^{(j)})}
     - \frac{1}{\widehat{\Pr(D)}}}^2.
 \end{equation}
@@ -208,7 +208,7 @@ The above equation provides a way of monitoring the convergence of the
 estimator.
 
 The estimator in equation~\eqref{eq:harmonic mean modified} is used in
-\textcite{Zhou2011}. It was proved to perform good enough for our purpose and
+\textcite{Zhou2011}. It was proved to perform well enough for our purpose and
 it was relative easy to compute. However, the choice of a sensible density
 $\gamma$ is not always easy in general. The multivariate normal or $t$
 densities as proposed by \textcite{Gelfand1994} is not always justified. Since
