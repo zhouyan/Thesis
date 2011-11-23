@@ -1,10 +1,6 @@
-\let\firstyear\iftrue
-\let\secondyear\iftrue
-\let\thirdyear\iffalse
-
-\let\endfirstyear\fi
-\let\endsecondyear\fi
-\let\endthirdyear\fi
+\let\firstyear\iftrue  \let\endfirstyear\fi
+\let\secondyear\iftrue \let\endsecondyear\fi
+\let\thirdyear\iffalse \let\endthirdyear\fi
 
 \def\DeclareAbbr#1#2{\def#1{\textsc{#2}\xspace}}
 \DeclareAbbr{\ess}{ess}
@@ -25,12 +21,13 @@
 \DeclareAbbr{\tic}{tic}
 \DeclareAbbr{\unix}{unix}
 
-\def\ESS{\text{\textsc{ess}}}
+\def\bugs{\textsc{\sffamily bugs}\xspace}
+\def\jags{\textsc{\sffamily jags}\xspace}
+
+\def\aicc{\hbox{\aic{}\ensuremath{_c}}\xspace}
 
 \def\kl{Kullback-Leibler divergence\xspace}
 \def\mha{Metropolis-Hastings algorithm\xspace}
-
-\def\aicc{\hbox{\aic{}\ensuremath{_c}}\xspace}
 
 \def\dkl{D_{\mathrm{KL}}}
 
@@ -44,9 +41,7 @@
 \def\Xm{(X^1,\dots,X^m)}
 \def\bthm{(\bth^1,\dots,\bth^m)}
 \def\bThm{(\bTh^1,\dots,\bTh^m)}
-
-\def\bugs{\textsc{\sffamily bugs}\xspace}
-\def\jags{\textsc{\sffamily jags}\xspace}
+\def\mcvec#1#2{#1^{(1)},\dots,#1^{(#2)}}
 
 \def\calGa{\mathcal{Ga}}
 \def\calK{\mathcal{K}}
@@ -63,6 +58,3 @@
 \def\bfY{\mathbfit{Y}}
 \def\bfy{\mathbfit{y}}
 \def\bfu{\mathbfit{u}}
-
-\def\x{\mathbfit{x}}
-\def\X{\mathbfit{X}}

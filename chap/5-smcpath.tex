@@ -167,7 +167,7 @@ $\pi_n$, $n = 1,\dots,p$, can be represented as below,
   \item Set $n=1$, draw $X_1^{(i)}$ from $\eta_1$ for $i = 1,\dots,N$.  And
     evaluate $\{W_1^{(i)}\}$ by equations~\eqref{eq:ini_weight}
     and~\eqref{eq:ini_weight_norm}.
-  \item If $\ESS < T$, where $T$ is a predefined threshold, resample.
+  \item If $\text{\ess} < T$, where $T$ is a predefined threshold, resample.
   \item Set $n = n + 1$, if $n = p + 1$, stop and exit the algorithm.
     Otherwise, draw $X_n^{(i)}$ from $K_n(X_{n-1}^{(i)},\cdot)$, and compute
     $\{\tilde{w}_n(X_{n-1}^{(i)},
@@ -417,7 +417,7 @@ data comes from either a Normal distribution or a Laplace distribution.
 \subsection{The Normal model}
 
 A conjugate prior is specified for $\calM_1$, the Normal likelihood model.
-That is, assuming the data observed are $\x = (x_1,\dots,x_n)^T$,
+That is, assuming the data observed are $\bfx = (x_1,\dots,x_n)^T$,
 \begin{align}
   x_i | \mu,\lambda &\sim \calN(x_i; \mu, \lambda^{-1}) \\
   \mu | \mu_0,\lambda,n_0 &\sim \calN(\mu; \mu_0, (n_0\lambda)^{-1}) \\
@@ -427,13 +427,13 @@ In other words, the prior is a Normal-Gamma distribution with parameters
 $(\mu_0, n_0, \alpha, \beta)$. Explicitly, we write the posterior density
 as,
 \begin{equation}
-  \pi(\mu,\lambda|\x) \propto
-  L(\mu,\lambda;\x)\pi(\mu,\lambda),
+  \pi(\mu,\lambda|\bfx) \propto
+  L(\mu,\lambda;\bfx)\pi(\mu,\lambda),
   \label{eq:normal_posterior}
 \end{equation}
 where
 \begin{align}
-  L(\mu,\lambda;\x) &= \Round[Big]{\frac{\lambda}{2\pi}}^{n/2}
+  L(\mu,\lambda;\bfx) &= \Round[Big]{\frac{\lambda}{2\pi}}^{n/2}
   \exp\Curly[Big]{-\frac{\lambda}{2}\sum_{i=1}^n(x_i - \mu)^2}
   \label{eq:likelihood_normal}\\
   \pi(\mu,\lambda) &= \sqrt{\frac{n_0\lambda}{2\pi}}
@@ -448,7 +448,7 @@ where
 Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as
 in equation~\ref{eq:prior_normal}. Let
 \begin{equation}
-  \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\x))^{p_k}\pi_0(\mu,\lambda)
+  \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\bfx))^{p_k}\pi_0(\mu,\lambda)
   \label{eq:normal_targets}
 \end{equation}
 where $L$ is the likelihood function, as in
@@ -536,7 +536,7 @@ corresponding to step $k$, and target $\pi_k(\mu,\lambda)$,
 \subsection{The Laplace model}
 
 Similar to the Normal case, a prior is specified for $\calM_2$, the Laplace
-likelihood model. Assuming the data observed are $\x = (x_1,\dots,x_n)^T$,
+likelihood model. Assuming the data observed are $\bfx = (x_1,\dots,x_n)^T$,
 \begin{align}
   x_i | \mu,\lambda &\sim \calL(x_i;\mu,\lambda^{-1}) \\
   \mu | \mu_0,\lambda,n_0 &\sim \calL(\mu;\mu_0, (n_0\lambda)^{-1}) \\
@@ -544,13 +544,13 @@ likelihood model. Assuming the data observed are $\x = (x_1,\dots,x_n)^T$,
 \end{align}
 We similarly write 
 \begin{equation}
-  \pi(\mu,\lambda|\x) \propto
-  L(\mu,\lambda;\x)\pi(\mu,\lambda),
+  \pi(\mu,\lambda|\bfx) \propto
+  L(\mu,\lambda;\bfx)\pi(\mu,\lambda),
   \label{eq:laplace_posterior}
 \end{equation}
 where
 \begin{align}
-  L(\mu,\lambda;\x) &= \Round[Big]{\frac{\lambda}{2}}^n
+  L(\mu,\lambda;\bfx) &= \Round[Big]{\frac{\lambda}{2}}^n
   \exp\Curly[Big]{-\lambda\sum_{i=1}^n\Abs{x_i - \mu}}
   \label{eq:likelihood_laplace}\\
   \pi(\mu,\lambda) &= \frac{n_0\lambda}{2}
@@ -565,7 +565,7 @@ where
 Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as
 in equation~\ref{eq:prior_laplace}. Let
 \begin{equation}
-  \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\x))^{p_k}\pi_0(\mu,\lambda)
+  \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\bfx))^{p_k}\pi_0(\mu,\lambda)
   \label{eq:laplace_targets}
 \end{equation}
 where $L$ is the kernel likelihood, as in
@@ -603,7 +603,7 @@ equations~\eqref{eq:normal_targets} and~\eqref{eq:laplace_targets} for the
 two models, respectively. They are in the common for with different
 likelihood functions,
 \begin{equation*}
-  \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\x))^{p_k}\pi_0(\mu,\lambda).
+  \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\bfx))^{p_k}\pi_0(\mu,\lambda).
 \end{equation*}
 The sequence $\{p_k\in[0,1]\}$ is chosen to be $p_k = k / 1000$, $k = 0, 1,
 \dots, 1000$.
