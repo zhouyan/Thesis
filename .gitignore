@@ -11,7 +11,4 @@ thesis.pdf
 *.toc
 *.swp
 *.bcf
-/diff.html
-/ansi2html.sh
-second/
 .DS_Store
