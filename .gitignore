@@ -9,6 +9,4 @@ thesis.pdf
 *.run.xml
 *.synctex.gz
 *.toc
-*.swp
 *.bcf
-.DS_Store
