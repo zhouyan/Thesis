@@ -1,5 +1,4 @@
-\documentclass[11pt, linespread = 1.1, lines=40, lineratio = 30, bib,
-fontset = Minion]{marticle}
+\documentclass[11pt, bib, fontset = Minion]{marticle}
 
 \def\mse{\textsc{mse}\xspace}
 \def\pet{\textsc{pet}\xspace}
@@ -8,8 +7,6 @@ fontset = Minion]{marticle}
 \def\rjmcmc{\textsc{rjmcmc}\xspace}
 \def\rjsmc{\textsc{rjsmc}\xspace}
 \def\smc{\textsc{smc}\xspace}
-\def\btheta{\mathbfit{\theta}}
-\def\bTheta{\mathbfit{\Theta}}
 \def\by{\mathbfit{y}}
 \def\bu{\mathbfit{u}}
 \def\K{\mathcal{K}}
@@ -29,9 +26,9 @@ fontset = Minion]{marticle}
   posterior distribution and the type of \mcmc moves between iterations. The
   posterior is now
   \begin{equation}
-    \pi(\btheta,k|\by) \propto p(k)\pi(\btheta|k)f(\by|\btheta,k)
+    \pi(\bftheta,k|\by) \propto p(k)\pi(\bftheta|k)f(\by|\bftheta,k)
   \end{equation}
-  which is defined on the joint space $\cup_{k\in\K}\bTheta_k\times\K$, where
+  which is defined on the joint space $\cup_{k\in\K}\bfTheta_k\times\K$, where
   $\K$ is the model space and $k$ is the model indicator. The space of model
   $\K$ is defined as a set of integers $\{1,\dots,\kmax\}$ and the prior of
   $k$ is uniform on this set. The value of $\kmax$ is set to $100$ in the
@@ -89,11 +86,11 @@ fontset = Minion]{marticle}
   To summary the above discussion, we give the explicit formulas of the
   algorithm in \textcite{Richardson:1997ea} with adjustment to the
   parameterization without allocation parameters. As before, we denote the
-  likelihood by $L(\by|\btheta,k)$, the prior without the adjacency condition
-  by $\pi(\btheta|k)$ and prior for $k$ by $p(k)$ (since it is uniform we will
+  likelihood by $L(\by|\bftheta,k)$, the prior without the adjacency condition
+  by $\pi(\bftheta|k)$ and prior for $k$ by $p(k)$ (since it is uniform we will
   omit this one henceforth). The first two are exactly the same as in standard
-  \smc. With the adjacency condition, the prior is thus $k!\pi(\btheta|k)$.
-  The parameter $\btheta = \{w_j, \mu_j, \lambda_j\}_{j=1}^k$, and all
+  \smc. With the adjacency condition, the prior is thus $k!\pi(\bftheta|k)$.
+  The parameter $\bftheta = \{w_j, \mu_j, \lambda_j\}_{j=1}^k$, and all
   weights, means and precisions share common priors. That is, the weights
   $\{w_j\}$ follow a symmetric Dirichlet distribution with parameter $\delta =
   1$; the means $\{\mu_j\}$ follow a normal distribution with mean $\eta$ and
@@ -108,82 +105,78 @@ fontset = Minion]{marticle}
 
   \subsubsection{The split and combine move}
 
-  Say at state $\btheta$ with number of components $k$, we first chose split
-  with probability $b_k$, and thus combine with probability $d_k = 1 - b_k$.
-  We set $b_1 = 1$, $b_{\kmax} = 0$ and $b_k = 0.5$ for $1 < k < \kmax$. If a
-  combine move is chosen, then we randomly select two adjacent components, say
-  $i_1 = i$ and $i_2 = i + 1$. We propose to combine them into a new
-  component $i$ and move to the new state $\theta'$,
+  Say at state $\bftheta$ with number of components $k$, that is, $\bftheta =
+  \{w_j, \mu_j, \lambda_j\}_{j=1}^k$ We first chose split with probability
+  $b_k$, and thus combine with probability $d_k = 1 - b_k$.  We set $b_1 = 1$,
+  $b_{\kmax} = 0$ and $b_k = 0.5$ for $1 < k < \kmax$. If a combine move is
+  chosen, then we randomly select two adjacent components, say $i_1 = i$ and
+  $i_2 = i + 1$. We propose to combine them into a new component $i$ and move
+  to the new state $\bftheta^*$ by the following transformation,
   \begin{align*}
-    (w\sprime{'}_j, \mu\sprime{'}_j, \lambda\sprime{'}_j) &=
-    (w_j,     \mu_j,     \lambda_j) && \quad\text{for }j < i, \\
-    %
-    (w\sprime{'}_j, \mu\sprime{'}_j, \lambda\sprime{'}_j) &=
-    (w_{j+1}, \mu_{j+1}, \lambda_{j+1}) && \quad\text{for }j > i,
+    (w_j^*, \mu_j^*, \lambda_j^*) &= (w_j, \mu_j, \lambda_j)
+    && \quad\text{for }j < i, \\
+    (w_j^*, \mu_j^*, \lambda_j^*) &= (w_{j+1}, \mu_{j+1}, \lambda_{j+1})
+    && \quad\text{for }j > i,
   \end{align*}
   and
   \begin{equation}
     \left.\begin{aligned}
-      w\sprime{'}_i &= w_{i_1} + w_{i_2} \\
-      %
-      w\sprime{'}_i \mu\sprime{'}_i &= w_{i_1}\mu_{i_1} + w_{i_2}\mu_{i_2} \\
-      %
-      w\sprime{'}_i({\mu\sprime{'}_i}^2 + {\lambda\sprime{'}_i}^{-1}) &=
+      w_i^* &= w_{i_1} + w_{i_2} \\
+      w_i^*\mu_i^* &= w_{i_1}\mu_{i_1} + w_{i_2}\mu_{i_2} \\
+      w_i^*({\mu_i^*}^2 + {\lambda_i^*}^{-1}) &=
       w_{i_1}(\mu_{i_1}^2 + \lambda_{i_1}^{-1}) +
       w_{i_2}(\mu_{i_2}^2 + \lambda_{i_2}^{-1})
     \end{aligned}\qquad\right\}\label{eq:combine_trans}
   \end{equation}
   If a split move is chosen, then we randomly select one component, say
   component $i$, and propose to split it into two component labeled with $i_1
-  = i$ and $i_2 = i + 1$, and move the state $\theta$ to the new state
-  $\theta'$,
+  = i$ and $i_2 = i + 1$, and move the state $\bftheta$ to the new state
+  $\bftheta^*$,
   \begin{align*}
-    (w\sprime{'}_j, \mu\sprime{'}_j, \lambda\sprime{'}_j) &=
-    (w_j, \mu_j, \lambda_j) && \quad\text{for }j < i, \\
-    %
-    (w\sprime{'}_j, \mu\sprime{'}_j, \lambda\sprime{'}_j) &=
-    (w_{j-1}, \mu_{j-1}, \lambda_{j-1}) && \quad\text{for }j > i + 1,
+    (w_j^*, \mu_j^*, \lambda_j^*) &= (w_j, \mu_j, \lambda_j)
+    && \quad\text{for }j < i, \\
+    (w_j^*, \mu_j^*, \lambda_j^*) &= (w_{j-1}, \mu_{j-1}, \lambda_{j-1})
+    && \quad\text{for }j > i + 1,
   \end{align*}
   and
   \begin{equation}
     \left.\begin{aligned}
-      w\sprime{'}_{i_1}   &= u_1w_i &
-      w\sprime{'}_{i_2}   &= (1 - u_1)w_i \\
-      %
-      \mu\sprime{'}_{i_1} &=
-      \mu_i - u_2\sqrt{\frac{w\sprime{'}_{i_2}}{w\sprime{'}_{i_1}\lambda_i}} &
-      \mu\sprime{'}_{i_2} &=
-      \mu_i + u_2\sqrt{\frac{w\sprime{'}_{i_1}}{w\sprime{'}_{i_2}\lambda_i}} \\
-      %
-      \frac{1}{\lambda\sprime{'}_{i_1}} &=
-      u_3(1 - u_2^2)\frac{w_i}{w\sprime{'}_{i_1}}\frac{1}{\lambda_i} &
-      \frac{1}{\lambda\sprime{'}_{i_2}} &=
-      (1 - u_3)(1 - u_2^2)\frac{w_i}{w\sprime{'}_{i_2}}\frac{1}{\lambda_i}\\
+      w_{i_1}^* &= u_1w_i & w_{i_2}^* &= (1 - u_1)w_i \\
+      \mu_{i_1}^* &=
+      \mu_i - u_2\sqrt{\frac{w_{i_2}^*}{w_{i_1}^*\lambda_i}} &
+      \mu_{i_2}^* &=
+      \mu_i + u_2\sqrt{\frac{w_{i_1}^*}{w_{i_2}^*\lambda_i}} \\
+      \frac{1}{\lambda_{i_1}^*} &=
+      u_3(1 - u_2^2)\frac{w_i}{w_{i_1}^*}\frac{1}{\lambda_i} &
+      \frac{1}{\lambda_{i_2}^*} &=
+      (1 - u_3)(1 - u_2^2)\frac{w_i}{w_{i_2}^*}\frac{1}{\lambda_i}\\
     \end{aligned}\qquad\right\}\label{eq:split_trans}
   \end{equation}
   where $u_1\sim\mathrm{Beta}(2,2)$, $u_2\sim\mathrm{Beta}(2,2)$ and
   $u_2\sim\mathrm{Beta}(1,1)$ and $\mathrm{Beta}(a,b)$ is the Beta
-  distribution. It is easy to check that they are indeed bijection
-  transformations.
+  distribution. It is easy to check that the split
+  transformation~\eqref{eq:split_trans} satisfies the relations in the combine
+  transformation~\eqref{eq:combine_trans} with suitable substitution of
+  notations.
 
-  In the split move, if $\mu\sprime{'}_{i_1} < \mu_{i - 1}$ or
-  $\mu\sprime{'}_{i_2} > \mu_{i + 1}$, i.e., the adjacency condition is not
+  In the split move, if $\mu_{i_1}^* < \mu_{i - 1}$ or
+  $\mu_{i_2}^* > \mu_{i + 1}$, i.e., the adjacency condition is not
   met, the proposal is rejected. Otherwise, it is accepted with probability
   $\min\{1, A\}$, where
   \begin{align}
     A =& \frac{(k + 1)!}{k!}
-    \frac{\pi(\btheta'|k + 1)L(\by|\btheta',k + 1)}
-    {\pi(\btheta|k)L(\by|\btheta,k)} \notag\\
+    \frac{\pi(\bftheta^*|k + 1)L(\by|\bftheta^*,k + 1)}
+    {\pi(\bftheta|k)L(\by|\bftheta,k)} \notag\\
     &\times\frac{d_{k+1}}{b_k}
     \frac{1}{g_{2,2}(u_1)g_{2,2}(u_2)g_{1,1}(u_3)} \notag\\
-    &\times\frac{w_i\Abs{\mu\sprime{'}_{i_1} - \mu\sprime{'}_{i_2}}}
+    &\times\frac{w_i\Abs{\mu_{i_1}^* - \mu_{i_2}^*}}
     {u_2(1 - u_2^2)u_3(1 - u_3)}
-    \frac{\lambda\sprime{'}_{i_1}\lambda\sprime{'}_{i_2}}{\lambda_i}
+    \frac{\lambda_{i_1}^*\lambda_{i_2}^*}{\lambda_i}
   \end{align}
   where $g_{a,b}(\cdot)$ is the density of Beta distribution. The term
-  $d_{k+1}/b_k$ is the odd of propose a combine move from $\btheta'$ back to
-  $\btheta$ to the split move. The last line is the Jacobian of
-  the transformation from $(\btheta,\bu)$ to $\btheta'$ with $\bu = (u_1, u_2,
+  $d_{k+1}/b_k$ is the odd of propose a combine move from $\bftheta^*$ back to
+  $\bftheta$ to the split move. The last line is the Jacobian of the
+  transformation from $(\bftheta,\bu)$ to $\bftheta^*$ with $\bu = (u_1, u_2,
   u_3)$. I haven't done all the calculation to verify this result. What I did
   is taking the results from \textcite{Richardson:1997ea} and taking our
   transformation as formed by a chain of three transformations, one transform
