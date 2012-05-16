@@ -1,4 +1,4 @@
-\documentclass[11pt, bib, fontset = Minion]{marticle}
+\documentclass[11pt, bib, fontset = Lucida]{marticle}
 
 \def\mse{\textsc{mse}\xspace}
 \def\pet{\textsc{pet}\xspace}
@@ -28,60 +28,35 @@
   \begin{equation}
     \pi(\bftheta,k|\by) \propto p(k)\pi(\bftheta|k)f(\by|\bftheta,k)
   \end{equation}
-  which is defined on the joint space $\cup_{k\in\K}\bfTheta_k\times\K$, where
-  $\K$ is the model space and $k$ is the model indicator. The space of model
-  $\K$ is defined as a set of integers $\{1,\dots,\kmax\}$ and the prior of
-  $k$ is uniform on this set. The value of $\kmax$ is set to $100$ in the
-  implementation. Another choice of the prior on $k$ is Poisson distribution.
-  The moves between iterations are constructed with one local move, which does
-  not change the dimension and two reversible jump moves. The first is a split
-  or combine move. The second is a birth or death move.
+  which is defined on the joint space $\cup_{k\in\K}(\bfTheta_k\times\{k\})$,
+  where $\K$ is the model space and $k$ is the model indicator. In this
+  particular example, the space $\K$ is defined as a set of integers
+  $\{1,\dots,\kmax\}$ and the prior of $k$ is uniform on this set. The value
+  of $\kmax$ is set to $100$ in the implementation. Another choice of the
+  prior of $k$ is a Poisson distribution. The moves between iterations are
+  constructed with one local move, which does not change the dimension and is
+  the same as in the standard \smc; and two reversible jump moves. The first
+  is a split or combine move. The second is a birth or death move.
 
   The \rjmcmc algorithm can be viewed as a special case of \rjsmc. That is,
   without resampling, and every intermediate distribution is the posterior,
   then a \rjsmc system with $n$ particles can be viewed as $n$ independent
   \rjmcmc chains. Therefore we will not make distinction between these two
-  algorithms in the following discussion, except for those places that such
+  algorithms in the following discussion, except for those places that such a
   distinction is important.
 
   The model is the same as in \textcite{DelMoral:2006hc}, and therefore is
   slightly different from \textcite{Richardson:1997ea} in the sense that there
   is no allocation parameter involved (in other words it is integrated out
   from \textcite{Richardson:1997ea}'s model) and there is no prior for the
-  scale parameter of the Gamma prior for the precision parameter of means.
-  This setting simplifies things considerably.
+  scale parameter of the Gamma prior for the precision parameter. This setting
+  simplifies things considerably.
 
-  The model in \textcite{Richardson:1997ea} restricted the labeling of
-  components such that the means of components are strictly increasing. That
-  is, for components $j_1 < j_2$, we have $\mu_{j_1} < \mu_{j_2}$. This is
-  similar to what we did for the \pet model, though with an identical prior
-  for each component, they can use an order statistic to implement such
-  restriction. However, in the \smc literature, for example both
-  \textcite{DelMoral:2006hc} and \textcite{Jasra:2007in}, such restriction was
-  not implied. In fact, they considered the identifiability problem as one of
-  the benchmarks that measured the algorithms' ability to explore the whole
-  space efficiently. For the start, the model with adjacency condition as in
-  \textcite{Richardson:1997ea} was implemented. This difference in modeling
-  will change the prior by a factor $k!$. But it also changes the parameter
-  space, as now the marginal likelihood is the integration over one of the
-  $1/k!$ identical spaces, thus the estimation of Bayes factor shall be
-  unchanged compared to the unordered modeling. A simple interpretation is
-  that labeling the components with an adjacency condition does not make one
-  model preferable compared to another.
+  As in \textcite{Richardson:1997ea} the components are labeled such that the
+  means of components are strictly increasing. That is, for components $j_1 <
+  j_2$, we have $\mu_{j_1} < \mu_{j_2}$.
 
-  The difference in parameterization implies that, in addition to a slightly
-  different local move, the birth death move is also slightly different. With
-  the allocation parameter, there are the ``empty components'' from which no
-  data comes and the death move is only proposed for such component since the
-  new born component in the birth move will be a such one. In our case, we
-  don't formula the likelihood as conditional on the allocation parameters,
-  therefore the death move is proposed for any random chosen component.
-
-  In the next section, we will attempt to implement the reversible jump for
-  the unordered case. It will not be very different but it seems there are
-  some issues to address in order to maintain the reversibility.
-
-  \subsection{Summary and formulation}
+  \subsection{Formulation of algorithms}
 
   To summary the above discussion, we give the explicit formulas of the
   algorithm in \textcite{Richardson:1997ea} with adjustment to the
@@ -95,23 +70,27 @@
   $\{w_j\}$ follow a symmetric Dirichlet distribution with parameter $\delta =
   1$; the means $\{\mu_j\}$ follow a normal distribution with mean $\eta$ and
   variance $\sigma^2$; the precisions $\{\lambda_j\}$ follow a Gamma
-  distribution with shape $\kappa$ and scale $\chi$ (that is mean
-  $\kappa\chi$. I always found that half authors use scale and the other half
-  use rate, but more than often both of them use the same alphabets, usually
-  $\alpha$ and $\beta$, which often gets tings confused. I will try to stick
-  with the scale parameter so the text and code are always the same thing and
-  hope I didn't use another notation before. Also we still reserve the letter
-  $\alpha$ for the power of likelihood function)
+  distribution with shape $\kappa$ and scale $\chi$. The prior parameters are
+  estimated from the data in the same way as in \textcite{DelMoral:2006hc}.
 
-  \subsubsection{The split and combine move}
+  \subsubsection{Local moves}
 
-  Say at state $\bftheta$ with number of components $k$, that is, $\bftheta =
-  \{w_j, \mu_j, \lambda_j\}_{j=1}^k$ We first chose split with probability
-  $b_k$, and thus combine with probability $d_k = 1 - b_k$.  We set $b_1 = 1$,
-  $b_{\kmax} = 0$ and $b_k = 0.5$ for $1 < k < \kmax$. If a combine move is
-  chosen, then we randomly select two adjacent components, say $i_1 = i$ and
-  $i_2 = i + 1$. We propose to combine them into a new component $i$ and move
-  to the new state $\bftheta^*$ by the following transformation,
+  The local move is a three-blocks Metropolis-Hastings random walk. Assume
+  that the particle is at state $\bftheta$ with $k$ components. First the
+  means $\{\mu_j\}$ are updated with a normal random walk. Second, the
+  precisions $\{\lambda_j\}$ are updated with a log-normal random walk, or in
+  other words a normal random walk on the logarithm scale. Last, the weights
+  $\{w_j\}$ are updated with a normal random walk on logit scale.
+
+  \subsubsection{Split and combine moves}
+
+  Again, assume the particle is at state $\bftheta$ with $k$ components, that
+  is, $\bftheta = \{w_j, \mu_j, \lambda_j\}_{j=1}^k$. We first chose split
+  with probability $b_k$, and thus combine with probability $d_k = 1 - b_k$.
+  We set $b_1 = 1$, $b_{\kmax} = 0$ and $b_k = 0.5$ for $1 < k < \kmax$. If a
+  combine move is chosen, then we randomly select two adjacent components, say
+  $i_1 = i$ and $i_2 = i + 1$. We propose to combine them into a new component
+  $i$ and move to the new state $\bftheta^*$ by the following transformation,
   \begin{align*}
     (w_j^*, \mu_j^*, \lambda_j^*) &= (w_j, \mu_j, \lambda_j)
     && \quad\text{for }j < i, \\
@@ -162,32 +141,52 @@
   In the split move, if $\mu_{i_1}^* < \mu_{i - 1}$ or
   $\mu_{i_2}^* > \mu_{i + 1}$, i.e., the adjacency condition is not
   met, the proposal is rejected. Otherwise, it is accepted with probability
-  $\min\{1, A\}$, where
+  $\min\{1, A_s\}$, where
   \begin{align}
-    A =& \frac{(k + 1)!}{k!}
+    A_s =& \frac{(k + 1)!}{k!}
     \frac{\pi(\bftheta^*|k + 1)L(\by|\bftheta^*,k + 1)}
     {\pi(\bftheta|k)L(\by|\bftheta,k)} \notag\\
     &\times\frac{d_{k+1}}{b_k}
-    \frac{1}{g_{2,2}(u_1)g_{2,2}(u_2)g_{1,1}(u_3)} \notag\\
+    \frac{1}{f_{2,2}(u_1)f_{2,2}(u_2)f_{1,1}(u_3)} \notag\\
     &\times\frac{w_i\Abs{\mu_{i_1}^* - \mu_{i_2}^*}}
     {u_2(1 - u_2^2)u_3(1 - u_3)}
     \frac{\lambda_{i_1}^*\lambda_{i_2}^*}{\lambda_i}
   \end{align}
-  where $g_{a,b}(\cdot)$ is the density of Beta distribution. The term
-  $d_{k+1}/b_k$ is the odd of propose a combine move from $\bftheta^*$ back to
-  $\bftheta$ to the split move. The last line is the Jacobian of the
-  transformation from $(\bftheta,\bu)$ to $\bftheta^*$ with $\bu = (u_1, u_2,
-  u_3)$. I haven't done all the calculation to verify this result. What I did
-  is taking the results from \textcite{Richardson:1997ea} and taking our
-  transformation as formed by a chain of three transformations, one transform
-  from precision $\lambda_i$ to variance $\sigma_i^2$, the second make the
-  transformation as in the paper, and last transform back to our parameters.
-  So by multiplying two additional easy to compute Jacobian, I got the above
-  result.
+  where $f_{a,b}(\cdot)$ is the density of $\mathrm{Beta}(a,b)$ distribution.
+  The term $d_{k+1}/b_k$ is the odd of propose a combine move from
+  $\bftheta^*$ back to $\bftheta$ to the split move. The last line is the
+  Jacobian of the transformation from $(\bftheta,\bu)$ to $\bftheta^*$ with
+  $\bu = (u_1, u_2, u_3)$. In the combine move, we accept the proposed new
+  state with probability $\min\{1,A_s^{-1}\}$ with suitable substitutions of
+  notations.
 
-  In the combine move, we accept the proposed new state with probability
-  $\min\{1,A^{-1}\}$ with suitable substitutions of notations.
+  \subsubsection{Birth and death moves}
 
-  \printbibliography
+  As before suppose the particle is at state $\bftheta$ with $k$ components.
+  We choose birth or death with the same probabilities $b_k$ and $d_k$ as in
+  the split and combine moves. If a birth move is chosen, then we generate a
+  new component with
+  \begin{equation}
+    w_{k+1}^* \sim \mathrm{Beta}(1, k),\qquad
+    \mu_{k+1}^* \sim \mathrm{Normal}(\eta,\sigma^2),\qquad
+    \lambda_{k+1}^* \sim \mathrm{Gamma}(\kappa, \chi).
+  \end{equation}
+  To make space for the new component we rescale the old weights $\{w_j\}$ to
+  $\{w_j^*\}$ with $w_j^* = w_j(1 - w_{k+1}^*)$. The last, we rearrange the
+  components to met the adjacency condition and obtain the new state
+  $\bftheta^*$. When a death move is chosen, we randomly select a component
+  and propose to delete it. The accept probability of accepting the birth move
+  is $\min\{1,A_b\}$ with
+  \begin{align}
+    A_s =& \frac{(k + 1)!}{k!}
+    \frac{\pi(\bftheta^*|k + 1)L(\by|\bftheta^*,k + 1)}
+    {\pi(\bftheta|k)L(\by|\bftheta,k)} \notag\\
+    &\times\frac{d_{k+1}}{b_k}
+    \frac{1}{f_{1,k}(w_{k+1}^*)}(1-w_{k+1}^*)^k.
+  \end{align}
+  And the probability of accepting the death move is thus $\min\{1,A_b^{-1}\}$
+  with suitable substitutions of notations.
+
+  \printbibliography[heading = reference]
 
 \end{document}
