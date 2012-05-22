@@ -9,7 +9,7 @@
 *.out
 *.pdf
 *.run.xml
-*.synctex.gz
+*.synctex.gz*
 *.toc
 
 thesis.pdf

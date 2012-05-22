@@ -1,0 +1,242 @@
+\documentclass[11pt, bib, fontset = Minion]{marticle}
+
+\def\mcmc{\textsc{mcmc}\xspace}
+\def\mse{\textsc{mse}\xspace}
+\def\pet{\textsc{pet}\xspace}
+\def\pmcmc{\textsc{pmcmc}\xspace}
+\def\smc{\textsc{smc}\xspace}
+
+\addbibresource{library.bib}
+
+\begin{document}
+  \title{Comparison with Population Markov Chain Monte Carlo}
+  \author{Yan Zhou}
+  \maketitle
+
+  \section{Description of the algorithm}
+  \label{sec:Description of the algorithm}
+
+  The \smc algorithm is as before. The \pmcmc algorithm for population with
+  $n$ chains is as the following,
+
+  \begin{description}
+    \item[Initialize] Initialize chain $x_{1:T}$ with $X_n$ from the prior.
+    \item[Mutation] Select a chain $n$ with a fixed (time homogeneous)
+      probability, and then update $x_n$ using a $\pi_n$--invariant
+      Metropolis-Hastings kernel. The kernel is chosen the same as in the \smc
+      algorithm.
+    \item[Exchange] Select a chain $n$ form $\{1,2,\dots,T-1\}$ with
+      probability $1/(T-1)$ and propose exchange its states with chain $n+1$.
+  \end{description}
+
+  The fixed probability in the mutation step is chosen as uniform over the
+  population, that is each chain has $1/T$ probability being updated. The
+  algorithm description is the same as in \textcite{Jasra:2007in}, which is
+  more specific than in \textcite{Calderhead:2009bd}, but I think they are the
+  same thing. The \mcmc kernel for the \pmcmc algorithm was tuned to have an
+  accept rate between 0.3 and 0.6.
+
+  Six schedules was experimented. The first is a linear schedule, or called
+  uniform tempering in \pmcmc, that is, the power to likelihood, $\alpha_n$
+  for chain $n$ is $\alpha_n = n/T$.  The second is the piecewise schedule as
+  in \textcite{DelMoral:2006hc}.  The third and fourth are cluttered towards
+  the prior, which \textcite{Calderhead:2009bd} argued shall works better than
+  the linear one.  Explicitly, $\alpha_n = (n/T)^p$ with $p = 2$ or~$5$. The
+  last two cluttered toward the posterior, that is, $\alpha_n = 1 - (1 -
+  n/T)^p$ also with $p = 2$ or~$5$.
+
+  \section{Results}
+  \label{sec:Results}
+
+  The \smc algorithm was run with 1,000 particles and 100 intermediate
+  distributions. Though \textcite{DelMoral:2006hc} argues that with few
+  distributions the performance is poor. But first it was not said how few do
+  they mean ``few''. Second, as we recently found, the mixing speed of the
+  \mcmc kernel can have large effect on the estimating normalizing constants,
+  though much less on the parameter inference, it is possible that our kernel
+  is just better than theirs. Anyway, the \smc algorithm performs reasonably
+  well with so few particles and iterations. The results will be shown later.
+
+  The \pmcmc algorithm was run with 100 chains, and 100,000 iterations in
+  addition to 10,000 burn in period. Since every iteration we perform a local
+  move and a global move, the actual number of computation of the likelihood
+  function is roughly triple of \smc algorithm. In practice it will take much
+  longer time, since I don't see how it can be parallelized.
+
+  Previous results with very large number of particles and iterations, the
+  \smc algorithm converges to the value $-247.8$. With very long chain (ten
+  million iterations), the \pmcmc algorithm also converge to the same value.
+  This is also very close to the value reported in \textcite{DelMoral:2006hc}.
+  So if we take this value as the true value, then the \mse, relative bias and
+  estimates with standard deviation of 100 simulations are shown in
+  table~\ref{tab:llh-s}. All values are for path sampling estimates. The
+  standard \smc estimates are not very different except even smaller bias and
+  sometime larger variance than the path sampling estimates.
+
+  Also, thinning the \pmcmc chains does not improve the results in this
+  example. As shown in the table, with reasonable schedule (linear, piecewise
+  linear or prior), the \pmcmc algorithm only has a variance close to the one
+  with \smc, with higher computational cost and an order higher relative bias.
+  The \mse is almost a hundred larger than \smc path sampling estimates except
+  for the prior 5 schedule. This also verify their claim that this schedule
+  works overall the best. But the optimal schedule for \smc is clearly much
+  different. The piecewise linear is still the best in the variance and second
+  best for \mse. What is more interesting is that the \smc algorithm is much
+  more robust to bad schedule. The posterior schedule is expected to work not
+  well. But the \smc algorithm has a much smaller \mse.
+
+  If we reduce the number of chains for \pmcmc to 30, the results for the
+  first four schedules improved for both variance and bias. The results with
+  the two prior schedule is slightly better than the corresponding \smc
+  results. Without \pmcmc, the path sampling integration itself shall have
+  better results with more chains. But it seems here that there is trade-off
+  with speed of exchanging information between chains here. That is, more
+  chains not always resulting better results.
+
+  Next, I tried to compute the Bayes factor between two models, a four
+  components model as before and another with two components. With reasonable
+  schedules, both of them seems give acceptable results for normalizing
+  constants. However, the Bayes factor comparing the two models have much
+  smaller magnitude, therefore the accuracy is much more important. The
+  results of 100 simulations are in table~\ref{tab:bayes-s}. Thirty chains were
+  used for \pmcmc, other settings are unchanged. The asymptotic estimate of
+  the two component model is $-262.8$. Therefore the log of Bayes factor is
+  $15$, in favor of the four components model. Comparing this table to the
+  previous one also show the improvement of using fewer chains in \pmcmc.
+
+  Repeat above experiments, but with the \pmcmc algorithm update each chain
+  per iteration and with 10,000 iterations recorded instead. It is found that
+  in this case using 30 chains or 100 chains, the difference is not
+  significant. For some schedule, 100 chains has less bias but slightly larger
+  variance. Overall the difference is mixed and neither is much better than
+  the other. So only the case of 30 chains is documented here and further
+  studied. In table~\ref{tab:pmcmc-parallel} show the estimates of \pmcmc for
+  the two models. For comparison, the same data for the serial version of
+  \pmcmc with 100,000 iterations and 30 chains is provided in
+  table~\ref{tab:pmcmc-serial}; and \smc with 3,000 particles, 100
+  distributions in table~\ref{tab:smc}. All three has roughly the same
+  computation cost, and all can be parallelized (the serial version of \pmcmc
+  can also be parallelized though less efficient and straightforward). The
+  burn in period is not considered as \pmcmc's computation cost here. The
+  reason is that, there are often situations that the recored iterations is
+  much more than the burn in iterations.
+
+  \begin{floatlayout}
+
+    \begin{table}
+      \caption{Log marginal likelihood estimates, four components model with
+        \smc and \pmcmc (serial). \smc: 1,000 particles, 100 distributions;
+        \pmcmc: 100,000 iterations, 100 chains.}
+      \label{tab:llh-s}
+      \begin{tabu}{lX[r]X[r]X[r]X[r]X[r]X[r]}
+        \everyrow{\rowfont{\sffamily\small}}
+        \toprule\rowfont{\sffamily}
+        & \multicolumn{2}{c}{\mse}
+        & \multicolumn{2}{c}{Relative bias}
+        & \multicolumn{2}{c}{Mean estimates$\pm$\textsc{S.D.}} \\
+        Schedule    & \smc & \pmcmc & \smc & \pmcmc & \smc & \pmcmc \\
+        \midrule
+        Linear      & $  2.6$ & $143.6$ & $0.006$ & $0.048$ & $-249.2\pm0.64$ & $-259.7\pm0.81$ \\
+        Piecewise   & $  1.0$ & $113.3$ & $0.004$ & $0.043$ & $-248.6\pm0.53$ & $-258.4\pm0.88$ \\
+        Prior 2     & $  0.7$ & $ 71.3$ & $0.001$ & $0.034$ & $-248.1\pm0.76$ & $-256.2\pm0.93$ \\
+        Prior 5     & $  2.9$ & $ 22.4$ & $0.002$ & $0.019$ & $-249.0\pm1.20$ & $-252.4\pm0.96$ \\
+        Posterior 2 & $ 17.0$ & $245.3$ & $0.015$ & $0.063$ & $-251.6\pm1.36$ & $-263.4\pm1.26$ \\
+        Posterior 5 & $167.1$ & $560.9$ & $0.051$ & $0.095$ & $-260.5\pm2.32$ & $-271.4\pm2.01$ \\
+        \bottomrule
+      \end{tabu}
+    \end{table}
+
+    \begin{table}
+      \caption{Log marginal likelihood and Bayes factor estimates with \smc
+        and \pmcmc (serial). \smc: 1,000 particles, 100 distributions; \pmcmc:
+        100,000 iterations, 30 chains.}
+      \label{tab:bayes-s}
+      \begin{tabu}{lX[r]X[r]X[r]X[r]X[r]X[r]}
+        \everyrow{\rowfont{\sffamily\small}}
+        \toprule\rowfont{\sffamily}
+        & \multicolumn{2}{c}{Two components}
+        & \multicolumn{2}{c}{Four components}
+        & \multicolumn{2}{c}{Bayes factor} \\
+        Schedule    & \smc & \pmcmc & \smc & \pmcmc & \smc & \pmcmc \\
+        \midrule
+        Linear      & $-265.7\pm0.22$ & $-275.6\pm1.23$ & $-249.2\pm0.69$ & $-254.1\pm0.79 $ & $16.4\pm0.74 $ & $21.6\pm1.38$ \\
+        Piecewise   & $-264.7\pm0.19$ & $-272.0\pm0.93$ & $-248.7\pm0.61$ & $-252.2\pm0.58 $ & $16.0\pm0.64 $ & $19.9\pm1.13$ \\
+        Prior 2     & $-262.8\pm0.13$ & $-263.1\pm0.17$ & $-248.2\pm0.69$ & $-248.4\pm0.32 $ & $14.5\pm0.67 $ & $14.8\pm0.35$ \\
+        Prior 5     & $-262.8\pm0.16$ & $-262.9\pm0.14$ & $-248.9\pm1.36$ & $-248.2\pm0.35 $ & $13.8\pm1.34 $ & $14.7\pm0.38$ \\
+        Posterior 2 & $-269.7\pm0.47$ & $-290.7\pm2.42$ & $-251.7\pm1.33$ & $-262.9\pm1.77 $ & $18.0\pm1.32 $ & $27.8\pm2.97$ \\
+        Posterior 5 & $-283.2\pm1.27$ & $-336.3\pm5.33$ & $-261.1\pm2.71$ & $-289.9\pm3.13 $ & $22.0\pm2.98 $ & $46.5\pm5.86$ \\
+        \bottomrule
+      \end{tabu}
+    \end{table}
+
+    \begin{table}
+      \caption{Log marginal likelihood and Bayes factor estimates with \pmcmc
+        (parallel): 10,000 iterations, 30 chains.}
+      \label{tab:pmcmc-parallel}
+      \begin{tabu}{lX[r]X[r]X[r]X[r]X[r]X[r]}
+        \everyrow{\rowfont{\sffamily\small}}
+        \toprule\rowfont{\sffamily}
+        & \multicolumn{2}{c}{Two components}
+        & \multicolumn{2}{c}{Four components}
+        & \multicolumn{2}{c}{Bayes factor} \\
+        Schedule    & \mse & Estimates & \mse & Estimates & \mse & Estimates \\
+        \midrule
+        Linear      & $ 163.26$ & $-275.5\pm0.62$ & $ 25.42$ & $-252.8\pm0.40$ & $  60.26$ & $22.7\pm0.63$ \\
+        Piecewise   & $  82.06$ & $-271.8\pm0.48$ & $ 12.74$ & $-251.3\pm0.34$ & $  30.53$ & $20.4\pm0.60$ \\
+        Prior 2     & $   0.11$ & $-263.0\pm0.10$ & $  0.09$ & $-248.0\pm0.19$ & $   0.05$ & $15.0\pm0.21$ \\
+        Prior 5     & $   0.03$ & $-262.9\pm0.13$ & $  0.11$ & $-248.0\pm0.23$ & $   0.09$ & $14.8\pm0.27$ \\
+        Posterior 2 & $ 744.73$ & $-290.0\pm1.38$ & $131.17$ & $-259.2\pm0.65$ & $ 252.78$ & $30.8\pm1.57$ \\
+        Posterior 5 & $4854.26$ & $-332.4\pm3.15$ & $959.22$ & $-278.7\pm1.98$ & $1513.01$ & $53.6\pm3.98$ \\
+        \bottomrule
+      \end{tabu}
+    \end{table}
+
+    \begin{table}
+      \caption{Log marginal likelihood and Bayes factor estimates with \pmcmc
+        (serial): 100,000 iterations, 30 chains.}
+      \label{tab:pmcmc-serial}
+      \begin{tabu}{lX[r]X[r]X[r]X[r]X[r]X[r]}
+        \everyrow{\rowfont{\sffamily\small}}
+        \toprule\rowfont{\sffamily}
+        & \multicolumn{2}{c}{Two components}
+        & \multicolumn{2}{c}{Four components}
+        & \multicolumn{2}{c}{Bayes factor} \\
+        Schedule    & \mse & Estimates & \mse & Estimates & \mse & Estimates \\
+        \midrule
+        Linear      & $ 163.74$ & $-275.5\pm1.13$ & $  41.63$ & $-254.1\pm0.85$ & $  42.59$ & $21.3\pm1.50$ \\
+        Piecewise   & $  85.43$ & $-272.0\pm0.80$ & $  18.61$ & $-252.0\pm0.65$ & $  25.70$ & $19.9\pm1.12$ \\
+        Prior 2     & $   0.11$ & $-263.1\pm0.16$ & $   0.51$ & $-248.4\pm0.31$ & $   0.24$ & $14.6\pm0.35$ \\
+        Prior 5     & $   0.03$ & $-262.8\pm0.14$ & $   0.21$ & $-248.0\pm0.35$ & $   0.17$ & $14.7\pm0.37$ \\
+        Posterior 2 & $ 799.87$ & $-290.9\pm2.16$ & $ 239.40$ & $-263.1\pm1.80$ & $ 173.11$ & $27.8\pm2.90$ \\
+        Posterior 5 & $5446.82$ & $-336.3\pm6.12$ & $1748.75$ & $-289.4\pm3.52$ & $1058.85$ & $46.8\pm6.52$ \\
+        \bottomrule
+      \end{tabu}
+    \end{table}
+
+    \begin{table}
+      \caption{Log marginal likelihood and Bayes factor estimates with \smc:
+        3,000 particles, 100 distributions.}
+      \label{tab:smc}
+      \begin{tabu}{lX[r]X[r]X[r]X[r]X[r]X[r]}
+        \everyrow{\rowfont{\sffamily\small}}
+        \toprule\rowfont{\sffamily}
+        & \multicolumn{2}{c}{Two components}
+        & \multicolumn{2}{c}{Four components}
+        & \multicolumn{2}{c}{Bayes factor} \\
+        Schedule    & \mse & Estimates & \mse & Estimates & \mse & Estimates \\
+        \midrule
+        Linear      & $  8.52$ & $-265.7\pm0.12$ & $  1.97$ & $-249.1\pm0.52$ & $ 2.88$ & $16.6\pm0.52$ \\
+        Piecewise   & $  3.88$ & $-264.7\pm0.09$ & $  0.73$ & $-248.5\pm0.42$ & $ 1.68$ & $16.2\pm0.42$ \\
+        Prior 2     & $  0.01$ & $-262.8\pm0.07$ & $  0.22$ & $-247.9\pm0.45$ & $ 0.22$ & $14.9\pm0.46$ \\
+        Prior 5     & $  0.01$ & $-262.8\pm0.08$ & $  1.43$ & $-248.3\pm1.05$ & $ 1.42$ & $14.4\pm1.06$ \\
+        Posterior 2 & $ 48.25$ & $-269.7\pm0.25$ & $ 12.31$ & $-251.1\pm1.01$ & $13.91$ & $18.5\pm1.03$ \\
+        Posterior 5 & $403.69$ & $-282.8\pm0.78$ & $134.75$ & $-259.2\pm1.82$ & $78.38$ & $23.6\pm2.05$ \\
+        \bottomrule
+      \end{tabu}
+    \end{table}
+
+  \end{floatlayout}
+
+  \printbibliography
+
+\end{document}
