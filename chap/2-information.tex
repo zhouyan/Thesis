@@ -86,15 +86,14 @@ The \aic method aims to find models that have fewer parameters while fitting
 the data well. There are other kind of penalized criteria for choosing models.
 And many of them are closely related to the \aic method.
 
-\firstyear
 
 There are precise mathematical reasons behind the \aic's way of penalizing
 complexity and measuring the fit of data. These are closely related to the
-behavior of the \mle and its relation to the \textcite{Kullback:1951va}'s measure
-of the statistical divergence from one probability density to another. In the
-next subsection the derivation of \aic is outlined. This shall provide us a
-basis for the discussion of the suitability of the \aic and related methods
-for model selection.
+behavior of the \mle and its relation to the \textcite{Kullback:1951va}'s
+measure of the statistical divergence from one probability density to another.
+In the next subsection the derivation of \aic is outlined. This shall provide
+us a basis for the discussion of the suitability of the \aic and related
+methods for model selection.
 
 \subsection{Derivation of \protect\aic}
 \label{sub:Derivation of aic}
@@ -117,10 +116,10 @@ information-theoretic interpretation of the \mle (see
 subsection~\ref{sub:Properties of kl and its relation to mle}). For a class of
 parametric models with density $f(\cdot;\bth)$, we aim to find the ``best'' in
 the sense that the \kl is minimized among all possible values of $\bth$, i.e.,
-to find the value of $\tbth$, which maximizes the expected log-likelihood. From
-a decision-theoretic point of view this model also minimizes the expected loss
-measured by the \kl \parencite{Akaike1973}. Ideally, if we can find $\tbth$,
-then the next step will be choosing the model with the minimum of
+to find the value of $\tbth$, which maximizes the expected log-likelihood.
+From a decision-theoretic point of view this model also minimizes the expected
+loss measured by the \kl \parencite{Akaike1973}. Ideally, if we can find
+$\tbth$, then the next step will be choosing the model with the minimum of
 $D_{\mathrm{KL}}(g,f(\cdot;\tbth))$. However, even in the unlikely case that
 $g(x) = f(x;\tbth)$, we still have to estimate $\tbth$. As suggested in the
 last section, given i.i.d sample $\bfx = (x_1,\dots,x_n)^T$, we shall use the
@@ -178,7 +177,6 @@ size is small. One of the information criteria of this kind are reviewed in
 the subsection~\ref{sub:Corrected aic}. However, when the model is high
 dimensional and the available data is limited, simple information criteria
 like \aic can hardly work.
-\endfirstyear
 
 \subsection{A Bayesian analysis of \protect\aic}
 \label{sub:A Bayesian analysis of aic}
@@ -186,9 +184,9 @@ like \aic can hardly work.
 The \aic method is often compared with the Bayesian model selection as one of
 the most important frequentist model selection methods, in particular in
 contrast with the \bic method. It is interest to note that
-\textcite{Akaike:1978ti} has a Bayesian interpretation of the \aic procedure for
-the special case of a multivariate Gaussian model. In that case, \aic can be
-viewed as an approximation to the posterior probability. Without going into
+\textcite{Akaike:1978ti} has a Bayesian interpretation of the \aic procedure
+for the special case of a multivariate Gaussian model. In that case, \aic can
+be viewed as an approximation to the posterior probability. Without going into
 the details, \textcite{Akaike:1978ti} considered the situation that the sample
 size can be easily increased to a large enough number while two models are
 very close in the sense that the difference in their parameters are not quite
@@ -199,13 +197,14 @@ this setting as the general cases in data analysis as argued by Akaike.
 Instead, in realistic cases the difficulties of model selection problem often
 come from the fact that we have very limited data.
 
-On the other hand, as seen in \textcite{Akaike:1980gh}, using likelihood function
-and \aic estimates as the source of objectivity of the Bayesian modeling leads
-to the \bic procedure. However, those with a subjective Bayesian perspective
-are not likely to be convinced by the desire of objectivity itself. In
-addition, as noted by \textcite{Kass:1995vb}, the Bayesian justification of \aic
-is only valid when the precision of the prior distribution is comparable to
-that of the likelihood. This assumption is hardly ever true in reality.
+On the other hand, as seen in \textcite{Akaike:1980gh}, using likelihood
+function and \aic estimates as the source of objectivity of the Bayesian
+modeling leads to the \bic procedure. However, those with a subjective
+Bayesian perspective are not likely to be convinced by the desire of
+objectivity itself. In addition, as noted by \textcite{Kass:1995vb}, the
+Bayesian justification of \aic is only valid when the precision of the prior
+distribution is comparable to that of the likelihood. This assumption is
+hardly ever true in reality.
 
 In both cases, we found that though the motivations of these Akaike's work are
 likely purely for the defense of \aic rather than a general assessment of the
@@ -215,7 +214,6 @@ selection methods should be considered based on the purposes (inference of the
 past or prediction of the future, or otherwise). There is no reason to argue
 that one is absolutely superior to another.
 
-\firstyear
 \subsection{Corrected \protect\aic}
 \label{sub:Corrected aic}
 
@@ -242,8 +240,8 @@ where $n$ is the sample size, other notations are as defined before.
 
 It should be noted that \aicc is just one way to improve \aic for small
 samples. In particular, it is derived in the case of a model with linear
-structure and normal errors \parencite{Hurvich:1989ev, Burnham2002}. Under other
-models, other form of improved \aic can be derived. In general,
+structure and normal errors \parencite{Hurvich:1989ev, Burnham2002}. Under
+other models, other form of improved \aic can be derived. In general,
 \textcite{Hurvich:1989ev}'s form seems to be a good choice and adopted
 extensively in the literature even in nonlinear cases
 \parencite[e.g.][]{Turkheimer:2003iy}.
@@ -255,10 +253,11 @@ and limited size of data. The use of \aic based methods for such models was
 first introduced by \textcite{Hawkins:1986ha}. However, their work, and some
 recent use of \aic or \aicc mainly focus on low noise data. If the model has a
 nonlinear structure and high level noise, it can hardly be approximated by
-normal distribution. In such situations, as shown in \textcite{Zhou:2011uo} for
-\pet data, \aicc does not perform well. It is possible to derive specific \aic
-based information criterion for specific models, like \textcite{Hurvich:1989ev}
-did for theirs. Nonetheless this will involve much more analytical work which
-may or may not results in improved results. Instead, in the our work, using
-Bayesian model selection for \pet data are approached. The results are
-encouraging while the implementations still has limitations.  \endfirstyear
+normal distribution. In such situations, as shown in \textcite{Zhou:2011uo}
+for \pet data, \aicc does not perform well. It is possible to derive specific
+\aic based information criterion for specific models, like
+\textcite{Hurvich:1989ev} did for theirs. Nonetheless this will involve much
+more analytical work which may or may not results in improved results.
+Instead, in the our work, using Bayesian model selection for \pet data are
+approached. The results are encouraging while the implementations still has
+limitations.

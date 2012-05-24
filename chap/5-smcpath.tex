@@ -94,13 +94,13 @@ both $\gamma_n$ and $\tilde{\gamma}_n$, and
   \prod_{k=1}^{n-1}L_k(x_{k+1},x_k).
 \end{equation}
 By construction, the new target distribution $\tilde{\pi}_n$ satisfies the
-requirement for standard sequential importance sampling, and admit $\pi_n$
-as its marginal distribution. Therefore any estimates about $\pi_n$ can be
-done through sampling from $\tilde{\pi}_n$.
+requirement for standard sequential importance sampling, and admit $\pi_n$ as
+its marginal distribution. Therefore any estimates about $\pi_n$ can be done
+through sampling from $\tilde{\pi}_n$.
 
-Now back to the standard sequential importance sampling scheme, at time
-$n=1$, we have $\eta_1$ as an importance distribution for $\tilde{\pi}_1 =
-\pi_1$. Also $N$ particles are sampled, say, $\{X_1^{(i)}\}$. And a set of
+Now back to the standard sequential importance sampling scheme, at time $n=1$,
+we have $\eta_1$ as an importance distribution for $\tilde{\pi}_1 = \pi_1$.
+Also $N$ particles are sampled, say, $\{X_1^{(i)}\}$. And a set of
 corresponding weights $\{W_1^{(i)}\}$ are calculated by,
 \begin{align}
   w_1^{(i)} =
@@ -131,8 +131,8 @@ where,
   \label{eq:incr_weight}
 \end{equation}
 Applying the above equation for particles $\{W_{n-1}^{(i)}, X_{n-1}^{(i)}\}$
-and newly generated $\{X_n^{(i)}\}$, the incremental weights ($\tilde{w}$)
-and normalized weights $\{W_n^{(i)}\}$ can therefore be calculated.
+and newly generated $\{X_n^{(i)}\}$, the incremental weights ($\tilde{w}$) and
+normalized weights $\{W_n^{(i)}\}$ can therefore be calculated.
 
 \paragraph{Degeneracy} Intuitively, as the time index $n$ increases, the
 discrepancy between $\eta_n$ and $\tilde{\pi}_n$ increases as well, and the
@@ -146,9 +146,8 @@ discrepancy is reduced. The resampled particles should also be as good an
 approximation to the distribution $\pi_n$ as possible \parencite{Douc2005}.
 There are a number of resampling schemes. One class of them is under the
 constrains that, each particle $\{X_n^{(i)}\}$ is copied $N_n^{(i)}$ times,
-such that $\sum_{i=1}^N N_n^{(i)} = N$, $\Exp[N_n^{(i)}|X_{1:n}] =
-NW_n^{(i)}$ and the new particle set has equal weights
-\parencite{Douc2005,DelMoral2006}.
+such that $\sum_{i=1}^N N_n^{(i)} = N$, $\Exp[N_n^{(i)}|X_{1:n}] = NW_n^{(i)}$
+and the new particle set has equal weights \parencite{Douc2005,DelMoral2006}.
 
 To decide when to perform resampling, one can define a quantity called
 \emph{effective sample size} (\ess),
@@ -156,16 +155,16 @@ To decide when to perform resampling, one can define a quantity called
   \text{\ess} = \frac{1}{\sum_{i=1}^N(W_n^{(i)})^2},
 \end{equation}
 and it can be used as a criterion for whether or not resampling is required at
-time $n$ \parencite{Liu:1998iu}.  Intuitively, with the discrepancy between
+time $n$ \parencite{Liu:1998iu}. Intuitively, with the discrepancy between
 $\eta_n$ and $\pi_n$ increasing, many particulars will have smaller and
 smaller weights. Carrying on a lot of particulars with very small weights is
 apparently a waste. In this sense, it is sensible to use a quantity measuring
 the variance of normalized weights to decide when to do resampling, since the
 mean of normalized weights is fixed to be $1/N$. Mathematically, it was argued
-in \textcite{Liu:1998iu} that the effective sample size (\ess) is approximately
-proportional to the inverse of the variance of importance sampling estimator
-associated with the weights. And therefore it is used as an indicator of
-requirement of resampling.
+in \textcite{Liu:1998iu} that the effective sample size (\ess) is
+approximately proportional to the inverse of the variance of importance
+sampling estimator associated with the weights. And therefore it is used as an
+indicator of requirement of resampling.
 
 \paragraph{Summary of the algorithm} In short the algorithm for a sequence
 $\{\pi_n\}$, $n = 1,\dots,p$, can be represented as below,
@@ -188,9 +187,9 @@ $\{\pi_n\}$, $n = 1,\dots,p$, can be represented as below,
   \item Go to step 3.
 \end{enumerate}
 
-A few problems remains here to actually implement the algorithm. First is
-the choice of the kernel $K_n$.  The second problem is the optimization of
-the backward kernel $L_{n-1}$.
+A few problems remains here to actually implement the algorithm. First is the
+choice of the kernel $K_n$. The second problem is the optimization of the
+backward kernel $L_{n-1}$.
 
 \subsection{Choice of forward kernels}
 \label{sub:Choice of forward kernels}
@@ -207,16 +206,16 @@ of kernels was used in the literature.
 \paragraph{Independent proposals} It is possible to construct
 $K_n(x_{n-1},x_n) = K_n(x_n)$ where $K_n$ is a density function. The
 parameters can be determined by using information from $\{X_{n-1}^{(i)}\}$
-\parencite[e.g.][]{West:1993us}. Independent proposals appear to be dependent on
-good behavior of the sequence $\{\pi_n\}$. One way to construct proposals
-adaptively is proposed by \textcite{Jasra:2008bb}. However, it is still difficult
-to construct independent proposals which approximate $\pi_n$ well in many
-cases. For example, with a multi modes $\pi_n$, a standard distribution like
-Normal can hardly be efficient. Therefore, it is sensible to construct local
-moves.
+\parencite[e.g.][]{West:1993us}. Independent proposals appear to be dependent
+on good behavior of the sequence $\{\pi_n\}$. One way to construct proposals
+adaptively is proposed by \textcite{Jasra:2008bb}. However, it is still
+difficult to construct independent proposals which approximate $\pi_n$ well in
+many cases. For example, with a multi modes $\pi_n$, a standard distribution
+like Normal can hardly be efficient. Therefore, it is sensible to construct
+local moves.
 
 \paragraph{Local random-walk moves} An alternative to above is using
-$K_n(x_{n-1},x_n)$ a random-walk kernel \parencite[e.g.][]{Givens:1996ul}.  It
+$K_n(x_{n-1},x_n)$ a random-walk kernel \parencite[e.g.][]{Givens:1996ul}. It
 worth noting that the local random-walk here is very different from the
 Metropolis random-walk. In the \mcmc case, The entire sequence of random-walks
 explores a single target distribution and past moves provide information about
@@ -230,14 +229,14 @@ $\pi_n$ becomes difficult to met.
 
 \paragraph{Markov chain Monte Carlo moves} As proposed in
 \textcite{DelMoral2006}, it is natural to set $K_n$ as an \mcmc kernel of
-invariant distribution $\pi_n$. It is sensible in the cases either $K_n$
-mixes fast enough or $\pi_n$ evolves slowly so that we can expect $\eta_n$
-to be close to $\pi_n$. The massive amount of literatures in \mcmc, for
-example some references mentioned in chapter~\ref{cha:Bayesian computation
-  with Monte Carlo methods} can be used to construct efficient \mcmc kernels
-that mixes fast enough. This is one of the advantage that make this approach
-attractive. Another property of this kind of kernels is shown in the next
-subsection when we discuss the choice of backward kernels.
+invariant distribution $\pi_n$. It is sensible in the cases either $K_n$ mixes
+fast enough or $\pi_n$ evolves slowly so that we can expect $\eta_n$ to be
+close to $\pi_n$. The massive amount of literatures in \mcmc, for example some
+references mentioned in chapter~\ref{cha:Bayesian computation with Monte Carlo
+  methods} can be used to construct efficient \mcmc kernels that mixes fast
+enough. This is one of the advantage that make this approach attractive.
+Another property of this kind of kernels is shown in the next subsection when
+we discuss the choice of backward kernels.
 
 \subsection{Choice of backward kernels}
 \label{sub:Choice of backward kernels}
@@ -245,12 +244,12 @@ subsection when we discuss the choice of backward kernels.
 It should be noted that the choice of backward kernels should be optimized
 with respect to the chosen forward kernel. Recall that we introduced this
 backward kernel to enable the evaluation of weights by doing importance
-sampling on space $\prod_{i=1}^n E_i$ (or $E^n$ for the case of common
-support $E$) instead of $E_n$. Intuitively the variance of the importance
-weights is increased. So the optimal backward kernel will reduce this ``side
-effect''. Indeed, as shown in \textcite{DelMoral2006}, the optimal backward
-kernel in the sense of minimizing the asymptotic conditional variance of the
-estimator if resampling is carried out every iteration is
+sampling on space $\prod_{i=1}^n E_i$ (or $E^n$ for the case of common support
+$E$) instead of $E_n$. Intuitively the variance of the importance weights is
+increased. So the optimal backward kernel will reduce this ``side effect''.
+Indeed, as shown in \textcite{DelMoral2006}, the optimal backward kernel in
+the sense of minimizing the asymptotic conditional variance of the estimator
+if resampling is carried out every iteration is
 \begin{equation}
   L_{n-1}^{\mathrm{opt}}(x_n,x_{n-1})
   = \frac{\eta_{n-1}(x_{n-1})K_n(x_{n-1},x_n)}{\eta_n(x_n)}
@@ -310,8 +309,8 @@ is based on,
 \begin{equation}
   Z_t = \int_{\bTh}\gamma_t(\bth)\dd\bth
 \end{equation}
-where $\bth$ is the support of $\bth$. Provided the regularity condition
-which allows the change order of integration and differentiation below,
+where $\bth$ is the support of $\bth$. Provided the regularity condition which
+allows the change order of integration and differentiation below,
 \begin{align}
   \frac{\diff}{\diff t}\log(Z_t)
   &= \frac{1}{Z_t}\frac{\diff}{\diff t}Z_t \notag\\
@@ -347,8 +346,8 @@ for simplicity and without losing generality, this range is used here.
 One way to implement the estimator above is interpreting $t$ as a realization
 of a uniform random variable $T$ on $[0,1]$. Then the above integration can be
 interpreted as the expectation of $(T,\bth)$ on the joint space
-$[0,1]\times\bTh$. To obtain an estimate, one can sample from the joint
-space of $(T, \bTh)$ and use the simple Monte Carlo approximation.
+$[0,1]\times\bTh$. To obtain an estimate, one can sample from the joint space
+of $(T, \bTh)$ and use the simple Monte Carlo approximation.
 
 An alternative way is to use a sequence $0 = t_0 < t_1 < \dots < t_m = 1$, and
 numerical integration with trapezoidal rule. In other words, a sequence of
@@ -390,9 +389,9 @@ harmonic mean estimator described in section~\ref{sub:Importance sampling and
   harmonic mean based estimators} \parencite[see][]{Gelman1998}. It was argued
 by those authors as a natural evolution from importance sampling, and we agree
 with them on this. However, if we approach the path sampling by simulating
-from the joint space of $(T,\bth)$ using existing methods like \mcmc, then
-we suffer the same issues discussed in chapter~\ref{cha:Bayesian computation
-  with Monte Carlo methods}.
+from the joint space of $(T,\bth)$ using existing methods like \mcmc, then we
+suffer the same issues discussed in chapter~\ref{cha:Bayesian computation with
+  Monte Carlo methods}.
 
 Instead, we propose to combine these two techniques together to obtain a good
 estimator for ratio of normalizing constants. In the next section, an example
@@ -404,8 +403,7 @@ is constructed to demonstrate the use of the proposed method.
 To illustrate the use of \smc sampler and path sampling identity for the
 estimating of ratio of normalizing constants, consider two models, with
 likelihoods as Normal and Laplace (i.e. double exponential) distribution
-respectively. Explicitly, model 1, denote by
-$\calM_1$, has a likelihood
+respectively. Explicitly, model 1, denote by $\calM_1$, has a likelihood
 $\calN(\mu_1,\lambda_1^{-1})$, i.e.,
 \begin{equation}
   f(x|\mu_1,\lambda_1) = \sqrt{\frac{\lambda_1}{2\pi}}
@@ -461,8 +459,8 @@ where
 
 \subsubsection{Algorithm setting}
 
-Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as
-in equation~\ref{eq:prior_normal}. Let
+Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as in
+equation~\ref{eq:prior_normal}. Let
 \begin{equation}
   \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\bfx))^{p_k}\pi_0(\mu,\lambda)
   \label{eq:normal_targets}
@@ -582,8 +580,8 @@ where
 
 \subsubsection{Algorithm setting}
 
-Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as
-in equation~\ref{eq:prior_laplace}. Let
+Set $\pi_0(\mu,\lambda) = \pi(\mu,\lambda)$, where $\pi(\mu,\lambda)$ is as in
+equation~\ref{eq:prior_laplace}. Let
 \begin{equation}
   \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\bfx))^{p_k}\pi_0(\mu,\lambda)
   \label{eq:laplace_targets}
@@ -609,8 +607,8 @@ normal case, except for the forward kernel:
 
 Three sets of data are simulated, one from the Normal distribution, one from
 the Laplace distribution, and another form a mixture of the two with the
-weight of the Normal distribution being $0.5$. Recall that, the two
-component of the mixtures both has zero mean and unit variance, as in
+weight of the Normal distribution being $0.5$. Recall that, the two component
+of the mixtures both has zero mean and unit variance, as in
 equation~\eqref{eq:data_density}. The number of particles is $1000$ and the
 number of data generated is $100$.
 
@@ -619,19 +617,18 @@ number of data generated is $100$.
 The data is simulated from density as in equation~\eqref{eq:data_density},
 with $p = 1$. In other words, the data comes from $\calN(0,1)$. The sequence
 of distribution used to construct the \smc algorithm are
-equations~\eqref{eq:normal_targets} and~\eqref{eq:laplace_targets} for the
-two models, respectively. They are in the common for with different
-likelihood functions,
+equations~\eqref{eq:normal_targets} and~\eqref{eq:laplace_targets} for the two
+models, respectively. They are in the common for with different likelihood
+functions,
 \begin{equation*}
   \pi_k(\mu,\lambda) \propto (L(\mu,\lambda;\bfx))^{p_k}\pi_0(\mu,\lambda).
 \end{equation*}
 The sequence $\{p_k\in[0,1]\}$ is chosen to be $p_k = k / 1000$, $k = 0, 1,
 \dots, 1000$.
 
-\paragraph{Estimating means of distributions} Just to illustrate how the
-\smc algorithm evolves, the estimated means of parameters for distributions
-$\pi_k$ in the Normal model are plotted in
-Figure~\ref{fig:normal_dist_mean}.
+\paragraph{Estimating means of distributions} Just to illustrate how the \smc
+algorithm evolves, the estimated means of parameters for distributions $\pi_k$
+in the Normal model are plotted in Figure~\ref{fig:normal_dist_mean}.
 
 \begin{figure}[htb]
   \centering
@@ -655,8 +652,8 @@ QQ-plot of the data against the theoretical quantile of the two model, with
 parameters estimated form the \smc sampler. The first plot showed that both
 \smc and path sampling estimates can perfectly distinguish between the two
 models, as expected. However, the \smc estimates have considerably larger
-variance than the path sampling estimates. The second plot showed that
-Normal model indeed fit the data much better than the Laplace model.
+variance than the path sampling estimates. The second plot showed that Normal
+model indeed fit the data much better than the Laplace model.
 
 \begin{figure}[htb]
   \centering
@@ -678,10 +675,10 @@ Normal model indeed fit the data much better than the Laplace model.
 The data is simulated from the Laplace density, $\calL(0, \sqrt{2}/2)$. The
 algorithm is as described in the last section. Analogy to
 Figure~\ref{fig:normal_z} and~\ref{fig:normal_qq}, the estimates of
-normalizing constants and QQ-plots for the data against the model are shown
-in Figure~\ref{fig:laplace_z} and~\ref{fig:laplace_qq}. The results are
-similar to the Normal data, except that this time the Laplace model is
-preferable, as expected.
+normalizing constants and QQ-plots for the data against the model are shown in
+Figure~\ref{fig:laplace_z} and~\ref{fig:laplace_qq}. The results are similar
+to the Normal data, except that this time the Laplace model is preferable, as
+expected.
 
 \begin{figure}[htb]
   \centering
