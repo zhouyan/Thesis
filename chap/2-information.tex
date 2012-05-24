@@ -17,7 +17,7 @@ followed by a discussion of the \aic model selection method.
 \kl measures the ``distance'' or ``divergence'' between statistical
 populations defined by their underlying probability densities. The divergence
 is measured in terms of the information defined by the log-likelihood ratio
-\parencite{Kullback1951}. The common definition of \kl for continuous
+\parencite{Kullback:1951va}. The common definition of \kl for continuous
 distributions in literature is \parencite[e.g.,][]{Claeskens2008},
 \begin{equation}
   \dkl(g, f(\cdot;\bth)) = \int g(x)\log\frac{g(x)}{f(x;\bth)}\dd x,
@@ -32,7 +32,7 @@ vector $\bth$. The integration above is over the support of $g$.
 
 One important observation is that $\dkl(g,f(\cdot;\bth))\ge0$ with equality if
 and only if $g(x) = f(x;\tbth)$ almost everywhere for some value of $\bth =
-\tbth$ \parencite{Kullback1951}. In terms of equation~\eqref{eq:kld}, this
+\tbth$ \parencite{Kullback:1951va}. In terms of equation~\eqref{eq:kld}, this
 means that the \kl is always positive unless for some value of $\bth$,
 $f(\cdot;\bth) = g(\cdot)$, which is the true data generating density. This
 result naturally suggests one to find the estimator $\tbth$ which minimizes
@@ -55,7 +55,7 @@ Law of Large Numbers,
   \label{eq:kl consistency}
 \end{equation}
 provided that this expectation exits. Hence \parencite[see][for
-details]{Kullback1951},
+details]{Kullback:1951va},
 \begin{equation}
   \hbth \overset{\mathrm{a.s}}{\longrightarrow} \tbth,
   \quad\text{for } n\to\infty.
@@ -78,7 +78,7 @@ is the maximum likelihood estimator (\mle) under model $\calM$.\footnote{More
   precisely it is a class of models whose densities belong to the same
   parametric family.} And $k$ is the dimension of the parameter vector. The
 model with the smallest \aic value is selected. It is first introduced by
-Akaike in a series of papers \parencite{Akaike1973, Akaike1974, Akaike1977,
+Akaike in a series of papers \parencite{Akaike1973, Akaike:1974ih, Akaike1977,
   Akaike1981}. From a likelihood principle perspective, \aic acts as a balance
 between good fit (high log-likelihood) and complexity in the sense that the
 dimension of the parameter vector is used as a penalty term in the formula.
@@ -90,7 +90,7 @@ And many of them are closely related to the \aic method.
 
 There are precise mathematical reasons behind the \aic's way of penalizing
 complexity and measuring the fit of data. These are closely related to the
-behavior of the \mle and its relation to the \textcite{Kullback1951}'s measure
+behavior of the \mle and its relation to the \textcite{Kullback:1951va}'s measure
 of the statistical divergence from one probability density to another. In the
 next subsection the derivation of \aic is outlined. This shall provide us a
 basis for the discussion of the suitability of the \aic and related methods
@@ -100,7 +100,7 @@ for model selection.
 \label{sub:Derivation of aic}
 
 The \aic method and its formula has been derived and justified by various
-authors \parencite[e.g.][]{Stone1982, Sawa1978, Chow1981, Bozdogan1987,
+authors \parencite[e.g.][]{Stone:1982ck, Sawa:1978tn, Chow1981, Bozdogan1987,
   Akaike1973, Claeskens2008}. To summarize, we start with the same
 information-theoretic approach as in \textcite{Akaike1973}, and use Taylor
 expansions to approximate the expected loss of using a parametric density with
@@ -108,7 +108,7 @@ expansions to approximate the expected loss of using a parametric density with
 addition we shall only consider the case in which the sample size $n$ is
 sufficient large in the sense that $n\gg k$, where $k$ is the dimension of the
 estimated parameter vector. The case in which $n$ is small is considered by
-\textcite{Hurvich1989}, and will be reviewed later in
+\textcite{Hurvich:1989ev}, and will be reviewed later in
 subsection~\ref{sub:Corrected aic}.
 
 As pointed out by \textcite{Bozdogan1987}, though the development of \aic had
@@ -186,10 +186,10 @@ like \aic can hardly work.
 The \aic method is often compared with the Bayesian model selection as one of
 the most important frequentist model selection methods, in particular in
 contrast with the \bic method. It is interest to note that
-\textcite{Akaike1978} has a Bayesian interpretation of the \aic procedure for
+\textcite{Akaike:1978ti} has a Bayesian interpretation of the \aic procedure for
 the special case of a multivariate Gaussian model. In that case, \aic can be
 viewed as an approximation to the posterior probability. Without going into
-the details, \textcite{Akaike1978} considered the situation that the sample
+the details, \textcite{Akaike:1978ti} considered the situation that the sample
 size can be easily increased to a large enough number while two models are
 very close in the sense that the difference in their parameters are not quite
 visible through the observed data. Under this setting, it was then shown that
@@ -199,11 +199,11 @@ this setting as the general cases in data analysis as argued by Akaike.
 Instead, in realistic cases the difficulties of model selection problem often
 come from the fact that we have very limited data.
 
-On the other hand, as seen in \textcite{Akaike1980}, using likelihood function
+On the other hand, as seen in \textcite{Akaike:1980gh}, using likelihood function
 and \aic estimates as the source of objectivity of the Bayesian modeling leads
 to the \bic procedure. However, those with a subjective Bayesian perspective
 are not likely to be convinced by the desire of objectivity itself. In
-addition, as noted by \textcite{Kass1995}, the Bayesian justification of \aic
+addition, as noted by \textcite{Kass:1995vb}, the Bayesian justification of \aic
 is only valid when the precision of the prior distribution is comparable to
 that of the likelihood. This assumption is hardly ever true in reality.
 
@@ -228,7 +228,7 @@ the robustness of the \aic procedure.
 The corrected \aic, usually denoted by \aicc, mainly deals with the situation
 that the sample size is not sufficient large in the sense that the dimension
 of the parameter vector to be estimated is close to the sample size.
-\textcite{Hurvich1989} developed the \aicc for regression and time series
+\textcite{Hurvich:1989ev} developed the \aicc for regression and time series
 modeling. \textcite{Sugiura1978} provided an equivalent form. The \aicc is
 defined as,
 \begin{equation}
@@ -242,22 +242,22 @@ where $n$ is the sample size, other notations are as defined before.
 
 It should be noted that \aicc is just one way to improve \aic for small
 samples. In particular, it is derived in the case of a model with linear
-structure and normal errors \parencite{Hurvich1989, Burnham2002}. Under other
+structure and normal errors \parencite{Hurvich:1989ev, Burnham2002}. Under other
 models, other form of improved \aic can be derived. In general,
-\textcite{Hurvich1989}'s form seems to be a good choice and adopted
+\textcite{Hurvich:1989ev}'s form seems to be a good choice and adopted
 extensively in the literature even in nonlinear cases
-\parencite[e.g.][]{Turkheimer2003}.
+\parencite[e.g.][]{Turkheimer:2003iy}.
 
 However, to illustrate the limitation of the \aicc method, in
-\textcite{Zhou2011} which we examined the model selection for compartment
+\textcite{Zhou:2011uo} which we examined the model selection for compartment
 models, the use of \aicc was shown inefficient for high dimension, high noise
 and limited size of data. The use of \aic based methods for such models was
-first introduced by \textcite{Hawkins1986}. However, their work, and some
+first introduced by \textcite{Hawkins:1986ha}. However, their work, and some
 recent use of \aic or \aicc mainly focus on low noise data. If the model has a
 nonlinear structure and high level noise, it can hardly be approximated by
-normal distribution. In such situations, as shown in \textcite{Zhou2011} for
+normal distribution. In such situations, as shown in \textcite{Zhou:2011uo} for
 \pet data, \aicc does not perform well. It is possible to derive specific \aic
-based information criterion for specific models, like \textcite{Hurvich1989}
+based information criterion for specific models, like \textcite{Hurvich:1989ev}
 did for theirs. Nonetheless this will involve much more analytical work which
 may or may not results in improved results. Instead, in the our work, using
 Bayesian model selection for \pet data are approached. The results are

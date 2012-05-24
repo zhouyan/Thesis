@@ -156,13 +156,13 @@ To decide when to perform resampling, one can define a quantity called
   \text{\ess} = \frac{1}{\sum_{i=1}^N(W_n^{(i)})^2},
 \end{equation}
 and it can be used as a criterion for whether or not resampling is required at
-time $n$ \parencite{Liu1998}.  Intuitively, with the discrepancy between
+time $n$ \parencite{Liu:1998iu}.  Intuitively, with the discrepancy between
 $\eta_n$ and $\pi_n$ increasing, many particulars will have smaller and
 smaller weights. Carrying on a lot of particulars with very small weights is
 apparently a waste. In this sense, it is sensible to use a quantity measuring
 the variance of normalized weights to decide when to do resampling, since the
 mean of normalized weights is fixed to be $1/N$. Mathematically, it was argued
-in \textcite{Liu1998} that the effective sample size (\ess) is approximately
+in \textcite{Liu:1998iu} that the effective sample size (\ess) is approximately
 proportional to the inverse of the variance of importance sampling estimator
 associated with the weights. And therefore it is used as an indicator of
 requirement of resampling.
@@ -207,16 +207,16 @@ of kernels was used in the literature.
 \paragraph{Independent proposals} It is possible to construct
 $K_n(x_{n-1},x_n) = K_n(x_n)$ where $K_n$ is a density function. The
 parameters can be determined by using information from $\{X_{n-1}^{(i)}\}$
-\parencite[e.g.][]{West1993}. Independent proposals appear to be dependent on
+\parencite[e.g.][]{West:1993us}. Independent proposals appear to be dependent on
 good behavior of the sequence $\{\pi_n\}$. One way to construct proposals
-adaptively is proposed by \textcite{Jasra2008}. However, it is still difficult
+adaptively is proposed by \textcite{Jasra:2008bb}. However, it is still difficult
 to construct independent proposals which approximate $\pi_n$ well in many
 cases. For example, with a multi modes $\pi_n$, a standard distribution like
 Normal can hardly be efficient. Therefore, it is sensible to construct local
 moves.
 
 \paragraph{Local random-walk moves} An alternative to above is using
-$K_n(x_{n-1},x_n)$ a random-walk kernel \parencite[e.g.][]{Givens1996}.  It
+$K_n(x_{n-1},x_n)$ a random-walk kernel \parencite[e.g.][]{Givens:1996ul}.  It
 worth noting that the local random-walk here is very different from the
 Metropolis random-walk. In the \mcmc case, The entire sequence of random-walks
 explores a single target distribution and past moves provide information about

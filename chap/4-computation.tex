@@ -145,7 +145,7 @@ tails. Now, back to our problem of evaluating the marginal likelihood
 $\Pr(D)$, replace $f$ by $\pi(\bth)$ and $h$ by $f(D|\bth)$, it is therefore
 suggested to use the posterior density $\pi^*(\bth|D) \propto
 f(D|\bth)\pi(\bth)$ as density $g$ in equation~\eqref{eq:is est}. This leads
-to the \emph{harmonic mean} estimator of $\Pr(D)$ \parencite{Newton1994},
+to the \emph{harmonic mean} estimator of $\Pr(D)$ \parencite{Newton:1994wm},
 using sample $\bth_N= \mcvec{\bth}{N}$ from the posterior density
 $\pi^*(\bth|D)$,
 \begin{equation}
@@ -191,7 +191,7 @@ or equivalently
 It can be seen that the density $\gamma$ plays the role of an importance
 sampling density. For similar reasons of optimizing importance sampling, high
 efficiency is most likely to be achieved if $\gamma$ is roughly proportional
-to $f(D|\bth)$ \parencite{Kass1995}. And the above equation suggests that the
+to $f(D|\bth)$ \parencite{Kass:1995vb}. And the above equation suggests that the
 estimator has a finite variance and thus satisfies the Central Limit Theorem
 if the tails of $\gamma$ is thin enough compared to the unnormalized posterior
 distribution $f(D|\bth)\pi(\bth)$. \textcite{Gelfand1994} suggested using
@@ -208,7 +208,7 @@ The above equation provides a way of monitoring the convergence of the
 estimator.
 
 The estimator in equation~\eqref{eq:harmonic mean modified} is used in
-\textcite{Zhou2011}. It was proved to perform well enough for our purpose and
+\textcite{Zhou:2011uo}. It was proved to perform well enough for our purpose and
 it was relative easy to compute. However, the choice of a sensible density
 $\gamma$ is not always easy in general. The multivariate normal or $t$
 densities as proposed by \textcite{Gelfand1994} is not always justified. Since
@@ -218,21 +218,21 @@ difficult to choose $\gamma$ to satisfy the condition for a finite variance.
 But the properties of the posterior distributions are usually not known
 (otherwise we may not have to use Monte Carlo methods for its simulating or we
 can use a good approximations for computing the Bayes factor), therefore high
-efficiency is hard to achieve. \textcite{Meng1996} considered an optimal
+efficiency is hard to achieve. \textcite{Meng:1996wj} considered an optimal
 choice of $\gamma$ and proposed a method to compute this iteratively.
 
 \subsubsection{Other methods and a summary}
 \label{ssub:Other methods and a summary a}
 
 Besides the estimator discussed above, there are some other approaches to
-stabilizing the harmonic mean estimator. For example \textcite{Hesterberg1995}
+stabilizing the harmonic mean estimator. For example \textcite{Hesterberg:1995wg}
 proposed using a mixture of the posterior density $\pi^*(\bth|D)$ and a heavy
 tailed density, say $\omega(\bth)$,
 \[
   (1-\rho)\pi^*(\bth|D) + \rho\omega(\bth),\quad \rho\ll 1,
 \]
-as the importance density \parencite[see also][]{Owen2000}.
-\textcite{Raftery2006} also discussed a method for improving the harmonic mean
+as the importance density \parencite[see also][]{Owen:2000kb}.
+\textcite{Raftery:2006ty} also discussed a method for improving the harmonic mean
 by parameter reduction. This method requires analytical form for integrating
 at least some parameter out of the unnormalized posterior distribution. Such
 analysis is in general intractable for complex models, especially for
@@ -289,10 +289,10 @@ discussions of algorithms.  \textcite[][chap.~6 and~7]{Durrett2010} address
 some of the properties of Markov chains in a fairly general setting with
 rigorous mathematical treatment. \textcite[][chap.~6]{Robert2004} is a compact
 reference for many results of Markov chains related particularly to \mcmc
-algorithms. The last not least, the classical paper by \textcite{Tierney1994}
+algorithms. The last not least, the classical paper by \textcite{Tierney:1994uk}
 has two sections of key results of Markov chains in the setting of \mcmc
 algorithms \parencite[also see][for discussions of results in this
-paper]{Besag1994,Chan1994,Doss1994,Robert1994}. These references provide all
+paper]{Besag1994,Chan1994,Doss1994,Robert:1994vh}. These references provide all
 the results we will use in the following.
 
 We will always consider a time-homogeneous Markov chain with transition kernel
@@ -303,7 +303,7 @@ distribution $\pi$ is $\pi$-irreducible, if for any initial state, it has a
 positive probability of entering any subset of the state space to which $\pi$
 assigns positive probability. A chain is aperiodic if there is no subset of
 the state space such that it can only be visited at certain regularly spaced
-times \parencite{Tierney1994}. These two properties together with a proper
+times \parencite{Tierney:1994uk}. These two properties together with a proper
 invariant distribution $\pi$ ensures the uniqueness of $\pi$ and the
 convergence of the chains to $\pi$ in the sense of total variation norm for
 almost all starting point $x_0$. If further, for this $\pi$-irreducible chain,
@@ -337,7 +337,7 @@ chain.
 
 The properties of Markov chains discussed above form the foundation of design
 of \mcmc algorithms. Two most important types of \mcmc algorithms are \mha
-\parencite{Hastings1970,Metropolis1953} and Gibbs sampling
+\parencite{Hastings:1970gd,Metropolis:1953ex} and Gibbs sampling
 \parencite{Geman1993}. We will review these two techniques in the following
 subsections. In addition, the use them for Bayesian model selection
 computation are also reviewed.
@@ -368,7 +368,7 @@ The probability $\rho(x,y)$ is called the \emph{the Metropolis-Hastings
 \mha having the limiting distribution $f$ are quite minimal
 \parencite[see][chap.~7]{Robert2004}. Instead of discuss the general form of
 \mha in details, we focus on some practical implementations of this algorithm
-\parencite[also see][for the speed of convergence of the \mha]{Mengersen1996}.
+\parencite[also see][for the speed of convergence of the \mha]{Mengersen:1996th}.
 
 \paragraph{Independent \mha} This algorithm uses a proposal density $q$ that
 is independent of $x^t$, that is $q(y|x) = q(y)$ whose support include that of
@@ -385,7 +385,7 @@ ergodicity of the chain is often in question. A theoretical assessment of the
 adaptive scheme is not easy, however there are a few examples in the
 literature using adaptive scheme for independent or random walk (discussed in
 the next paragraph) \mha \parencites(e.g.,
-see)(){Gilks1998,Haario1999,Haario2001} On the practical side, the
+see)(){Gilks1998,Haario:1999dh,Haario:2001gu} On the practical side, the
 optimization of the adaptive scheme is often as difficult as the design of the
 proposals. Another solution, which is generic and easy to implement is the
 random walk \mha.
@@ -394,7 +394,7 @@ random walk \mha.
 ($(g(t) = g(-t)$). Or equivalently the the conditional density $q(y|x)$ is of
 the form $q(|x-y|)$. The random walks does not satisfies conditions for a
 uniformly ergodicity. However it is geometric ergodic under certain
-conditions. \textcite{Mengersen1996} proposed a condition based on
+conditions. \textcite{Mengersen:1996th} proposed a condition based on
 log-concavity of $f$ in the tails. However we found that in practice it is
 often too difficult to verify those conditions for complex models. However a
 more important limitation of random walks is similar to that of independent
@@ -522,14 +522,14 @@ on the saturation scheme. It is very clear that \textcite{Carlin1995}'s method
 requires the simulations from all models at all steps, which is very costly
 when the size of model set is large. The other issue is the constructing of
 pseudo-priors. There is always the possibility that some part of the model
-parameter space $\bTh_k$ may be omitted \parencites[see][chap.~7]{Robert2007}.
+parameter space $\bTh_k$ may be omitted \parencites[see][chap.~7]{Robert:2007tc}.
 \endfirstyear
 
 \subsection{Reversible jump \protect\mcmc}
 \label{sub:Reversible jump mcmc}
 
 The reversible jump \mcmc techniques (\rjmcmc) introduced by
-\textcite{Green1995} is based on existence of the detailed balance,
+\textcite{Green:1995dg} is based on existence of the detailed balance,
 \begin{equation}
   \int_A\int_B\pi(x)K(x,y)\dd y \dd x = \int_B\int_A\pi(y)K(y,x)\dd x \dd y,
   \label{eq:detailed balance}
@@ -540,7 +540,7 @@ algorithms for simulation from posterior densities $\pi^*(\bth_k|D,\kappa =
 k)$ as we discussed in subsection~\ref{sub:Markov chain Monte Carlo sampling}.
 The difference is that in the context of Bayesian model selection, the target
 distribution is $\mu(\bth_k,\kappa = k|D)$ and the dimension of the parameter
-is variable. The core of \textcite{Green1995}'s techniques is to construct an
+is variable. The core of \textcite{Green:1995dg}'s techniques is to construct an
 algorithm that the Markov transition kernel $K((\bth_i,\kappa = i),
 (\bth_j,\kappa = j))$ satisfies the detailed balance~\eqref{eq:detailed
   balance}. The detailed balance ensures that the constructed Markov chain is
@@ -567,7 +567,7 @@ where
   \omega(x) = 1 - \sum_k(\rho_k q_k)(x,\bTh_k),
 \end{equation}
 that is the probability of no move. The fundamental assumption in
-\textcite{Green1995} is that joint measure $\pi(\diff x)q_k(x,\diff y)$
+\textcite{Green:1995dg} is that joint measure $\pi(\diff x)q_k(x,\diff y)$
 \emph{must be absolutely continous with respect to a symmetric measure}
 $\xi_k(\diff x, \diff y)$ on $\bTh\times\bTh$. That is, there exists a density
 $g_k(x,y)$ of $q_k(x,\diff y)\pi(\diff x)$ against this dominating measure.
@@ -580,7 +580,7 @@ In such a setting the reversibility is ensured by the symmetry of the measure
 $\xi_k$.
 
 The first difficulty of the \rjmcmc approach is the determination of the
-measure $\xi_k$, which is restricted to be symmetric. \textcite{Green1995}
+measure $\xi_k$, which is restricted to be symmetric. \textcite{Green:1995dg}
 proposed the use of auxiliary variables. For example in the notations of
 settings of section~\ref{sec:Variable dimension models}, if the jumps are
 decomposed into moves between pairs of models, say $\calM_1$ and $\calM_2$
@@ -589,7 +589,7 @@ the model parameter spaces $\bTh_{k_1}$ and $\bTh_{k_2}$ to create a bijective
 mapping between them. Without losing generality, assuming $\dim(\bTh_{k_1}) >
 \dim(\bTh_{k_2})$ and if the move from $\bTh_{k_1}$ to $\bTh_{k_2}$ can be
 represented by a deterministic transformation $\bth_{k_2}= T(\bth_{k_1})$,
-\textcite{Green1995} imposes a dimension matching condition which is that the
+\textcite{Green:1995dg} imposes a dimension matching condition which is that the
 move from $\calM_2$ to $\calM_1$ is concentrated on the curve,
 \begin{equation}
   \{\bth_{k_1}:\bth_{k_2}= T(\bth_{k_1})\}.
@@ -608,7 +608,7 @@ the move from $\calM_1$ to $\calM_2$ is therefore,
 where $p_{ij}$ is the probability of proposing a move to $\calM_j$ when the
 current state is $\calM_i$, and $g_i$ is the density of $\bfu_i$. This
 proposal satisfies the detailed balance condition if the move from $\calM_2$
-to $\calM_1$ also satisfies the bijection $T$. \textcite{Green1995} pointed
+to $\calM_1$ also satisfies the bijection $T$. \textcite{Green:1995dg} pointed
 out that the target density $\mu$ does not need to be normalized, but the
 posterior densities for difference models have to be known up to the
 \emph{same} normalizing constant.
@@ -616,7 +616,7 @@ posterior densities for difference models have to be known up to the
 \subsection{Challenges of implementations of \protect\rjmcmc}
 \label{sub:Challenges of implementations of rjmcmc}
 
-Though \textcite{Green2009} argued that the additional challenges of
+Though \textcite{Green:2009tr} argued that the additional challenges of
 implementation of \rjmcmc is just a ``myth'', we still outlines some
 difficulties of these techniques. The ability of simulation the posterior
 density $\mu(\bth_k,\kappa = k)$ is obviously very appealing to the Bayesian
@@ -635,10 +635,10 @@ to be very practical for within model simulations, may no longer be intuitive
 in the variable dimension model settings.
 
 Some discussion of the optimization of the cross-model moves can be found in
-\textcite{Green2009}. Also similar development to the adaptive scheme for \mha
-can be found extended to for \rjmcmc \parencite[for example][]{Hastie2005}.
+\textcite{Green:2009tr}. Also similar development to the adaptive scheme for \mha
+can be found extended to for \rjmcmc \parencite[for example][]{Hastie:2005vi}.
 However little other work are known for this kind of improvement of \rjmcmc.
-\textcite{Green2011} discussed a method called \emph{delayed rejection}. In
+\textcite{Green:2011tk} discussed a method called \emph{delayed rejection}. In
 this method, a rejection of a proposal does not immediately lead to the
 acceptance of current state, instead a second proposal is attempted. Their
 numerical results showed efficiency improve but with increased computation

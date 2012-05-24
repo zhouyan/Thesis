@@ -31,7 +31,7 @@ problem, and their implementations.
 As stated in chapter~\ref{cha:Introduction}, we insist on the
 decision-oriented aspects of statistical inference, in particular, model
 selection problems. A throughout treatment of Bayesian modeling from this
-perspective can be found in \textcite{Robert2007}. Formal mathematical
+perspective can be found in \textcite{Robert:2007tc}. Formal mathematical
 representations can also be found in \textcite[][sec.~5.1 and
 sec.~6.1]{Bernardo2000}, where the notion of rational decisions in the context
 of uncertainty was made precise in the form of axioms
@@ -45,7 +45,7 @@ It shall also be noted that logically, one's beliefs do not necessarily lead
 to one's decisions. Instead the beliefs can often be interpreted as an useful
 summary of the information available. In this case, the beliefs lead to
 inference, but the inference itself can be interpreted as the decision to be
-made \parencite[][chap.~1]{Lehmann2005}. The foundation of the Bayesian
+made \parencite[][chap.~1]{Lehmann:2005vy}. The foundation of the Bayesian
 approach to various statistical problems is prescriptive rather than
 descriptive. We are concerned with deriving beliefs from information and
 making decisions or preferences based on decisions such that a specified form
@@ -192,7 +192,7 @@ where
 \end{equation}
 is called the Bayes factor. Equation~\eqref{eq:posterior odd} states how the
 prior odds ratio is transformed into the posterior odds ratio by the Bayes
-factor \parencite{Kass1995}. The Bayes factor is the principle tool for
+factor \parencite{Kass:1995vb}. The Bayes factor is the principle tool for
 Bayesian model comparison and model selection. As it is made clear in the
 above equation, to compute the Bayes factor, all that needs to be done is the
 computation of following quality for each value of $\kappa$,
@@ -219,14 +219,14 @@ words, one can always construct a prior distribution such that inference will
 be biased towards one's preference, which is not necessarily rational. It is
 often too difficult to elicit a precise distribution from prior information.
 Therefore it is necessary to make at least partly arbitrary choice of the
-prior distribution \parencites{Robert2007}[][chap.~3]{Kass1995}.
+prior distribution \parencites{Robert:2007tc}[][chap.~3]{Kass:1995vb}.
 
 Often the priors need to be considered carefully on a per problem basis.
 Nonetheless there are a few classes of prior distributions frequently used in
 the Bayesian modeling. In the particular problem of Bayesian model comparison
 and selection, it shall be noted that the Bayes factor is more sensitive to
-the choice of prior than point or interval estimations \parencite{Kass1993,
-  Kass1995}. One of the more important class of prior distribution is the
+the choice of prior than point or interval estimations \parencite{Kass:1993vy,
+  Kass:1995vb}. One of the more important class of prior distribution is the
 conjugate prior. See \textcite[][chap.~5]{Bernardo2000} for its justification.
 In practice the conjugate prior is often used because of its mathematical
 properties. However it is often argued that this is an objective approach as
@@ -237,18 +237,18 @@ the choice of prior distributions on a subjective basis in such situations. In
 such settings, there are also efforts to make the prior ``non-informative''.
 Among them the most important two are Jeffreys' priors
 \parencite{Jeffreys1946} and the reference prior \parencite{Bernardo1979}. See
-\textcite{Kass1996} for more detailed analysis of the Jeffreys' priors and
-other non-informative approach to Bayesian analysis and \textcite{Berger1989,
-  Berger1992, Berger1992a} for reference priors.
+\textcite{Kass:1996jj} for more detailed analysis of the Jeffreys' priors and
+other non-informative approach to Bayesian analysis and \textcite{Berger:1989vj,
+  Berger:1992kf, Berger:1992wo} for reference priors.
 
 It is also important to evaluate the Bayes factor over a range of possible
 priors to assess the sensitivity issues. This is often computational intensive
 since many high dimensional integrations are required. When there is enough
 information to construct parametric priors, it is possible to alter the values
 of parameters and recompute the Bayes factor
-\parencite[e.g.,][]{McCulloch1991}. In general situations, a less
+\parencite[e.g.,][]{McCulloch:1991hj}. In general situations, a less
 computational intensive method is to use the Laplace approximation to compare
-the Bayes factor using different priors \parencite[e.g.,][]{Kass1992}. It is
+the Bayes factor using different priors \parencite[e.g.,][]{Kass:1992tz}. It is
 also proposed in the literature to use the maximum of Bayes factor (and thus
 the maximal evidence against a model) to evaluate the sensitivity problem
 \parencite[e.g.,][]{Berger1987}.
@@ -269,7 +269,7 @@ chapter~\ref{cha:Bayesian computation with Monte Carlo methods}.
 \label{sub:Bayesian information criterion}
 
 The Bayesian information criterion (\bic) was developed as an approximation to
-the Bayes factor \parencite{Schwarz1978}. The \bic is defined as,
+the Bayes factor \parencite{Schwarz:1978uv}. The \bic is defined as,
 \begin{equation}
   \text{\bic} = -2\log f(D|\hbth) + k\log(n).
 \end{equation}
@@ -336,10 +336,10 @@ terms. These assumptions restricted the use of \bic in many situations. See
 See \textcite{Berger2001} for examples that the irregularity of likelihood
 function causes the \bic method failed. Moreover, in non-i.i.d. situations,
 just like \aic, the definition of the parameter dimension $k$ is ambiguous
-\parencite{Spiegelhalter1998, Kass1995}. See also \textcite[][chap.~5 and
+\parencite{Spiegelhalter:1998uc, Kass:1995vb}. See also \textcite[][chap.~5 and
 chap.~6]{Burnham2002} for more comparison and contrast of \aic and \bic
 approaches to model selection. There are other criticism of the \bic strategy.
-For example \textcite[][chap.~7]{Robert2007} argued that the \bic strategy
+For example \textcite[][chap.~7]{Robert:2007tc} argued that the \bic strategy
 eliminated the subjective input into the Bayes modeling since the value of
 \bic does not depend on the prior distribution. However this is equally argued
 as an advantage of this strategy in the case that priors, to which Bayes
