@@ -19,7 +19,7 @@ approximated by an importance distribution, and iteratively, move the
 importance distribution towards the target distribution of interest. The
 distributions constructed by the intermediate steps can be used to estimate
 the ratio of normalizing constants between the target and initial
-distribution. \parencite{DelMoral2006}
+distribution. \parencite{DelMoral:2006hc}
 
 The path sampling technique constructs a continuous \emph{path} to bridge two
 distributions, and estimates the logarithm ratio of normalizing constants
@@ -28,7 +28,7 @@ section~\ref{sec:Path sampling estimator}. The exact meaning of ``path'' will
 be introduced in the same section. However, it is worth mention here that,
 when implementing the path sampling estimator, this path is often constructed
 as a finite sequence of distributions and numerical integration is used to
-approximate the estimator. \parencite{Gelman1998}
+approximate the estimator. \parencite{Gelman:1998ei}
 
 These two techniques can be combined together for the estimating of ratios of
 normalizing constants. One way to think of it is that, the path sampling
@@ -61,7 +61,7 @@ distribution $\eta_n$ such that $\eta_n$ is an efficient importance
 distribution for $\pi_n$. This is done by moving the $N$ particles by a
 sensible Markov kernel $K_n$ such that particles are moved into high density
 region of $\pi_n$. This technique is called sequential importance sampling in
-some literature \parencite[e.g.][]{DelMoral2006}.
+some literature \parencite[e.g.][]{DelMoral:2006hc}.
 
 It should be intuitively clear that, in general to do any kind of estimations,
 we need be able to evaluate the importance weights at each time $n$, and thus
@@ -143,11 +143,11 @@ normalized weights, as similar in the regular importance sampling.
 One way to solve this problem is to resample the particles. The resampling
 process consists of selecting new particles and weights such that the
 discrepancy is reduced. The resampled particles should also be as good an
-approximation to the distribution $\pi_n$ as possible \parencite{Douc2005}.
+approximation to the distribution $\pi_n$ as possible \parencite{Douc:2005wa}.
 There are a number of resampling schemes. One class of them is under the
 constrains that, each particle $\{X_n^{(i)}\}$ is copied $N_n^{(i)}$ times,
 such that $\sum_{i=1}^N N_n^{(i)} = N$, $\Exp[N_n^{(i)}|X_{1:n}] = NW_n^{(i)}$
-and the new particle set has equal weights \parencite{Douc2005,DelMoral2006}.
+and the new particle set has equal weights \parencite{Douc:2005wa,DelMoral:2006hc}.
 
 To decide when to perform resampling, one can define a quantity called
 \emph{effective sample size} (\ess),
@@ -168,7 +168,7 @@ indicator of requirement of resampling.
 
 \paragraph{Summary of the algorithm} In short the algorithm for a sequence
 $\{\pi_n\}$, $n = 1,\dots,p$, can be represented as below,
-\parencite{DelMoral2006}
+\parencite{DelMoral:2006hc}
 \begin{enumerate}
   \item Set $n=1$, draw $\{X_1^{(i)}\}$ from $\eta_1$ for $i = 1,\dots,N$.
     And evaluate $\{W_1^{(i)}\}$ by equations~\eqref{eq:ini_weight}
@@ -228,7 +228,7 @@ defined by the problem and the requirement for $\pi_{n-1}$ being close to
 $\pi_n$ becomes difficult to met.
 
 \paragraph{Markov chain Monte Carlo moves} As proposed in
-\textcite{DelMoral2006}, it is natural to set $K_n$ as an \mcmc kernel of
+\textcite{DelMoral:2006hc}, it is natural to set $K_n$ as an \mcmc kernel of
 invariant distribution $\pi_n$. It is sensible in the cases either $K_n$ mixes
 fast enough or $\pi_n$ evolves slowly so that we can expect $\eta_n$ to be
 close to $\pi_n$. The massive amount of literatures in \mcmc, for example some
@@ -247,7 +247,7 @@ backward kernel to enable the evaluation of weights by doing importance
 sampling on space $\prod_{i=1}^n E_i$ (or $E^n$ for the case of common support
 $E$) instead of $E_n$. Intuitively the variance of the importance weights is
 increased. So the optimal backward kernel will reduce this ``side effect''.
-Indeed, as shown in \textcite{DelMoral2006}, the optimal backward kernel in
+Indeed, as shown in \textcite{DelMoral:2006hc}, the optimal backward kernel in
 the sense of minimizing the asymptotic conditional variance of the estimator
 if resampling is carried out every iteration is
 \begin{equation}
@@ -262,7 +262,7 @@ which is exactly the importance sampling weights in marginal space. However,
 as for the same reason we need this backward kernel, the above optimal kernels
 cannot be computed point-wise, since itself relies on the marginal
 distribution $\eta_n$. Several suboptimal kernels were shown in
-\textcite{DelMoral2006}. The one of most interest to this report is as below.
+\textcite{DelMoral:2006hc}. The one of most interest to this report is as below.
 
 It was shown that with the \mcmc kernel and $\pi_n$ be close enough to
 $\pi_{n-1}$, a good approximation to optimal backward kernel is given by
@@ -295,7 +295,7 @@ and the importance sampling estimates,
 \end{equation}
 To estimate $Z_n/Z_1$, the product of the above estimates can be used. The
 formula can be further simplified in the case where resampling is not
-performed at each iteration \parencite{DelMoral2006}.
+performed at each iteration \parencite{DelMoral:2006hc}.
 
 \section{Path sampling estimator}
 \label{sec:Path sampling estimator}
@@ -386,7 +386,7 @@ a large enough particle set and smooth enough move between iterations.
 
 Second, the path sampling estimator has some attractive properties compared to
 harmonic mean estimator described in section~\ref{sub:Importance sampling and
-  harmonic mean based estimators} \parencite[see][]{Gelman1998}. It was argued
+  harmonic mean based estimators} \parencite[see][]{Gelman:1998ei}. It was argued
 by those authors as a natural evolution from importance sampling, and we agree
 with them on this. However, if we approach the path sampling by simulating
 from the joint space of $(T,\bth)$ using existing methods like \mcmc, then we
@@ -702,7 +702,7 @@ As demonstrated in this section, it is possible to use \smc sampler and path
 sampling estimator to do Bayesian model comparison. There are some aspects of
 the estimator worth further investigation in the research follows here. 
 
-\paragraph{Quality of the estimator} In \textcite{DelMoral2006} and references
+\paragraph{Quality of the estimator} In \textcite{DelMoral:2006hc} and references
 thereby, a central limited theorem was established for the importance sampling
 estimator for $\Exp[\phi(x_n)]$, where $\phi(\cdot)$ is an arbitrary and $X_n$
 is are from the distribution $\pi_n$ at step $n$ of \smc iterations. The
@@ -759,7 +759,7 @@ includes solving a few main problems.
     both established in literature, for example the Central Limit Theorem for
     \smc estimator mentioned earlier. The theories need to be developed
     further for the proposed estimator. Some simple results could be obtained
-    based on results in \textcite{DelMoral2006}. One of the main interest here
+    based on results in \textcite{DelMoral:2006hc}. One of the main interest here
     is problem analogy to the convergence speed problem in \mcmc algorithms.
 \end{enumerate}
 

@@ -18,7 +18,7 @@ followed by a discussion of the \aic model selection method.
 populations defined by their underlying probability densities. The divergence
 is measured in terms of the information defined by the log-likelihood ratio
 \parencite{Kullback:1951va}. The common definition of \kl for continuous
-distributions in literature is \parencite[e.g.,][]{Claeskens2008},
+distributions in literature is,
 \begin{equation}
   \dkl(g, f(\cdot;\bth)) = \int g(x)\log\frac{g(x)}{f(x;\bth)}\dd x,
   \label{eq:kld}
@@ -78,13 +78,13 @@ is the maximum likelihood estimator (\mle) under model $\calM$.\footnote{More
   precisely it is a class of models whose densities belong to the same
   parametric family.} And $k$ is the dimension of the parameter vector. The
 model with the smallest \aic value is selected. It is first introduced by
-Akaike in a series of papers \parencite{Akaike1973, Akaike:1974ih, Akaike1977,
-  Akaike1981}. From a likelihood principle perspective, \aic acts as a balance
-between good fit (high log-likelihood) and complexity in the sense that the
-dimension of the parameter vector is used as a penalty term in the formula.
-The \aic method aims to find models that have fewer parameters while fitting
-the data well. There are other kind of penalized criteria for choosing models.
-And many of them are closely related to the \aic method.
+Akaike in a series of papers \parencite{Akaike:1973uc, Akaike:1974ih,
+  Akaike:1977ul}. From a likelihood principle perspective, \aic acts as a
+balance between good fit (high log-likelihood) and complexity in the sense
+that the dimension of the parameter vector is used as a penalty term in the
+formula.  The \aic method aims to find models that have fewer parameters while
+fitting the data well. There are other kind of penalized criteria for choosing
+models.  And many of them are closely related to the \aic method.
 
 
 There are precise mathematical reasons behind the \aic's way of penalizing
@@ -99,9 +99,9 @@ methods for model selection.
 \label{sub:Derivation of aic}
 
 The \aic method and its formula has been derived and justified by various
-authors \parencite[e.g.][]{Stone:1982ck, Sawa:1978tn, Chow1981, Bozdogan1987,
-  Akaike1973, Claeskens2008}. To summarize, we start with the same
-information-theoretic approach as in \textcite{Akaike1973}, and use Taylor
+authors \parencite[e.g.][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
+  Bozdogan:1987wy, Akaike:1973uc}. To summarize, we start with the same
+information-theoretic approach as in \textcite{Akaike:1973uc}, and use Taylor
 expansions to approximate the expected loss of using a parametric density with
 \mle as the parameter value in place of the true data generating density. In
 addition we shall only consider the case in which the sample size $n$ is
@@ -110,7 +110,7 @@ estimated parameter vector. The case in which $n$ is small is considered by
 \textcite{Hurvich:1989ev}, and will be reviewed later in
 subsection~\ref{sub:Corrected aic}.
 
-As pointed out by \textcite{Bozdogan1987}, though the development of \aic had
+As pointed out by \textcite{Bozdogan:1987wy}, though the development of \aic had
 its origin in the time series modeling, it is a direct extension to the
 information-theoretic interpretation of the \mle (see
 subsection~\ref{sub:Properties of kl and its relation to mle}). For a class of
@@ -118,7 +118,7 @@ parametric models with density $f(\cdot;\bth)$, we aim to find the ``best'' in
 the sense that the \kl is minimized among all possible values of $\bth$, i.e.,
 to find the value of $\tbth$, which maximizes the expected log-likelihood.
 From a decision-theoretic point of view this model also minimizes the expected
-loss measured by the \kl \parencite{Akaike1973}. Ideally, if we can find
+loss measured by the \kl \parencite{Akaike:1973uc}. Ideally, if we can find
 $\tbth$, then the next step will be choosing the model with the minimum of
 $D_{\mathrm{KL}}(g,f(\cdot;\tbth))$. However, even in the unlikely case that
 $g(x) = f(x;\tbth)$, we still have to estimate $\tbth$. As suggested in the
@@ -153,13 +153,13 @@ where
 
 That is, $\Sigma$ is the theoretical covariance matrix of $\hbth(\bfY)$ when
 $\bfY$ follows the true data generating density. This is a more general
-results than that found in \textcite{Akaike1973}. In the special case where $g
-= f(\cdot;\tbth)$, $I(\tbth)$ becomes the Fisher information matrix, and
+results than that found in \textcite{Akaike:1973uc}. In the special case where
+$g = f(\cdot;\tbth)$, $I(\tbth)$ becomes the Fisher information matrix, and
 $I(\tbth) = \Sigma^{-1}$. In this case equation~\eqref{eq:aic general} leads
 to the original \aic by using $\ell_n(\hbth;\bfy)$ as an unbiased consistent
 estimator for its own expectation. This ideal situation does not exist in
-reality anyway. But as shown in \textcite{Shibata1989}, $k$, the dimension of
-the estimated parameter vector is a good estimator of $\tr(I(\tbth)\Sigma)$
+reality anyway. But as shown in \textcite{Shibata:1989tm}, $k$, the dimension
+of the estimated parameter vector is a good estimator of $\tr(I(\tbth)\Sigma)$
 when the model is a ``good'' approximation of the true data generating
 mechanism. This also leads to the exact formula of \aic. In either case, a
 large sample is required to produce a good estimate of the expected
@@ -220,15 +220,14 @@ that one is absolutely superior to another.
 In this subsection we briefly review one of the most widely used extension and
 modification of \aic method, the corrected \aic. This and other similar
 methods try to improve the model selection procedure in the situations that
-\textcite{Akaike1973}'s assumptions are not justified. Therefore, they improve
+\textcite{Akaike:1973uc}'s assumptions are not justified. Therefore, they improve
 the robustness of the \aic procedure.
 
 The corrected \aic, usually denoted by \aicc, mainly deals with the situation
 that the sample size is not sufficient large in the sense that the dimension
 of the parameter vector to be estimated is close to the sample size.
 \textcite{Hurvich:1989ev} developed the \aicc for regression and time series
-modeling. \textcite{Sugiura1978} provided an equivalent form. The \aicc is
-defined as,
+modeling. The \aicc is defined as,
 \begin{equation}
   \text{\aicc} = -2\ell_n(\hbth;\bfx) + \frac{2nk}{n-k-1}
 \end{equation}
@@ -240,7 +239,7 @@ where $n$ is the sample size, other notations are as defined before.
 
 It should be noted that \aicc is just one way to improve \aic for small
 samples. In particular, it is derived in the case of a model with linear
-structure and normal errors \parencite{Hurvich:1989ev, Burnham2002}. Under
+structure and normal errors \parencite{Hurvich:1989ev, Burnham:2002wc}. Under
 other models, other form of improved \aic can be derived. In general,
 \textcite{Hurvich:1989ev}'s form seems to be a good choice and adopted
 extensively in the literature even in nonlinear cases

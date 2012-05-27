@@ -83,7 +83,7 @@ likelihood $\Pr(D)$, this means that one needs to simulate samples from the
 prior distribution $\pi(\bth)$. In addition, the use of samples from $f$ to
 estimate equation~\eqref{eq:classical mc} is in general suboptimal in the
 sense that the variance of the estimator is not minimized
-\parencite[see][sec.~3.3]{Robert2004}. Also other Bayesian inference problems,
+\parencite[see][sec.~3.3]{Robert:2004tn}. Also other Bayesian inference problems,
 for example estimating the posterior means of parameters will require
 separated simulations unless prior and posterior distributions are close so
 that importance sampling estimators can be used. These limitations are the
@@ -114,7 +114,7 @@ estimator in equation~\eqref{eq:is estimator} converges to $\Exp_f h(X)$ also
 by the Law of Large Numbers, whenever the support of the density $g$ includes
 the support of density $f$. While the estimator converges almost surely, its
 variance is not necessarily finite. In general, the variance is finite if and
-only if, \parencite[see][sec.~3.3]{Robert2004},
+only if, \parencite[see][sec.~3.3]{Robert:2004tn},
 \begin{equation}
   \int h^2(x)\frac{f^2(x)}{g(x)}\dd x < \infty.
   \label{eq:finite var}
@@ -123,7 +123,7 @@ This suggests that the density $g$ shall have tails heavier than density $f$.
 To access inequality~\eqref{eq:finite var}, evaluating of a more complex
 integration than original problem is required. Some very restrictive
 sufficient conditions for finite variance estimator was mentioned in
-\textcite{Geweke1989}. In addition a more critical problem is that, in order
+\textcite{Geweke:1989tm}. In addition a more critical problem is that, in order
 to use estimator in equation~\eqref{eq:is estimator}, one need access to a
 properly normalized density $f$, which is hardly the case for complex
 posterior densities. A more practical approach is use an alternative
@@ -136,8 +136,8 @@ estimator,
 \end{equation}
 which also converges to $\Exp_f h(X)$ by Strong Law of Large Numbers. Though
 this estimator has a small bias, the variance and mean square errors are
-improved \parencite{Casella1998}. As suggest in
-\textcite[][sec.~3.3]{Robert2004}, to minimize the variance of the estimator
+improved \parencite{Casella:1998tj}. As suggest in
+\textcite[][sec.~3.3]{Robert:2004tn}, to minimize the variance of the estimator
 in equation~\eqref{eq:is estimator}, the density $g$ should be chosen such
 that $|h|f/g$ is almost constant with a finite variance. That is it is
 preferable for the density $g$ to be proportional to $|h|f$ and have heavier
@@ -194,7 +194,7 @@ efficiency is most likely to be achieved if $\gamma$ is roughly proportional
 to $f(D|\bth)$ \parencite{Kass:1995vb}. And the above equation suggests that
 the estimator has a finite variance and thus satisfies the Central Limit
 Theorem if the tails of $\gamma$ is thin enough compared to the unnormalized
-posterior distribution $f(D|\bth)\pi(\bth)$. \textcite{Gelfand1994} suggested
+posterior distribution $f(D|\bth)\pi(\bth)$. \textcite{Gelfand:1994ux} suggested
 using multivariate normal distributions with moments estimated from the
 posterior samples as a natural choice of $\gamma$. In addition the variance of
 the estimator can also be estimated for $1/\widehat{\Pr(D)}$ from the
@@ -211,7 +211,7 @@ The estimator in equation~\eqref{eq:harmonic mean modified} is used in
 \textcite{Zhou:2011uo}. It was proved to perform well enough for our purpose
 and it was relative easy to compute. However, the choice of a sensible density
 $\gamma$ is not always easy in general. The multivariate normal or $t$
-densities as proposed by \textcite{Gelfand1994} is not always justified. Since
+densities as proposed by \textcite{Gelfand:1994ux} is not always justified. Since
 in the context of Bayesian modeling, the posterior distribution is usually
 known at least up to a normalizing constant, it is (in principle) not very
 difficult to choose $\gamma$ to satisfy the condition for a finite variance.
@@ -236,8 +236,8 @@ as the importance density \parencite[see also][]{Owen:2000kb}.
 mean by parameter reduction. This method requires analytical form for
 integrating at least some parameter out of the unnormalized posterior
 distribution. Such analysis is in general intractable for complex models,
-especially for irregular likelihood function. \textcite{Chib1995} and
-\textcite{Chib2001} considered specified methods for estimating the marginal
+especially for irregular likelihood function. \textcite{Chib:1995em} and
+\textcite{Chib:2001gq} considered specified methods for estimating the marginal
 likelihood when the posterior samples come from Gibbs sampling and \mha,
 respectively. The former requires the full conditional density of the
 parameters. Again this can be intractable for complex models. And the latter
@@ -286,15 +286,12 @@ Results from the theory of general state space Markov chains are required to
 justify, derive properties of, and improve \mcmc algorithms. However a
 detailed treatment of such results is beyond the scope of this report and we
 only state some most important concepts that we will use throughout the
-discussions of algorithms. \textcite[][chap.~6 and~7]{Durrett2010} address
-some of the properties of Markov chains in a fairly general setting with
-rigorous mathematical treatment. \textcite[][chap.~6]{Robert2004} is a compact
+discussions of algorithms. \textcite[][chap.~6]{Robert:2004tn} is a compact
 reference for many results of Markov chains related particularly to \mcmc
 algorithms. The last not least, the classical paper by
 \textcite{Tierney:1994uk} has two sections of key results of Markov chains in
-the setting of \mcmc algorithms \parencite[also see][for discussions of
-results in this paper]{Besag1994,Chan1994,Doss1994,Robert:1994vh}. These
-references provide all the results we will use in the following.
+the setting of \mcmc algorithms. These references provide all the results we
+will use in the following.
 
 We will always consider a time-homogeneous Markov chain with transition kernel
 $K(x_n,x_{n+1})$ and a invariant distribution $\pi$ in the following
@@ -328,7 +325,7 @@ marginal distribution converge to the limiting distribution at least at as
 fast as a geometry series converges to zero, in the sense of total variation.
 Uniformly ergodicity is stronger than geometric ergodicity by requiring the
 speed of convergence being uniform over the whole state space. Formal
-definitions and treatment can be found in \textcite[][chap.~6]{Robert2004} and
+definitions and treatment can be found in \textcite[][chap.~6]{Robert:2004tn} and
 most Markov chain references mentioned previously. Informally, the property of
 geometric ergodicity ensures that the samples from a \mcmc algorithm will
 converge at a fast speed and it is also a requirement for the application of
@@ -339,7 +336,7 @@ chain.
 The properties of Markov chains discussed above form the foundation of design
 of \mcmc algorithms. Two most important types of \mcmc algorithms are \mha
 \parencite{Hastings:1970gd,Metropolis:1953ex} and Gibbs sampling
-\parencite{Geman1993}. We will review these two techniques in the following
+\parencite{Geman:1993bp}. We will review these two techniques in the following
 subsections. In addition, the use them for Bayesian model selection
 computation are also reviewed.
 
@@ -367,7 +364,7 @@ transition. At time $t$, given $x^t$,
 The probability $\rho(x,y)$ is called the \emph{the Metropolis-Hastings
   acceptance probability}. The conditions for the Markov chains produced by
 \mha having the limiting distribution $f$ are quite minimal
-\parencite[see][chap.~7]{Robert2004}. Instead of discuss the general form of
+\parencite[see][chap.~7]{Robert:2004tn}. Instead of discuss the general form of
 \mha in details, we focus on some practical implementations of this algorithm
 \parencite[also see][for the speed of convergence of the
 \mha]{Mengersen:1996th}.
@@ -387,7 +384,7 @@ ergodicity of the chain is often in question. A theoretical assessment of the
 adaptive scheme is not easy, however there are a few examples in the
 literature using adaptive scheme for independent or random walk (discussed in
 the next paragraph) \mha \parencites(e.g.,
-see)(){Gilks1998,Haario:1999dh,Haario:2001gu} On the practical side, the
+see)(){Gilks:1998dl,Haario:1999dh,Haario:2001gu} On the practical side, the
 optimization of the adaptive scheme is often as difficult as the design of the
 proposals. Another solution, which is generic and easy to implement is the
 random walk \mha.
@@ -415,7 +412,7 @@ space.
 \mha can be used for computing the marginal likelihood with the same methods
 as in subsection~\ref{sub:Importance sampling and harmonic mean based
   estimators}, provided the convergence condition of the Markov chains are
-met. \textcite{Chib2001} demonstrated a method of computing the marginal
+met. \textcite{Chib:2001gq} demonstrated a method of computing the marginal
 likelihood specifically by using output from \mha. Their method is based on
 the simple identity,
 \begin{equation}
@@ -446,7 +443,7 @@ $\bfX^{t+1}$ in $p$ steps. At each step $i$, $X_i^{t+1}$ is generated from
 The densities $f_1,\dots,f_p$ are called the \emph{full conditionals}.
 
 Gibbs sampler is a special case of the \mha
-\parencite[see][chap.~10]{Robert2004}. However it has several features making
+\parencite[see][chap.~10]{Robert:2004tn}. However it has several features making
 it one of the most popular \mcmc algorithms in literature, but also limited
 its use in some cases.
 \begin{enumerate}
@@ -458,15 +455,15 @@ its use in some cases.
     analytical properties of the target density. This largely limited its use
     in the cases of complex models.
   \item The Gibbs sampler does not apply to problems where the number of
-    parameters varies \parencite[see][chap.~10]{Robert2004}.
+    parameters varies \parencite[see][chap.~10]{Robert:2004tn}.
 \end{enumerate}
 
 \paragraph{Use in the computing of marginal likelihoods} The output from a
 Gibbs sampling can be used for computing of the marginal likelihood in the
 same way as \mha. In addition to the harmonic mean based methods discussed in
 subsection~\ref{sub:Importance sampling and harmonic mean based estimators},
-the same methods in \textcite{Chib2001} can be applied. In fact, this method
-was first developed for Gibbs sampling in \textcite{Chib1995}.
+the same methods in \textcite{Chib:2001gq} can be applied. In fact, this method
+was first developed for Gibbs sampling in \textcite{Chib:1995em}.
 
 \section{Simulation for variable dimension models}
 \label{sec:Simulation for variable dimension models}
@@ -491,7 +488,7 @@ that the dimension of the parameter is not fixed.
 \subsection{Pseudo-priors method}
 \label{sub:Pseudo-priors method}
 
-The \emph{pseudo-priors} method was introduced by \textcite{Carlin1995} by
+The \emph{pseudo-priors} method was introduced by \textcite{Carlin:1995uy} by
 saturating the models. Consider for a finite set of models, specify the prior
 densities $\pi(\bth_k|\kappa=k,D)$ and prior weights $\rho_k$, the parameter
 space is constructed by including all models at once, that is,
@@ -507,7 +504,7 @@ is
   \prod_{k\in\calK}\pi(\bth_k|\kappa=k),
 \end{equation}
 where $\bth \in \prod_{k\in\calK}\bTh_k$. Since $f(D|\kappa=k)$ clearly does
-not depend on $\pi(\bth_j|\kappa=j)$ for $k \ne j$, \textcite{Carlin1995}
+not depend on $\pi(\bth_j|\kappa=j)$ for $k \ne j$, \textcite{Carlin:1995uy}
 proposed to use pseudo-priors $\tilde\pi(\bth_j|\kappa=k)$ to simulate
 $\bth_j$ at steps with $\kappa = k$. By saturating the models, the model
 dimension is no longer variable and the model indicator $\kappa$ is only one
@@ -518,8 +515,8 @@ on $(\bth,\kappa)$, where the full posterior density for $\kappa$ is,
   \propto \rho_k f(D|\bth_k,D) \pi_k(\bth_k|\kappa=k)
   \prod_{\substack{j\in\calK}\\j \ne k} \tilde\pi(\bth_j|\kappa = k).
 \end{equation}
-Similar development can also be found in \textcite{Brooks2003,Besag2001} based
-on the saturation scheme. It is very clear that \textcite{Carlin1995}'s method
+Similar development can also be found in \textcite{Brooks:2003ko,Besag:2001um} based
+on the saturation scheme. It is very clear that \textcite{Carlin:1995uy}'s method
 requires the simulations from all models at all steps, which is very costly
 when the size of model set is large. The other issue is the constructing of
 pseudo-priors. There is always the possibility that some part of the model
@@ -550,7 +547,7 @@ ensures that after the sample moves from one model parameter space to another,
 it can move back equally.
 
 The method for constructing the reversible kernel $K$ outlined below is based
-on \textcite[][chap.~11]{Robert2004}. To simplify the notations, we use
+on \textcite[][chap.~11]{Robert:2004tn}. To simplify the notations, we use
 variables $x$, $y$, etc., instead of $(\bth_{\kappa}, \kappa)$. Also let
 $\pi(\diff x)$ denote the target distribution (it is the posterior density in
 Bayesian model selection context). And as before, $\bTh_k$ denote the model
