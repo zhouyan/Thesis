@@ -1,0 +1,166 @@
+\documentclass[11pt, fontset = Minion]{marticle}
+
+\title{Sequential Monte Carlo for Bayesian Model Comparison}
+\author{Yan Zhou}
+\date{\today}
+\input{macros}
+
+\def\finish#1{(Estimated completion date: #1 2013)}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction \finish{September}}
+
+Model comparison for the purpose of selection, averaging and validation is a
+problem found throughout statistics and related areas. It has been studies
+since the very early days of statistics. Bayesian model comparison has
+attracted substantial interest and has seen extensive applications in the past
+three decades. However, for some application areas where a Bayesian approach
+is appealing, much difficulties, mainly computationally, still remain.
+
+Bayesian modeling for non-trivial problems are usually solved through
+simulation techniques. Markov chain Monte Carlo methods has been the dominant
+methods until recent development of population based Monte Carlo algorithms.
+Among them sequential Monte Carlo (\smc) and other related algorithms have
+attracted considerable interest and development in the past decade. However,
+their applications for the purpose of Bayesian model comparison are less well
+studied in the literature.
+
+The current work advocates Bayesian model comparison for applications where
+such approaches were previously difficult due to computational complexity.
+Further, we develop novel sequential Monte Carlo techniques for the purpose of
+Bayesian model comparison.
+
+\section{Model comparison \finish{May}}
+
+In this chapter various model comparison techniques were reviewed. First the
+approaches based on information criteria, such as \aic and \bic are reviewed
+briefly. Though their limitations are well known, they are still widely used
+in many areas due to its computational simplicity. It is followed by a review
+of the Bayesian comparison methodology.
+
+\subsection{Information criteria based model selection \finish{April}}
+
+\subsection{Bayesian model comparison \finish{May}}
+
+\section{Monte Carlo methods \finish{June}}
+
+In this chapter, an extensive literature review of Monte Carlo methods is
+provided.
+
+Monte Carlo methods aim to simulate samples from a distribution of interest,
+say $\pi$, or provide large sample approximations of some quantities related
+to the distributions such as expectations of some $\pi$-integrable functions.
+
+We first review the importance sampling. Though its applications are quite
+limited due to well known limitations. It is essential for more advanced
+techniques such as sequential Monte Carlo, which will be the central topic of
+the current work.
+
+Next various Markov chain Monte Carlo (\mcmc) algorithms are reviewed. Though
+it well known that these techniques often cannot explore high dimensional
+multimodal distributions efficiently, they are the building blocks of many
+advanced Monte Carlo algorithms.
+
+It is followed by a review of the sequential Monte Carlo literature. Some
+related methods, including those combining both \smc and \mcmc are also
+reviewed in this section.
+
+\subsection{Importance sampling \finish{April}}
+
+\subsection{Markov chain Monte Carlo \finish{May}}
+
+\subsubsection{Discrete time Markov chains}
+
+\subsubsection{Metropolis-Hastings algorithm}
+
+\subsubsection{Gibbs sampling}
+
+\subsubsection{Reversible jump Markov chain Monte Carlo}
+
+\subsection{Sequential Monte Carlo \finish{June}}
+
+\subsubsection{Sequential importance sampling and resampling}
+
+\subsubsection{\smc sampler}
+
+\subsubsection{Related methods}
+
+\section{Bayesian model comparison for Positron Emission Tomography
+  compartmental model \finish{July}}
+
+Positron Emission Tomography (\pet) is widely used medical imaging technique
+in practice and research. It is often used for study human brains \emph{in
+  vivo}. \pet is usually modeled by a linear ordinary equation system, the
+compartmental model. Due to some computational challenges, documented later in
+this chapter, information criteria such as \aic has been the universal model
+comparison approach in this area.
+
+In this chapter, Bayesian approach to this problem is developed. In addition,
+this problem also serves as a ``running example'', such that various Monte
+Carlo methods will be applied for this problem to illustrate the performance
+improvement provided by the Monte Carlo techniques developed in the current
+work.
+
+In the end of this chapter, some further issues are discussed, and motivate
+the work of the next chapter, where this problem is revisited with newly
+developed sequential Monte Carlo techniques.
+
+\subsection{A Bayesian approach \finish{July}}
+
+\subsection{Further issues \finish{May}}
+
+\section{Sequential Monte Carlo for Bayesian model comparison \finish{August}}
+
+Sequential Monte Carlo methods are a family of algorithms that combines
+importance sampling and resampling to allows one to obtains samples from
+complex distributions iteratively. These algorithms are well known for its
+ability to explore high dimensional multimodal spaces. In this chapter, we
+apply them for the purpose of Bayesian model comparison.
+
+First standard techniques are reviewed in the context of Bayesian model
+comparison. Next the combination of \smc and path sampling are discussed.
+
+It follows a few novel extensions to existing practices. In particular, some
+adaptive methods are developed.
+
+We provide a few illustrative examples, including the \pet compartmental
+model in the last chapter. It will be shown that \smc compares favorable to
+other state-of-the-art Monte Carlo methods for the purpose of Bayesian model
+comparison.
+
+Last, some more practical issues of the implementation of the \smc algorithms
+are developed. During a research progress, a C++ library is developed for the
+purpose of parallel implementation of \smc algorithms. It is briefly discussed
+in the end of this chapter.
+
+\subsection{Methodology \finish{May}}
+
+\subsection{Path sampling with \smc samplers \finish{May}}
+
+\subsection{Extensions \finish{June}}
+
+\subsection{Relation with other methods \finish{July}}
+
+\subsection{Illustrative examples \finish{July}}
+
+\subsubsection{Gaussian mixture model}
+
+\subsubsection{Nonlinear ordinary differential systems}
+
+\subsubsection{\pet compartmental model revisited}
+
+\subsection{Implementation of sequential Monte Carlo algorithms
+  \finish{August}}
+
+\section{Conclusions \finish{September}}
+
+\subsection{Contributions}
+
+\subsection{Future research}
+
+\subsection{Summary}
+
+\end{document}
