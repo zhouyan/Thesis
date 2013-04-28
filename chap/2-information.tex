@@ -11,8 +11,8 @@ upon the \kl and its relation to the maximum likelihood estimator (\mle).
 These are introduced in section~\ref{sec:kl and maximum likelihood}. It is
 followed by a discussion of the \aic model selection method.
 
-\section{\kl and maximum likelihood}
-\label{sec:kl and maximum likelihood}
+\subsection{\kl and maximum likelihood}
+\label{sub:kl and maximum likelihood}
 
 \kl measures the ``distance'' or ``divergence'' between statistical
 populations defined by their underlying probability densities. The divergence
@@ -27,8 +27,8 @@ where $g$ is the true density of the data generating mechanism, and
 $f(\cdot;\bth)$ is the density of a candidate model specified by parameter
 vector $\bth$. The integration above is over the support of $g$.
 
-\subsection{Properties of \kl and its relation to \protect\mle}
-\label{sub:Properties of kl and its relation to mle}
+\subsubsection{Properties of \kl and its relation to \protect\mle}
+\label{ssub:Properties of kl and its relation to mle}
 
 One important observation is that $\dkl(g,f(\cdot;\bth))\ge0$ with equality if
 and only if $g(x) = f(x;\tbth)$ almost everywhere for some value of $\bth =
@@ -64,8 +64,8 @@ where $\hbth$ is the \mle. That is, the \mle aims to minimize the \kl from the
 candidate model to the true data generating density. This also justifies the
 use of \mle from a information-theoretic perspective.
 
-\section{Akaike's information criterion}
-\label{sec:Akaike's information criterion}
+\subsection{Akaike's information criterion}
+\label{sub:Akaike's information criterion}
 
 The general formula of the Akaike's information criterion (\aic) for a
 candidate parametric model $\calM$ is
@@ -95,8 +95,8 @@ In the next subsection the derivation of \aic is outlined. This shall provide
 us a basis for the discussion of the suitability of the \aic and related
 methods for model selection.
 
-\subsection{Derivation of \protect\aic}
-\label{sub:Derivation of aic}
+\subsubsection{Derivation of \protect\aic}
+\label{ssub:Derivation of aic}
 
 The \aic method and its formula has been derived and justified by various
 authors \parencite[e.g.][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
@@ -178,8 +178,8 @@ the subsection~\ref{sub:Corrected aic}. However, when the model is high
 dimensional and the available data is limited, simple information criteria
 like \aic can hardly work.
 
-\subsection{A Bayesian analysis of \protect\aic}
-\label{sub:A Bayesian analysis of aic}
+\subsubsection{A Bayesian analysis of \protect\aic}
+\label{ssub:A Bayesian analysis of aic}
 
 The \aic method is often compared with the Bayesian model selection as one of
 the most important frequentist model selection methods, in particular in
@@ -214,8 +214,8 @@ selection methods should be considered based on the purposes (inference of the
 past or prediction of the future, or otherwise). There is no reason to argue
 that one is absolutely superior to another.
 
-\subsection{Corrected \protect\aic}
-\label{sub:Corrected aic}
+\subsubsection{Corrected \protect\aic}
+\label{ssub:Corrected aic}
 
 In this subsection we briefly review one of the most widely used extension and
 modification of \aic method, the corrected \aic. This and other similar
