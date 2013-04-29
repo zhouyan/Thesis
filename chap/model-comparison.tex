@@ -1,3 +1,5 @@
+\ifx\inthesis\undefined % In Thesis
+
 \documentclass[11pt, fontset=Minion, hyper, bib]{marticle}
 \input{../macros}
 \addbibresource{../thesis.bib}
@@ -8,6 +10,13 @@
 
 \begin{document}
 \maketitle
+
+\else % In Thesis
+
+\chapter{Model Comparison}
+\label{cha:Model Comparison}
+
+\fi % In Thesis
 
 \section{Information criteria based model selection}
 \label{sec:Information criteria based model selection}
@@ -606,5 +615,7 @@ be discussed in section~\note{Reversible jump \mcmc}, the reversible jump
 \mcmc techniques rely on such assumptions. The computation of the variable
 dimension models are reviewed in section~\note{Reversible jump \mcmc}.
 
+\ifx\inthesis\undefined
 \printbibliography
 \end{document}
+\else\relax\fi
