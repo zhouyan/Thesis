@@ -1,10 +1,11 @@
 \ifx\inthesis\undefined % In Thesis
 
-\documentclass[11pt, fontset=Minion, hyper, bib]{marticle}
+\documentclass[10pt, hyper, bib, fontset=Lucida,
+linespread=1.3, typearearatio=0.75]{marticle}
 \input{../macros}
 \addbibresource{../thesis.bib}
 
-\title{Model Comparison}
+\title{Bayesian Model Comparison}
 \author{Yan Zhou}
 \date{\today}
 
@@ -13,13 +14,33 @@
 
 \else % In Thesis
 
-\chapter{Model Comparison}
-\label{cha:Model Comparison}
+\chapter{Bayesian Model Comparison}
+\label{cha:Bayesian Model Comparison}
 
 \fi % In Thesis
 
+Model comparison for the purposes of selection, averaging and validation is a
+problem found through out statistics and related disciplines. There are many
+approaches to this and related problems, such as variable selection in
+regression analysis. There two approaches widely used in many fields. One is
+the information-theoretic approach and the other is the Bayesian approach.
+They both can be applied in very general settings. The limitations of various
+information criteria are well known, however they are used exclusively in many
+fields due to their simplicity in computation. The Bayesian approach is often
+appealing yet not used in practice due to the need to compute complex
+integrations, which leads to high computational intensity.
+
+In this chapter, information-theoretic approach is reviewed briefly first. It
+will be used as a base line for comparison in chapter~\note{Bayesian Model
+  Comparison for Positron Emission Tomography Compartmental Models}. Then
+Bayesian model comparison is reviewed in detail.
+
 \section{Information criteria based model selection}
 \label{sec:Information criteria based model selection}
+
+\comment{This section need expansion to include some other widely used
+  information based approaches or need a new title. At the moment this section
+  is basically only \aic and related methods}
 
 The information-theoretic approach to model selection from a
 decision-theoretic perspective uses the divergence of the chosen model from
@@ -52,7 +73,7 @@ vector $\bth$. The integration above is over the support of $g$.
 
 One important observation is that $\dkl(g,f(\cdot;\bth))\ge0$ with equality if
 and only if $g(x) = f(x;\tbth)$ almost everywhere for some value of $\bth =
-\tbth$ \parencite{Kullback:1951va}. In terms of equation~\eqref{eq:kld}, this
+\tbth$ %\parencite{Kullback:1951va}. In terms of equation~\eqref{eq:kld}, this
 means that the \kl is always positive unless for some value of $\bth$,
 $f(\cdot;\bth) = g(\cdot)$, which is the true data generating density. This
 result naturally suggests one to find the estimator $\tbth$ which minimizes
@@ -284,17 +305,16 @@ limitations.
 \section{Bayesian model comparison}
 \label{sec:Bayesian model comparison}
 
-Bayes' theorem, in its simplest form is stated as below,
+The Bayes' theorem, in its simplest form is stated as below,
 \begin{equation}
-  \Pr(H|D) = \frac{\Pr(D|H)\Pr(H)}{\Pr(D)}
-  \label{eq:bayes}
+  \Pr(H|D) = \frac{\Pr(D|H)\Pr(H)}{\Pr(D)} \label{eq:bayes}
 \end{equation}
-where $D$ is the data and $H$ is a hypothesis. Like any other probability
+where $D$ is the data and $H$ is a hypothesis. Like many other probability
 theories, technically the Bayes' theorem merely provides a method of
 accounting for the uncertainty. However, what is far more important is the
-associated philosophical interpretation of probability, namely the subjective
-perspective. Though early development of Bayesian statistics showed interests
-of using likelihood functions as objective input to the modeling processes
+associated philosophical interpretation -- the subjective perspective. Though
+early development of Bayesian statistics showed interests of using likelihood
+functions as objective input to the modeling processes
 \parencite{Jeffreys:1961ua, Jeffreys:1946jf}, it is nowadays widely accepted
 that a subjective view is more appropriated
 \parencite[see][chap.~1]{Bernardo:2000vd}.  The subjectivity and objectivity
