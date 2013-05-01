@@ -1,7 +1,6 @@
 \ifx\inthesis\undefined % In Thesis
 
-\documentclass[10pt, hyper, bib, fontset=Lucida,
-linespread=1.3, typearearatio=0.75]{marticle}
+\documentclass[11pt, hyper, bib, fontset=Minion]{marticle}
 \input{../macros}
 \addbibresource{../thesis.bib}
 
@@ -20,46 +19,50 @@ linespread=1.3, typearearatio=0.75]{marticle}
 \fi % In Thesis
 
 Model comparison for the purposes of selection, averaging and validation is a
-problem found through out statistics and related disciplines. There are many
-approaches to this and related problems, such as variable selection in
-regression analysis. There two approaches widely used in many fields. One is
-the information-theoretic approach and the other is the Bayesian approach.
-They both can be applied in very general settings. The limitations of various
-information criteria are well known, however they are used exclusively in many
-fields due to their simplicity in computation. The Bayesian approach is often
-appealing yet not used in practice due to the need to compute complex
-integrations, which leads to high computational intensity.
+problem found through out statistics and related disciplines. There are two
+popular approaches to this problem among others. One is the main subject of
+this thesis, Bayesian model comparison. The other is information-theoretic
+based and in particular Akaike's information criterion (\aic). Though not fit
+into the Bayesian framework, \aic is used as a baseline for comparison in
+chapter~\note{Bayesian Model Comparison for Positron Emission Tomography
+  Compartmental Models} and is reviewed briefly in the next section. The rest
+of this chapter review Bayesian model comparison techniques in detail.
 
-In this chapter, information-theoretic approach is reviewed briefly first. It
-will be used as a base line for comparison in chapter~\note{Bayesian Model
-  Comparison for Positron Emission Tomography Compartmental Models}. Then
-Bayesian model comparison is reviewed in detail.
+\section{Akaike's information criterion}
+\label{sec:Akaike's information criterion}
 
-\section{Information criteria based model selection}
-\label{sec:Information criteria based model selection}
+The \aic uses the \kl (see section~\ref{sub:kl and maximum likelihood
+  estimator}) as a measure of the loss when using an approximated model in
+place of the true data generating mechanism. It is built upon the relation
+between \kl and the maximum likelihood estimator (\mle). The general formula
+of \aic for a candidate parametric model $\calM$ is
+\begin{equation}
+  \text{\aic} = -2\ell_n(\hbth;\bfx) + 2k
+\end{equation}
+where $\ell_n(\bth;\bfx)$ is the log-likelihood for a size $n$ sample
+$\bfx=(x_1,\dots,x_n)^T$, evaluated at $\bth$. The value $\hbth = \hbth(\bfx)$
+is the \mle under model $\calM$.\footnote{More precisely it is a class of
+  models whose densities belong to the same parametric family.} And $k$ is the
+dimension of the parameter vector. The model with the smallest \aic value is
+selected. It is first introduced by Akaike in a series of papers
+\parencite{Akaike:1973uc, Akaike:1974ih, Akaike:1977ul}. From a likelihood
+principle perspective, \aic acts as a balance between good fit (high
+log-likelihood) and complexity in the sense that the dimension of the
+parameter vector is used as a penalty term in the formula.  The \aic method
+aims to find models that have fewer parameters while fitting the data well.
+There are other kind of penalized criteria for choosing models.  And many of
+them are closely related to the \aic method.
 
-\comment{This section need expansion to include some other widely used
-  information based approaches or need a new title. At the moment this section
-  is basically only \aic and related methods}
+In the remaining of this section, the relation between \kl and \mle is
+introduced first. Then a derivation of \aic is provided, as a basis for
+further discussions. A Bayesian analysis and corrected \aic are also reviewed.
 
-The information-theoretic approach to model selection from a
-decision-theoretic perspective uses the divergence of the chosen model from
-the true model as a measure of the loss when using an approximated model in
-place of the true data generating mechanism. The Akaike's information
-criterion (\aic) is perhaps the most important and widely used model selection
-method among these information-theoretic approaches. Its foundation is built
-upon the \kl and its relation to the maximum likelihood estimator (\mle).
-These are introduced in section~\ref{sub:kl and maximum likelihood}. It is
-followed by a discussion of the \aic model selection method.
-
-\subsection{\kl and maximum likelihood}
-\label{sub:kl and maximum likelihood}
+\subsection{\protect\kl and maximum likelihood estimator}
+\label{sub:kl and maximum likelihood estimator}
 
 \kl measures the ``distance'' or ``divergence'' between statistical
-populations defined by their underlying probability densities. The divergence
-is measured in terms of the information defined by the log-likelihood ratio
-\parencite{Kullback:1951va}. The common definition of \kl for continuous
-distributions in literature is,
+populations defined by their underlying probability densities. The common
+definition of \kl for continuous distributions in literature is,
 \begin{equation}
   \dkl(g, f(\cdot;\bth)) = \int g(x)\log\frac{g(x)}{f(x;\bth)}\dd x,
   \label{eq:kld}
@@ -68,16 +71,11 @@ where $g$ is the true density of the data generating mechanism, and
 $f(\cdot;\bth)$ is the density of a candidate model specified by parameter
 vector $\bth$. The integration above is over the support of $g$.
 
-\subsubsection{Properties of \kl and its relation to \protect\mle}
-\label{ssub:Properties of kl and its relation to mle}
-
 One important observation is that $\dkl(g,f(\cdot;\bth))\ge0$ with equality if
 and only if $g(x) = f(x;\tbth)$ almost everywhere for some value of $\bth =
-\tbth$ %\parencite{Kullback:1951va}. In terms of equation~\eqref{eq:kld}, this
-means that the \kl is always positive unless for some value of $\bth$,
-$f(\cdot;\bth) = g(\cdot)$, which is the true data generating density. This
-result naturally suggests one to find the estimator $\tbth$ which minimizes
-the \kl. Under suitable conditions, rewrite equation~\eqref{eq:kld},
+\tbth$ \parencite{Kullback:1951va}. This result naturally suggests one to find
+the estimator $\tbth$ which minimizes the \kl. Under suitable conditions,
+rewrite equation~\eqref{eq:kld},
 \begin{align}
   \dkl(g,f(\cdot;\bth))
   & = \int g(x)\log g(x)\dd x - \int g(x)\log f(x;\bth)\dd x \notag\\
@@ -103,41 +101,10 @@ details]{Kullback:1951va},
 \end{equation}
 where $\hbth$ is the \mle. That is, the \mle aims to minimize the \kl from the
 candidate model to the true data generating density. This also justifies the
-use of \mle from a information-theoretic perspective.
+use of \mle from an information-theoretic perspective.
 
-\subsection{Akaike's information criterion}
-\label{sub:Akaike's information criterion}
-
-The general formula of the Akaike's information criterion (\aic) for a
-candidate parametric model $\calM$ is
-\begin{equation}
-  \text{\aic} = -2\ell_n(\hbth;\bfx) + 2k
-\end{equation}
-where $\ell_n(\bth;\bfx)$ is the log-likelihood for a size $n$ sample
-$\bfx=(x_1,\dots,x_n)^T$, evaluated at $\bth$. The value $\hbth = \hbth(\bfx)$
-is the maximum likelihood estimator (\mle) under model $\calM$.\footnote{More
-  precisely it is a class of models whose densities belong to the same
-  parametric family.} And $k$ is the dimension of the parameter vector. The
-model with the smallest \aic value is selected. It is first introduced by
-Akaike in a series of papers \parencite{Akaike:1973uc, Akaike:1974ih,
-  Akaike:1977ul}. From a likelihood principle perspective, \aic acts as a
-balance between good fit (high log-likelihood) and complexity in the sense
-that the dimension of the parameter vector is used as a penalty term in the
-formula.  The \aic method aims to find models that have fewer parameters while
-fitting the data well. There are other kind of penalized criteria for choosing
-models.  And many of them are closely related to the \aic method.
-
-
-There are precise mathematical reasons behind the \aic's way of penalizing
-complexity and measuring the fit of data. These are closely related to the
-behavior of the \mle and its relation to the \textcite{Kullback:1951va}'s
-measure of the statistical divergence from one probability density to another.
-In the next subsection the derivation of \aic is outlined. This shall provide
-us a basis for the discussion of the suitability of the \aic and related
-methods for model selection.
-
-\subsubsection{Derivation of \protect\aic}
-\label{ssub:Derivation of aic}
+\subsection{Derivation of \protect\aic}
+\label{sub:Derivation of aic}
 
 The \aic method and its formula has been derived and justified by various
 authors \parencite[e.g.][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
@@ -149,17 +116,16 @@ addition we shall only consider the case in which the sample size $n$ is
 sufficient large in the sense that $n\gg k$, where $k$ is the dimension of the
 estimated parameter vector. The case in which $n$ is small is considered by
 \textcite{Hurvich:1989ev}, and will be reviewed later in
-section~\ref{ssub:Corrected aic}.
+section~\ref{sub:Corrected aic}.
 
 As pointed out by \textcite{Bozdogan:1987wy}, though the development of \aic
 had its origin in the time series modeling, it is a direct extension to the
-information-theoretic interpretation of the \mle (see
-section~\ref{ssub:Properties of kl and its relation to mle}). For a class of
-parametric models with density $f(\cdot;\bth)$, we aim to find the ``best'' in
-the sense that the \kl is minimized among all possible values of $\bth$, i.e.,
-to find the value of $\tbth$, which maximizes the expected log-likelihood.
-From a decision-theoretic point of view this model also minimizes the expected
-loss measured by the \kl \parencite{Akaike:1973uc}. Ideally, if we can find
+information-theoretic interpretation of the \mle. For a class of parametric
+models with density $f(\cdot;\bth)$, we aim to find the ``best'' in the sense
+that the \kl is minimized among all possible values of $\bth$, i.e., to find
+the value of $\tbth$, which maximizes the expected log-likelihood.  From a
+decision-theoretic point of view this model also minimizes the expected loss
+measured by the \kl \parencite{Akaike:1973uc}. Ideally, if we can find
 $\tbth$, then the next step will be choosing the model with the minimum of
 $D_{\mathrm{KL}}(g,f(\cdot;\tbth))$. However, even in the unlikely case that
 $g(x) = f(x;\tbth)$, we still have to estimate $\tbth$. As suggested in the
@@ -215,24 +181,24 @@ sufficient large. But one can hardly determine if the candidate models are
 There have been many efforts to improve the \aic methods in the situations
 that the candidate models are not ``good enough'' approximations or the sample
 size is small. One of the information criteria of this kind are reviewed in
-the section~\ref{ssub:Corrected aic}. However, when the model is high
+the section~\ref{sub:Corrected aic}. However, when the model is high
 dimensional and the available data is limited, simple information criteria
 like \aic can hardly work.
 
-\subsubsection{A Bayesian analysis of \protect\aic}
-\label{ssub:A Bayesian analysis of aic}
+\subsection{A Bayesian analysis of \protect\aic}
+\label{sub:A Bayesian analysis of aic}
 
-The \aic method is often compared with Bayesian model selection as one of
-the most important frequentist model selection methods, in particular in
-contrast with the \bic method. It is interest to note that
-\textcite{Akaike:1978ti} has a Bayesian interpretation of the \aic procedure
-for the special case of a multivariate Gaussian model. In that case, \aic can
-be viewed as an approximation to the posterior probability. Without going into
-the details, \textcite{Akaike:1978ti} considered the situation that the sample
-size can be easily increased to a large enough number while two models are
-very close in the sense that the difference in their parameters are not quite
-visible through the observed data. Under this setting, it was then shown that
-the log of posterior model probability from a normal priors for mean vector is
+The \aic method is often compared with Bayesian model selection as one of the
+most important frequentist model selection methods, in particular in contrast
+with the \bic method. It is interesting to note that \textcite{Akaike:1978ti}
+has a Bayesian interpretation of the \aic procedure for the special case of a
+multivariate Gaussian model. In that case, \aic can be viewed as an
+approximation to the posterior probability. Without going into the details,
+\textcite{Akaike:1978ti} considered the situation that the sample size can be
+easily increased to a large enough number while two models are very close in
+the sense that the difference in their parameters are not quite visible
+through the observed data. Under this setting, it was then shown that the log
+of posterior model probability from a normal priors for mean vector is
 approximated by $(-1/2)$\aic up to an additive constant. However we don't see
 this setting as the general cases in data analysis as argued by Akaike.
 Instead, in realistic cases the difficulties of model selection problem often
@@ -255,14 +221,14 @@ selection methods should be considered based on the purposes (inference of the
 past or prediction of the future, or otherwise). There is no reason to argue
 that one is absolutely superior to another.
 
-\subsubsection{Corrected \protect\aic}
-\label{ssub:Corrected aic}
+\subsection{Corrected \protect\aic}
+\label{sub:Corrected aic}
 
-In this subsection we briefly review one of the most widely used extension and
-modification of \aic method, the corrected \aic. This and other similar
-methods try to improve the model selection procedure in the situations that
-\textcite{Akaike:1973uc}'s assumptions are not justified. Therefore, they improve
-the robustness of the \aic procedure.
+We briefly review one of the most widely used extension and modification of
+\aic method, the corrected \aic. This and other similar methods try to improve
+the model selection procedure in the situations that
+\textcite{Akaike:1973uc}'s assumptions are not justified. Therefore, they
+improve the robustness of the \aic procedure.
 
 The corrected \aic, usually denoted by \aicc, mainly deals with the situation
 that the sample size is not sufficient large in the sense that the dimension
@@ -317,48 +283,30 @@ early development of Bayesian statistics showed interests of using likelihood
 functions as objective input to the modeling processes
 \parencite{Jeffreys:1961ua, Jeffreys:1946jf}, it is nowadays widely accepted
 that a subjective view is more appropriated
-\parencite[see][chap.~1]{Bernardo:1994vd}.  The subjectivity and objectivity
-of probability is a more philosophical problem that we will not elaborate in
-this thesis.
+\parencite[see][chap.~1]{Bernardo:1994vd}. Bayesian statistics offers a
+rationalist theory of \emph{personal} beliefs and decisions in the contexts of
+uncertainty. So it is natural to question the relevance of one's personal
+beliefs to another. However, limited by the scope, these more philosophical
+problems will not be elaborated further in this thesis. In the remaining of
+this section We will focus on the technical aspects of Bayesian statistics, in
+particular the model comparison and selection problem, and their
+implementations.
 
-However, it shall be emphasized that within the Bayesian framework, we shall
-think more in the term of ``beliefs''. It shall be noted that Bayesian
-statistics offers a rationalist theory of \emph{personal} beliefs and
-decisions in the contexts of uncertainty. So it is natural to question the
-relevance of one's personal beliefs to another. Just like the long-run
-relevance problem of the frequentist statistics, Bayesian statistics surely
-has its own shortcoming. Such philosophical problems are not unimportant, but
-are beyond the scope of this thesis. We will focus on the technical aspects of
-Bayesian statistics, in particular the model comparison and selection problem,
-and their implementations.
-
-As stated in chapter~\note{Introduction} we insist on the decision-oriented
-aspects of statistical inference, in particular, model selection problems. A
-throughout treatment of Bayesian modeling from this perspective can be found
-in \textcite{Robert:2007tc}. Formal mathematical representations can also be
-found in \textcite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd}, where the notion
-of rational decisions in the context of uncertainty was made precise in the
-form of axioms in \textcite[][chap.~2]{Bernardo:1994vd}. It is assumed that a
-rational decision cannot be considered separately from rational beliefs. And
-rational beliefs shall be built upon available information (the data in the
-statistical term) and any personal preference input (the prior information in
-Bayesian literatures).
-
-It shall also be noted that logically, one's beliefs do not necessarily lead
-to one's decisions. Instead the beliefs can often be interpreted as an useful
-summary of the information available. In this case, the beliefs lead to
-inference, but the inference itself can be interpreted as the decision to be
-made \parencite[][chap.~1]{Lehmann:2005vy}. The foundation of the Bayesian
-approach to various statistical problems is prescriptive rather than
-descriptive. We are concerned with deriving beliefs from information and
-making decisions or preferences based on decisions such that a specified form
-of consistency is archived.
+A throughout treatment of Bayesian modeling from a decision theory perspective
+can be found in \textcite{Robert:2007tc}. Formal mathematical representations
+can also be found in \textcite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd},
+where the notion of rational decisions in the context of uncertainty was made
+precise in the form of axioms in \textcite[][chap.~2]{Bernardo:1994vd}. It is
+assumed that a rational decision cannot be considered separately from rational
+beliefs. And rational beliefs shall be built upon available information (the
+data in the statistical term) and any personal preference input (the prior
+information in Bayesian literatures).
 
 \subsection{Bayesian model choice problem}
 \label{sub:Bayesian model choice problem}
 
 Consider a (possibly infinite) countable set of models $\calM = \{\calM_i,
-  k\in I\}$. Our aim is to choose a ``best'' model from this set. There will
+i\in I\}$. Our aim is to choose a ``best'' model from this set. There will
 usually be actions taken once we have decided which model to use. For example
 we may use the chosen model for inference of the past or prediction of the
 future. It is the consequences of these actions of interest instead of the
@@ -580,18 +528,18 @@ becomes the formula for what is commonly known as \bic. The \bic method choose
 the model with smallest \bic.
 
 The \bic method is often compared and contrasted with the \aic method, which
-we discussed in section~\ref{sub:Akaike's information criterion}. Despite the
-similarity in formulas, \aic and \bic have very different assumptions. In
-addition to the large sample assumption, which is difficult to assess in
-practice, \bic also assumes ``good behavior'' of the likelihood function such
-that the use of \mle in place of $\tbth$ is justified. Also, unlike \aic,
-whose approximation is often at worst $O(1/n)$, the \bic requires that the
-$O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared to other
-terms. These assumptions restricted the use of \bic in many situations. See
-\textcite{Gelfand:1994ux} for an example where the $O(1)$ approximation failed.
-See \textcite{Berger:2001uy} for examples that the irregularity of likelihood
-function causes the \bic method failed. Moreover, in non-i.i.d. situations,
-just like \aic, the definition of the parameter dimension $k$ is ambiguous
+we discussed in section~\ref{sub:aic}. Despite the similarity in formulas,
+\aic and \bic have very different assumptions. In addition to the large sample
+assumption, which is difficult to assess in practice, \bic also assumes ``good
+behavior'' of the likelihood function such that the use of \mle in place of
+$\tbth$ is justified. Also, unlike \aic, whose approximation is often at worst
+$O(1/n)$, the \bic requires that the $O(1)$ term in equation~\eqref{eq:bic
+  approx} is negligible compared to other terms. These assumptions restricted
+the use of \bic in many situations. See \textcite{Gelfand:1994ux} for an
+example where the $O(1)$ approximation failed.  See \textcite{Berger:2001uy}
+for examples that the irregularity of likelihood function causes the \bic
+method failed. Moreover, in non-i.i.d. situations, just like \aic, the
+definition of the parameter dimension $k$ is ambiguous
 \parencite{Spiegelhalter:1998uc, Kass:1995vb}. See also \textcite[][chap.~5
 and chap.~6]{Burnham:2002wc} for more comparison and contrast of \aic and \bic
 approaches to model selection. There are other criticism of the \bic strategy.
