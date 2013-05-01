@@ -107,7 +107,7 @@ use of \mle from an information-theoretic perspective.
 \label{sub:Derivation of aic}
 
 The \aic method and its formula has been derived and justified by various
-authors \parencite[e.g.][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
+authors \parencite[e.g.,][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
   Bozdogan:1987wy, Akaike:1973uc}. To summarize, we start with the same
 information-theoretic approach as in \textcite{Akaike:1973uc}, and use Taylor
 expansions to approximate the expected loss of using a parametric density with
@@ -250,7 +250,7 @@ structure and normal errors \parencite{Hurvich:1989ev, Burnham:2002wc}. Under
 other models, other form of improved \aic can be derived. In general,
 \textcite{Hurvich:1989ev}'s form seems to be a good choice and adopted
 extensively in the literature even in nonlinear cases
-\parencite[e.g.][]{Turkheimer:2003iy}.
+\parencite[e.g.,][]{Turkheimer:2003iy}.
 
 However, to illustrate the limitation of the \aicc method, in
 \textcite{Zhou:2011uo} which we examined the model selection for compartment
@@ -288,7 +288,7 @@ rationalist theory of \emph{personal} beliefs and decisions in the contexts of
 uncertainty. So it is natural to question the relevance of one's personal
 beliefs to another. However, limited by the scope, these more philosophical
 problems will not be elaborated further in this thesis. In the remaining of
-this section We will focus on the technical aspects of Bayesian statistics, in
+this thesis We will focus on the technical aspects of Bayesian statistics, in
 particular the model comparison and selection problem, and their
 implementations.
 
@@ -312,20 +312,20 @@ we may use the chosen model for inference of the past or prediction of the
 future. It is the consequences of these actions of interest instead of the
 chosen model itself. Therefore, from a decision-theoretic perspective, the
 ``best'' model should maximize the utility for some quality of the interest.
-However, this is a very complicated problem. And in practice, it is common to
-ignore the actions following the model selection decision and our interest is
-the true model, say $\calM_t$. In this case, it is natural to define a
-zero-one utility function, say $u(\calM_i,\calM_t)$, such that
-$u(\calM_i,\calM_t) = 1$ for $\calM_t = \calM_i$ and $0$ otherwise.
+However, in practice it is common to ignore the actions following the model
+selection decision and our interest is the true model, say $\calM_t$. In this
+case, it is natural to define a zero-one utility function, say
+$u(\calM_i,\calM_t)$, such that $u(\calM_i,\calM_t) = 1$ for $\calM_t =
+\calM_i$ and $0$ otherwise.
 
 It is easy to see that the model $\calM_i$ that maximizes the expected utility
-given data $D$ is the model with highest posterior probability
-$\Pr(\calM_i|D)$ \parencite[see][chap.~6]{Bernardo:1994vd}. This model is thus
-our ``best'' model in this setting. It should be noted this argument is only
-valid if the true model $\calM_t \in \calM$. Otherwise, the utility is always
-zero for all models. However, the precise meaning of a true model is not well
-defined. Again, we will not focus on these philosophical problems. In what
-follows, we presume that our aim is to find the model with the highest
+given data $D$ is the model with the highest posterior probability
+$\Pr(\calM_i|D)$, see \textcite[][chap.~6]{Bernardo:1994vd}. This model is
+thus our ``best'' model in this setting. It should be noted this argument is
+only valid if the true model $\calM_t \in \calM$. Otherwise, the utility is
+always zero for all models. However, the precise meaning of a true model is
+not well defined. Again, we will not focus on these philosophical problems. In
+what follows, we presume that our aim is to find the model with the highest
 posterior probability.
 
 Since the set $\calM$ is countable, it is natural to define a discrete random
