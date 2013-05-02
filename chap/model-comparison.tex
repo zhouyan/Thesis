@@ -273,7 +273,7 @@ limitations.
 
 The Bayes' theorem, in its simplest form is stated as below,
 \begin{equation}
-  \Pr(H|D) = \frac{\Pr(D|H)\Pr(H)}{\Pr(D)} \label{eq:bayes}
+  p(H|D) = \frac{p(D|H)p(H)}{p(D)} \label{eq:bayes}
 \end{equation}
 where $D$ is the data and $H$ is a hypothesis. Like many other probability
 theories, technically the Bayes' theorem merely provides a method of
@@ -306,60 +306,54 @@ information in Bayesian literatures).
 \label{sub:Bayesian model choice problem}
 
 Consider a (possibly infinite) countable set of models $\calM = \{\calM_i,
-i\in I\}$. Our aim is to choose a ``best'' model from this set. There will
-usually be actions taken once we have decided which model to use. For example
-we may use the chosen model for inference of the past or prediction of the
-future. It is the consequences of these actions of interest instead of the
-chosen model itself. Therefore, from a decision-theoretic perspective, the
-``best'' model should maximize the utility for some quality of the interest.
-However, in practice it is common to ignore the actions following the model
-selection decision and our interest is the true model, say $\calM_t$. In this
-case, it is natural to define a zero-one utility function, say
-$u(\calM_i,\calM_t)$, such that $u(\calM_i,\calM_t) = 1$ for $\calM_t =
-\calM_i$ and $0$ otherwise.
+i\in I\}$. Our aim is to choose the ``best'' model from this set. There will
+usually be actions taken after the model is chosen, for example inference of
+the past or prediction of the future. It is the consequences of these actions
+of interest instead of the chosen model itself. Therefore, from a
+decision-theoretic perspective, the ``best'' model should maximize the utility
+for some quality of the interest. However, in practice it is common to ignore
+the actions following the model selection and the sole interest is the true
+model, say $\calM_t$. In this case, it is natural to define a zero-one utility
+function, say $u(\calM_i,\calM_t)$, such that $u(\calM_i,\calM_t) = 1$ for
+$\calM_t = \calM_i$ and $0$ otherwise.
 
 It is easy to see that the model $\calM_i$ that maximizes the expected utility
 given data $D$ is the model with the highest posterior probability
-$\Pr(\calM_i|D)$, see \textcite[][chap.~6]{Bernardo:1994vd}. This model is
+$\pi(\calM_i|D)$, see \textcite[][chap.~6]{Bernardo:1994vd}. This model is
 thus our ``best'' model in this setting. It should be noted this argument is
 only valid if the true model $\calM_t \in \calM$. Otherwise, the utility is
-always zero for all models. However, the precise meaning of a true model is
-not well defined. Again, we will not focus on these philosophical problems. In
-what follows, we presume that our aim is to find the model with the highest
-posterior probability.
+always zero for all models. In what follows, we presume that our aim is to
+find the model with the highest posterior probability.
 
 Since the set $\calM$ is countable, it is natural to define a discrete random
-variable by the injective mapping $\kappa:\calM\to\bbN$, such that
-$\kappa(\calM_i) = k_i$, $k_i \in \bbN$. The above problem of choosing the
-model with the highest posterior probability is therefore equivalent to
-inferencing the posterior density $p^*(\kappa = k|D)$. We will refer to a
-model by $\calM_i$, or its corresponding $\kappa = k_i$ or simply $\kappa = k$
-in the remaining of this thesis. The random variable $\kappa$ is often called
-the model indicator. In the case of parametric models, assume that conditional
-on $\kappa = k$, the parameter vector $\bth_k$ has dimension $n_k$ and
-parameter space $\bTh_k\subset\bbR^{n_k}$. In addition, a prior distribution
-for both $\bth_k$ conditional on $\kappa = k$ and the model indicator $\kappa$
-are specified, say $\pi(\bth_k|\kappa =k)$ and $p(\kappa = k)$, respectively.
-Therefore, given the data $D$, the joint density and posterior density are,
+variable by an injective mapping $\kappa:\calM\to\bbN$, such that
+$\kappa(\calM_i) = k_i$, $k_i \in \bbN$. We will refer to a model by $\calM_i$
+or $\kappa = k_i$ in the remaining of this thesis whichever is more convenient
+in context. The random variable $\kappa$ is often called the model indicator.
+
+For parametric models, assuming that conditional on $\kappa = k$, the
+parameter vector $\bth_k$ has dimension $n_k$ and parameter space
+$\bTh_k\subset\bbR^{n_k}$. In addition, prior distributions for both $\bth_k$
+conditional on $\kappa = k$ and the model indicator $\kappa$ are specified,
+say $\pi(\bth_k|\kappa =k)$ and $p(\kappa = k)$, respectively. Therefore,
+given the data $D$, the joint density and the posterior density are,
 respectively,
 \begin{align}
   \eta(D,\bth_k,\kappa=k)
-  &= f(D|\bth_k,\kappa=k)\pi(\bth_k|\kappa=k)p(\kappa=k)
+  &= f(D|\bth_k,\kappa=k)\pi(\bth_k|\kappa=k)\pi(\kappa=k)
   \label{eq:full joint}\\
-  \mu(\bth_k,\kappa=k|D)
-  &= \pi^*(\bth_k|D,\kappa=k)p^*(\kappa=k|D)
+  \pi(\bth_k,\kappa=k|D)
+  &= \pi(\bth_k|D,\kappa=k)\pi(\kappa=k|D)
   \label{eq:full posterior}
 \end{align}
-where $f$ is the likelihood function. And $\pi^*$ and $p^*$ are the posterior
-densities for $\bth_k$ and $\kappa$, respectively. Therefore the inference of
-the model indicator $\kappa$ can be entirely based on the posterior densities
-$\mu$ or $p^*$. Two approaches are commonly used in Bayesian model selection
-problems. One is to compare the posterior probability $p^*(\kappa=k_i|D)$
-pairwise for models $\kappa(\calM_i) = k_i$. This approach leads to the Bayes
-factor, reviewed in the next section. The other approach is to inference the
-distribution $\mu$ or $p^*$ directly. This approach to Bayesian model
-selection can be seen as a specific application of variable dimension models,
-which is briefly reviewed in section~\ref{sub:Variable dimension models}.
+where $f$ is the likelihood function. Two approaches are commonly used in
+Bayesian model selection problems. One is to compare the posterior probability
+$\pi(\kappa=k_i|D)$ pairwise for models $\kappa = k_i$. This approach leads to
+the Bayes factor, reviewed in the next section. The other approach is to
+inference the distribution $\pi(\kappa=k_i|D)$ directly. This approach to
+Bayesian model selection can be seen as a specific application of variable
+dimension models, which is briefly reviewed in section~\ref{sub:Variable
+  dimension models}.
 
 \subsection{Bayes factor}
 \label{sub:Bayes factor}
@@ -368,23 +362,23 @@ When the model set $\calM$ is finite, we can find the model with the highest
 posterior probability by compare models pairwise. Rewrite the posterior
 density~\eqref{eq:full posterior} as,
 \begin{equation}
-  \mu(\bth_k,\kappa=k|D) = \frac{\eta(D,\bth_k,\kappa=k)}{\Pr(D)}.
+  \pi(\bth_k,\kappa=k|D) = \frac{\eta(D,\bth_k,\kappa=k)}{p(D)}.
 \end{equation}
 Substitute equation~\eqref{eq:full joint}, and integrate out the parameter
-vector $\bth_k$ over its parameter space, we have the form of the posterior
-model probability $p^*(\kappa=k|D)$,
+vector $\bth_k$ over its parameter space, we have the following form of the
+posterior model probability $\pi(\kappa=k|D)$,
 \begin{equation}
-  p^*(\kappa=k|D) = \frac{p(\kappa = k)}{\Pr(D)}
+  \pi(\kappa=k|D) = \frac{\pi(\kappa = k)}{p(D)}
   \int f(D|\bth_k,\kappa = k)\pi(\bth_k|\kappa = k)\dd\bth_k.
 \end{equation}
 Therefore to compare the posterior probabilities of two models, say $\kappa =
 k_1$ and $k_2$, one only need to compute their ratio,
 \begin{align}
-  \frac{p^*(\kappa = k_1|D)}{p^*(\kappa = k_2|D)} &= \frac
+  \frac{\pi(\kappa = k_1|D)}{\pi(\kappa = k_2|D)} &= \frac
   {\int f(D|\bth_{k_1},\kappa=k_1)\pi(\bth_{k_1}|\kappa=k_1)\dd\bth_k}
   {\int f(D|\bth_{k_2},\kappa=k_2)\pi(\bth_{k_2}|\kappa=k_2)\dd\bth_k}
-  \frac{p(\kappa=k_1)}{p(\kappa=k_2)} \notag\\
-  & = B_{12} \frac{p(\kappa=k_1)}{p(\kappa=k_2)},
+  \frac{\pi(\kappa=k_1)}{\pi(\kappa=k_2)} \notag\\
+  & = B_{12} \frac{\pi(\kappa=k_1)}{\pi(\kappa=k_2)},
   \label{eq:posterior odd}
 \end{align}
 where
@@ -399,10 +393,9 @@ prior odds ratio is transformed into the posterior odds ratio by the Bayes
 factor \parencite{Kass:1995vb}. The Bayes factor is the principle tool for
 Bayesian model comparison and model selection. As it is made clear in the
 above equation, to compute the Bayes factor, all that needs to be done is the
-computation of following quality for each value of $\kappa$,
+computation of the following quality for each value of $\kappa$,
 \begin{equation}
-  \Pr(D|\kappa = k)
-  = \int f(D|\bth_k,\kappa=k)\pi(\bth_k|\kappa=k)\dd\bth_k,
+  p(D|\kappa = k) = \int f(D|\bth_k,\kappa=k)\pi(\bth_k|\kappa=k)\dd\bth_k,
   \label{eq:marginal likelihood}
 \end{equation}
 which is called the marginal likelihood of data $D$ under model $\kappa = k$.
@@ -412,18 +405,19 @@ likelihood, as long as the model set $\calM$ is finite.
 
 It should be noted that the prior distribution $\pi(\bth_k|\kappa=k)$ is
 chosen by the statistician in the modeling process. The choice of the prior
-distributions is one of the most critical and criticized part of Bayesian
+distribution is one of the most critical and criticized part of Bayesian
 modeling. In principle, the prior distribution shall represent the prior
 beliefs. That is, it represents how much is already known about the data
 generating mechanism and what is believed about it before the observation of
 the data, no more or no less. It shall not only describe all knowledge already
 known, but also more importantly preserve all the ignorance. If it contains
-more information than actually known, the inference will be biased. In other
-words, one can always construct a prior distribution such that inference will
-be biased towards one's preference, which is not necessarily rational. It is
-often too difficult to elicit a precise distribution from prior information.
-Therefore it is necessary to make at least partly arbitrary choice of the
-prior distribution \parencites{Robert:2007tc}[][chap.~3]{Kass:1995vb}.
+more information than what is actually known, the inference will be biased. In
+other words, one can always construct a prior distribution such that inference
+will be biased towards one's preference, which is not necessarily rational. It
+is often too difficult to elicit a precise distribution from prior
+information.  Therefore it is necessary to make at least partially arbitrary
+choice of the prior distribution
+\parencites{Robert:2007tc}[][chap.~3]{Kass:1995vb}.
 
 Often the priors need to be considered carefully on a per problem basis.
 Nonetheless there are a few classes of prior distributions frequently used in
@@ -447,12 +441,12 @@ Bayesian analysis and \textcite{Berger:1989vj, Berger:1992kf, Berger:1992wo}
 for reference priors.
 
 It is also important to evaluate the Bayes factor over a range of possible
-priors to assess the sensitivity issues. This is often computational intensive
+priors to assess the sensitivity issues. This is often computational expensive
 since many high dimensional integrations are required. When there is enough
 information to construct parametric priors, it is possible to alter the values
 of parameters and recompute the Bayes factor
 \parencite[e.g.,][]{McCulloch:1991hj}. In general situations, a less
-computational intensive method is to use the Laplace approximation to compare
+computational expensive method is to use the Laplace approximation to compare
 the Bayes factor using different priors \parencite[e.g.,][]{Kass:1992tz}. It
 is also proposed in the literature to use the maximum of Bayes factor (and
 thus the maximal evidence against a model) to evaluate the sensitivity problem
@@ -479,14 +473,14 @@ the Bayes factor \parencite{Schwarz:1978uv}. The \bic is defined as,
 \end{equation}
 where $f(D|\hbth)$ is the likelihood function evaluated at the \mle ($\hbth$)
 and $k$ is the number of parameters to be estimated. The \bic strategy choose
-the model with smallest \bic value. To justify its use, we first outline its
-derivation, which will provide us some insights of the quality of the
+the model with the smallest \bic value. To justify its use, we first outline
+its derivation, which will provide us some insights of the quality of the
 approximation. We start with equation~\eqref{eq:marginal likelihood} while
 dropping the model index $k$ and $\kappa=k$, since this computations is for
 each model individually. Let $h(\bth) = - \log f(D|\bth)\pi(\bth)$ and let
 $\tbth$ denote the value of $\bth$ that minimizes $h(\bth)$. Then,
 \begin{equation}
-  \Pr(D) = \int f(D|\bth)\pi(\bth)\dd\bth = \int\exp\{-h(\bth)\}\dd\bth
+  p(D) = \int f(D|\bth)\pi(\bth)\dd\bth = \int\exp\{-h(\bth)\}\dd\bth
 \end{equation}
 Applying Taylor expansion to $h(\bth)$ around $\tbth$,
 \begin{align}
@@ -501,18 +495,18 @@ $h'$ is the gradient of $h$. Since for $n\to\infty$, the posterior
 distribution is concentrated around $\tbth$, and thus only those values close
 to $\tbth$ contribute significantly to the integration,
 \begin{equation}
-  \Pr(D)\approx\exp\{-h(\tbth)\}
+  p(D)\approx\exp\{-h(\tbth)\}
   \int\exp\{-\frac{1}{2}(\bth - \tbth)^TH(\bth - \tbth)\}.
 \end{equation}
 Note the integrand is the kernel of of a multivariate normal distribution with
 mean $\tbth$ and covariance matrix $H^{-1}$, which is assumed to be positive
 definite and exist. It follows,
 \begin{equation}
-  \Pr(D) \approx \exp\{-h(\tbth)\} (2\pi)^{k/2} \lvert H \rvert^{-1/2},
+  p(D) \approx \exp\{-h(\tbth)\} (2\pi)^{k/2} \lvert H \rvert^{-1/2},
 \end{equation}
 where $k$ is the number of parameters, or the dimension of $\bth$. Thus,
 \begin{equation}
-  -2\log\Pr(D) \approx
+  -2\log p(D) \approx
   -2\log f(D|\tbth) - 2\log\pi(\tbth) - k\log(2\pi) + \log\lvert H \rvert.
   \label{eq:bic approx}
 \end{equation}
@@ -520,7 +514,7 @@ With i.i.d samples, for $n\to\infty$, $H/n \approx i$, where $i$ is the Fisher
 information matrix. It follows that $\lvert H \rvert \approx n^k \lvert i
 \rvert$ for large $n$. Omitting the $O(1)$ terms,
 \begin{equation}
-  -2\log\Pr(D) \approx -2\log f(D|\tbth) + k\log(n).
+  -2\log p(D) \approx -2\log f(D|\tbth) + k\log(n).
 \end{equation}
 With $n\to\infty$, $\tbth\approx\hat{\bth}$, where $\hat{\bth}$ is the \mle,
 replace $\tbth$ with $\hat{\bth}$, the right hand side of the above equation
@@ -528,26 +522,27 @@ becomes the formula for what is commonly known as \bic. The \bic method choose
 the model with smallest \bic.
 
 The \bic method is often compared and contrasted with the \aic method, which
-we discussed in section~\ref{sub:aic}. Despite the similarity in formulas,
-\aic and \bic have very different assumptions. In addition to the large sample
-assumption, which is difficult to assess in practice, \bic also assumes ``good
-behavior'' of the likelihood function such that the use of \mle in place of
-$\tbth$ is justified. Also, unlike \aic, whose approximation is often at worst
-$O(1/n)$, the \bic requires that the $O(1)$ term in equation~\eqref{eq:bic
-  approx} is negligible compared to other terms. These assumptions restricted
-the use of \bic in many situations. See \textcite{Gelfand:1994ux} for an
-example where the $O(1)$ approximation failed.  See \textcite{Berger:2001uy}
-for examples that the irregularity of likelihood function causes the \bic
-method failed. Moreover, in non-i.i.d. situations, just like \aic, the
-definition of the parameter dimension $k$ is ambiguous
-\parencite{Spiegelhalter:1998uc, Kass:1995vb}. See also \textcite[][chap.~5
-and chap.~6]{Burnham:2002wc} for more comparison and contrast of \aic and \bic
-approaches to model selection. There are other criticism of the \bic strategy.
-For example \textcite[][chap.~7]{Robert:2007tc} argued that the \bic strategy
-eliminated the subjective input into the Bayes modeling since the value of
-\bic does not depend on the prior distribution. However this is equally argued
-as an advantage of this strategy in the case that priors, to which Bayes
-factors can be very sensitive, are hard to specify.
+we discussed in section~\ref{sec:Akaike's information criterion}. Despite the
+similarity in formulas, \aic and \bic have very different assumptions. In
+addition to the large sample assumption, which is difficult to assess in
+practice, \bic also assumes ``good behavior'' of the likelihood function such
+that the use of \mle in place of $\tbth$ is justified. Also, unlike \aic,
+whose approximation is often at worst $O(1/n)$, the \bic requires that the
+$O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared to other
+terms. These assumptions restricted the use of \bic in many situations. See
+\textcite{Gelfand:1994ux} for an example where the $O(1)$ approximation
+failed. See \textcite{Berger:2001uy} for examples that the irregularity of
+likelihood function causes the \bic method failed. Moreover, in non-i.i.d.
+situations, just like \aic, the definition of the parameter dimension $k$ is
+ambiguous \parencite{Spiegelhalter:1998uc, Kass:1995vb}. See also
+\textcite[][chap.~5 and chap.~6]{Burnham:2002wc} for more comparison and
+contrast of \aic and \bic approaches to model selection. There are other
+criticism of the \bic strategy. For example
+\textcite[][chap.~7]{Robert:2007tc} argued that the \bic strategy eliminated
+the subjective input into the Bayes modeling since the value of \bic does not
+depend on the prior distribution. However this is equally argued as an
+advantage of this strategy in the case that priors, to which Bayes factors can
+be very sensitive, are hard to specify.
 
 \subsection{Variable dimension models}
 \label{sub:Variable dimension models}
@@ -564,7 +559,7 @@ $\calM$). Then the goal is to make inference about the parameter vector
 $(\kappa, \bth_{\kappa})$ conditional on the data $D$, whose parameter space
 is,
 \begin{equation}
-  \bTh = \bigcup_{k\in\calK}{k}\times\bTh_k,
+  \bTh = \bigcup_{k\in\calK}\{k\}\times\bTh_k,
   \label{eq:variable dimension parameter space}
 \end{equation}
 where $\bTh_k$ is the model parameter space of $\bth_k$.
