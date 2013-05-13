@@ -1,0 +1,56 @@
+\ifx\inthesis\undefined % In Thesis
+
+\documentclass[11pt, hyper, bib, fontset=Minion]{marticle}
+\input{../macros}
+\addbibresource{../thesis.bib}
+
+\title{Monte Carlo Methods}
+\author{Yan Zhou}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\else % In Thesis
+
+\chapter{Bayesian Model Comparison}
+\label{cha:Bayesian Model Comparison}
+
+\fi % In Thesis
+
+\section{Importance sampling}
+\label{sec:Importance sampling}
+
+\section{Markov chain Monte Carlo}
+\label{sec:Markov chain Monte Carlo}
+
+\subsection{Discrete time Markov chains}
+\label{sub:Discrete time Markov chains}
+
+\subsection{Metropolis-Hastings algorithms}
+\label{sub:Metropolis-Hastings algorithms}
+
+\subsection{Gibbs sampling}
+\label{sub:Gibbs sampling}
+
+\subsection{Reversible jump \protect\mcmc}
+\label{sub:Reversible jump mcmc}
+
+\subsection{Population \protect\mcmc}
+\label{sub:Population mcmc}
+
+\section{Sequential Monte Carlo}
+\label{sec:Sequential Monte Carlo}
+
+\subsection{Sequential importance sampling and resampling}
+\label{sub:Sequential importance sampling and resampling}
+
+\subsection{\protect\smc sampler}
+\label{sub:smc sampler}
+
+\subsection{Related methods}
+\label{sub:Related methods}
+
+\ifx\inthesis\undefined
+\printbibliography
+\end{document}\else\relax\fi
