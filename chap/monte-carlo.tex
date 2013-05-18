@@ -303,16 +303,16 @@ required to be known including their normalizing constants.
 \subsection{Reversible jump \protect\mcmc}
 \label{sub:Reversible jump mcmc}
 
-As noted in section~\note{Variable dimension models}, Bayesian model selection
-can also be achieved through inference on the full posterior
-$\pi(\bth_k,\kappa=k|D)$. However, this requires simulations on the joint
-parameter space $\bTh = \bigcup_{k\in\calK}\{k\}\times\bTh_k$.
+Bayesian model selection can also be achieved through inference on the full
+posterior $\pi(\bth_k,\kappa=k|D)$ directly. However, this requires
+simulations on the joint parameter space $\bTh = \bigcup_{k\in\calK} \{k\}
+\times \bTh_k$.
 
-\iffalse
-The reversible jump \mcmc techniques (\rjmcmc) introduced by
+The reversible jump \mcmc algorithm (\rjmcmc) introduced by
 \textcite{Green:1995dg} is based on existence of the detailed balance,
 \begin{equation}
-  \int_A\int_B\pi(x)K(x,y)\dd y \dd x = \int_B\int_A\pi(y)K(y,x)\dd x \dd y,
+  \int_A\int_B\pi(x)K(x,y)\intd y \intd x =
+  \int_B\int_A\pi(y)K(y,x)\intd x \intd y,
   \label{eq:detailed balance}
 \end{equation}
 where $\pi$ is some target distribution, and $K$ is an aperiodic and
@@ -321,7 +321,7 @@ algorithms for simulation from posterior densities $\pi^*(\bth_k|D,\kappa =
 k)$ as we discussed in subsection~\ref{sub:Markov chain Monte Carlo sampling}.
 The difference is that in the context of Bayesian model selection, the target
 distribution is $\mu(\bth_k,\kappa = k|D)$ and the dimension of the parameter
-is variable. The core of \textcite{Green:1995dg}'s techniques is to construct
+is variable. The core of \textcite{Green:1995dg}'s technique is to construct
 an algorithm that the Markov transition kernel $K((\bth_i,\kappa = i),
 (\bth_j,\kappa = j))$ satisfies the detailed balance~\eqref{eq:detailed
   balance}. The detailed balance ensures that the constructed Markov chain is
@@ -394,9 +394,6 @@ out that the target density $\mu$ does not need to be normalized, but the
 posterior densities for difference models have to be known up to the
 \emph{same} normalizing constant.
 
-\subsection{Challenges of implementations of \protect\rjmcmc}
-\label{sub:Challenges of implementations of rjmcmc}
-
 Though \textcite{Green:2009tr} argued that the additional challenges of
 implementation of \rjmcmc is just a ``myth'', we still outlines some
 difficulties of these techniques. The ability of simulation the posterior
@@ -429,7 +426,6 @@ Despite all these efforts, the challenges of implementations of \rjmcmc is
 still the main issue that limits its use in practice. We are going to look for
 alternative ways of doing Bayesian computation and it is proposed in the next
 chapter.
-\fi
 
 \subsection{Population \protect\mcmc}
 \label{sub:Population mcmc}

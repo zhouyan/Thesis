@@ -1,0 +1,24 @@
+\ifx\inthesis\undefined % In Thesis
+
+\documentclass[11pt, hyper, bib, fontset=Minion]{marticle}
+\input{../macros}
+\addbibresource{../thesis.bib}
+
+\title{vSMC: A C++ Library for Parallel Sequential Monte Carlo}
+\author{Yan Zhou}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\else % In Thesis
+
+\chapter{vSMC: A C++ Library for Parallel Sequential Monte Carlo}
+\label{cha:vSMC: A C++ Library for Parallel Sequential Monte Carlo}
+
+\fi % In Thesis
+
+
+\ifx\inthesis\undefined
+\printbibliography
+\end{document}\else\relax\fi

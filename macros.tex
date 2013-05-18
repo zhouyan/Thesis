@@ -1,6 +1,8 @@
-\let\firstyear\iftrue  \let\endfirstyear\fi
-\let\secondyear\iftrue \let\endsecondyear\fi
-\let\thirdyear\iffalse \let\endthirdyear\fi
+\ifx\inthesis\undefined
+\def\rootdir{..}
+\else
+\def\rootdir{.}
+\fi
 
 \def\DeclareAbbr#1#2{\def#1{\textsc{#2}\xspace}}
 \DeclareAbbr{\ess}{ess}

@@ -1,0 +1,24 @@
+\ifx\inthesis\undefined % In Thesis
+
+\documentclass[11pt, hyper, bib, fontset=Minion]{marticle}
+\input{../macros}
+\addbibresource{../thesis.bib}
+
+\title{Sequential Monte Carlo for Bayesian Model Comparison}
+\author{Yan Zhou}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\else % In Thesis
+
+\chapter{Sequential Monte Carlo for Bayesian Model Comparison}
+\label{cha:Sequential Monte Carlo for Bayesian Model Comparison}
+
+\fi % In Thesis
+
+
+\ifx\inthesis\undefined
+\printbibliography
+\end{document}\else\relax\fi

@@ -1,0 +1,24 @@
+\ifx\inthesis\undefined % In Thesis
+
+\documentclass[11pt, hyper, bib, fontset=Minion]{marticle}
+\input{../macros}
+\addbibresource{../thesis.bib}
+
+\title{Conclusions}
+\author{Yan Zhou}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\else % In Thesis
+
+\chapter{Conclusions}
+\label{cha:Conclusions}
+
+\fi % In Thesis
+
+
+\ifx\inthesis\undefined
+\printbibliography
+\end{document}\else\relax\fi
