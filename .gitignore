@@ -7,10 +7,11 @@
 *.fls
 *.log
 *.out
-*.pdf
 *.run.xml
 *.synctex.gz*
 *.toc
 
 thesis.pdf
+outline.pdf
+chap/*.pdf
 pieces/*.pdf

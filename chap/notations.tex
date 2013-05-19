@@ -1,1 +1,12 @@
-\chapter*{notations}
+\ifx\inthesis\undefined % In Thesis
+\input{../header}
+\title{Notations}
+\begin{document}
+\maketitle
+\else % In Thesis
+\chapter*{Notations}
+\fi % In Thesis
+
+\ifx\inthesis\undefined
+\printbibliography
+\end{document}\else\relax\fi
