@@ -14,8 +14,8 @@ popular approaches to this problem among others. One is the main subject of
 this thesis, Bayesian model comparison. The other is information-theoretic
 based and in particular Akaike's information criterion (\aic). Though not fit
 into the Bayesian framework, \aic is used as a baseline for comparison in
-chapter~\note{Bayesian Model Comparison for Positron Emission Tomography
-  Compartmental Models} and is reviewed briefly in the next section. The rest
+chapter~\ref{cha:Bayesian Model Comparison for Positron Emission Tomography
+  Compartmental Model} and is reviewed briefly in the next section. The rest
 of this chapter review Bayesian model comparison techniques in detail.
 
 \section{Akaike's information criterion}
@@ -27,10 +27,10 @@ place of the true data generating mechanism. It is built upon the relation
 between \kl and the maximum likelihood estimator (\mle). The general formula
 of \aic for a candidate parametric model $\calM$ is
 \begin{equation}
-  \text{\aic} = -2\ell_n(\hbth;\bfx) + 2k
+  \text{\aic} = -2\ell_n(\hat\theta;\bfx) + 2k
 \end{equation}
-where $\ell_n(\bth;\bfx)$ is the log-likelihood for a size $n$ sample
-$\bfx=(x_1,\dots,x_n)^T$, evaluated at $\bth$. The value $\hbth = \hbth(\bfx)$
+where $\ell_n(\theta;\bfx)$ is the log-likelihood for a size $n$ sample
+$\bfx=(x_1,\dots,x_n)^T$, evaluated at $\theta$. The value $\hat\theta = \hat\theta(\bfx)$
 is the \mle under model $\calM$.\footnote{More precisely it is a class of
   models whose densities belong to the same parametric family.} And $k$ is the
 dimension of the parameter vector. The model with the smallest \aic value is
@@ -54,42 +54,42 @@ further discussions. A Bayesian analysis and corrected \aic are also reviewed.
 populations defined by their underlying probability densities. The common
 definition of \kl for continuous distributions in literature is,
 \begin{equation}
-  \dkl(g, f(\cdot;\bth)) = \int g(x)\log\frac{g(x)}{f(x;\bth)}\intd x,
+  \dkl(g, f(\cdot;\theta)) = \int g(x)\log\frac{g(x)}{f(x;\theta)}\intd x,
   \label{eq:kld}
 \end{equation}
 where $g$ is the true density of the data generating mechanism, and
-$f(\cdot;\bth)$ is the density of a candidate model specified by parameter
-vector $\bth$. The integration above is over the support of $g$.
+$f(\cdot;\theta)$ is the density of a candidate model specified by parameter
+vector $\theta$. The integration above is over the support of $g$.
 
-One important observation is that $\dkl(g,f(\cdot;\bth))\ge0$ with equality if
-and only if $g(x) = f(x;\tbth)$ almost everywhere for some value of $\bth =
-\tbth$ \parencite{Kullback:1951va}. This result naturally suggests one to find
-the estimator $\tbth$ which minimizes the \kl. Under suitable conditions,
+One important observation is that $\dkl(g,f(\cdot;\theta))\ge0$ with equality if
+and only if $g(x) = f(x;\tilde\theta)$ almost everywhere for some value of $\theta =
+\tilde\theta$ \parencite{Kullback:1951va}. This result naturally suggests one to find
+the estimator $\tilde\theta$ which minimizes the \kl. Under suitable conditions,
 rewrite equation~\eqref{eq:kld},
 \begin{align}
-  \dkl(g,f(\cdot;\bth))
-  & = \int g(x)\log g(x)\intd x - \int g(x)\log f(x;\bth)\intd x \notag\\
-  & = \int g(x)\log g(x)\intd x - \Exp_g \log f(X;\bth),
+  \dkl(g,f(\cdot;\theta))
+  & = \int g(x)\log g(x)\intd x - \int g(x)\log f(x;\theta)\intd x \notag\\
+  & = \int g(x)\log g(x)\intd x - \Exp_g \log f(X;\theta),
   \label{eq:kl exp ll}
 \end{align}
-where $\Exp_g\log f(X;\bth)$ is the expected log-likelihood with respect to
-$g(X)$. Therefore $\tbth$ will maximize the expected log-likelihood. Letting
-$\ell_n(\bth;\bfx)$ denote the log-likelihood of an \iid sample $\bfx =
-(x_1,\dots,x_n)^T$ from density $g$, evaluated at $\bth$, then by the Strong
+where $\Exp_g\log f(X;\theta)$ is the expected log-likelihood with respect to
+$g(X)$. Therefore $\tilde\theta$ will maximize the expected log-likelihood. Letting
+$\ell_n(\theta;\bfx)$ denote the log-likelihood of an \iid sample $\bfx =
+(x_1,\dots,x_n)^T$ from density $g$, evaluated at $\theta$, then by the Strong
 Law of Large Numbers,
 \begin{equation}
-  \frac{\ell_n(\bth;\bfx)}{n}
+  \frac{\ell_n(\theta;\bfx)}{n}
   \overset{\mathrm{a.s.}}{\longrightarrow}
-  \Exp_g\log f(X;\bth), \quad\text{for } n\to\infty\text{ and fixed }\bth,
+  \Exp_g\log f(X;\theta), \quad\text{for } n\to\infty\text{ and fixed }\theta,
   \label{eq:kl consistency}
 \end{equation}
 provided that this expectation exits. Hence \parencite[see][for
 details]{Kullback:1951va},
 \begin{equation}
-  \hbth \overset{\mathrm{a.s}}{\longrightarrow} \tbth,
+  \hat\theta \overset{\mathrm{a.s}}{\longrightarrow} \tilde\theta,
   \quad\text{for } n\to\infty.
 \end{equation}
-where $\hbth$ is the \mle. That is, the \mle aims to minimize the \kl from the
+where $\hat\theta$ is the \mle. That is, the \mle aims to minimize the \kl from the
 candidate model to the true data generating density. This also justifies the
 use of \mle from an information-theoretic perspective.
 
@@ -111,52 +111,53 @@ section~\ref{sub:Corrected aic}.
 As pointed out by \textcite{Bozdogan:1987wy}, though the development of \aic
 had its origin in the time series modeling, it is a direct extension to the
 information-theoretic interpretation of the \mle. For a class of parametric
-models with density $f(\cdot;\bth)$, we aim to find the ``best'' in the sense
-that the \kl is minimized among all possible values of $\bth$, i.e., to find
-the value of $\tbth$, which maximizes the expected log-likelihood.  From a
+models with density $f(\cdot;\theta)$, we aim to find the ``best'' in the sense
+that the \kl is minimized among all possible values of $\theta$, i.e., to find
+the value of $\tilde\theta$, which maximizes the expected log-likelihood.  From a
 decision-theoretic point of view this model also minimizes the expected loss
 measured by the \kl \parencite{Akaike:1973uc}. Ideally, if we can find
-$\tbth$, then the next step will be choosing the model with the minimum of
-$D_{\mathrm{KL}}(g,f(\cdot;\tbth))$. However, even in the unlikely case that
-$g(x) = f(x;\tbth)$, we still have to estimate $\tbth$. As suggested in the
+$\tilde\theta$, then the next step will be choosing the model with the minimum of
+$D_{\mathrm{KL}}(g,f(\cdot;\tilde\theta))$. However, even in the unlikely case that
+$g(x) = f(x;\tilde\theta)$, we still have to estimate $\tilde\theta$. As suggested in the
 last section, given \iid sample $\bfx = (x_1,\dots,x_n)^T$, we shall use the
-\mle ($\hbth$) as a consistent estimator for $\tbth$. The \aic method is in
-essence used to estimate the expected \kl from $f(\cdot; \hbth)$ to $g$.
+\mle ($\hat\theta$) as a consistent estimator for $\tilde\theta$. The \aic method is in
+essence used to estimate the expected \kl from $f(\cdot; \hat\theta)$ to $g$.
 Recall equation~\eqref{eq:kl exp ll}, and the additive property of \kl and
 log-likelihood, the \aic method aim to estimate the following quantity,
 \begin{equation}
-  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hbth(\bfY)),
+  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hat\theta(\bfY)),
 \end{equation}
 where $\bfX = (X_1,\dots,X_n)^T$, $X_i \sim g$, and $\bfY =
 (Y_1,\dots,Y_n)^T$, $Y_i \sim g$ is a simple random sample. We emphasize that
-$\hbth$, the \mle, is a function of the data without involving $\bfX$.
+$\hat\theta$, the \mle, is a function of the data without involving $\bfX$.
 Therefore, the outer expectation can also be viewed as taken with respect to
-$\hbth$. Let $\ell_n(\bth;\bfy)$ be the log-likelihood computed with data
-$\bfy = (y_1,\dots,y_n)$. Let $\tbth$ be the value of $\bth$ maximize
-$\Exp_{\bfX}\log f(\bfX;\bth)$. Then the key result is that,
+$\hat\theta$. Let $\ell_n(\theta;\bfy)$ be the log-likelihood computed with data
+$\bfy = (y_1,\dots,y_n)$. Let $\tilde\theta$ be the value of $\theta$ maximize
+$\Exp_{\bfX}\log f(\bfX;\theta)$. Then the key result is that,
 \begin{equation}
-  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hbth(\bfY))
-  \approx \Exp_{\bfX}\log f(\bfX;\hbth) - \tr(I(\tbth)\Sigma),
+  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hat\theta(\bfY))
+  \approx \Exp_{\bfX}\log f(\bfX;\hat\theta) - \tr(I(\tilde\theta)\Sigma),
   \label{eq:aic general}
 \end{equation}
 where
 \begin{align}
-  I(\tbth)
+  I(\tilde\theta)
   & = \Exp_{\bfX}\Square[Big]{
-    -\frac{\partial^2\log f(\bfX;\bth)}{\partial\bth\partial\bth^T}}
-  \Bigm|_{\bth=\tbth} \\
-  \Sigma &= \Exp_{\hbth}[(\hbth-\tbth)(\hbth-\tbth)^T].
+    -\frac{\partial^2\log f(\bfX;\theta)}{\partial\theta\partial\theta^T}}
+  \Bigm|_{\theta=\tilde\theta} \\
+  \Sigma &=
+  \Exp_{\hat\theta}[(\hat\theta-\tilde\theta)(\hat\theta-\tilde\theta)^T].
 \end{align}
 
-That is, $\Sigma$ is the theoretical covariance matrix of $\hbth(\bfY)$ when
+That is, $\Sigma$ is the theoretical covariance matrix of $\hat\theta(\bfY)$ when
 $\bfY$ follows the true data generating density. This is a more general
 results than that found in \textcite{Akaike:1973uc}. In the special case where
-$g = f(\cdot;\tbth)$, $I(\tbth)$ becomes the Fisher information matrix, and
-$I(\tbth) = \Sigma^{-1}$. In this case equation~\eqref{eq:aic general} leads
-to the original \aic by using $\ell_n(\hbth;\bfy)$ as an unbiased consistent
+$g = f(\cdot;\tilde\theta)$, $I(\tilde\theta)$ becomes the Fisher information matrix, and
+$I(\tilde\theta) = \Sigma^{-1}$. In this case equation~\eqref{eq:aic general} leads
+to the original \aic by using $\ell_n(\hat\theta;\bfy)$ as an unbiased consistent
 estimator for its own expectation. This ideal situation does not exist in
 reality anyway. But as shown in \textcite{Shibata:1989tm}, $k$, the dimension
-of the estimated parameter vector is a good estimator of $\tr(I(\tbth)\Sigma)$
+of the estimated parameter vector is a good estimator of $\tr(I(\tilde\theta)\Sigma)$
 when the model is a ``good'' approximation of the true data generating
 mechanism. This also leads to the exact formula of \aic. In either case, a
 large sample is required to produce a good estimate of the expected
@@ -226,7 +227,7 @@ of the parameter vector to be estimated is close to the sample size.
 \textcite{Hurvich:1989ev} developed the \aicc for regression and time series
 modeling. The \aicc is defined as,
 \begin{equation}
-  \text{\aicc} = -2\ell_n(\hbth;\bfx) + \frac{2nk}{n-k-1}
+  \text{\aicc} = -2\ell_n(\hat\theta;\bfx) + \frac{2nk}{n-k-1}
 \end{equation}
 or equivalently,
 \begin{equation}
@@ -258,14 +259,14 @@ Instead, in the our work, using Bayesian model selection for \pet data are
 approached. The results are encouraging while the implementations still has
 limitations.
 
-\section{Bayesian model comparison}
-\label{sec:Bayesian model comparison}
+\section{Bayesian model choice}
+\label{sec:Bayesian model choice}
 
 The Bayes' theorem, in its simplest form is stated as below,
 \begin{equation}
-  p(H|D) = \frac{p(D|H)p(H)}{p(D)} \label{eq:bayes}
+  p(H|\data) = \frac{p(\data|H)p(H)}{p(\data)} \label{eq:bayes}
 \end{equation}
-where $D$ is the data and $H$ is a hypothesis. Like many other probability
+where $\data$ is the data and $H$ is a hypothesis. Like many other probability
 theories, technically the Bayes' theorem merely provides a method of
 accounting for the uncertainty. However, what is far more important is the
 associated philosophical interpretation -- the subjective perspective. Though
@@ -292,9 +293,6 @@ beliefs. And rational beliefs shall be built upon available information (the
 data in the statistical term) and any personal preference input (the prior
 information in Bayesian literatures).
 
-\subsection{Bayesian model choice problem}
-\label{sub:Bayesian model choice problem}
-
 Consider a (possibly infinite) countable set of models $\calM = \{\calM_i,
 i\in I\}$. Our aim is to choose the ``best'' model from this set. There will
 usually be actions taken after the model is chosen, for example inference of
@@ -308,39 +306,33 @@ function, say $u(\calM_i,\calM_t)$, such that $u(\calM_i,\calM_t) = 1$ for
 $\calM_t = \calM_i$ and $0$ otherwise.
 
 It is easy to see that the model $\calM_i$ that maximizes the expected utility
-given data $D$ is the model with the highest posterior probability
-$\pi(\calM_i|D)$, see \textcite[][chap.~6]{Bernardo:1994vd}. This model is
+given data $\data$ is the model with the highest posterior probability
+$\pi(\calM_i|\data)$, see \textcite[][chap.~6]{Bernardo:1994vd}. This model is
 thus our ``best'' model in this setting. It should be noted this argument is
 only valid if the true model $\calM_t \in \calM$. Otherwise, the utility is
 always zero for all models. In what follows, we presume that our aim is to
 find the model with the highest posterior probability.
 
-Since the set $\calM$ is countable, it is natural to define a discrete random
-variable by an injective mapping $\kappa:\calM\to\bbN$, such that
-$\kappa(\calM_i) = k_i$, $k_i \in \bbN$. We will refer to a model by $\calM_i$
-or $\kappa = k_i$ in the remaining of this thesis whichever is more convenient
-in context. The random variable $\kappa$ is often called the model indicator.
-
-For parametric models, assuming that conditional on $\kappa = k$, the
-parameter vector $\bth_k$ has dimension $n_k$ and parameter space
-$\bTh_k\subset\bbR^{n_k}$. In addition, prior distributions for both $\bth_k$
-conditional on $\kappa = k$ and the model indicator $\kappa$ are specified,
-say $\pi(\bth_k|\kappa =k)$ and $p(\kappa = k)$, respectively. Therefore,
-given the data $D$, the joint density and the posterior density are,
+For parametric models, assuming that conditional on $k$, the
+parameter vector $\theta_k$ has dimension $n_k$ and parameter space
+$\Theta_k\subset\bbR^{n_k}$. In addition, prior distributions for both $\theta_k$
+conditional on $k$ and the model indicator $\kappa$ are specified,
+say $\pi(\theta_k|k)$ and $p(k)$, respectively. Therefore,
+given the data $\data$, the joint density and the posterior density are,
 respectively,
 \begin{align}
-  \eta(D,\bth_k,\kappa=k)
-  &= f(D|\bth_k,\kappa=k)\pi(\bth_k|\kappa=k)\pi(\kappa=k)
+  \eta(\data,\theta_k,k)
+  &= f(\data|\theta_k,k)\pi(\theta_k|k)\pi(k)
   \label{eq:full joint}\\
-  \pi(\bth_k,\kappa=k|D)
-  &= \pi(\bth_k|D,\kappa=k)\pi(\kappa=k|D)
+  \pi(\theta_k,k|\data)
+  &= \pi(\theta_k|D,k)\pi(k|\data)
   \label{eq:full posterior}
 \end{align}
 where $f$ is the likelihood function. Two approaches are commonly used in
 Bayesian model selection problems. One is to compare the posterior probability
-$\pi(\kappa=k_i|D)$ pairwise for models $\kappa = k_i$. This approach leads to
+$\pi(k_i|\data)$ pairwise for models $k_i$. This approach leads to
 the Bayes factor, reviewed in the next section. The other approach is to
-inference the distribution $\pi(\kappa=k_i|D)$ directly. This approach to
+inference the distribution $\pi(k_i|\data)$ directly. This approach to
 Bayesian model selection can be seen as a specific application of variable
 dimension models, which is briefly reviewed in section~\ref{sub:Variable
   dimension models}.
@@ -352,30 +344,30 @@ When the model set $\calM$ is finite, we can find the model with the highest
 posterior probability by compare models pairwise. Rewrite the posterior
 density~\eqref{eq:full posterior} as,
 \begin{equation}
-  \pi(\bth_k,\kappa=k|D) = \frac{\eta(D,\bth_k,\kappa=k)}{p(D)}.
+  \pi(\theta_k,k|\data) = \frac{\eta(\data,\theta_k,k)}{p(\data)}.
 \end{equation}
 Substitute equation~\eqref{eq:full joint}, and integrate out the parameter
-vector $\bth_k$ over its parameter space, we have the following form of the
-posterior model probability $\pi(\kappa=k|D)$,
+vector $\theta_k$ over its parameter space, we have the following form of the
+posterior model probability $\pi(k|\data)$,
 \begin{equation}
-  \pi(\kappa=k|D) = \frac{\pi(\kappa = k)}{p(D)}
-  \int f(D|\bth_k,\kappa = k)\pi(\bth_k|\kappa = k)\intd\bth_k.
+  \pi(k|\data) = \frac{\pi(k)}{p(\data)}
+  \int f(\data|\theta_k,k)\pi(\theta_k|k)\intd\theta_k.
 \end{equation}
-Therefore to compare the posterior probabilities of two models, say $\kappa =
-k_1$ and $k_2$, one only need to compute their ratio,
+Therefore to compare the posterior probabilities of two models, say $k_1$ and
+$k_2$, one only need to compute their ratio,
 \begin{align}
-  \frac{\pi(\kappa = k_1|D)}{\pi(\kappa = k_2|D)} &= \frac
-  {\int f(D|\bth_{k_1},\kappa=k_1)\pi(\bth_{k_1}|\kappa=k_1)\intd\bth_k}
-  {\int f(D|\bth_{k_2},\kappa=k_2)\pi(\bth_{k_2}|\kappa=k_2)\intd\bth_k}
-  \frac{\pi(\kappa=k_1)}{\pi(\kappa=k_2)} \notag\\
-  & = B_{12} \frac{\pi(\kappa=k_1)}{\pi(\kappa=k_2)},
+  \frac{\pi(k_1|\data)}{\pi(k_2|\data)} &= \frac
+  {\int f(\data|\theta_{k_1},k_1)\pi(\theta_{k_1}|k_1)\intd\theta_k}
+  {\int f(\data|\theta_{k_2},k_2)\pi(\theta_{k_2}|k_2)\intd\theta_k}
+  \frac{\pi(k_1)}{\pi(k_2)} \notag\\
+  & = B_{12} \frac{\pi(k_1)}{\pi(k_2)},
   \label{eq:posterior odd}
 \end{align}
 where
 \begin{equation}
   B_{12} = \frac
-  {\int f(D|\bth_{k_1},\kappa=k_1)\pi(\bth_{k_1}|\kappa=k_1)\intd\bth_k}
-  {\int f(D|\bth_{k_2},\kappa=k_2)\pi(\bth_{k_2}|\kappa=k_2)\intd\bth_k}
+  {\int f(\data|\theta_{k_1},k_1)\pi(\theta_{k_1}|k_1)\intd\theta_k}
+  {\int f(\data|\theta_{k_2},k_2)\pi(\theta_{k_2}|k_2)\intd\theta_k}
   \label{eq:bayes factor}
 \end{equation}
 is called the Bayes factor. Equation~\eqref{eq:posterior odd} states how the
@@ -383,17 +375,18 @@ prior odds ratio is transformed into the posterior odds ratio by the Bayes
 factor \parencite{Kass:1995vb}. The Bayes factor is the principle tool for
 Bayesian model comparison and model selection. As it is made clear in the
 above equation, to compute the Bayes factor, all that needs to be done is the
-computation of the following quality for each value of $\kappa$,
+computation of the following quality for each value of $k$,
 \begin{equation}
-  p(D|\kappa = k) = \int f(D|\bth_k,\kappa=k)\pi(\bth_k|\kappa=k)\intd\bth_k,
+  p(\data|k) = 
+  \int f(\data|\theta_k,k)\pi(\theta_k|k)\intd\theta_k,
   \label{eq:marginal likelihood}
 \end{equation}
-which is called the \emph{marginal likelihood} of data $D$ under model $\kappa
-= k$.  It is obvious that $B_{ij} = B_{ik} B_{kj}$, and thus the Bayes factor
-approach is equivalent to choose the model with the highest marginal
+which is called the \emph{marginal likelihood} of data $\data$ under model
+$k$.  It is obvious that $B_{ij} = B_{ik} B_{kj}$, and thus the Bayes
+factor approach is equivalent to choose the model with the highest marginal
 likelihood, as long as the model set $\calM$ is finite.
 
-It should be noted that the prior distribution $\pi(\bth_k|\kappa=k)$ is
+It should be noted that the prior distribution $\pi(\theta_k|k)$ is
 chosen by the statistician in the modeling process. The choice of the prior
 distribution is one of the most critical and criticized part of Bayesian
 modeling. In principle, the prior distribution shall represent the prior
@@ -450,8 +443,8 @@ factor is finite and nonzero, and we concerns the computation of the Bayes
 factor. Broadly the computation can be divided into two classes: approximation
 based and Monte Carlo methods based. We review one of the most important
 information criteria, the Bayesian information criterion (\bic) in the next
-subsection. We will review the Monte Carlo methods in chapter~\note{Monte
-  Carlo methods}.
+subsection. We will review the Monte Carlo methods in chapter~\ref{cha:Monte
+  Carlo Methods}.
 
 \subsubsection{Bayesian information criterion}
 \label{ssub:Bayesian information criterion}
@@ -459,68 +452,69 @@ subsection. We will review the Monte Carlo methods in chapter~\note{Monte
 The Bayesian information criterion (\bic) was developed as an approximation to
 the Bayes factor \parencite{Schwarz:1978uv}. The \bic is defined as,
 \begin{equation}
-  \text{\bic} = -2\log f(D|\hbth) + k\log(n).
+  \text{\bic} = -2\log f(\data|\hat\theta) + k\log(n).
 \end{equation}
-where $f(D|\hbth)$ is the likelihood function evaluated at the \mle ($\hbth$)
-and $k$ is the number of parameters to be estimated. The \bic strategy choose
-the model with the smallest \bic value. To justify its use, we first outline
-its derivation, which will provide us some insights of the quality of the
-approximation. We start with equation~\eqref{eq:marginal likelihood} while
-dropping the model index $k$ and $\kappa=k$, since this computations is for
-each model individually. Let $h(\bth) = - \log f(D|\bth)\pi(\bth)$ and let
-$\tbth$ denote the value of $\bth$ that minimizes $h(\bth)$. Then,
+where $f(\data|\hat\theta)$ is the likelihood function evaluated at the \mle
+($\hat\theta$) and $k$ is the number of parameters to be estimated. The \bic
+strategy choose the model with the smallest \bic value. To justify its use, we
+first outline its derivation, which will provide us some insights of the
+quality of the approximation. We start with equation~\eqref{eq:marginal
+  likelihood} while dropping the model index $k$ and $k$, since this
+computations is for each model individually. Let $h(\theta) = - \log
+f(\data|\theta)\pi(\theta)$ and let $\tilde\theta$ denote the value of $\theta$ that minimizes
+$h(\theta)$. Then,
 \begin{equation}
-  p(D) = \int f(D|\bth)\pi(\bth)\intd\bth = \int\exp\{-h(\bth)\}\intd\bth
+  p(\data) = \int f(\data|\theta)\pi(\theta)\intd\theta = \int\exp\{-h(\theta)\}\intd\theta
 \end{equation}
-Applying Taylor expansion to $h(\bth)$ around $\tbth$,
+Applying Taylor expansion to $h(\theta)$ around $\tilde\theta$,
 \begin{align}
-  h(\bth)
-  &= h(\tbth) + (\bth - \tbth)^T h'
-  + \frac{1}{2}(\bth - \tbth)^T h''(\tbth) (\bth - \tbth)
-  + o(\lVert \bth - \tbth \rVert)^2 \notag\\
-  &\approx h(\tbth) + \frac{1}{2}(\bth - \tbth)^T H (\bth - \tbth)
+  h(\theta)
+  &= h(\tilde\theta) + (\theta - \tilde\theta)^T h'
+  + \frac{1}{2}(\theta - \tilde\theta)^T h''(\tilde\theta) (\theta - \tilde\theta)
+  + o(\lVert \theta - \tilde\theta \rVert)^2 \notag\\
+  &\approx h(\tilde\theta) + \frac{1}{2}(\theta - \tilde\theta)^T H (\theta - \tilde\theta)
 \end{align}
-where $H = h''(\tbth)$, the Hessian matrix of $h$ evaluated at $\tbth$ and
+where $H = h''(\tilde\theta)$, the Hessian matrix of $h$ evaluated at $\tilde\theta$ and
 $h'$ is the gradient of $h$. Since for $n\to\infty$, the posterior
-distribution is concentrated around $\tbth$, and thus only those values close
-to $\tbth$ contribute significantly to the integration,
+distribution is concentrated around $\tilde\theta$, and thus only those values close
+to $\tilde\theta$ contribute significantly to the integration,
 \begin{equation}
-  p(D)\approx\exp\{-h(\tbth)\}
-  \int\exp\{-\frac{1}{2}(\bth - \tbth)^TH(\bth - \tbth)\}.
+  p(\data)\approx\exp\{-h(\tilde\theta)\}
+  \int\exp\{-\frac{1}{2}(\theta - \tilde\theta)^TH(\theta - \tilde\theta)\}.
 \end{equation}
 Note the integrand is the kernel of of a multivariate normal distribution with
-mean $\tbth$ and covariance matrix $H^{-1}$, which is assumed to be positive
+mean $\tilde\theta$ and covariance matrix $H^{-1}$, which is assumed to be positive
 definite and exist. It follows,
 \begin{equation}
-  p(D) \approx \exp\{-h(\tbth)\} (2\pi)^{k/2} \lvert H \rvert^{-1/2},
+  p(\data) \approx \exp\{-h(\tilde\theta)\} (2\pi)^{k/2} \lvert H \rvert^{-1/2},
 \end{equation}
-where $k$ is the number of parameters, or the dimension of $\bth$. Thus,
+where $k$ is the number of parameters, or the dimension of $\theta$. Thus,
 \begin{equation}
-  -2\log p(D) \approx
-  -2\log f(D|\tbth) - 2\log\pi(\tbth) - k\log(2\pi) + \log\lvert H \rvert.
+  -2\log p(\data) \approx
+  -2\log f(\data|\tilde\theta) - 2\log\pi(\tilde\theta) - k\log(2\pi) + \log\lvert H \rvert.
   \label{eq:bic approx}
 \end{equation}
 With \iid samples, for $n\to\infty$, $H/n \approx i$, where $i$ is the Fisher
 information matrix. It follows that $\lvert H \rvert \approx n^k \lvert i
 \rvert$ for large $n$. Omitting the $O(1)$ terms,
 \begin{equation}
-  -2\log p(D) \approx -2\log f(D|\tbth) + k\log(n).
+  -2\log p(\data) \approx -2\log f(\data|\tilde\theta) + k\log(n).
 \end{equation}
-With $n\to\infty$, $\tbth\approx\hat{\bth}$, where $\hat{\bth}$ is the \mle,
-replace $\tbth$ with $\hat{\bth}$, the right hand side of the above equation
-becomes the formula for what is commonly known as \bic. The \bic method choose
-the model with smallest \bic.
+With $n\to\infty$, $\tilde\theta\approx\hat{\theta}$, where $\hat{\theta}$ is
+the \mle, replace $\tilde\theta$ with $\hat{\theta}$, the right hand side of the
+above equation becomes the formula for what is commonly known as \bic. The
+\bic method choose the model with smallest \bic.
 
 The \bic method is often compared and contrasted with the \aic method, which
 we discussed in section~\ref{sec:Akaike's information criterion}. Despite the
 similarity in formulas, \aic and \bic have very different assumptions. In
 addition to the large sample assumption, which is difficult to assess in
 practice, \bic also assumes ``good behavior'' of the likelihood function such
-that the use of \mle in place of $\tbth$ is justified. Also, unlike \aic,
-whose approximation is often at worst $O(1/n)$, the \bic requires that the
-$O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared to other
-terms. These assumptions restricted the use of \bic in many situations. See
-\textcite{Gelfand:1994ux} for an example where the $O(1)$ approximation
+that the use of \mle in place of $\tilde\theta$ is justified. Also, unlike
+\aic, whose approximation is often at worst $O(1/n)$, the \bic requires that
+the $O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared to
+other terms. These assumptions restricted the use of \bic in many situations.
+See \textcite{Gelfand:1994ux} for an example where the $O(1)$ approximation
 failed. See \textcite{Berger:2001uy} for examples that the irregularity of
 likelihood function causes the \bic method failed. Moreover, in non-\iid
 situations, just like \aic, the definition of the parameter dimension $k$ is
@@ -533,39 +527,6 @@ the subjective input into the Bayes modeling since the value of \bic does not
 depend on the prior distribution. However this is equally argued as an
 advantage of this strategy in the case that priors, to which Bayes factors can
 be very sensitive, are hard to specify.
-
-\subsection{Variable dimension models}
-\label{sub:Variable dimension models}
-
-Recall the end of section~\ref{sub:Bayesian model choice problem}, instead of
-using the marginal likelihood for Bayesian model selection, the posterior
-density $\pi(\bth_k,\kappa=k|D)$ can also be directly used for model
-inference. Since the posterior model probability $p^*(\kappa=k|D)$ is simply
-the marginal density of $\mu$. Therefore if we have knowledges of $\mu$,
-(usually from simulations, see section~\note{Reversible jump \mcmc}), it is
-straightforward to make model inference. Formally, let $\calK$ denote the
-possible values of $\kappa$ (this is equivalent to the notion of model set
-$\calM$). Then the goal is to make inference about the parameter vector
-$(\kappa, \bth_{\kappa})$ conditional on the data $D$, whose parameter space
-is,
-\begin{equation}
-  \bTh = \bigcup_{k\in\calK}\{k\}\times\bTh_k,
-  \label{eq:variable dimension parameter space}
-\end{equation}
-where $\bTh_k$ is the model parameter space of $\bth_k$.
-
-Despite its straightforward interpretation of the inference objective, this
-representation has some theoretical difficulties. Limited by the scope of this
-thesis, we will not discuss the details such as the measure-theoretic
-difficulty in the notions of prior density for a direct sum space.
-Nonetheless, it shall be noted that in the context of Bayesian model
-selection, the model parameter spaces $\bTh_k$ are independent of each other.
-And thus a prior density $\pi(\bth_k|\kappa =k)$ need to be specified for each
-model. However, it is often preferred to use some parameters common to all
-models and thus reduce the modeling and computation difficulties. As it will
-be discussed in section~\note{Reversible jump \mcmc}, the reversible jump
-\mcmc techniques rely on such assumptions. The computation of the variable
-dimension models are reviewed in section~\note{Reversible jump \mcmc}.
 
 \ifx\inthesis\undefined
 \printbibliography

@@ -1,5 +1,12 @@
+\ifx\inthesis\undefined
+\def\rootdir{..}
 \documentclass[11pt, hyper, bib, fontset=Cambria]{marticle}
-\input{../macros}
-\addbibresource{../thesis.bib}
+\else
+\def\rootdir{.}
+\documentclass[11pt, hyper, bib, fontset=Cambria]{mthesis}
+\fi
+
+\input{\rootdir/macros}
+\addbibresource{\rootdir/thesis.bib}
 \author{Yan Zhou}
 \date{\today}
