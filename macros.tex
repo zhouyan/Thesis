@@ -39,6 +39,7 @@
 \def\svec#1#2{#1^1,\dots,#1^{#2}}
 \def\mcvec#1#2{#1^{(1)},\dots,#1^{(#2)}}
 
+\def\calE{\mathcal{E}}
 \def\calGa{\mathcal{Ga}}
 \def\calK{\mathcal{K}}
 \def\calLN{\mathcal{LN}}
@@ -64,5 +65,8 @@
 \def\Wiu{\supi{W}}
 \def\wiu{\supi{w}}
 
-\def\note#1{\textcolor{MRed}{#1}}
-\def\comment#1{\textcolor{MGreen}{#1}}
+\long\def\sidenote#1{\marginpar{%
+    \begin{flushleft}%
+      \footnotesize\sffamily\raggedright#1%
+    \end{flushleft}%
+}}

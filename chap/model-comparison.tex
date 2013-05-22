@@ -35,7 +35,7 @@ is the \mle under model $\calM$.\footnote{More precisely it is a class of
   models whose densities belong to the same parametric family.} And $k$ is the
 dimension of the parameter vector. The model with the smallest \aic value is
 selected. It is first introduced by Akaike in a series of papers
-\parencite{Akaike:1973uc, Akaike:1974ih, Akaike:1977ul}. From a likelihood
+\cite{Akaike:1973uc, Akaike:1974ih, Akaike:1977ul}. From a likelihood
 principle perspective, \aic acts as a balance between good fit (high
 log-likelihood) and complexity in the sense that the dimension of the
 parameter vector is used as a penalty term in the formula.  The \aic method
@@ -63,7 +63,7 @@ vector $\theta$. The integration above is over the support of $g$.
 
 One important observation is that $\dkl(g,f(\cdot;\theta))\ge0$ with equality if
 and only if $g(x) = f(x;\tilde\theta)$ almost everywhere for some value of $\theta =
-\tilde\theta$ \parencite{Kullback:1951va}. This result naturally suggests one to find
+\tilde\theta$ \cite{Kullback:1951va}. This result naturally suggests one to find
 the estimator $\tilde\theta$ which minimizes the \kl. Under suitable conditions,
 rewrite equation~\eqref{eq:kld},
 \begin{align}
@@ -83,7 +83,7 @@ Law of Large Numbers,
   \Exp_g\log f(X;\theta), \quad\text{for } n\to\infty\text{ and fixed }\theta,
   \label{eq:kl consistency}
 \end{equation}
-provided that this expectation exits. Hence \parencite[see][for
+provided that this expectation exits. Hence \cite[see][for
 details]{Kullback:1951va},
 \begin{equation}
   \hat\theta \overset{\mathrm{a.s}}{\longrightarrow} \tilde\theta,
@@ -97,25 +97,25 @@ use of \mle from an information-theoretic perspective.
 \label{sub:Derivation of aic}
 
 The \aic method and its formula has been derived and justified by various
-authors \parencite[e.g.,][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
+authors \cite[e.g.,][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
   Bozdogan:1987wy, Akaike:1973uc}. To summarize, we start with the same
-information-theoretic approach as in \textcite{Akaike:1973uc}, and use Taylor
+information-theoretic approach as in \cite{Akaike:1973uc}, and use Taylor
 expansions to approximate the expected loss of using a parametric density with
 \mle as the parameter value in place of the true data generating density. In
 addition we shall only consider the case in which the sample size $n$ is
 sufficient large in the sense that $n\gg k$, where $k$ is the dimension of the
 estimated parameter vector. The case in which $n$ is small is considered by
-\textcite{Hurvich:1989ev}, and will be reviewed later in
+\cite{Hurvich:1989ev}, and will be reviewed later in
 section~\ref{sub:Corrected aic}.
 
-As pointed out by \textcite{Bozdogan:1987wy}, though the development of \aic
+As pointed out by \cite{Bozdogan:1987wy}, though the development of \aic
 had its origin in the time series modeling, it is a direct extension to the
 information-theoretic interpretation of the \mle. For a class of parametric
 models with density $f(\cdot;\theta)$, we aim to find the ``best'' in the sense
 that the \kl is minimized among all possible values of $\theta$, i.e., to find
 the value of $\tilde\theta$, which maximizes the expected log-likelihood.  From a
 decision-theoretic point of view this model also minimizes the expected loss
-measured by the \kl \parencite{Akaike:1973uc}. Ideally, if we can find
+measured by the \kl \cite{Akaike:1973uc}. Ideally, if we can find
 $\tilde\theta$, then the next step will be choosing the model with the minimum of
 $D_{\mathrm{KL}}(g,f(\cdot;\tilde\theta))$. However, even in the unlikely case that
 $g(x) = f(x;\tilde\theta)$, we still have to estimate $\tilde\theta$. As suggested in the
@@ -151,12 +151,12 @@ where
 
 That is, $\Sigma$ is the theoretical covariance matrix of $\hat\theta(\bfY)$ when
 $\bfY$ follows the true data generating density. This is a more general
-results than that found in \textcite{Akaike:1973uc}. In the special case where
+results than that found in \cite{Akaike:1973uc}. In the special case where
 $g = f(\cdot;\tilde\theta)$, $I(\tilde\theta)$ becomes the Fisher information matrix, and
 $I(\tilde\theta) = \Sigma^{-1}$. In this case equation~\eqref{eq:aic general} leads
 to the original \aic by using $\ell_n(\hat\theta;\bfy)$ as an unbiased consistent
 estimator for its own expectation. This ideal situation does not exist in
-reality anyway. But as shown in \textcite{Shibata:1989tm}, $k$, the dimension
+reality anyway. But as shown in \cite{Shibata:1989tm}, $k$, the dimension
 of the estimated parameter vector is a good estimator of $\tr(I(\tilde\theta)\Sigma)$
 when the model is a ``good'' approximation of the true data generating
 mechanism. This also leads to the exact formula of \aic. In either case, a
@@ -181,11 +181,11 @@ like \aic can hardly work.
 
 The \aic method is often compared with Bayesian model selection as one of the
 most important frequentist model selection methods, in particular in contrast
-with the \bic method. It is interesting to note that \textcite{Akaike:1978ti}
+with the \bic method. It is interesting to note that \cite{Akaike:1978ti}
 has a Bayesian interpretation of the \aic procedure for the special case of a
 multivariate Gaussian model. In that case, \aic can be viewed as an
 approximation to the posterior probability. Without going into the details,
-\textcite{Akaike:1978ti} considered the situation that the sample size can be
+\cite{Akaike:1978ti} considered the situation that the sample size can be
 easily increased to a large enough number while two models are very close in
 the sense that the difference in their parameters are not quite visible
 through the observed data. Under this setting, it was then shown that the log
@@ -195,11 +195,11 @@ this setting as the general cases in data analysis as argued by Akaike.
 Instead, in realistic cases the difficulties of model selection problem often
 come from the fact that we have very limited data.
 
-On the other hand, as seen in \textcite{Akaike:1980gh}, using likelihood
+On the other hand, as seen in \cite{Akaike:1980gh}, using likelihood
 function and \aic estimates as the source of objectivity of Bayesian
 modeling leads to the \bic procedure. However, those with a subjective
 Bayesian perspective are not likely to be convinced by the desire of
-objectivity itself. In addition, as noted by \textcite{Kass:1995vb}, the
+objectivity itself. In addition, as noted by \cite{Kass:1995vb}, the
 Bayesian justification of \aic is only valid when the precision of the prior
 distribution is comparable to that of the likelihood. This assumption is
 hardly ever true in reality.
@@ -218,13 +218,13 @@ that one is absolutely superior to another.
 We briefly review one of the most widely used extension and modification of
 \aic method, the corrected \aic. This and other similar methods try to improve
 the model selection procedure in the situations that
-\textcite{Akaike:1973uc}'s assumptions are not justified. Therefore, they
+\cite{Akaike:1973uc}'s assumptions are not justified. Therefore, they
 improve the robustness of the \aic procedure.
 
 The corrected \aic, usually denoted by \aicc, mainly deals with the situation
 that the sample size is not sufficient large in the sense that the dimension
 of the parameter vector to be estimated is close to the sample size.
-\textcite{Hurvich:1989ev} developed the \aicc for regression and time series
+\cite{Hurvich:1989ev} developed the \aicc for regression and time series
 modeling. The \aicc is defined as,
 \begin{equation}
   \text{\aicc} = -2\ell_n(\hat\theta;\bfx) + \frac{2nk}{n-k-1}
@@ -237,23 +237,23 @@ where $n$ is the sample size, other notations are as defined before.
 
 It should be noted that \aicc is just one way to improve \aic for small
 samples. In particular, it is derived in the case of a model with linear
-structure and normal errors \parencite{Hurvich:1989ev, Burnham:2002wc}. Under
+structure and normal errors \cite{Hurvich:1989ev, Burnham:2002wc}. Under
 other models, other form of improved \aic can be derived. In general,
-\textcite{Hurvich:1989ev}'s form seems to be a good choice and adopted
+\cite{Hurvich:1989ev}'s form seems to be a good choice and adopted
 extensively in the literature even in nonlinear cases
-\parencite[e.g.,][]{Turkheimer:2003iy}.
+\cite[e.g.,][]{Turkheimer:2003iy}.
 
 However, to illustrate the limitation of the \aicc method, in
-\textcite{Zhou:2011uo} which we examined the model selection for compartment
+\cite{Zhou:2011uo} which we examined the model selection for compartment
 models, the use of \aicc was shown inefficient for high dimension, high noise
 and limited size of data. The use of \aic based methods for such models was
-first introduced by \textcite{Hawkins:1986ha}. However, their work, and some
+first introduced by \cite{Hawkins:1986ha}. However, their work, and some
 recent use of \aic or \aicc mainly focus on low noise data. If the model has a
 nonlinear structure and high level noise, it can hardly be approximated by
-normal distribution. In such situations, as shown in \textcite{Zhou:2011uo}
+normal distribution. In such situations, as shown in \cite{Zhou:2011uo}
 for \pet data, \aicc does not perform well. It is possible to derive specific
 \aic based information criterion for specific models, like
-\textcite{Hurvich:1989ev} did for theirs. Nonetheless this will involve much
+\cite{Hurvich:1989ev} did for theirs. Nonetheless this will involve much
 more analytical work which may or may not results in improved results.
 Instead, in the our work, using Bayesian model selection for \pet data are
 approached. The results are encouraging while the implementations still has
@@ -272,9 +272,9 @@ accounting for the uncertainty. However, what is far more important is the
 associated philosophical interpretation -- the subjective perspective. Though
 early development of Bayesian statistics showed interests of using likelihood
 functions as objective input to the modeling processes
-\parencite{Jeffreys:1961ua, Jeffreys:1946jf}, it is nowadays widely accepted
+\cite{Jeffreys:1961ua, Jeffreys:1946jf}, it is nowadays widely accepted
 that a subjective view is more appropriated
-\parencite[see][chap.~1]{Bernardo:1994vd}. Bayesian statistics offers a
+\cite[see][chap.~1]{Bernardo:1994vd}. Bayesian statistics offers a
 rationalist theory of \emph{personal} beliefs and decisions in the contexts of
 uncertainty. So it is natural to question the relevance of one's personal
 beliefs to another. However, limited by the scope, these more philosophical
@@ -284,10 +284,10 @@ particular the model comparison and selection problem, and their
 implementations.
 
 A throughout treatment of Bayesian modeling from a decision theory perspective
-can be found in \textcite{Robert:2007tc}. Formal mathematical representations
-can also be found in \textcite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd},
+can be found in \cite{Robert:2007tc}. Formal mathematical representations
+can also be found in \cite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd},
 where the notion of rational decisions in the context of uncertainty was made
-precise in the form of axioms in \textcite[][chap.~2]{Bernardo:1994vd}. It is
+precise in the form of axioms in \cite[][chap.~2]{Bernardo:1994vd}. It is
 assumed that a rational decision cannot be considered separately from rational
 beliefs. And rational beliefs shall be built upon available information (the
 data in the statistical term) and any personal preference input (the prior
@@ -307,7 +307,7 @@ $\calM_t = \calM_i$ and $0$ otherwise.
 
 It is easy to see that the model $\calM_i$ that maximizes the expected utility
 given data $\data$ is the model with the highest posterior probability
-$\pi(\calM_i|\data)$, see \textcite[][chap.~6]{Bernardo:1994vd}. This model is
+$\pi(\calM_i|\data)$, see \cite[][chap.~6]{Bernardo:1994vd}. This model is
 thus our ``best'' model in this setting. It should be noted this argument is
 only valid if the true model $\calM_t \in \calM$. Otherwise, the utility is
 always zero for all models. In what follows, we presume that our aim is to
@@ -372,7 +372,7 @@ where
 \end{equation}
 is called the Bayes factor. Equation~\eqref{eq:posterior odd} states how the
 prior odds ratio is transformed into the posterior odds ratio by the Bayes
-factor \parencite{Kass:1995vb}. The Bayes factor is the principle tool for
+factor \cite{Kass:1995vb}. The Bayes factor is the principle tool for
 Bayesian model comparison and model selection. As it is made clear in the
 above equation, to compute the Bayes factor, all that needs to be done is the
 computation of the following quality for each value of $k$,
@@ -400,15 +400,15 @@ will be biased towards one's preference, which is not necessarily rational. It
 is often too difficult to elicit a precise distribution from prior
 information.  Therefore it is necessary to make at least partially arbitrary
 choice of the prior distribution
-\parencites{Robert:2007tc}[][chap.~3]{Kass:1995vb}.
+\cites{Robert:2007tc}[][chap.~3]{Kass:1995vb}.
 
 Often the priors need to be considered carefully on a per problem basis.
 Nonetheless there are a few classes of prior distributions frequently used in
 the Bayesian modeling. In the particular problem of Bayesian model comparison
 and selection, it shall be noted that the Bayes factor is more sensitive to
-the choice of prior than point or interval estimations \parencite{Kass:1993vy,
+the choice of prior than point or interval estimations \cite{Kass:1993vy,
   Kass:1995vb}. One of the more important class of prior distribution is the
-conjugate prior. See \textcite[][chap.~5]{Bernardo:1994vd} for its
+conjugate prior. See \cite[][chap.~5]{Bernardo:1994vd} for its
 justification.  In practice the conjugate prior is often used because of its
 mathematical properties. However it is often argued that this is an objective
 approach as the subjective input is reduced to the choice of parameters. In
@@ -417,10 +417,10 @@ for conjugate priors is analytical, their closed form expression. There is no
 way to justify the choice of prior distributions on a subjective basis in such
 situations. In such settings, there are also efforts to make the prior
 ``non-informative''.  Among them the most important two are Jeffreys' priors
-\parencite{Jeffreys:1946jf} and the reference prior
-\parencite{Bernardo:1979uq}. See \textcite{Kass:1996jj} for more detailed
+\cite{Jeffreys:1946jf} and the reference prior
+\cite{Bernardo:1979uq}. See \cite{Kass:1996jj} for more detailed
 analysis of the Jeffreys' priors and other non-informative approach to
-Bayesian analysis and \textcite{Berger:1989vj, Berger:1992kf, Berger:1992wo}
+Bayesian analysis and \cite{Berger:1989vj, Berger:1992kf, Berger:1992wo}
 for reference priors.
 
 It is also important to evaluate the Bayes factor over a range of possible
@@ -428,12 +428,12 @@ priors to assess the sensitivity issues. This is often computational expensive
 since many high dimensional integrations are required. When there is enough
 information to construct parametric priors, it is possible to alter the values
 of parameters and recompute the Bayes factor
-\parencite[e.g.,][]{McCulloch:1991hj}. In general situations, a less
+\cite[e.g.,][]{McCulloch:1991hj}. In general situations, a less
 computational expensive method is to use the Laplace approximation to compare
-the Bayes factor using different priors \parencite[e.g.,][]{Kass:1992tz}. It
+the Bayes factor using different priors \cite[e.g.,][]{Kass:1992tz}. It
 is also proposed in the literature to use the maximum of Bayes factor (and
 thus the maximal evidence against a model) to evaluate the sensitivity problem
-\parencite[e.g.,][]{Berger:1987iq}.
+\cite[e.g.,][]{Berger:1987iq}.
 
 We will not concern much of the choice of priors in the remaining of this
 thesis. It should however be noted that in practice, prior distributions
@@ -450,7 +450,7 @@ subsection. We will review the Monte Carlo methods in chapter~\ref{cha:Monte
 \label{ssub:Bayesian information criterion}
 
 The Bayesian information criterion (\bic) was developed as an approximation to
-the Bayes factor \parencite{Schwarz:1978uv}. The \bic is defined as,
+the Bayes factor \cite{Schwarz:1978uv}. The \bic is defined as,
 \begin{equation}
   \text{\bic} = -2\log f(\data|\hat\theta) + k\log(n).
 \end{equation}
@@ -514,15 +514,15 @@ that the use of \mle in place of $\tilde\theta$ is justified. Also, unlike
 \aic, whose approximation is often at worst $O(1/n)$, the \bic requires that
 the $O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared to
 other terms. These assumptions restricted the use of \bic in many situations.
-See \textcite{Gelfand:1994ux} for an example where the $O(1)$ approximation
-failed. See \textcite{Berger:2001uy} for examples that the irregularity of
+See \cite{Gelfand:1994ux} for an example where the $O(1)$ approximation
+failed. See \cite{Berger:2001uy} for examples that the irregularity of
 likelihood function causes the \bic method failed. Moreover, in non-\iid
 situations, just like \aic, the definition of the parameter dimension $k$ is
-ambiguous \parencite{Spiegelhalter:1998uc, Kass:1995vb}. See also
-\textcite[][chap.~5 and chap.~6]{Burnham:2002wc} for more comparison and
+ambiguous \cite{Spiegelhalter:1998uc, Kass:1995vb}. See also
+\cite[][chap.~5 and chap.~6]{Burnham:2002wc} for more comparison and
 contrast of \aic and \bic approaches to model selection. There are other
 criticism of the \bic strategy. For example
-\textcite[][chap.~7]{Robert:2007tc} argued that the \bic strategy eliminated
+\cite[][chap.~7]{Robert:2007tc} argued that the \bic strategy eliminated
 the subjective input into the Bayes modeling since the value of \bic does not
 depend on the prior distribution. However this is equally argued as an
 advantage of this strategy in the case that priors, to which Bayes factors can

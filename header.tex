@@ -1,11 +1,13 @@
 \ifx\inthesis\undefined
 \def\rootdir{..}
-\documentclass[11pt, hyper, bib, fontset=Cambria]{marticle}
+\def\doccls{marticle}
 \else
 \def\rootdir{.}
-\documentclass[11pt, hyper, bib, fontset=Cambria]{mthesis}
+\def\doccls{mthesis}
 \fi
 
+\documentclass[11pt, hyper, bib, fontset=Minion,
+biblatexstyle=numeric]{\doccls}
 \input{\rootdir/macros}
 \addbibresource{\rootdir/thesis.bib}
 \author{Yan Zhou}
