@@ -1,183 +1,400 @@
 \ifx\inthesis\undefined % In Thesis
 \input{../header}
-\title{Bayesian Model Comparison}
+\title{Model Comparison}
 \begin{document}
 \maketitle
 \else % In Thesis
-\chapter{Bayesian Model Comparison}
-\label{cha:Bayesian Model Comparison}
+\chapter{Model Comparison}
+\label{cha:Model Comparison}
 \fi % In Thesis
 
 Model comparison for the purposes of selection, averaging and validation is a
 problem found through out statistics and related disciplines. There are two
-popular approaches to this problem among others. One is the main subject of
-this thesis, Bayesian model comparison. The other is information-theoretic
-based and in particular Akaike's information criterion (\aic). Though not fit
-into the Bayesian framework, \aic is used as a baseline for comparison in
-chapter~\ref{cha:Bayesian Model Comparison for Positron Emission Tomography
-  Compartmental Model} and is reviewed briefly in the next section. The rest
-of this chapter review Bayesian model comparison techniques in detail.
+purposes of model comparison often found in the application of statistical
+theories. One is to discover the ``true'' data generating mechanism, which
+actually produce the data. This aspect is often strongly related to hypothesis
+testing, in the sense that it can be viewed as testing different scientific
+theories about the data against each other. The other purpose it to choose the
+model describes the data best or provide the best estimates of quantities of
+interest. The chosen model can also be used for predictive purposes in
+addition to inference purposes. It is difficult to give the phrase ``the best
+model'' a precise definition. Sometimes, the true model, even it exists at all
+which is much up to debate, can be to complicated for practice use. Many model
+comparison strategies aim to find a balance between model complexity can
+accuracy.
+
+There are a number of approaches of model comparison has been developed. Each
+has its strength and drawbacks. There is no universally best model comparison
+strategy. As \cite[][chap.~4]{Myers:1990wt} pointed out, different model
+comparison strategies have different purposes. Though he made the statement in
+the context of regression analysis, it is much true in more general
+situations.
+
+\section{Bayesian model choice}
+\label{sec:Bayesian model choice}
+
+Bayes' theorem, in its simplest form is stated as below,
+\begin{equation}
+  p(H|\data) = \frac{p(\data|H)p(H)}{p(\data)} \label{eq:bayes}
+\end{equation}
+\sidenote{In the discussions of the views of probabilities. I believe I read
+  them somewhere. However I am still finding some references to support it or
+  to verify that I did not get anything wrong here.}
+where $\data$ is the data and $H$ is a hypothesis. Like many other probability
+theories, technically Bayes' theorem merely provides a method of accounting
+for the uncertainty. There are different interpretations, rooted in the views
+of probabilities. Two popular views. One is the \emph{frequentist} (or
+\emph{statistical}) view among other so called \emph{objective} views. The
+other is \emph{subjective} view. The frequentist view an \emph{event} as a
+class of \emph{individual events} which are not only equally probable and
+\emph{stochastically independent}. With a subjective view, the only thing
+that matters is uncertainty and how to make informed and rational discussions
+under uncertainty. Some, mostly from an objective perspective, has argued that
+Bayesian modeling merely provides a convenient formulation in some situations.
+From a subjective perspective, Bayesian statistics provides a rational way to
+update one's \emph{personal belief} and to make rational decisions. There has
+been debate over views of probability as long as statistics has been a
+discipline. These topics, though will not be focused on in this thesis, are
+important in both theory and practice. For example, it can affects the choice
+of priors.
+
+\sidenote{Original I saw in Bernardo cited Finetti, which I never read. So I
+  previously cited sections in Bernardo which I did read. I am not quite sure
+  I cited the right work of Finetti here. The one I cited are the two volume
+  \emph{Theory of Probability}}
+A throughout treatment of Bayesian modeling from a decision theory perspective
+can be found in \cite{Robert:2007tc}. Formal mathematical representations can
+also be found in \cite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd}. Notion of
+rational decisions in the context of uncertainty was also made precise in the
+form of axioms in \cite{DeFinetti:1974tg,DeFinetti:1975ua}. It is assumed that
+a rational decision cannot be considered separately from rational beliefs. And
+rational beliefs shall be built upon available information (the data in the
+statistical term) and any personal preference input (the prior information in
+Bayesian literatures).
+
+\subsection{Mathematical foundations}
+\label{sub:Mathematical foundations}
+
+Consider a (possibly infinite) countable set of parametric models $\calM =
+\{\calM_k\}_{k\in\calK}$. Under each model, the data is generated according to
+a likelihood function $f(\data|\theta_k,\calM_k)$ where $\theta_k$ is the
+parameter vector in the space $\Theta_k\subset\Real^{d_k}$, and $d_k$ is the
+dimension. Within the Bayesian framework, a prior distribution is chosen for
+these parameters conditional on the model, say $\pi(\theta_k|\calM_k)$. And
+each model itself has a prior distribution $\pi(\calM_k)$. Therefore according
+to Bayes' theorem, the posterior distribution of the parameters and the model,
+conditional upon the data is given by the following density, defined on the
+space $\bigcup_{k\in\calK}\{\calM_k\}\times\Theta_k$,
+\begin{equation}
+  \pi(\theta_k,\calM_k|\data) =
+  \frac{f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\pi(\calM_k)}{p(\data)}
+  \label{eq:full posterior}
+\end{equation}
+where
+\begin{align}
+  p(\data) &= \sum_{k\in\calK}p(\data|\calM_k)\pi(\calM_k) \\
+  p(\data|\calM_k) &=
+  \int f(\data,\theta_k|\calM_k)\pi(\theta_k|\calM_k)\intd\theta_k
+  \label{eq:marginal likelihood}
+\end{align}
+This is
+sometimes also termed the \emph{full posterior}. The within model posterior
+distribution of the parameter is,
+\begin{equation}
+  \pi(\theta_k|\data,\calM_k) =
+  \frac{f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)}{p(\data|\calM_k)}
+  \label{eq:within posterior}
+\end{equation}
+The term $p(\data|\calM_k)$ is termed the \emph{marginal likelihood} or the
+\emph{evidence} of the model.
+
+From equation~\eqref{eq:full posterior}, it is clear that the model posterior
+probability $\pi(\calM_k|\data)$ is a marginal of the full posterior,
+\begin{equation}
+  \pi(\calM_k|\data) =
+  \frac{
+    \pi(\calM_k)
+    \int f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\intd\theta_k
+  }{
+    \sum_{l\in\calK}\pi(\calM_l)
+    \int f(\data|\theta_l,\calM_l)\pi(\theta_l|\calM_l)\intd\theta_l
+  }.
+  \label{eq:post model prob}
+\end{equation}
+Bayesian model choice problem mostly centers around the inference of this
+posterior model probability. Many methods for computing this probability is
+reviewed in chapter~\ref{cha:Monte Carlo Methods}. In the remaining of this
+section, we assume that the calculation of required quantities will be
+available.
+
+Our aim is to choose the ``best'' model from the set $\calM$. There will
+usually be actions taken after the model is chosen, for example inference of
+the past or prediction of the future. It is the consequences of these actions
+of interest instead of the chosen model itself. Therefore, from a
+decision-theoretic perspective, the ``best'' model should maximize the utility
+for some quality of interest. However, in practice it is common to ignore the
+actions following the model selection and the sole interest is the true model,
+say $\calM_t$. In this case, it is natural to define a zero-one utility
+function, say $u(\calM_k,\calM_t)$,
+\begin{equation}
+  u(\calM_k,\calM_t) =
+  \begin{cases}
+    0, &\text{if } \calM_k = \calM_t,\\
+    1  &\text{otherwise.}
+  \end{cases}
+\end{equation}
+It is easy to see that the model $\calM_k$ that maximizes the expected utility
+given data $\data$ is the model with the highest posterior probability
+$\pi(\calM_k|\data)$, see \cite[][chap.~6]{Bernardo:1994vd}. Also see
+\cite[][sec.~7.2.1]{Robert:2007tc} for an in depth discussion of the
+difficulties of the Bayesian formulation in the model choice problem and the
+reason of why such a maximum posterior probability approach is adapted. It
+should be noted the above argument is only valid if the true model $\calM_t
+\in \calM$. Otherwise, the utility is always zero for all models. In what
+follows, we presume that our aim is to find the model with the highest
+posterior probability.
+
+It should be noted that the prior distribution $\pi(\theta_k|\calM_k)$ is
+chosen by statisticians in the modeling process. In chapter~\ref{cha:Bayesian
+  Model Comparison for Positron Emission Tomography Compartmental Model} we
+will see an example of construction of well-informed priors for a realistic
+application. The choice of the prior distribution is one of the most critical
+and criticized part of Bayesian modeling. In principle, the prior distribution
+shall represent the prior beliefs. That is, it represents how much is already
+known about the data generating mechanism and what is believed about it before
+the observation of the data, no more or no less. It shall not only describe
+all knowledge already known, but also more importantly preserve all the
+ignorance. If it contains more information than what is actually known, the
+inference will be biased. In other words, one can always construct a prior
+distribution such that inference will be biased towards one's preference,
+which is not necessarily rational. The priors need to be considered carefully
+on a per problem basis. Nonetheless there are a few classes of prior
+distributions frequently used in the Bayesian modeling. It is often too
+difficult to elicit a precise distribution from prior information. Therefore
+it is necessary to make at least partially arbitrary choice of the prior
+distribution \cite[][chap.~3]{Robert:2007tc}\cite{Kass:1995vb}.
+
+One of the more important class of prior distribution is conjugate priors. A
+conjugate prior, say $\pi(\theta_k|\calM_k)$, for a parametric model with
+likelihood $f(\data|\theta_k,\calM_k)$, is one such that the posterior
+$\pi(\theta_k|\data,\calM_K)$ belongs to the same family of distributions as
+the prior. In \cite[][chap.~5]{Bernardo:1994vd} it was argued that the
+conjugate prior reduced the input of prior information to only the choice of
+parameter values and thus cannot be fully justified from a subjective
+perspective. Though their mathematical simplicity make them attractive in
+practice, for many applications of interest it is near impossible to find such
+priors.
+
+In situations where no or little prior information are available, the
+so-called ``non-informative'' priors are often used. One choice is the
+Jeffrey's priors \cite{Jeffreys:1946jf}, which has the form
+\begin{equation}
+  \pi(\theta_k|\calM_k)\propto\sqrt{I(\theta_k)}
+\end{equation}
+where
+\begin{equation}
+  I(\theta_k) = \int f(\data|\theta_k,\calM_k)\Round[Big]{
+    -\frac{\partial^2}{\partial\theta_k^2}\log f(\data|\theta_k,\calM_k)}
+  \intd\data,
+\end{equation}
+\sidenote{I recall that in the early stages I encountered a few improper
+  Jeffery's priors in practice and read something along the lines here.
+  However, still seeking reference to support the statements here}
+is the \emph{Fisher's information}. The basic idea behind Jeffrey's priors is
+that the prior shall contain no more information than the observed data do.
+Though intuitive, Jeffrey's priors derived for many models may be problemtic.
+It is often the case that the derived Jeffrey's prior can be improper, which
+makes the Bayesian model choice problem difficult to formulalize as there is
+no unique scale for improper priors.
+
+Another class non-informative priors is called \emph{reference priors}
+introduced in \cite{Bernardo:1979uq}. Reference priors aims to derive priors
+such that the distance between the posteriror and prior is maximized, usually
+measured in terms of \kl \cite{Kullback:1951va}. In some sense, a reference
+prior is the least informative prior. See \cite{Berger:1989vj, Berger:1992kf,
+  Berger:1992wo} and \cite[][sec.~5.4]{Bernardo:1994vd} for more information
+on this class of priors.
+
+\subsection{Bayes factor}
+\label{sub:Bayes factor}
+
+When the model set $\calM$ is finite, we can find the model with the highest
+posterior probability by compare models pairwise. To compare the posterior
+probabilities of two models, say $\calM_{k_1}$ and $\calM_{k_2}$, one only
+need to compute their ratio. Recall the expression~\eqref{eq:post model prob},
+the ratio can be written as,
+\begin{equation}
+  \frac{\pi(\calM_{k_1}|\data)}{\pi(\calM_{k_2}|\data)}
+  = \frac{\pi(\calM_{k_1})}{\pi(\calM_{k_2})} \frac
+  {\int f(\data|\theta_{k_1},\calM_{k_1})\pi(\theta_{k_1}|\calM_{k_1})
+      \intd\theta_k}
+  {\int f(\data|\theta_{k_2},\calM_{k_2})\pi(\theta_{k_2}|\calM_{k_2})
+      \intd\theta_k}
+  = \frac{\pi(\calM_{k_1})}{\pi(\calM_{k_2})}B_{12},
+  \label{eq:posterior odd}
+\end{equation}
+where
+\begin{equation}
+  B_{12} = \frac
+  {\int f(\data|\theta_{k_1},\calM_{k_1})\pi(\theta_{k_1}|\calM_{k_1})
+      \intd\theta_k}
+  {\int f(\data|\theta_{k_2},\calM_{k_2})\pi(\theta_{k_2}|\calM_{k_2})
+      \intd\theta_k}
+    = \frac{p(\data|\calM_{k_1})}{p(\data|\calM_{k_2})}
+  \label{eq:bayes factor}
+\end{equation}
+is called the Bayes factor. Equation~\eqref{eq:posterior odd} states how the
+prior odds ratio is transformed into the posterior odds ratio by the Bayes
+factor \cite{Kass:1995vb}. The Bayes factor is the principle tool for
+Bayesian model comparison and model selection. As it is made clear in the
+above equation, to compute the Bayes factor, all that needs to be done is the
+computation of the marginal likelihood for each model $\calM_k\in\calM$,
+\begin{equation}
+  p(\data|\calM_k) =
+  \int f(\data|\theta_k,\calM_k)\pi(\theta_k|k)\intd\theta_k.
+\end{equation}
+It is obvious that $B_{ij} = B_{ik} B_{kj}$, and thus the Bayes
+factor approach is equivalent to choosing the model with the highest marginal
+likelihood, as long as the model set $\calM$ is finite.
+
+Though intuitively the influence of priors can be eliminated given enough
+data. One formal assertion will be seen later in the derivation of Bayesian
+information criterion (section~\ref{ssub:Bayesian information criterion}). In
+the particular problem of Bayesian model comparison and selection, it shall be
+noted that Bayesian model comparison is more sensitive to the choice of prior
+than point or interval estimations in the sense that more data are need to
+eliminate the influence of priors when it comes to the value of Bayes factor
+than a posterior interval \cite{Kass:1993vy, Kass:1995vb}. \sidenote{They did
+  say that, on top of pp.~782. Kass 1995. I added a half sentence to make the
+  idea more clearly}
+
+It is also important to evaluate the Bayes factor over a range of possible
+priors to assess the sensitivity issues. This is often computational expensive
+since many high dimensional integrations are required. When there is enough
+information to construct parametric priors, it is possible to alter the values
+of parameters and recompute the Bayes factor \cite{McCulloch:1991hj}. In
+general situations, a less computational expensive method is to use the
+Laplace approximation to compare the Bayes factor using different priors
+\cite{Kass:1992tz}. It is also proposed in the literature to use the maximum
+of Bayes factor (and thus the maximal evidence against a model) to evaluate
+the sensitivity problem \cite{Berger:1987iq}.
+
+The calculation of the Bayes factor can be made exact using analytical results
+only occasionally. In most applications of interest, approximations has to be
+used. Two approaches are widely used. On is using Monte Carlo approximations.
+Another is based on the asymptotic behavior of the Bayes factor. A few of the
+later is reviewed in the remaining of this section.
+
+\subsubsection{Bayesian information criterion}
+\label{ssub:Bayesian information criterion}
+
+The Bayesian information criterion (\bic) was developed as an approximation to
+the Bayes factor \cite{Schwarz:1978uv}. The \bic is defined as,
+\begin{equation}
+  \text{\bic} = -2\log f(\data|\hat\theta) + k\log(n).
+\end{equation}
+where $f(\data|\hat\theta)$ is the likelihood function evaluated at the
+maximum likelihood estimator (\mle); $k$ is the number of parameters to be
+estimated and $n$ is the number of observations. The \bic strategy choose the
+model with the smallest \bic value. Note that in this section we dropped the
+dependence on model $\calM_k$ in notations for simplicity.
+
+To justify its use, we first outline its derivation, which will provide us
+some insights of the quality of the approximation. We start with
+equation~\eqref{eq:marginal likelihood} while dropping the model index $k$,
+since this computations is for each model individually. Let $h(\theta) = -
+\log f(\data|\theta)\pi(\theta)$ and let $\tilde\theta$ denote the value of
+$\theta$ that minimizes $h(\theta)$. Then,
+\begin{equation}
+  p(\data) = \int f(\data|\theta)\pi(\theta)\intd\theta
+  = \int\exp\{-h(\theta)\}\intd\theta
+\end{equation}
+Applying Taylor expansion to $h(\theta)$ around $\tilde\theta$,
+\begin{align}
+  h(\theta)
+  &= h(\tilde\theta) + (\theta - \tilde\theta)^T h'
+  + \frac{1}{2}(\theta - \tilde\theta)^T h''(\tilde\theta)
+  (\theta - \tilde\theta)
+  + o(\Norm{\theta - \tilde\theta})^2 \notag\\
+  &\approx h(\tilde\theta) + \frac{1}{2}(\theta - \tilde\theta)^T
+  H (\theta - \tilde\theta)
+\end{align}
+where $H = h''(\tilde\theta)$, the Hessian matrix of $h$ evaluated at
+$\tilde\theta$ and $h'$ is the gradient of $h$. Since for $n\to\infty$, the
+posterior distribution is concentrated around $\tilde\theta$, and thus only
+those values close to $\tilde\theta$ contribute significantly to the
+integration,
+\begin{equation}
+  p(\data)\approx\exp\{-h(\tilde\theta)\}
+  \int\exp\{-\frac{1}{2}(\theta - \tilde\theta)^TH(\theta - \tilde\theta)\}.
+\end{equation}
+Note the integrand is the kernel of a multivariate normal distribution with
+mean $\tilde\theta$ and covariance matrix $H^{-1}$, which is assumed to be
+positive definite and exist. It follows,
+\begin{equation}
+  p(\data) \approx \exp\{-h(\tilde\theta)\} (2\pi)^{k/2} \Abs{H}^{-1/2},
+\end{equation}
+where $k$ is the number of parameters, or the dimension of $\theta$. Thus,
+\begin{equation}
+  -2\log p(\data) \approx
+  -2\log f(\data|\tilde\theta) - 2\log\pi(\tilde\theta) - k\log(2\pi) +
+  \log\Abs{H}.
+  \label{eq:bic approx}
+\end{equation}
+With \iid samples, for $n\to\infty$, $H/n \approx I$, where $I$ is the Fisher
+information matrix. It follows that $\Abs{H}\approx n^k \Abs{I}$ for
+large $n$. Omitting the $O(1)$ terms,
+\begin{equation}
+  -2\log p(\data) \approx -2\log f(\data|\tilde\theta) + k\log(n).
+\end{equation}
+With $n\to\infty$, $\tilde\theta\approx\hat{\theta}$, where $\hat{\theta}$ is
+the \mle, replace $\tilde\theta$ with $\hat{\theta}$, the right hand side of the
+above equation becomes the formula for what is commonly known as \bic. The
+\bic method choose the model with smallest \bic.
+
+In addition to the large sample assumption, which is difficult to assess in
+practice, \bic also assumes ``good behavior'' of the likelihood function such
+that the use of \mle in place of $\tilde\theta$ is justified. As seen in its
+formulation, \bic eliminates the prior for large data set.  The \bic requires
+that the $O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared
+to other terms. These assumptions restricted the use of \bic in many
+situations.  See \cite{Gelfand:1994ux} for an example where the $O(1)$
+approximation failed. See \cite{Berger:2001uy} for examples that the
+irregularity of likelihood function causes the \bic method failed. Moreover,
+in non-\iid situations, the definition of the parameter dimension $k$ is
+ambiguous \cite{Spiegelhalter:1998uc, Kass:1995vb}. There are other criticism
+of the \bic strategy.  For example \cite[][sec.~7.2.3]{Robert:2007tc} argued
+that the \bic strategy eliminated the subjective input into the Bayes modeling
+since the value of \bic does not depend on the prior distribution. However
+this is equally argued as an advantage of this strategy in the case that
+priors, to which Bayes factors can be very sensitive, are hard to specify.
+
+\subsection{Deviance information criterion}
+\label{sub:Deviance information criterion}
 
 \section{Akaike's information criterion}
 \label{sec:Akaike's information criterion}
 
-The \aic uses the \kl (see section~\ref{sub:kl and maximum likelihood
-  estimator}) as a measure of the loss when using an approximated model in
-place of the true data generating mechanism. It is built upon the relation
-between \kl and the maximum likelihood estimator (\mle). The general formula
-of \aic for a candidate parametric model $\calM$ is
+The \aic uses the \kl \cite{Kullback:1951va} as a measure of the loss when
+using an approximated model in place of the true data generating mechanism. It
+is built upon the relation between \kl and the maximum likelihood estimator
+(\mle). The general formula of \aic for a candidate parametric model $\calM$
+is
 \begin{equation}
-  \text{\aic} = -2\ell_n(\hat\theta;\bfx) + 2k
+  \text{\aic} = -2\log f(\data|\hat\theta) + 2k
 \end{equation}
-where $\ell_n(\theta;\bfx)$ is the log-likelihood for a size $n$ sample
-$\bfx=(x_1,\dots,x_n)^T$, evaluated at $\theta$. The value $\hat\theta = \hat\theta(\bfx)$
-is the \mle under model $\calM$.\footnote{More precisely it is a class of
-  models whose densities belong to the same parametric family.} And $k$ is the
-dimension of the parameter vector. The model with the smallest \aic value is
-selected. It is first introduced by Akaike in a series of papers
-\cite{Akaike:1973uc, Akaike:1974ih, Akaike:1977ul}. From a likelihood
-principle perspective, \aic acts as a balance between good fit (high
-log-likelihood) and complexity in the sense that the dimension of the
-parameter vector is used as a penalty term in the formula.  The \aic method
+where $\hat\theta$ is the \mle under model $\calM$ and $k$ is the number
+parameters estimated. The model with the smallest \aic value is selected.  It
+is first introduced by Akaike in a series of papers \cite{Akaike:1973uc,
+  Akaike:1974ih, Akaike:1977ul}. It can be shown that \aic is a large sample
+approximation to the expected \kl \cite{Akaike:1973uc,Bozdogan:1987wy}. From a
+likelihood principle perspective, \aic acts as a balance between good fit
+(high log-likelihood) and complexity in the sense that the dimension of the
+parameter vector is used as a penalty term in the formula. The \aic method
 aims to find models that have fewer parameters while fitting the data well.
-There are other kind of penalized criteria for choosing models.  And many of
-them are closely related to the \aic method.
 
-In the remaining of this section, the relation between \kl and \mle is
-introduced first. Then a derivation of \aic is provided, as a basis for
-further discussions. A Bayesian analysis and corrected \aic are also reviewed.
-
-\subsection{\protect\kl and maximum likelihood estimator}
-\label{sub:kl and maximum likelihood estimator}
-
-\kl measures the ``distance'' or ``divergence'' between statistical
-populations defined by their underlying probability densities. The common
-definition of \kl for continuous distributions in literature is,
-\begin{equation}
-  \dkl(g, f(\cdot;\theta)) = \int g(x)\log\frac{g(x)}{f(x;\theta)}\intd x,
-  \label{eq:kld}
-\end{equation}
-where $g$ is the true density of the data generating mechanism, and
-$f(\cdot;\theta)$ is the density of a candidate model specified by parameter
-vector $\theta$. The integration above is over the support of $g$.
-
-One important observation is that $\dkl(g,f(\cdot;\theta))\ge0$ with equality if
-and only if $g(x) = f(x;\tilde\theta)$ almost everywhere for some value of $\theta =
-\tilde\theta$ \cite{Kullback:1951va}. This result naturally suggests one to find
-the estimator $\tilde\theta$ which minimizes the \kl. Under suitable conditions,
-rewrite equation~\eqref{eq:kld},
-\begin{align}
-  \dkl(g,f(\cdot;\theta))
-  & = \int g(x)\log g(x)\intd x - \int g(x)\log f(x;\theta)\intd x \notag\\
-  & = \int g(x)\log g(x)\intd x - \Exp_g \log f(X;\theta),
-  \label{eq:kl exp ll}
-\end{align}
-where $\Exp_g\log f(X;\theta)$ is the expected log-likelihood with respect to
-$g(X)$. Therefore $\tilde\theta$ will maximize the expected log-likelihood. Letting
-$\ell_n(\theta;\bfx)$ denote the log-likelihood of an \iid sample $\bfx =
-(x_1,\dots,x_n)^T$ from density $g$, evaluated at $\theta$, then by the Strong
-Law of Large Numbers,
-\begin{equation}
-  \frac{\ell_n(\theta;\bfx)}{n}
-  \overset{\mathrm{a.s.}}{\longrightarrow}
-  \Exp_g\log f(X;\theta), \quad\text{for } n\to\infty\text{ and fixed }\theta,
-  \label{eq:kl consistency}
-\end{equation}
-provided that this expectation exits. Hence \cite[see][for
-details]{Kullback:1951va},
-\begin{equation}
-  \hat\theta \overset{\mathrm{a.s}}{\longrightarrow} \tilde\theta,
-  \quad\text{for } n\to\infty.
-\end{equation}
-where $\hat\theta$ is the \mle. That is, the \mle aims to minimize the \kl from the
-candidate model to the true data generating density. This also justifies the
-use of \mle from an information-theoretic perspective.
-
-\subsection{Derivation of \protect\aic}
-\label{sub:Derivation of aic}
-
-The \aic method and its formula has been derived and justified by various
-authors \cite[e.g.,][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
-  Bozdogan:1987wy, Akaike:1973uc}. To summarize, we start with the same
-information-theoretic approach as in \cite{Akaike:1973uc}, and use Taylor
-expansions to approximate the expected loss of using a parametric density with
-\mle as the parameter value in place of the true data generating density. In
-addition we shall only consider the case in which the sample size $n$ is
-sufficient large in the sense that $n\gg k$, where $k$ is the dimension of the
-estimated parameter vector. The case in which $n$ is small is considered by
-\cite{Hurvich:1989ev}, and will be reviewed later in
-section~\ref{sub:Corrected aic}.
-
-As pointed out by \cite{Bozdogan:1987wy}, though the development of \aic
-had its origin in the time series modeling, it is a direct extension to the
-information-theoretic interpretation of the \mle. For a class of parametric
-models with density $f(\cdot;\theta)$, we aim to find the ``best'' in the sense
-that the \kl is minimized among all possible values of $\theta$, i.e., to find
-the value of $\tilde\theta$, which maximizes the expected log-likelihood.  From a
-decision-theoretic point of view this model also minimizes the expected loss
-measured by the \kl \cite{Akaike:1973uc}. Ideally, if we can find
-$\tilde\theta$, then the next step will be choosing the model with the minimum of
-$D_{\mathrm{KL}}(g,f(\cdot;\tilde\theta))$. However, even in the unlikely case that
-$g(x) = f(x;\tilde\theta)$, we still have to estimate $\tilde\theta$. As suggested in the
-last section, given \iid sample $\bfx = (x_1,\dots,x_n)^T$, we shall use the
-\mle ($\hat\theta$) as a consistent estimator for $\tilde\theta$. The \aic method is in
-essence used to estimate the expected \kl from $f(\cdot; \hat\theta)$ to $g$.
-Recall equation~\eqref{eq:kl exp ll}, and the additive property of \kl and
-log-likelihood, the \aic method aim to estimate the following quantity,
-\begin{equation}
-  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hat\theta(\bfY)),
-\end{equation}
-where $\bfX = (X_1,\dots,X_n)^T$, $X_i \sim g$, and $\bfY =
-(Y_1,\dots,Y_n)^T$, $Y_i \sim g$ is a simple random sample. We emphasize that
-$\hat\theta$, the \mle, is a function of the data without involving $\bfX$.
-Therefore, the outer expectation can also be viewed as taken with respect to
-$\hat\theta$. Let $\ell_n(\theta;\bfy)$ be the log-likelihood computed with data
-$\bfy = (y_1,\dots,y_n)$. Let $\tilde\theta$ be the value of $\theta$ maximize
-$\Exp_{\bfX}\log f(\bfX;\theta)$. Then the key result is that,
-\begin{equation}
-  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hat\theta(\bfY))
-  \approx \Exp_{\bfX}\log f(\bfX;\hat\theta) - \tr(I(\tilde\theta)\Sigma),
-  \label{eq:aic general}
-\end{equation}
-where
-\begin{align}
-  I(\tilde\theta)
-  & = \Exp_{\bfX}\Square[Big]{
-    -\frac{\partial^2\log f(\bfX;\theta)}{\partial\theta\partial\theta^T}}
-  \Bigm|_{\theta=\tilde\theta} \\
-  \Sigma &=
-  \Exp_{\hat\theta}[(\hat\theta-\tilde\theta)(\hat\theta-\tilde\theta)^T].
-\end{align}
-
-That is, $\Sigma$ is the theoretical covariance matrix of $\hat\theta(\bfY)$ when
-$\bfY$ follows the true data generating density. This is a more general
-results than that found in \cite{Akaike:1973uc}. In the special case where
-$g = f(\cdot;\tilde\theta)$, $I(\tilde\theta)$ becomes the Fisher information matrix, and
-$I(\tilde\theta) = \Sigma^{-1}$. In this case equation~\eqref{eq:aic general} leads
-to the original \aic by using $\ell_n(\hat\theta;\bfy)$ as an unbiased consistent
-estimator for its own expectation. This ideal situation does not exist in
-reality anyway. But as shown in \cite{Shibata:1989tm}, $k$, the dimension
-of the estimated parameter vector is a good estimator of $\tr(I(\tilde\theta)\Sigma)$
-when the model is a ``good'' approximation of the true data generating
-mechanism. This also leads to the exact formula of \aic. In either case, a
-large sample is required to produce a good estimate of the expected
-\kl.\footnote{More precisely, it is the relative \kl being estimated, the term
-  $\int g(x)\log g(x)\intd x$ in equation~\eqref{eq:kl exp ll} is not and cannot
-  be estimated.}
-
-In summary, \aic is fully justified when the candidate models are already good
-approximations to the true data generating mechanism and the sample size is
-sufficient large. But one can hardly determine if the candidate models are
-``good'' approximations while the true model, if it exists at all, is unknown.
-There have been many efforts to improve the \aic methods in the situations
-that the candidate models are not ``good enough'' approximations or the sample
-size is small. One of the information criteria of this kind are reviewed in
-the section~\ref{sub:Corrected aic}. However, when the model is high
-dimensional and the available data is limited, simple information criteria
-like \aic can hardly work.
-
-\subsection{A Bayesian analysis of \protect\aic}
-\label{sub:A Bayesian analysis of aic}
+\subsection{Comparison with \protect\bic}
+\label{sub:Comparison with bic}
 
 The \aic method is often compared with Bayesian model selection as one of the
 most important frequentist model selection methods, in particular in contrast
@@ -204,13 +421,14 @@ Bayesian justification of \aic is only valid when the precision of the prior
 distribution is comparable to that of the likelihood. This assumption is
 hardly ever true in reality.
 
-In both cases, we found that though the motivations of these Akaike's work are
-likely purely for the defense of \aic rather than a general assessment of the
-connections between \aic and Bayesian modeling, it is still interested to note
-that the two frameworks are closely related. In practice different model
-selection methods should be considered based on the purposes (inference of the
-past or prediction of the future, or otherwise). There is no reason to argue
-that one is absolutely superior to another.
+In contrast to \bic, \aic penalize the model complexity less heavily for large
+sample size (the term $k\log(n)$ in \bic can easily exceeds the term $2k$ in
+\aic for large $n$.) Also though developed from different origins, in some
+sense \aic is more accurate (provided its underlying assumptions are
+fulfilled.) The \bic approximation to Bayes factor, as we see in
+section~\ref{ssub:Bayesian information criterion}, requires an $O(1)$ term to
+be negligible while \aic is often at worst an $O(1/n)$ approximation
+\cite{Akaike:1973uc}.
 
 \subsection{Corrected \protect\aic}
 \label{sub:Corrected aic}
@@ -227,7 +445,7 @@ of the parameter vector to be estimated is close to the sample size.
 \cite{Hurvich:1989ev} developed the \aicc for regression and time series
 modeling. The \aicc is defined as,
 \begin{equation}
-  \text{\aicc} = -2\ell_n(\hat\theta;\bfx) + \frac{2nk}{n-k-1}
+  \text{\aicc} = -2\log f(\data|\hat\theta) + \frac{2nk}{n-k-1}
 \end{equation}
 or equivalently,
 \begin{equation}
@@ -237,296 +455,37 @@ where $n$ is the sample size, other notations are as defined before.
 
 It should be noted that \aicc is just one way to improve \aic for small
 samples. In particular, it is derived in the case of a model with linear
-structure and normal errors \cite{Hurvich:1989ev, Burnham:2002wc}. Under
-other models, other form of improved \aic can be derived. In general,
-\cite{Hurvich:1989ev}'s form seems to be a good choice and adopted
-extensively in the literature even in nonlinear cases
-\cite[e.g.,][]{Turkheimer:2003iy}.
+structure and normal errors \cite{Hurvich:1989ev, Burnham:2002wc}. Under other
+models, other form of improved \aic can be derived. \cite{Hurvich:1989ev}'s
+form has also been adopted successfully in literature even in nonlinear
+non-Gaussian cases, for example see \cite{Turkheimer:2003iy}.
 
 However, to illustrate the limitation of the \aicc method, in
 \cite{Zhou:2011uo} which we examined the model selection for compartment
-models, the use of \aicc was shown inefficient for high dimension, high noise
-and limited size of data. The use of \aic based methods for such models was
-first introduced by \cite{Hawkins:1986ha}. However, their work, and some
+models, the use of \aicc was shown not satisfactory for high dimension, high
+noise and limited size of data. The use of \aic based methods for such models
+was first introduced by \cite{Hawkins:1986ha}. However, their work, and some
 recent use of \aic or \aicc mainly focus on low noise data. If the model has a
 nonlinear structure and high level noise, it can hardly be approximated by
-normal distribution. In such situations, as shown in \cite{Zhou:2011uo}
-for \pet data, \aicc does not perform well. It is possible to derive specific
-\aic based information criterion for specific models, like
-\cite{Hurvich:1989ev} did for theirs. Nonetheless this will involve much
-more analytical work which may or may not results in improved results.
-Instead, in the our work, using Bayesian model selection for \pet data are
-approached. The results are encouraging while the implementations still has
-limitations.
+normal distribution. In such situations, as shown in \cite{Zhou:2011uo} for
+\pet data, \aicc does not perform well. It is possible to derive specific \aic
+based information criterion for specific models, like \cite{Hurvich:1989ev}
+did for theirs. Nonetheless this will involve much more analytical work which
+may or may not results in improved results.  Instead, in the our work, using
+Bayesian model selection for \pet data are approached. The results are
+encouraging while the implementations still has limitations.
 
-\section{Bayesian model choice}
-\label{sec:Bayesian model choice}
+\section{Cross validation}
+\label{sec:Cross validation}
 
-The Bayes' theorem, in its simplest form is stated as below,
-\begin{equation}
-  p(H|\data) = \frac{p(\data|H)p(H)}{p(\data)} \label{eq:bayes}
-\end{equation}
-where $\data$ is the data and $H$ is a hypothesis. Like many other probability
-theories, technically the Bayes' theorem merely provides a method of
-accounting for the uncertainty. However, what is far more important is the
-associated philosophical interpretation -- the subjective perspective. Though
-early development of Bayesian statistics showed interests of using likelihood
-functions as objective input to the modeling processes
-\cite{Jeffreys:1961ua, Jeffreys:1946jf}, it is nowadays widely accepted
-that a subjective view is more appropriated
-\cite[see][chap.~1]{Bernardo:1994vd}. Bayesian statistics offers a
-rationalist theory of \emph{personal} beliefs and decisions in the contexts of
-uncertainty. So it is natural to question the relevance of one's personal
-beliefs to another. However, limited by the scope, these more philosophical
-problems will not be elaborated further in this thesis. In the remaining of
-this thesis We will focus on the technical aspects of Bayesian statistics, in
-particular the model comparison and selection problem, and their
-implementations.
+\section{Minimum description length}
+\label{sec:Minimum description length}
 
-A throughout treatment of Bayesian modeling from a decision theory perspective
-can be found in \cite{Robert:2007tc}. Formal mathematical representations
-can also be found in \cite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd},
-where the notion of rational decisions in the context of uncertainty was made
-precise in the form of axioms in \cite[][chap.~2]{Bernardo:1994vd}. It is
-assumed that a rational decision cannot be considered separately from rational
-beliefs. And rational beliefs shall be built upon available information (the
-data in the statistical term) and any personal preference input (the prior
-information in Bayesian literatures).
+\section{Other approaches}
+\label{sec:Other approaches}
 
-Consider a (possibly infinite) countable set of models $\calM = \{\calM_i,
-i\in I\}$. Our aim is to choose the ``best'' model from this set. There will
-usually be actions taken after the model is chosen, for example inference of
-the past or prediction of the future. It is the consequences of these actions
-of interest instead of the chosen model itself. Therefore, from a
-decision-theoretic perspective, the ``best'' model should maximize the utility
-for some quality of the interest. However, in practice it is common to ignore
-the actions following the model selection and the sole interest is the true
-model, say $\calM_t$. In this case, it is natural to define a zero-one utility
-function, say $u(\calM_i,\calM_t)$, such that $u(\calM_i,\calM_t) = 1$ for
-$\calM_t = \calM_i$ and $0$ otherwise.
-
-It is easy to see that the model $\calM_i$ that maximizes the expected utility
-given data $\data$ is the model with the highest posterior probability
-$\pi(\calM_i|\data)$, see \cite[][chap.~6]{Bernardo:1994vd}. This model is
-thus our ``best'' model in this setting. It should be noted this argument is
-only valid if the true model $\calM_t \in \calM$. Otherwise, the utility is
-always zero for all models. In what follows, we presume that our aim is to
-find the model with the highest posterior probability.
-
-For parametric models, assuming that conditional on $k$, the
-parameter vector $\theta_k$ has dimension $n_k$ and parameter space
-$\Theta_k\subset\bbR^{n_k}$. In addition, prior distributions for both $\theta_k$
-conditional on $k$ and the model indicator $\kappa$ are specified,
-say $\pi(\theta_k|k)$ and $p(k)$, respectively. Therefore,
-given the data $\data$, the joint density and the posterior density are,
-respectively,
-\begin{align}
-  \eta(\data,\theta_k,k)
-  &= f(\data|\theta_k,k)\pi(\theta_k|k)\pi(k)
-  \label{eq:full joint}\\
-  \pi(\theta_k,k|\data)
-  &= \pi(\theta_k|D,k)\pi(k|\data)
-  \label{eq:full posterior}
-\end{align}
-where $f$ is the likelihood function. Two approaches are commonly used in
-Bayesian model selection problems. One is to compare the posterior probability
-$\pi(k_i|\data)$ pairwise for models $k_i$. This approach leads to
-the Bayes factor, reviewed in the next section. The other approach is to
-inference the distribution $\pi(k_i|\data)$ directly. This approach to
-Bayesian model selection can be seen as a specific application of variable
-dimension models, which is briefly reviewed in section~\ref{sub:Variable
-  dimension models}.
-
-\subsection{Bayes factor}
-\label{sub:Bayes factor}
-
-When the model set $\calM$ is finite, we can find the model with the highest
-posterior probability by compare models pairwise. Rewrite the posterior
-density~\eqref{eq:full posterior} as,
-\begin{equation}
-  \pi(\theta_k,k|\data) = \frac{\eta(\data,\theta_k,k)}{p(\data)}.
-\end{equation}
-Substitute equation~\eqref{eq:full joint}, and integrate out the parameter
-vector $\theta_k$ over its parameter space, we have the following form of the
-posterior model probability $\pi(k|\data)$,
-\begin{equation}
-  \pi(k|\data) = \frac{\pi(k)}{p(\data)}
-  \int f(\data|\theta_k,k)\pi(\theta_k|k)\intd\theta_k.
-\end{equation}
-Therefore to compare the posterior probabilities of two models, say $k_1$ and
-$k_2$, one only need to compute their ratio,
-\begin{align}
-  \frac{\pi(k_1|\data)}{\pi(k_2|\data)} &= \frac
-  {\int f(\data|\theta_{k_1},k_1)\pi(\theta_{k_1}|k_1)\intd\theta_k}
-  {\int f(\data|\theta_{k_2},k_2)\pi(\theta_{k_2}|k_2)\intd\theta_k}
-  \frac{\pi(k_1)}{\pi(k_2)} \notag\\
-  & = B_{12} \frac{\pi(k_1)}{\pi(k_2)},
-  \label{eq:posterior odd}
-\end{align}
-where
-\begin{equation}
-  B_{12} = \frac
-  {\int f(\data|\theta_{k_1},k_1)\pi(\theta_{k_1}|k_1)\intd\theta_k}
-  {\int f(\data|\theta_{k_2},k_2)\pi(\theta_{k_2}|k_2)\intd\theta_k}
-  \label{eq:bayes factor}
-\end{equation}
-is called the Bayes factor. Equation~\eqref{eq:posterior odd} states how the
-prior odds ratio is transformed into the posterior odds ratio by the Bayes
-factor \cite{Kass:1995vb}. The Bayes factor is the principle tool for
-Bayesian model comparison and model selection. As it is made clear in the
-above equation, to compute the Bayes factor, all that needs to be done is the
-computation of the following quality for each value of $k$,
-\begin{equation}
-  p(\data|k) = 
-  \int f(\data|\theta_k,k)\pi(\theta_k|k)\intd\theta_k,
-  \label{eq:marginal likelihood}
-\end{equation}
-which is called the \emph{marginal likelihood} of data $\data$ under model
-$k$.  It is obvious that $B_{ij} = B_{ik} B_{kj}$, and thus the Bayes
-factor approach is equivalent to choose the model with the highest marginal
-likelihood, as long as the model set $\calM$ is finite.
-
-It should be noted that the prior distribution $\pi(\theta_k|k)$ is
-chosen by the statistician in the modeling process. The choice of the prior
-distribution is one of the most critical and criticized part of Bayesian
-modeling. In principle, the prior distribution shall represent the prior
-beliefs. That is, it represents how much is already known about the data
-generating mechanism and what is believed about it before the observation of
-the data, no more or no less. It shall not only describe all knowledge already
-known, but also more importantly preserve all the ignorance. If it contains
-more information than what is actually known, the inference will be biased. In
-other words, one can always construct a prior distribution such that inference
-will be biased towards one's preference, which is not necessarily rational. It
-is often too difficult to elicit a precise distribution from prior
-information.  Therefore it is necessary to make at least partially arbitrary
-choice of the prior distribution
-\cites{Robert:2007tc}[][chap.~3]{Kass:1995vb}.
-
-Often the priors need to be considered carefully on a per problem basis.
-Nonetheless there are a few classes of prior distributions frequently used in
-the Bayesian modeling. In the particular problem of Bayesian model comparison
-and selection, it shall be noted that the Bayes factor is more sensitive to
-the choice of prior than point or interval estimations \cite{Kass:1993vy,
-  Kass:1995vb}. One of the more important class of prior distribution is the
-conjugate prior. See \cite[][chap.~5]{Bernardo:1994vd} for its
-justification.  In practice the conjugate prior is often used because of its
-mathematical properties. However it is often argued that this is an objective
-approach as the subjective input is reduced to the choice of parameters. In
-addition, when there is no prior information available, the only justification
-for conjugate priors is analytical, their closed form expression. There is no
-way to justify the choice of prior distributions on a subjective basis in such
-situations. In such settings, there are also efforts to make the prior
-``non-informative''.  Among them the most important two are Jeffreys' priors
-\cite{Jeffreys:1946jf} and the reference prior
-\cite{Bernardo:1979uq}. See \cite{Kass:1996jj} for more detailed
-analysis of the Jeffreys' priors and other non-informative approach to
-Bayesian analysis and \cite{Berger:1989vj, Berger:1992kf, Berger:1992wo}
-for reference priors.
-
-It is also important to evaluate the Bayes factor over a range of possible
-priors to assess the sensitivity issues. This is often computational expensive
-since many high dimensional integrations are required. When there is enough
-information to construct parametric priors, it is possible to alter the values
-of parameters and recompute the Bayes factor
-\cite[e.g.,][]{McCulloch:1991hj}. In general situations, a less
-computational expensive method is to use the Laplace approximation to compare
-the Bayes factor using different priors \cite[e.g.,][]{Kass:1992tz}. It
-is also proposed in the literature to use the maximum of Bayes factor (and
-thus the maximal evidence against a model) to evaluate the sensitivity problem
-\cite[e.g.,][]{Berger:1987iq}.
-
-We will not concern much of the choice of priors in the remaining of this
-thesis. It should however be noted that in practice, prior distributions
-should always be chosen carefully and the sensitivity should be evaluated. In
-what follows, we assume a suitable prior is already chosen such that the Bayes
-factor is finite and nonzero, and we concerns the computation of the Bayes
-factor. Broadly the computation can be divided into two classes: approximation
-based and Monte Carlo methods based. We review one of the most important
-information criteria, the Bayesian information criterion (\bic) in the next
-subsection. We will review the Monte Carlo methods in chapter~\ref{cha:Monte
-  Carlo Methods}.
-
-\subsubsection{Bayesian information criterion}
-\label{ssub:Bayesian information criterion}
-
-The Bayesian information criterion (\bic) was developed as an approximation to
-the Bayes factor \cite{Schwarz:1978uv}. The \bic is defined as,
-\begin{equation}
-  \text{\bic} = -2\log f(\data|\hat\theta) + k\log(n).
-\end{equation}
-where $f(\data|\hat\theta)$ is the likelihood function evaluated at the \mle
-($\hat\theta$) and $k$ is the number of parameters to be estimated. The \bic
-strategy choose the model with the smallest \bic value. To justify its use, we
-first outline its derivation, which will provide us some insights of the
-quality of the approximation. We start with equation~\eqref{eq:marginal
-  likelihood} while dropping the model index $k$ and $k$, since this
-computations is for each model individually. Let $h(\theta) = - \log
-f(\data|\theta)\pi(\theta)$ and let $\tilde\theta$ denote the value of $\theta$ that minimizes
-$h(\theta)$. Then,
-\begin{equation}
-  p(\data) = \int f(\data|\theta)\pi(\theta)\intd\theta = \int\exp\{-h(\theta)\}\intd\theta
-\end{equation}
-Applying Taylor expansion to $h(\theta)$ around $\tilde\theta$,
-\begin{align}
-  h(\theta)
-  &= h(\tilde\theta) + (\theta - \tilde\theta)^T h'
-  + \frac{1}{2}(\theta - \tilde\theta)^T h''(\tilde\theta) (\theta - \tilde\theta)
-  + o(\lVert \theta - \tilde\theta \rVert)^2 \notag\\
-  &\approx h(\tilde\theta) + \frac{1}{2}(\theta - \tilde\theta)^T H (\theta - \tilde\theta)
-\end{align}
-where $H = h''(\tilde\theta)$, the Hessian matrix of $h$ evaluated at $\tilde\theta$ and
-$h'$ is the gradient of $h$. Since for $n\to\infty$, the posterior
-distribution is concentrated around $\tilde\theta$, and thus only those values close
-to $\tilde\theta$ contribute significantly to the integration,
-\begin{equation}
-  p(\data)\approx\exp\{-h(\tilde\theta)\}
-  \int\exp\{-\frac{1}{2}(\theta - \tilde\theta)^TH(\theta - \tilde\theta)\}.
-\end{equation}
-Note the integrand is the kernel of of a multivariate normal distribution with
-mean $\tilde\theta$ and covariance matrix $H^{-1}$, which is assumed to be positive
-definite and exist. It follows,
-\begin{equation}
-  p(\data) \approx \exp\{-h(\tilde\theta)\} (2\pi)^{k/2} \lvert H \rvert^{-1/2},
-\end{equation}
-where $k$ is the number of parameters, or the dimension of $\theta$. Thus,
-\begin{equation}
-  -2\log p(\data) \approx
-  -2\log f(\data|\tilde\theta) - 2\log\pi(\tilde\theta) - k\log(2\pi) + \log\lvert H \rvert.
-  \label{eq:bic approx}
-\end{equation}
-With \iid samples, for $n\to\infty$, $H/n \approx i$, where $i$ is the Fisher
-information matrix. It follows that $\lvert H \rvert \approx n^k \lvert i
-\rvert$ for large $n$. Omitting the $O(1)$ terms,
-\begin{equation}
-  -2\log p(\data) \approx -2\log f(\data|\tilde\theta) + k\log(n).
-\end{equation}
-With $n\to\infty$, $\tilde\theta\approx\hat{\theta}$, where $\hat{\theta}$ is
-the \mle, replace $\tilde\theta$ with $\hat{\theta}$, the right hand side of the
-above equation becomes the formula for what is commonly known as \bic. The
-\bic method choose the model with smallest \bic.
-
-The \bic method is often compared and contrasted with the \aic method, which
-we discussed in section~\ref{sec:Akaike's information criterion}. Despite the
-similarity in formulas, \aic and \bic have very different assumptions. In
-addition to the large sample assumption, which is difficult to assess in
-practice, \bic also assumes ``good behavior'' of the likelihood function such
-that the use of \mle in place of $\tilde\theta$ is justified. Also, unlike
-\aic, whose approximation is often at worst $O(1/n)$, the \bic requires that
-the $O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared to
-other terms. These assumptions restricted the use of \bic in many situations.
-See \cite{Gelfand:1994ux} for an example where the $O(1)$ approximation
-failed. See \cite{Berger:2001uy} for examples that the irregularity of
-likelihood function causes the \bic method failed. Moreover, in non-\iid
-situations, just like \aic, the definition of the parameter dimension $k$ is
-ambiguous \cite{Spiegelhalter:1998uc, Kass:1995vb}. See also
-\cite[][chap.~5 and chap.~6]{Burnham:2002wc} for more comparison and
-contrast of \aic and \bic approaches to model selection. There are other
-criticism of the \bic strategy. For example
-\cite[][chap.~7]{Robert:2007tc} argued that the \bic strategy eliminated
-the subjective input into the Bayes modeling since the value of \bic does not
-depend on the prior distribution. However this is equally argued as an
-advantage of this strategy in the case that priors, to which Bayes factors can
-be very sensitive, are hard to specify.
+\sidenote{These other approaches may include some classical approaches, e.g.,
+  those used in variable selection of regression analysis}
 
 \ifx\inthesis\undefined
 \printbibliography
