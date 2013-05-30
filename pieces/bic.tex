@@ -1,0 +1,49 @@
+To justify its use, we first outline its derivation, which will provide us
+some insights of the quality of the approximation. We start with
+equation~\eqref{eq:marginal likelihood} while dropping the model index $k$ and
+$k$, since this computations is for each model individually. Let $h(\theta) =
+- \log f(\data|\theta)\pi(\theta)$ and let $\tilde\theta$ denote the value of
+$\theta$ that minimizes $h(\theta)$. Then,
+\begin{equation}
+  p(\data) = \int f(\data|\theta)\pi(\theta)\intd\theta = \int\exp\{-h(\theta)\}\intd\theta
+\end{equation}
+Applying Taylor expansion to $h(\theta)$ around $\tilde\theta$,
+\begin{align}
+  h(\theta)
+  &= h(\tilde\theta) + (\theta - \tilde\theta)^T h'
+  + \frac{1}{2}(\theta - \tilde\theta)^T h''(\tilde\theta)
+  (\theta - \tilde\theta)
+  + o(\lVert \theta - \tilde\theta \rVert)^2 \notag\\
+  &\approx h(\tilde\theta) + \frac{1}{2}(\theta - \tilde\theta)^T H (\theta - \tilde\theta)
+\end{align}
+where $H = h''(\tilde\theta)$, the Hessian matrix of $h$ evaluated at
+$\tilde\theta$ and $h'$ is the gradient of $h$. Since for $n\to\infty$, the
+posterior distribution is concentrated around $\tilde\theta$, and thus only
+those values close to $\tilde\theta$ contribute significantly to the
+integration,
+\begin{equation}
+  p(\data)\approx\exp\{-h(\tilde\theta)\}
+  \int\exp\{-\frac{1}{2}(\theta - \tilde\theta)^TH(\theta - \tilde\theta)\}.
+\end{equation}
+Note the integrand is the kernel of of a multivariate normal distribution with
+mean $\tilde\theta$ and covariance matrix $H^{-1}$, which is assumed to be
+positive definite and exist. It follows,
+\begin{equation}
+  p(\data) \approx \exp\{-h(\tilde\theta)\} (2\pi)^{k/2} \lvert H \rvert^{-1/2},
+\end{equation}
+where $k$ is the number of parameters, or the dimension of $\theta$. Thus,
+\begin{equation}
+  -2\log p(\data) \approx
+  -2\log f(\data|\tilde\theta) - 2\log\pi(\tilde\theta) - k\log(2\pi) + \log\lvert H \rvert.
+  \label{eq:bic approx}
+\end{equation}
+With \iid samples, for $n\to\infty$, $H/n \approx i$, where $i$ is the Fisher
+information matrix. It follows that $\lvert H \rvert \approx n^k \lvert i
+\rvert$ for large $n$. Omitting the $O(1)$ terms,
+\begin{equation}
+  -2\log p(\data) \approx -2\log f(\data|\tilde\theta) + k\log(n).
+\end{equation}
+With $n\to\infty$, $\tilde\theta\approx\hat{\theta}$, where $\hat{\theta}$ is
+the \mle, replace $\tilde\theta$ with $\hat{\theta}$, the right hand side of the
+above equation becomes the formula for what is commonly known as \bic. The
+\bic method choose the model with smallest \bic.

@@ -1,0 +1,83 @@
+\subsection{Derivation of \protect\aic}
+\label{sub:Derivation of aic}
+
+The \aic method and its formula has been derived and justified by various
+authors \cite[e.g.,][]{Stone:1982ck, Sawa:1978tn, Chow:1981te,
+  Bozdogan:1987wy, Akaike:1973uc}. To summarize, we start with the same
+information-theoretic approach as in \cite{Akaike:1973uc}, and use Taylor
+expansions to approximate the expected loss of using a parametric density with
+\mle as the parameter value in place of the true data generating density. In
+addition we shall only consider the case in which the sample size $n$ is
+sufficient large in the sense that $n\gg k$, where $k$ is the dimension of the
+estimated parameter vector. The case in which $n$ is small is considered by
+\cite{Hurvich:1989ev}, and will be reviewed later in
+section~\ref{sub:Corrected aic}.
+
+As pointed out by \cite{Bozdogan:1987wy}, though the development of \aic had
+its origin in the time series modeling, it is a direct extension to the
+information-theoretic interpretation of the \mle. For a class of parametric
+models with density $f(\cdot;\theta)$, we aim to find the ``best'' in the
+sense that the \kl is minimized among all possible values of $\theta$, i.e.,
+to find the value of $\tilde\theta$, which maximizes the expected
+log-likelihood.  From a decision-theoretic point of view this model also
+minimizes the expected loss measured by the \kl \cite{Akaike:1973uc}. Ideally,
+if we can find $\tilde\theta$, then the next step will be choosing the model
+with the minimum of $D_{\mathrm{KL}}(g,f(\cdot;\tilde\theta))$. However, even
+in the unlikely case that $g(x) = f(x;\tilde\theta)$, we still have to
+estimate $\tilde\theta$. As suggested in the last section, given \iid sample
+$\bfx = (x_1,\dots,x_n)^T$, we shall use the \mle ($\hat\theta$) as a
+consistent estimator for $\tilde\theta$. The \aic method is in essence used to
+estimate the expected \kl from $f(\cdot; \hat\theta)$ to $g$.  Recall
+equation~\eqref{eq:kl exp ll}, and the additive property of \kl and
+log-likelihood, the \aic method aim to estimate the following quantity,
+\begin{equation}
+  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hat\theta(\bfY)),
+\end{equation}
+where $\bfX = (X_1,\dots,X_n)^T$, $X_i \sim g$, and $\bfY =
+(Y_1,\dots,Y_n)^T$, $Y_i \sim g$ is a simple random sample. We emphasize that
+$\hat\theta$, the \mle, is a function of the data without involving $\bfX$.
+Therefore, the outer expectation can also be viewed as taken with respect to
+$\hat\theta$. Let $\ell_n(\theta;\bfy)$ be the log-likelihood computed with
+data $\bfy = (y_1,\dots,y_n)$. Let $\tilde\theta$ be the value of $\theta$
+maximize $\Exp_{\bfX}\log f(\bfX;\theta)$. Then the key result is that,
+\begin{equation}
+  \Exp_{\bfY}\Exp_{\bfX}\log f(\bfX;\hat\theta(\bfY))
+  \approx \Exp_{\bfX}\log f(\bfX;\hat\theta) - \tr(I(\tilde\theta)\Sigma),
+  \label{eq:aic general}
+\end{equation}
+where
+\begin{align}
+  I(\tilde\theta)
+  & = \Exp_{\bfX}\Square[Big]{
+    -\frac{\partial^2\log f(\bfX;\theta)}{\partial\theta\partial\theta^T}}
+  \Bigm|_{\theta=\tilde\theta} \\
+  \Sigma &=
+  \Exp_{\hat\theta}[(\hat\theta-\tilde\theta)(\hat\theta-\tilde\theta)^T].
+\end{align}
+
+That is, $\Sigma$ is the theoretical covariance matrix of $\hat\theta(\bfY)$
+when $\bfY$ follows the true data generating density. This is a more general
+results than that found in \cite{Akaike:1973uc}. In the special case where $g
+= f(\cdot;\tilde\theta)$, $I(\tilde\theta)$ becomes the Fisher information
+matrix, and $I(\tilde\theta) = \Sigma^{-1}$. In this case
+equation~\eqref{eq:aic general} leads to the original \aic by using
+$\ell_n(\hat\theta;\bfy)$ as an unbiased consistent estimator for its own
+expectation. This ideal situation does not exist in reality anyway. But as
+shown in \cite{Shibata:1989tm}, $k$, the dimension of the estimated parameter
+vector is a good estimator of $\tr(I(\tilde\theta)\Sigma)$ when the model is a
+``good'' approximation of the true data generating mechanism. This also leads
+to the exact formula of \aic. In either case, a large sample is required to
+produce a good estimate of the expected \kl.\footnote{More precisely, it is
+  the relative \kl being estimated, the term $\int g(x)\log g(x)\intd x$ in
+  equation~\eqref{eq:kl exp ll} is not and cannot be estimated.}
+
+In summary, \aic is fully justified when the candidate models are already good
+approximations to the true data generating mechanism and the sample size is
+sufficient large. But one can hardly determine if the candidate models are
+``good'' approximations while the true model, if it exists at all, is unknown.
+There have been many efforts to improve the \aic methods in the situations
+that the candidate models are not ``good enough'' approximations or the sample
+size is small. One of the information criteria of this kind are reviewed in
+the section~\ref{sub:Corrected aic}. However, when the model is high
+dimensional and the available data is limited, simple information criteria
+like \aic can hardly work.
