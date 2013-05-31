@@ -112,8 +112,7 @@ the target as a limiting distribution for estimation of desired expectations.
 The basic idea is that, given a Markov chain $(X^{(1)},\dots,\Xiu,\dots)$,
 whose has a limiting distribution $\pi$ over a measurable space $(E,\calE)$,
 then with suitable conditions (outlined for each algorithm later), for a
-$\pi$-integrable function $\varphi (\varphi
-\in L^1(\pi)$
+$\pi$-integrable function $\varphi \in L^1(\pi)$
 \begin{equation}
   \lim_{N\to\infty}\frac{1}{N}\sum_{i=1}^N\varphi(\Xiu) =
   \Exp_{\pi}[\varphi(X)]\qquad a.e.\ \pi
@@ -135,9 +134,9 @@ by later sections. For more throughout treatment of discrete time Markov
 chains, the readers are referred to references therein.
 
 A Markov chain can be defined in terms of \emph{transition kernels}. Consider
-a measurable space, $(E,\calE)$, a transition kernel $K$ is a function defined
+a measurable space, say $(E,\calE)$, a transition kernel $K$ is a function defined
 on $E\times\calE$ such that $K(x,\cdot)$ is a probability measure for every
-$x\inE$ and $K(\cdot,A)$ is measurable for every $A\in\calE$. In the
+$x\in E$ and $K(\cdot,A)$ is measurable for every $A\in\calE$. In the
 continuous case, we also call the corresponding conditional density
 \emph{kernel}, denoted by $K(x,x')$, $x,x'\in E$. That is, $\Pr(X\in A|x) =
 \int_A K(x,x')\intd x'$.
