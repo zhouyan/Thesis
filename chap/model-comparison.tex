@@ -1,34 +1,235 @@
 \ifx\inthesis\undefined % In Thesis
 \input{../header}
-\title{Model Comparison}
+\title{Model selection}
 \begin{document}
 \maketitle
+\section{Overview}
 \else % In Thesis
-\chapter{Model Comparison}
-\label{cha:Model Comparison}
+\chapter{Model selection}
+\label{cha:Model selection}
 \fi % In Thesis
 
-Model comparison for the purposes of selection, averaging and validation is a
-problem found through out statistics and related disciplines. There are two
-purposes of model comparison often found in the application of statistical
-theories. One is to discover the ``true'' data generating mechanism, which
-actually produce the data. This aspect is often strongly related to hypothesis
-testing, in the sense that it can be viewed as testing different scientific
-theories about the data against each other. The other purpose it to choose the
-model describes the data best or provide the best estimates of quantities of
-interest. The chosen model can also be used for predictive purposes in
-addition to inference purposes. It is difficult to give the phrase ``the best
-model'' a precise definition. Sometimes, the true model, even it exists at all
-which is much up to debate, can be to complicated for practice use. Many model
-comparison strategies aim to find a balance between model complexity can
-accuracy.
+Model selection is a problem found through out statistics and related
+disciplines.
+\sidenote{High level overview of model selection}
 
-There are a number of approaches of model comparison has been developed. Each
-has its strength and drawbacks. There is no universally best model comparison
-strategy. As \cite[][chap.~4]{Myers:1990wt} pointed out, different model
-comparison strategies have different purposes. Though he made the statement in
-the context of regression analysis, it is much true in more general
-situations.
+A number of approaches of model selection has been developed through the
+history of statistics. Each has its strength and drawbacks. There is no
+universally best model selection strategy. As \cite[][chap.~4]{Myers:1990wt}
+pointed out, different model selection strategies have different purposes.
+Though he made the statement in the context of regression analysis, it is much
+true in more general situations.
+
+Many model selection methods has its root in information theory, most notably
+the Akaike's information criterion (\aic), which aims to select the model with
+the smallest \kl \cite{Kullback:1951va} to the true data generating mechanism.
+Another large group of methods has their origin in the Bayesian theory, for
+instance the Bayesian information criterion (\bic). It is beyond the scope of
+this thesis to give a systematic review of the topic of model selection.
+Instead, we will review some of the most used in the practice of modern
+statistics.  \sidenote{Reference of comprehensive reviews}
+
+Instead of grouping the methods reviewed according to their origins (e.g.,
+Bayesian theory or information theory), we structure this chapter as the
+following. Section~\ref{sec:Information criteria} reviews a few methods that
+takes the form of information criteria, such as \aic and \bic. In
+section~\ref{sec:Cross-validation} the cross-validation method is reviewed. In
+section~\ref{sec:Minimum description length} the minimum description length
+(\mdl) method is reviewed. The last, in section~\ref{sec:Bayesian model
+  comparison} the Bayesian framework for the purpose of model comparison is
+discussed, while its computation is reviewed in the next chapter. Essentially,
+those methods that take similar forms are reviewed together. The rational
+behind this structure is that, though some methods have different origins, for
+instance, both \bic and deviation information criterion (\dic) can trace their
+development back to the Bayesian framework (section~\ref{sec:Bayesian model
+  comparison}) instead of the information theory as \aic, they are more often
+compared to \aic and its variants in practice instead of other ``pure''
+Bayesian approach, which are usually based on Monte Carlo approximations of
+Bayes factor or posterior model probabilities.
+
+In this thesis, we restrict the discussions to parametric models. However, it
+shall be noted that model selection is not a topic only found in these
+situations. For non-parametric model selection, see\sidenote{Non-parametric
+  model selection}
+
+\section{Information criteria}
+\label{sec:Information criteria}
+
+In this section, we review various model selection methods that take the form
+of information criteria. Among them, the Akaike's information criterion (\aic)
+is perhaps the most widely used, and discussed in section~\ref{sub:Akaike's
+  information criterion}. It is followed by discussions of Bayesian
+information criterion (\bic), deviance information criterion (\dic) and
+focused information criterion (\fic). The first three all select a single
+model as the best model while \fic has a different approach, which allows
+different model to be selected for the purpose of estimating different
+parameters. This section is concluded with a discussion of some common
+strategies of choosing a model selection criterion.
+
+Though these methods have been developed with different background and
+focuses. A common theme is that they tend to balance the goodness-of-fit with
+complexity of the chosen model. This is most obvious in the cases of \aic and
+\bic, which act as penalized log-likelihood criteria.
+
+Limited by the scope, we will avoid technical derivations of most methods
+discussed here. Instead, we will focus more on the properties of the resulting
+formulas of each model selection methods.
+
+\subsection{Akaike's information criterion}
+\label{sub:Akaike's information criterion}
+
+As we will see later, \aic is built upon the relation between \kl and the
+maximum likelihood estimator (\mle). Given data $\data = (y_1,\dots,y_n)^T$,
+the general formula of \aic for a candidate parametric model $\calM$, with
+parameter vector $\theta$ and density $f(\data;\theta)$ is,
+\begin{equation}
+  \text{\aic} = -2\log f(\data;\hat\theta) + 2k
+  \label{eq:aic}
+\end{equation}
+where $\hat\theta$ is the \mle under model $\calM$ and $k$ is the number
+parameters estimated, i.e., the dimension of $\theta$. The model with the
+smallest \aic value is selected. It is first introduced by Akaike in a series
+of papers \cite{Akaike:1973uc, Akaike:1974ih, Akaike:1977ul}. It can be shown
+that \aic is a large sample approximation to the expected \kl
+\cite{Akaike:1973uc,Bozdogan:1987wy}. This point will be discussed later in
+this section. From a likelihood principle perspective, \aic acts as a balance
+between good fit (high log-likelihood) and complexity in the sense that the
+dimension of the parameter vector is used as a penalty term in the formula.
+The \aic method aims to find models that have fewer parameters while fitting
+the data well.
+
+\subsubsection{Maximum likelihood, Kullback-Leibler divergence and
+  \protect\aic}
+\label{ssub:Maximum likelihood, Kullback-Leiber divergence and aic}
+
+The \aic strategy is not unique in using maximum likelihood as a measure of
+goodness-of-fit. However, these methods differs in how the penalize the model
+complexity. The \aic method is based on the idea of minimizing the
+``distance'' between the chosen model and the true data generating density,
+say $g(y)$. There are several methods to measure the difference between
+densities. However, the one most directly linked to the maximum likelihood
+estimator is the \kl, defined as,
+\begin{equation}
+  \dkl(g, f(\cdot;\theta))
+  = \int g(y)\log\frac{g(y)}{f(y;\theta)}\intd y
+  = \int g(y)\log g(y) - \Exp_g[\log f(Y;\theta)],
+\end{equation}
+where the expectation is taken with respect to the true data density $g$,
+assuming it exists. For \iid samples, applying the strong law of large
+numbers, we have
+\begin{equation}
+  \frac{1}{n}\log f(\data;\theta) \xrightarrow{\text{a.s.}}
+  \Exp_g[\log f(Y;\theta)]
+\end{equation}
+and thus,
+\begin{equation}
+  \hat\theta \xrightarrow{\text{a.s.}} \tilde\theta
+\end{equation}
+where $\tilde\theta$ is the value of $\theta$ that minimize
+$\dkl(g,f(\cdot;\theta))$ for a given model. The \aic formula,
+equation~\eqref{eq:aic} is essentially an approximation to the expectation of
+\begin{equation}
+  R_n = \Exp_g[\log f(Y;\hat\theta)],
+\end{equation}
+say, $Q_n = \Exp_{\hat\theta}[R_n]$, where the outer expectation is with
+respect to the distribution of the \mle, $\hat\theta$, under the true data
+density $g$, based on the above relation. In other words, \aic studies the
+expected \kl of the candidate model relative to the true data generating
+density when using the \mle of given data. A naive approximation of $Q_n$ is,
+\begin{equation}
+  \hat{Q}_n = \frac{1}{n} f(\data;\hat\theta).
+\end{equation}
+However, it can be shown that this approximation has a positive bias. With a
+first order Taylor expansion (see e.g., \cite[][sec.~2.3]{Claeskens:2008tq}),
+\begin{equation}
+  \Exp[\hat{Q}_n - Q_n] \approx \frac{1}{n}\tr(I^{-1}\Sigma),
+  \label{eq:aic Taylor}
+\end{equation}
+where
+\begin{equation}
+  I = \Exp_g[I(Y,\tilde\theta)]\quad\text{and}\quad
+  \Sigma = \var_g U(Y,\tilde\theta)
+\end{equation}
+with
+\begin{align}
+  I(y,\theta) &=
+  -\frac{\partial^2\log f(y;\theta)}{\partial\theta\partial\theta^T}\\
+  U(y,\theta) &=
+  \frac{\partial\log f(y;\theta)}{\partial\theta},
+\end{align}
+namely the information matrix and the score function, respectively. In the
+special case that $f(y;\theta) = g(y)$, $I$ becomes the Fisher information
+matrix and $\tr(I^{-1}\Sigma) = k$. This leads to the \aic
+formula~\eqref{eq:aic}, by multiplying both the approximation $\hat{Q}_n$ and
+the expected bias by $n$.
+
+The approximation in the expression~\ref{eq:aic Taylor} has an error of order
+$o(n^{-1})$. For small sample situations, this approximation may be too
+inaccurate for practical use. A second order approximation which is more
+suitable for small sample size is developed as the corrected \aic and will be
+discussed later.
+
+The \aic strategy also has obvious issues when $n$ becomes larger. The
+log-likelihood function increases linear as $n$ increases while the penalize
+term $2k$ is not affected. Therefore, the \aic strategy is going to select
+more and more complex models when more data becomes available. This is due to
+the inadequate of assumption that the approximation model is correct, that is
+$f(y;\theta) = g(y)$. \cite{Takeuchi:1976} provided a refinement for this
+issue, as we will see later.
+
+\subsection{Corrected \protect\aic}
+\label{sub:Corrected aic}
+
+We briefly review one of the most widely used extension and modification of
+\aic method, the corrected \aic. This and other similar methods try to improve
+the model selection procedure in the situations that
+\cite{Akaike:1973uc}'s assumptions are not justified. Therefore, they
+improve the robustness of the \aic procedure.
+
+The corrected \aic, usually denoted by \aicc, mainly deals with the situation
+that the sample size is not sufficient large in the sense that the dimension
+of the parameter vector to be estimated is close to the sample size.
+\cite{Hurvich:1989ev} developed the \aicc for regression and time series
+modeling. The \aicc is defined as,
+\begin{equation}
+  \text{\aicc} = -2\log f(\data;\hat\theta) + \frac{2nk}{n-k-1}
+\end{equation}
+or equivalently,
+\begin{equation}
+  \text{\aicc} = \text{\aic} + \frac{2k(k+1)}{n-k-1},
+\end{equation}
+where $n$ is the sample size, other notations are as defined before.
+
+It should be noted that \aicc is just one way to improve \aic for small
+samples. In particular, it is derived in the case of a model with linear
+structure and normal errors \cite{Hurvich:1989ev, Burnham:2002wc}. Under other
+models, other form of improved \aic can be derived. \cite{Hurvich:1989ev}'s
+form has also been adopted successfully in literature even in nonlinear
+non-Gaussian cases, for example see \cite{Turkheimer:2003iy}.
+
+However, to illustrate the limitation of the \aicc method, in
+\cite{Zhou:2011uo} which we examined the model selection for compartment
+models, the use of \aicc was shown not satisfactory for high dimension, high
+noise and limited size of data. The use of \aic based methods for such models
+was first introduced by \cite{Hawkins:1986ha}. However, their work, and some
+recent use of \aic or \aicc mainly focus on low noise data. If the model has a
+nonlinear structure and high level noise, it can hardly be approximated by
+normal distribution. In such situations, as shown in \cite{Zhou:2011uo} for
+\pet data, \aicc does not perform well. It is possible to derive specific \aic
+based information criterion for specific models, like \cite{Hurvich:1989ev}
+did for theirs. Nonetheless this will involve much more analytical work which
+may or may not results in improved results.  Instead, in the our work, using
+Bayesian model selection for \pet data are approached. The results are
+encouraging while the implementations still has limitations.
+
+\section{Cross validation}
+\label{sec:Cross validation}
+
+\section{Minimum description length}
+\label{sec:Minimum description length}
+
+\sidenote{These other approaches may include some classical approaches, e.g.,
+  those used in variable selection of regression analysis}
 
 \section{Bayesian model choice}
 \label{sec:Bayesian model choice}
@@ -368,124 +569,6 @@ that the \bic strategy eliminated the subjective input into the Bayes modeling
 since the value of \bic does not depend on the prior distribution. However
 this is equally argued as an advantage of this strategy in the case that
 priors, to which Bayes factors can be very sensitive, are hard to specify.
-
-\subsection{Deviance information criterion}
-\label{sub:Deviance information criterion}
-
-\section{Akaike's information criterion}
-\label{sec:Akaike's information criterion}
-
-The \aic uses the \kl \cite{Kullback:1951va} as a measure of the loss when
-using an approximated model in place of the true data generating mechanism. It
-is built upon the relation between \kl and the maximum likelihood estimator
-(\mle). The general formula of \aic for a candidate parametric model $\calM$
-is
-\begin{equation}
-  \text{\aic} = -2\log f(\data|\hat\theta) + 2k
-\end{equation}
-where $\hat\theta$ is the \mle under model $\calM$ and $k$ is the number
-parameters estimated. The model with the smallest \aic value is selected.  It
-is first introduced by Akaike in a series of papers \cite{Akaike:1973uc,
-  Akaike:1974ih, Akaike:1977ul}. It can be shown that \aic is a large sample
-approximation to the expected \kl \cite{Akaike:1973uc,Bozdogan:1987wy}. From a
-likelihood principle perspective, \aic acts as a balance between good fit
-(high log-likelihood) and complexity in the sense that the dimension of the
-parameter vector is used as a penalty term in the formula. The \aic method
-aims to find models that have fewer parameters while fitting the data well.
-
-\subsection{Comparison with \protect\bic}
-\label{sub:Comparison with bic}
-
-The \aic method is often compared with Bayesian model selection as one of the
-most important frequentist model selection methods, in particular in contrast
-with the \bic method. It is interesting to note that \cite{Akaike:1978ti}
-has a Bayesian interpretation of the \aic procedure for the special case of a
-multivariate Gaussian model. In that case, \aic can be viewed as an
-approximation to the posterior probability. Without going into the details,
-\cite{Akaike:1978ti} considered the situation that the sample size can be
-easily increased to a large enough number while two models are very close in
-the sense that the difference in their parameters are not quite visible
-through the observed data. Under this setting, it was then shown that the log
-of posterior model probability from a normal priors for mean vector is
-approximated by $(-1/2)$\aic up to an additive constant. However we don't see
-this setting as the general cases in data analysis as argued by Akaike.
-Instead, in realistic cases the difficulties of model selection problem often
-come from the fact that we have very limited data.
-
-On the other hand, as seen in \cite{Akaike:1980gh}, using likelihood
-function and \aic estimates as the source of objectivity of Bayesian
-modeling leads to the \bic procedure. However, those with a subjective
-Bayesian perspective are not likely to be convinced by the desire of
-objectivity itself. In addition, as noted by \cite{Kass:1995vb}, the
-Bayesian justification of \aic is only valid when the precision of the prior
-distribution is comparable to that of the likelihood. This assumption is
-hardly ever true in reality.
-
-In contrast to \bic, \aic penalize the model complexity less heavily for large
-sample size (the term $k\log(n)$ in \bic can easily exceeds the term $2k$ in
-\aic for large $n$.) Also though developed from different origins, in some
-sense \aic is more accurate (provided its underlying assumptions are
-fulfilled.) The \bic approximation to Bayes factor, as we see in
-section~\ref{ssub:Bayesian information criterion}, requires an $O(1)$ term to
-be negligible while \aic is often at worst an $O(1/n)$ approximation
-\cite{Akaike:1973uc}.
-
-\subsection{Corrected \protect\aic}
-\label{sub:Corrected aic}
-
-We briefly review one of the most widely used extension and modification of
-\aic method, the corrected \aic. This and other similar methods try to improve
-the model selection procedure in the situations that
-\cite{Akaike:1973uc}'s assumptions are not justified. Therefore, they
-improve the robustness of the \aic procedure.
-
-The corrected \aic, usually denoted by \aicc, mainly deals with the situation
-that the sample size is not sufficient large in the sense that the dimension
-of the parameter vector to be estimated is close to the sample size.
-\cite{Hurvich:1989ev} developed the \aicc for regression and time series
-modeling. The \aicc is defined as,
-\begin{equation}
-  \text{\aicc} = -2\log f(\data|\hat\theta) + \frac{2nk}{n-k-1}
-\end{equation}
-or equivalently,
-\begin{equation}
-  \text{\aicc} = \text{\aic} + \frac{2k(k+1)}{n-k-1},
-\end{equation}
-where $n$ is the sample size, other notations are as defined before.
-
-It should be noted that \aicc is just one way to improve \aic for small
-samples. In particular, it is derived in the case of a model with linear
-structure and normal errors \cite{Hurvich:1989ev, Burnham:2002wc}. Under other
-models, other form of improved \aic can be derived. \cite{Hurvich:1989ev}'s
-form has also been adopted successfully in literature even in nonlinear
-non-Gaussian cases, for example see \cite{Turkheimer:2003iy}.
-
-However, to illustrate the limitation of the \aicc method, in
-\cite{Zhou:2011uo} which we examined the model selection for compartment
-models, the use of \aicc was shown not satisfactory for high dimension, high
-noise and limited size of data. The use of \aic based methods for such models
-was first introduced by \cite{Hawkins:1986ha}. However, their work, and some
-recent use of \aic or \aicc mainly focus on low noise data. If the model has a
-nonlinear structure and high level noise, it can hardly be approximated by
-normal distribution. In such situations, as shown in \cite{Zhou:2011uo} for
-\pet data, \aicc does not perform well. It is possible to derive specific \aic
-based information criterion for specific models, like \cite{Hurvich:1989ev}
-did for theirs. Nonetheless this will involve much more analytical work which
-may or may not results in improved results.  Instead, in the our work, using
-Bayesian model selection for \pet data are approached. The results are
-encouraging while the implementations still has limitations.
-
-\section{Cross validation}
-\label{sec:Cross validation}
-
-\section{Minimum description length}
-\label{sec:Minimum description length}
-
-\section{Other approaches}
-\label{sec:Other approaches}
-
-\sidenote{These other approaches may include some classical approaches, e.g.,
-  those used in variable selection of regression analysis}
 
 \ifx\inthesis\undefined
 \printbibliography
