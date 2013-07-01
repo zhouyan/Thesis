@@ -10,15 +10,12 @@
 \fi % In Thesis
 
 Model selection is a problem found through out statistics and related
-disciplines.
-\sidenote{High level overview of model selection}
-
-A number of approaches of model selection has been developed through the
-history of statistics. Each has its strength and drawbacks. There is no
-universally best model selection strategy. As \cite[][chap.~4]{Myers:1990wt}
-pointed out, different model selection strategies have different purposes.
-Though he made the statement in the context of regression analysis, it is much
-true in more general situations.
+disciplines. A number of approaches of model selection has been developed
+through the history of statistics. Each has its strength and drawbacks. There
+is no universally best model selection strategy. As
+\cite[][chap.~4]{Myers:1990wt} pointed out, different model selection
+strategies have different purposes.  Though he made the statement in the
+context of regression analysis, it is much true in more general situations.
 
 Many model selection methods has its root in information theory, most notably
 the Akaike's information criterion (\aic), which aims to select the model with
@@ -27,7 +24,7 @@ Another large group of methods has their origin in the Bayesian theory, for
 instance the Bayesian information criterion (\bic). It is beyond the scope of
 this thesis to give a systematic review of the topic of model selection.
 Instead, we will review some of the most used in the practice of modern
-statistics.  \sidenote{Reference of comprehensive reviews}
+statistics.
 
 Instead of grouping the methods reviewed according to their origins (e.g.,
 Bayesian theory or information theory), we structure this chapter as the
@@ -49,8 +46,11 @@ Bayes factor or posterior model probabilities.
 
 In this thesis, we restrict the discussions to parametric models. However, it
 shall be noted that model selection is not a topic only found in these
-situations. For non-parametric model selection, see\sidenote{Non-parametric
-  model selection}
+situations. In addition, we only consider methods that can be applied in
+general situations, in contrast to those that can only be used for certain
+studies. For example, the Hannan-Quinn \cite{Hanna:1979us} criteria for
+autoregression analysis is not considered though it has been widely used in
+that specific field.
 
 \section{Information criteria}
 \label{sec:Information criteria}
@@ -63,17 +63,51 @@ information criterion (\bic), deviance information criterion (\dic) and
 focused information criterion (\fic). The first three all select a single
 model as the best model while \fic has a different approach, which allows
 different model to be selected for the purpose of estimating different
-parameters. This section is concluded with a discussion of some common
-strategies of choosing a model selection criterion.
+parameters.
 
 Though these methods have been developed with different background and
 focuses. A common theme is that they tend to balance the goodness-of-fit with
 complexity of the chosen model. This is most obvious in the cases of \aic and
-\bic, which act as penalized log-likelihood criteria.
+\bic, which act as penalized log-likelihood criteria. More specifically, for a
+given model with parameter vector $\theta$ and density $f(\cdot;\theta)$,
+these information criteria takes the form,
+\begin{equation}
+  \text{\ic} = -2\ell_n(\hat\theta) + p
+\end{equation}
+where $\ell_n(\theta)$ is the log-likelihood for data $\data =
+(y_1,\dots,y_n)^T$ given parameter $\theta$ and $\hat\theta$ is the \mle given
+the data $\data$.
+
+\subsection{Consistency and efficiency}
+\label{sub:Consistency and efficiency}
 
 Limited by the scope, we will avoid technical derivations of most methods
 discussed here. Instead, we will focus more on the properties of the resulting
-formulas of each model selection methods.
+formulas of each model selection methods. In \cite{Sin:1996vs}, a throughout
+treatment of properties of information criteria can be found. Two properties
+are of particular interest, the consistency and efficiency of a given method.
+
+By consistency, we mean a model selector shall pickup the true model if it
+exits and is among the candidate models. If we only assume that there is a
+true data generating mechanism, which is not among the candidate models, then
+the model selector shall choose the model that is closest to this true model
+given enough data. There are different ways of measuring this ``closeness''.
+The \kl is the most commonly used and the one we considered here. When more
+than one models minimize the \kl, then consistency means that the model
+selection methods shall choose the model with the least complexity, usually
+meaning the shortest parameter vector. More formal treatment can be found in
+\cite{Sin:1996vs} and \cite[][sec.~4.1 and~4.3]{Claeskens:2008tq}.
+
+Efficiency is a less precisely defined term. The primary goal of statistical
+modeling is often not the model selection itself, rather the inference and
+prediction using the selected model. By efficiency, we means how well the
+chosen model perform for the purpose of estimation and prediction. This is
+often measured with mean squared error (\mse) or squared prediction error.
+More formally, an efficient information criteria will select a model such that
+when the sample size goes to infinity, the minimal \mse (or other criteria) is
+reached. It shall be noted that, the efficiency of model selection methods can
+only be studied in context. A method that is efficient for a linear regression
+is not necessarily efficient for a time series study.
 
 \subsection{Akaike's information criterion}
 \label{sub:Akaike's information criterion}
@@ -83,7 +117,7 @@ maximum likelihood estimator (\mle). Given data $\data = (y_1,\dots,y_n)^T$,
 the general formula of \aic for a candidate parametric model $\calM$, with
 parameter vector $\theta$ and density $f(\data;\theta)$ is,
 \begin{equation}
-  \text{\aic} = -2\log f(\data;\hat\theta) + 2k
+  \text{\aic} = -2\ell_n(\hat\theta) + 2k
   \label{eq:aic}
 \end{equation}
 where $\hat\theta$ is the \mle under model $\calM$ and $k$ is the number
@@ -118,7 +152,7 @@ where the expectation is taken with respect to the true data density $g$,
 assuming it exists. For \iid samples, applying the strong law of large
 numbers, we have
 \begin{equation}
-  \frac{1}{n}\log f(\data;\theta) \xrightarrow{\text{a.s.}}
+  \frac{1}{n}\ell_n(\theta) \xrightarrow{\text{a.s.}}
   \Exp_g[\log f(Y;\theta)]
 \end{equation}
 and thus,
@@ -149,6 +183,7 @@ where
 \begin{equation}
   I = \Exp_g[I(Y,\tilde\theta)]\quad\text{and}\quad
   \Sigma = \var_g U(Y,\tilde\theta)
+  \label{eq:aic bias}
 \end{equation}
 with
 \begin{align}
@@ -174,17 +209,39 @@ log-likelihood function increases linear as $n$ increases while the penalize
 term $2k$ is not affected. Therefore, the \aic strategy is going to select
 more and more complex models when more data becomes available. This is due to
 the inadequate of assumption that the approximation model is correct, that is
-$f(y;\theta) = g(y)$. \cite{Takeuchi:1976} provided a refinement for this
-issue, as we will see later.
+$f(y;\theta) = g(y)$. Therefore, \aic has tendency of overfitting and it is
+formally shown in \cite{Sin:1996vs} that it is not consistent in the sense
+that when more than one models that minimize the \kl to the true data density
+are presented, \aic does not necessarily choose the simplest model.
 
-\subsection{Corrected \protect\aic}
-\label{sub:Corrected aic}
+In many studies, it is found that \aic can be more efficient when compared to
+other information criteria (such as \bic as we will see later). For example,
+in \cite{Lee:2001tm} it was shown that \aic is efficient for selecting the
+order of an autoregressive process, with efficiency measured by the mean
+squared prediction error.
 
-We briefly review one of the most widely used extension and modification of
-\aic method, the corrected \aic. This and other similar methods try to improve
-the model selection procedure in the situations that
-\cite{Akaike:1973uc}'s assumptions are not justified. Therefore, they
-improve the robustness of the \aic procedure.
+\subsection{Refinement of \protect\aic}
+\label{sub:Refinement of aic}
+
+Most refinement of \aic resolves around the improvement of the approximation
+in~\ref{eq:aic Taylor}, which uses a first order Taylor expansion, or more
+accurate estimation of the bias term, which is expression in terms of
+equation~\eqref{eq:aic bias}.
+
+As shown in \cite{Sugiura:1978be}, the first order approximation can perform
+poorly when the data size is small when compared to the number of parameters
+to be estimated. A second order variant is derived in the same paper and
+further studied by \cite{Hurvich:1989ev}, which led to a criterion that is
+called \aicc, the corrected \aic,
+\begin{equation}
+  \text{\aicc} = -2\ell_n(\hat\theta) + \frac{2nk}{n-k-1}
+\end{equation}
+where $n$ is the sample size. It is clearly that the additional bias
+correction is negligible if $n$ is large when compared to $k$, as
+$\lim_{n\to\infty}2nk/(n-k-1) = 2k$, which is exactly the penalty term in the
+original \aic formula. A rule of thumb, found in various source, is that \aicc
+shall be used in place of \aic when $n/k\le40$, see e.g.,
+\cite[][sec.~2.4]{Burnham:2002wc}.
 
 The corrected \aic, usually denoted by \aicc, mainly deals with the situation
 that the sample size is not sufficient large in the sense that the dimension
@@ -192,7 +249,7 @@ of the parameter vector to be estimated is close to the sample size.
 \cite{Hurvich:1989ev} developed the \aicc for regression and time series
 modeling. The \aicc is defined as,
 \begin{equation}
-  \text{\aicc} = -2\log f(\data;\hat\theta) + \frac{2nk}{n-k-1}
+  \text{\aicc} = -2\ell_n(\hat\theta) + \frac{2nk}{n-k-1}
 \end{equation}
 or equivalently,
 \begin{equation}
@@ -231,8 +288,8 @@ encouraging while the implementations still has limitations.
 \sidenote{These other approaches may include some classical approaches, e.g.,
   those used in variable selection of regression analysis}
 
-\section{Bayesian model choice}
-\label{sec:Bayesian model choice}
+\section{Bayesian model comparison}
+\label{sec:Bayesian model comparison}
 
 Bayes' theorem, in its simplest form is stated as below,
 \begin{equation}
