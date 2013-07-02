@@ -52,6 +52,63 @@ studies. For example, the Hannan-Quinn \cite{Hanna:1979us} criteria for
 autoregression analysis is not considered though it has been widely used in
 that specific field.
 
+\section{Qualities of model selection method}
+\label{sec of model selection method}
+
+\sidenote{The heading of this section is still not quite right. The purpose of
+  this section is to give a general discussion of the properties of the model
+  selection methods. It shall give a context of the discussions of the various
+  methods later. It shall provide an overview of what properties of model
+  selection methods that we care in this thesis and also it provides a
+  guideline of how each of the method is discussed. In short, it tells the
+  reader what are expected to be found in the discussion of each method
+  besides their basic mathematical formulations, etc.}
+
+Two properties of a model selection method are of particular interest for the
+purpose of this thesis, the consistency and efficiency of a given method.
+
+By consistency, we mean a model selector shall pickup the true model if it
+exists and is among the candidate models. If we only assume that there is a
+true data generating mechanism, which may not be among the candidate models,
+then the model selector shall choose the model that is closest to this true
+model given enough data. There are different ways of measuring this
+``closeness''. The \kl between the true model and the chosen model is the most
+commonly used. When more than one model that minimize the \kl, then
+consistency means that the model selection methods shall choose the model with
+the least complexity, usually meaning the shortest parameter vector. Sometime
+this model is also called the \emph{parsimony} model. More formal treatment
+can be found in \cite{Sin:1996vs} and \cite[][sec.~4.1
+and~4.3]{Claeskens:2008tq} for the particular case of information criteria
+that take the form of penalized likelihood. However, we believe that this
+concept is applicable to other methods including Bayesian model comparison.
+
+Efficiency is a less precisely defined term. The primary goal of statistical
+modeling is often not the model selection itself, rather the inference and
+prediction using the selected model. By efficiency, we means how well the
+chosen model perform for the purpose of estimation and prediction. This is
+often measured with mean squared error (\mse) or squared prediction error.
+More formally, an efficient information criteria will select a model such that
+when the sample size goes to infinity, the minimal \mse (or other criteria)
+among all candidate models is reached by the chosen model. It shall be noted
+that, the efficiency of model selection methods can only be studied in
+context. A method that is efficient for a linear regression is not necessarily
+efficient for a time series study.
+
+It shall be noted that, the conditions for a model selection method to be
+consistent or efficient depend also on the models under consideration. For
+instance, in \cite{Sin:1996vs}, the conditions of consistency for information
+criteria that takes the form of penalized likelihood is given under certain
+assumptions of the candidate and true models. However, for real world
+applications, the determination of consistency and efficiency often relies on
+empirical results or simulation studies.
+
+These two desired properties are often of conflict. A method that is efficient
+is often not consistent. As we will see later, some methods can be efficient
+for certain applications in the sense that it often results in the best
+estimation or predictions. However, they also have the tendency of
+over-fitting, and thus choose more complex models. The choice of model
+selection methods shall be determined by the specific applications.
+
 \section{Information criteria}
 \label{sec:Information criteria}
 
@@ -70,44 +127,16 @@ focuses. A common theme is that they tend to balance the goodness-of-fit with
 complexity of the chosen model. This is most obvious in the cases of \aic and
 \bic, which act as penalized log-likelihood criteria. More specifically, for a
 given model with parameter vector $\theta$ and density $f(\cdot;\theta)$,
-these information criteria takes the form,
+these two information criteria takes the form,
 \begin{equation}
   \text{\ic} = -2\ell_n(\hat\theta) + p
+  \label{eq:ic}
 \end{equation}
 where $\ell_n(\theta)$ is the log-likelihood for data $\data =
 (y_1,\dots,y_n)^T$ given parameter $\theta$ and $\hat\theta$ is the \mle given
-the data $\data$.
-
-\subsection{Consistency and efficiency}
-\label{sub:Consistency and efficiency}
-
-Limited by the scope, we will avoid technical derivations of most methods
-discussed here. Instead, we will focus more on the properties of the resulting
-formulas of each model selection methods. In \cite{Sin:1996vs}, a throughout
-treatment of properties of information criteria can be found. Two properties
-are of particular interest, the consistency and efficiency of a given method.
-
-By consistency, we mean a model selector shall pickup the true model if it
-exits and is among the candidate models. If we only assume that there is a
-true data generating mechanism, which is not among the candidate models, then
-the model selector shall choose the model that is closest to this true model
-given enough data. There are different ways of measuring this ``closeness''.
-The \kl is the most commonly used and the one we considered here. When more
-than one models minimize the \kl, then consistency means that the model
-selection methods shall choose the model with the least complexity, usually
-meaning the shortest parameter vector. More formal treatment can be found in
-\cite{Sin:1996vs} and \cite[][sec.~4.1 and~4.3]{Claeskens:2008tq}.
-
-Efficiency is a less precisely defined term. The primary goal of statistical
-modeling is often not the model selection itself, rather the inference and
-prediction using the selected model. By efficiency, we means how well the
-chosen model perform for the purpose of estimation and prediction. This is
-often measured with mean squared error (\mse) or squared prediction error.
-More formally, an efficient information criteria will select a model such that
-when the sample size goes to infinity, the minimal \mse (or other criteria) is
-reached. It shall be noted that, the efficiency of model selection methods can
-only be studied in context. A method that is efficient for a linear regression
-is not necessarily efficient for a time series study.
+the data $\data$. There are other model selection methods use criteria with
+the same form as above. In \cite{Sin:1996vs}, a throughout treatment of
+asymptotic properties of such information criteria can be found.
 
 \subsection{Akaike's information criterion}
 \label{sub:Akaike's information criterion}
