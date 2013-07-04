@@ -1,13 +1,5 @@
-\ifx\inthesis\undefined % In Thesis
-\input{../header}
-\title{Model selection}
-\begin{document}
-\maketitle
-\section{Overview}
-\else % In Thesis
 \chapter{Model selection}
 \label{cha:Model selection}
-\fi % In Thesis
 
 Model selection is a problem found through out statistics and related
 disciplines. A number of approaches of model selection has been developed
@@ -17,70 +9,66 @@ is no universally best model selection strategy. As
 strategies have different purposes. Though he made the statement in the
 context of regression analysis, it is much true in more general situations.
 
-Many model selection methods have their root in information theory, most
-notably the Akaike's information criterion (\aic), which aims to select the
-model with the smallest \kl \cite{Kullback:1951va} to the true data generating
-mechanism. Another large group of methods has their origin in the Bayesian
-theory, for instance the Bayesian information criterion (\bic). It is beyond
-the scope of this thesis to give a systematic review of the topic of model
-selection. Instead, we will review some of the most used in the practice of
-modern statistics.
-
-Instead of grouping the methods reviewed according to their origins (e.g.,
-Bayesian theory or information theory), we structure this chapter as the
-following. Section~\ref{sec:Information criteria} reviews a few methods that
-takes the form of information criteria, such as \aic and \bic. In
-section~\ref{sec:Cross-validation} the cross-validation method is reviewed. In
-section~\ref{sec:Minimum description length} the minimum description length
-(\mdl) method is reviewed. The last, in section~\ref{sec:Bayesian model
-  comparison} the Bayesian framework for the purpose of model comparison is
-discussed, while its computation is reviewed in the next chapter. Essentially,
-those methods that take similar forms are reviewed together. The rational
-behind this structure is that, though some methods have different origins, for
-instance, both \bic and deviation information criterion (\dic) can trace their
-development back to the Bayesian framework (section~\ref{sec:Bayesian model
-  comparison}) instead of the information theory as \aic, they are more often
-compared to \aic and its variants in practice instead of other ``pure''
-Bayesian approach, which are usually based on Monte Carlo approximations of
-Bayes factor or posterior model probabilities.
+It is beyond the scope of this thesis to give a comprehensive systematic
+review of the topic of model selection. We will review some of the most used
+in the practice of modern statistics. Instead of grouping the methods reviewed
+according to their origins (e.g., Bayesian theory or information theory), we
+structure this chapter as the following. Section~\ref{sec:Consistency and
+  efficiency} discusses two aspects of model selection methods in general, the
+consistency and efficiency. We consider them to be two more important
+properties of a given method. They provide practical guidelines for how to
+select a model selection strategy. In the sections that follow, instead of
+diving into more technical details of each method, such as rigorous
+mathematical presentations of their derivations, we aim to give intuitive
+discussions of these two aspects of each method.  Section~\ref{sec:Information
+  criteria} reviews a few methods that take the form of information criteria,
+such as \aic and \bic. In section~\ref{sec:Cross-validation} the
+cross-validation method is reviewed. In section~\ref{sec:Minimum description
+  length} the minimum description length (\mdl) method is reviewed. The last,
+in section~\ref{sec:Bayesian model comparison} the Bayesian framework for the
+purpose of model comparison is discussed, while its computation is reviewed in
+the next chapter. Essentially, those methods that take similar forms are
+reviewed together. The rational behind this structure is that, though some
+methods have different origins, for instance, both \bic and deviation
+information criterion (\dic) can trace their development back to the Bayesian
+framework (section~\ref{sec:Bayesian model comparison}) instead of the
+information theory as \aic, they are more often compared to \aic and its
+variants in practice instead of other ``pure'' Bayesian approach, which are
+usually based on Monte Carlo approximations of Bayes factor or posterior model
+probabilities.
 
 In this thesis, we restrict the discussions to parametric models. However, it
 shall be noted that model selection is not a topic only found in these
-situations. In addition, we only consider methods that can be applied in
-general situations, in contrast to those that can only be used for certain
-studies. For example, the Hannan-Quinn \cite{Hanna:1979us} criteria for
-autoregression analysis is not considered though it has been widely used in
-that specific field.
+situations.\sidenote{Need some reference showing that what does ``not a topic
+  only found...'' means} In addition, we only consider methods that can be
+applied in general situations, in contrast to those that can only be used for
+certain fields. For example, the Hannan-Quinn \cite{Hannan:1979us} criteria
+for autoregression analysis is not considered though it has been widely used
+in that specific field.
 
-\section{Qualities of model selection method}
-\label{sec of model selection method}
-
-\sidenote{The heading of this section is still not quite right. The purpose of
-  this section is to give a general discussion of the properties of the model
-  selection methods. It shall give a context of the discussions of the various
-  methods later. It shall provide an overview of what properties of model
-  selection methods that we care in this thesis and also it provides a
-  guideline of how each of the method is discussed. In short, it tells the
-  reader what are expected to be found in the discussion of each method
-  besides their basic mathematical formulations, etc.}
+\section{Consistency and efficiency}
+\label{sec:Consistency and efficiency}
 
 Two properties of a model selection method are of particular interest for the
 purpose of this thesis, the consistency and efficiency of a given method.
+
+\sidenote{Many places in this section lacks references}
 
 By consistency, we mean a model selector shall pickup the true model if it
 exists and is among the candidate models. If we only assume that there is a
 true data generating mechanism, which may not be among the candidate models,
 then the model selector shall choose the model that is closest to this true
 model given enough data. There are different ways of measuring this
-``closeness''. The \kl between the true model and the chosen model is the most
-commonly used. When more than one model that minimize the \kl, then
-consistency means that the model selection methods shall choose the model with
-the least complexity, usually meaning the shortest parameter vector. Sometime
-this model is also called the \emph{parsimony} model. More formal treatment
-can be found in \cite{Sin:1996vs} and \cite[][sec.~4.1
+``closeness''. The \kl \cite{Kullback:1951va} between the true model and the
+chosen model is the most commonly used. When more than one model that minimize
+the \kl, then consistency means that the model selection methods shall choose
+the model with the least complexity, usually meaning the shortest parameter
+vector. Sometime this model is also called the \emph{parsimony} model. More
+formal treatment can be found in \cite{Sin:1996vs} and \cite[][sec.~4.1
 and~4.3]{Claeskens:2008tq} for the particular case of information criteria
-that take the form of penalized likelihood. However, we believe that this
-concept is applicable to other methods including Bayesian model comparison.
+that take the form of penalized likelihood. Note that, without a proper nested
+relationship between models, the definition of consistency can be unclear in
+general.
 
 Efficiency is a less precisely defined term. The primary goal of statistical
 modeling is often not the model selection itself, rather the inference and
@@ -94,20 +82,22 @@ that, the efficiency of model selection methods can only be studied in
 context. A method that is efficient for a linear regression is not necessarily
 efficient for a time series study.
 
-It shall be noted that, the conditions for a model selection method to be
-consistent or efficient depend also on the models under consideration. For
-instance, in \cite{Sin:1996vs}, the conditions of consistency for information
-criteria that takes the form of penalized likelihood is given under certain
-assumptions of the candidate and true models. However, for real world
-applications, the determination of consistency and efficiency often relies on
-empirical results or simulation studies.
-
-These two desired properties are often of conflict. A method that is efficient
-is often not consistent. As we will see later, some methods can be efficient
-for certain applications in the sense that it often results in the best
-estimation or predictions. However, they also have the tendency of
-over-fitting, and thus choose more complex models. The choice of model
-selection methods shall be determined by the specific applications.
+It is clear that consistency is more important when one does assume that a
+true model exits and identifying it is important. Efficiency is more important
+if the purpose of model selection is finding the system that approximates the
+reality best. It shall not be a surprise that these two factors are often of
+conflict. In fact, in \cite{Yang:2005vj}, \sidenote{What Yang really said is
+  that the selector is not minmax optimal with expected \mse as the risk. I
+  intend not to introduce more rigorous mathematical representation here.
+  Otherwise the this chapter needs a whole new level of technical details
+  which I don't see particularly useful. I am not sure if my description here
+  is close enough to the more formal presentation} it was shown that for
+regression models with the form $Y_i = f(x_i) + \varepsilon_i$, under some
+rather mild assumptions of the models, any consistent model selection method
+cannot be efficient in the sense that the worst mean square error will be
+higher than a non-consistent selector that minimize this quantity. Therefore,
+depending on the purpose of model selection, ``identifying the true model''
+may not be the most important thing to consider.
 
 \section{Information criteria}
 \label{sec:Information criteria}
@@ -134,9 +124,10 @@ these two information criteria takes the form,
 \end{equation}
 where $\ell_n(\theta)$ is the log-likelihood for data $\data =
 (y_1,\dots,y_n)^T$ given parameter $\theta$ and $\hat\theta$ is the \mle given
-the data $\data$. There are other model selection methods use criteria with
-the same form as above. In \cite{Sin:1996vs}, a throughout treatment of
-asymptotic properties of such information criteria can be found.
+the data $\data$. For \iid samples, $\ell(\theta) = \sum_{i=1}^n\log
+f(y_i;\theta)$. There are other model selection methods use criteria with the
+same form as above. In \cite{Sin:1996vs}, a throughout treatment of asymptotic
+properties of such information criteria can be found.
 
 \subsection{Akaike's information criterion}
 \label{sub:Akaike's information criterion}
@@ -144,13 +135,13 @@ asymptotic properties of such information criteria can be found.
 As we will see later, \aic is built upon the relation between \kl and the
 maximum likelihood estimator (\mle). Given data $\data = (y_1,\dots,y_n)^T$,
 the general formula of \aic for a candidate parametric model $\calM$, with
-parameter vector $\theta$ and density $f(\data;\theta)$ is,
+parameter vector $\theta$ and density $f(\cdot;\theta)$ is,
 \begin{equation}
   \text{\aic} = -2\ell_n(\hat\theta) + 2k
   \label{eq:aic}
 \end{equation}
 where $\hat\theta$ is the \mle under model $\calM$ and $k$ is the number
-parameters estimated, i.e., the dimension of $\theta$. The model with the
+parameters estimated, i.e., the length of $\theta$. The model with the
 smallest \aic value is selected. It is first introduced by Akaike in a series
 of papers \cite{Akaike:1973uc, Akaike:1974ih, Akaike:1977ul}. It can be shown
 that \aic is a large sample approximation to the expected \kl
@@ -169,7 +160,7 @@ The \aic strategy is not unique in using maximum likelihood as a measure of
 goodness-of-fit. However, these methods differs in how the penalize the model
 complexity. The \aic method is based on the idea of minimizing the
 ``distance'' between the chosen model and the true data generating density,
-say $g(y)$. There are several methods to measure the difference between
+say $g(\cdot)$. There are several methods to measure the difference between
 densities. However, the one most directly linked to the maximum likelihood
 estimator is the \kl, defined as,
 \begin{equation}
@@ -200,7 +191,7 @@ density $g$, based on the above relation. In other words, \aic studies the
 expected \kl of the candidate model relative to the true data generating
 density when using the \mle of given data. A naive approximation of $Q_n$ is,
 \begin{equation}
-  \hat{Q}_n = \frac{1}{n} f(\data;\hat\theta).
+  \hat{Q}_n = \frac{1}{n} \sum_{i=1}^nf(y_i;\hat\theta).
 \end{equation}
 However, it can be shown that this approximation has a positive bias. With a
 first order Taylor expansion (see e.g., \cite[][sec.~2.3]{Claeskens:2008tq}),
@@ -227,8 +218,8 @@ matrix and $\tr(I^{-1}\Sigma) = k$. This leads to the \aic
 formula~\eqref{eq:aic}, by multiplying both the approximation $\hat{Q}_n$ and
 the expected bias by $n$.
 
-The approximation in the expression~\ref{eq:aic Taylor} has an error of order
-$o(n^{-1})$. For small sample situations, this approximation may be too
+The approximation in the expression~\eqref{eq:aic Taylor} has an error of
+order $o(n^{-1})$. For small sample situations, this approximation may be too
 inaccurate for practical use. A second order approximation which is more
 suitable for small sample size is developed as the corrected \aic and will be
 discussed later.
@@ -236,26 +227,32 @@ discussed later.
 The \aic strategy also has obvious issues when $n$ becomes larger. The
 log-likelihood function increases linear as $n$ increases while the penalize
 term $2k$ is not affected. Therefore, the \aic strategy is going to select
-more and more complex models when more data becomes available. This is due to
-the inadequate of assumption that the approximation model is correct, that is
-$f(y;\theta) = g(y)$. Therefore, \aic has tendency of overfitting and it is
-formally shown in \cite{Sin:1996vs} that it is not consistent in the sense
-that when more than one models that minimize the \kl to the true data density
-are presented, \aic does not necessarily choose the simplest model.
+more and more complex models when more data becomes available. This is partly
+due to the inadequate of assumption that the approximation model is correct,
+that is $f(y;\theta) = g(y)$. Therefore, \aic has a tendency of overfitting
+and it is formally shown in \cite{Sin:1996vs} that it is not consistent in the
+sense that when more than one models that minimize the \kl to the true data
+density are presented, \aic does not necessarily choose the simplest model.
 
 In many studies, it is found that \aic can be more efficient when compared to
 other information criteria (such as \bic as we will see later). For example,
 in \cite{Lee:2001tm} it was shown that \aic is efficient for selecting the
 order of an autoregressive process, with efficiency measured by the mean
-squared prediction error.
+squared prediction error. Similar results is also found in \cite{Yang:2005vj}
+for regression analysis.
 
-\subsection{Refinement of \protect\aic}
-\label{sub:Refinement of aic}
+These properties of consistency and efficiency of \aic are also applicable to
+the two commonly used refinements discussed below.
+
+\subsubsection{Refinement of \protect\aic}
+\label{ssub:Refinement of aic}
 
 Most refinement of \aic resolves around the improvement of the approximation
-in~\ref{eq:aic Taylor}, which uses a first order Taylor expansion, or more
-accurate estimation of the bias term, which is expression in terms of
-equation~\eqref{eq:aic bias}.
+in~\eqref{eq:aic Taylor}, which uses a first order Taylor expansion, or more
+accurate estimation of the bias term in terms of equations~\eqref{eq:aic
+  bias}.
+
+\paragraph{Corrected \protect\aic}
 
 As shown in \cite{Sugiura:1978be}, the first order approximation can perform
 poorly when the data size is small when compared to the number of parameters
@@ -272,50 +269,81 @@ original \aic formula. A rule of thumb, found in various source, is that \aicc
 shall be used in place of \aic when $n/k\le40$, see e.g.,
 \cite[][sec.~2.4]{Burnham:2002wc}.
 
-The corrected \aic, usually denoted by \aicc, mainly deals with the situation
-that the sample size is not sufficient large in the sense that the dimension
-of the parameter vector to be estimated is close to the sample size.
-\cite{Hurvich:1989ev} developed the \aicc for regression and time series
-modeling. The \aicc is defined as,
-\begin{equation}
-  \text{\aicc} = -2\ell_n(\hat\theta) + \frac{2nk}{n-k-1}
-\end{equation}
-or equivalently,
-\begin{equation}
-  \text{\aicc} = \text{\aic} + \frac{2k(k+1)}{n-k-1},
-\end{equation}
-where $n$ is the sample size, other notations are as defined before.
-
 It should be noted that \aicc is just one way to improve \aic for small
 samples. In particular, it is derived in the case of a model with linear
 structure and normal errors \cite{Hurvich:1989ev, Burnham:2002wc}. Under other
-models, other form of improved \aic can be derived. \cite{Hurvich:1989ev}'s
-form has also been adopted successfully in literature even in nonlinear
-non-Gaussian cases, for example see \cite{Turkheimer:2003iy}.
+models, other form of improved \aic can be derived. However, this form has
+also been adopted successfully in literature even in nonlinear non-Gaussian
+cases, for example see \cite{Turkheimer:2003iy}.
 
-However, to illustrate the limitation of the \aicc method, in
-\cite{Zhou:2011uo} which we examined the model selection for compartment
-models, the use of \aicc was shown not satisfactory for high dimension, high
-noise and limited size of data. The use of \aic based methods for such models
-was first introduced by \cite{Hawkins:1986ha}. However, their work, and some
-recent use of \aic or \aicc mainly focus on low noise data. If the model has a
-nonlinear structure and high level noise, it can hardly be approximated by
-normal distribution. In such situations, as shown in \cite{Zhou:2011uo} for
-\pet data, \aicc does not perform well. It is possible to derive specific \aic
-based information criterion for specific models, like \cite{Hurvich:1989ev}
-did for theirs. Nonetheless this will involve much more analytical work which
-may or may not results in improved results.  Instead, in the our work, using
-Bayesian model selection for \pet data are approached. The results are
-encouraging while the implementations still has limitations.
+\paragraph{Takeuchi's information criterion}
 
-\section{Cross validation}
-\label{sec:Cross validation}
+As mentioned before, the \aic's approximation of the bias term is based on the
+assumption the candidate model is close enough to the true model. However,
+this is often not the case in reality. A model-robust modification, shown by
+Takeuchi in 1976 (and commonly termed \tic) uses the data to estimate the two
+matrices in equations~\eqref{eq:aic bias}. More specifically, let $\hat{I}_n$
+and $\hat\Sigma_n$ be the sample average and sample variance of $I(y,\theta)$
+and $U(y,\theta)$, respectively. Then $\tr(\hat{I}_n\hat\Sigma_n)$ is used as
+the penalize term instead of the length of the parameter vector.
+
+\subsection{Bayesian information criterion}
+\label{sub:Bayesian information criterion}
+
+The Bayesian information criterion (\bic) was developed as an approximation to
+the Bayes factor \cite{Schwarz:1978uv}. The \bic is defined as,
+\begin{equation}
+  \text{\bic} = -2\ell(\hat\theta) + k\log(n).
+  \label{eq:bic}
+\end{equation}
+where $\ell(\hat\theta)$ is the log-likelihood function evaluated at the
+\mle; $k$ is the number of parameters to be estimated and $n$ is the number of
+observations. The \bic strategy choose the model with the smallest \bic value.
+A full treatment of Bayesian model comparison, and Bayes factor in particular
+is given in section~\ref{sec:Bayesian model comparison}. For the purpose of
+this section, it is sufficient to mention that \bic aims to choose a model
+that maximize the posterior probability of a model, say $M$, defined as,
+\begin{equation}
+  \Pr(M|\data) = \frac{\Pr(M)}{f(\data)}\int
+  f(y|M,\theta)\pi(\theta|M)\intd\theta
+\end{equation}
+where $f(y|M,\data)$ is the likelihood function; $\pi(\theta|M)$ is a prior
+distribution, which can be arbitrary yet critically influence the model
+selection results; and $f(\data)$ is the unconditional likelihood of the data
+and it is irrelevant here since it is a constant for all models.
+
+It is clear from the formulation of \bic that the influence of the prior
+distribution $\pi(\theta|M)$ is eliminated in this strategy. This also leads
+to some argue that \bic is not a full fleged 
+
+In addition to the large sample assumption, \bic also assumes ``good
+behavior'' of the likelihood function such that the use of \mle in place of
+$\tilde\theta$ is justified. As seen in its formulation, \bic eliminates the
+prior for large data set.  The \bic requires that the $O(1)$ term in
+equation~\eqref{eq:bic approx} is negligible compared to other terms. These
+assumptions restricted the use of \bic in many situations.  See
+\cite{Gelfand:1994ux} for an example where the $O(1)$ approximation failed.
+See \cite{Berger:2001uy} for examples that the irregularity of likelihood
+function causes the \bic method failed. Moreover, in non-\iid situations, the
+definition of the parameter dimension $k$ is ambiguous
+\cite{Spiegelhalter:1998uc, Kass:1995vb}. There are other criticism of the
+\bic strategy.  For example \cite[][sec.~7.2.3]{Robert:2007tc} argued that the
+\bic strategy eliminated the subjective input into the Bayes modeling since
+the value of \bic does not depend on the prior distribution. However this is
+equally argued as an advantage of this strategy in the case that priors, to
+which Bayes factors can be very sensitive, are hard to specify.
+
+\subsection{Deviance information criterion}
+\label{sub:Deviance information criterion}
+
+\subsection{Focus information criterion}
+\label{sub:Focus information criterion}
+
+\section{Cross-validation}
+\label{sec:Cross-validation}
 
 \section{Minimum description length}
 \label{sec:Minimum description length}
-
-\sidenote{These other approaches may include some classical approaches, e.g.,
-  those used in variable selection of regression analysis}
 
 \section{Bayesian model comparison}
 \label{sec:Bayesian model comparison}
@@ -324,9 +352,6 @@ Bayes' theorem, in its simplest form is stated as below,
 \begin{equation}
   p(H|\data) = \frac{p(\data|H)p(H)}{p(\data)} \label{eq:bayes}
 \end{equation}
-\sidenote{In the discussions of the views of probabilities. I believe I read
-  them somewhere. However I am still finding some references to support it or
-  to verify that I did not get anything wrong here.}
 where $\data$ is the data and $H$ is a hypothesis. Like many other probability
 theories, technically Bayes' theorem merely provides a method of accounting
 for the uncertainty. There are different interpretations, rooted in the views
@@ -571,91 +596,3 @@ only occasionally. In most applications of interest, approximations has to be
 used. Two approaches are widely used. On is using Monte Carlo approximations.
 Another is based on the asymptotic behavior of the Bayes factor. A few of the
 later is reviewed in the remaining of this section.
-
-\subsubsection{Bayesian information criterion}
-\label{ssub:Bayesian information criterion}
-
-The Bayesian information criterion (\bic) was developed as an approximation to
-the Bayes factor \cite{Schwarz:1978uv}. The \bic is defined as,
-\begin{equation}
-  \text{\bic} = -2\log f(\data|\hat\theta) + k\log(n).
-\end{equation}
-where $f(\data|\hat\theta)$ is the likelihood function evaluated at the
-maximum likelihood estimator (\mle); $k$ is the number of parameters to be
-estimated and $n$ is the number of observations. The \bic strategy choose the
-model with the smallest \bic value. Note that in this section we dropped the
-dependence on model $\calM_k$ in notations for simplicity.
-
-To justify its use, we first outline its derivation, which will provide us
-some insights of the quality of the approximation. We start with
-equation~\eqref{eq:marginal likelihood} while dropping the model index $k$,
-since this computations is for each model individually. Let $h(\theta) = -
-\log f(\data|\theta)\pi(\theta)$ and let $\tilde\theta$ denote the value of
-$\theta$ that minimizes $h(\theta)$. Then,
-\begin{equation}
-  p(\data) = \int f(\data|\theta)\pi(\theta)\intd\theta
-  = \int\exp\{-h(\theta)\}\intd\theta
-\end{equation}
-Applying Taylor expansion to $h(\theta)$ around $\tilde\theta$,
-\begin{align}
-  h(\theta)
-  &= h(\tilde\theta) + (\theta - \tilde\theta)^T h'
-  + \frac{1}{2}(\theta - \tilde\theta)^T h''(\tilde\theta)
-  (\theta - \tilde\theta)
-  + o(\Norm{\theta - \tilde\theta})^2 \notag\\
-  &\approx h(\tilde\theta) + \frac{1}{2}(\theta - \tilde\theta)^T
-  H (\theta - \tilde\theta)
-\end{align}
-where $H = h''(\tilde\theta)$, the Hessian matrix of $h$ evaluated at
-$\tilde\theta$ and $h'$ is the gradient of $h$. Since for $n\to\infty$, the
-posterior distribution is concentrated around $\tilde\theta$, and thus only
-those values close to $\tilde\theta$ contribute significantly to the
-integration,
-\begin{equation}
-  p(\data)\approx\exp\{-h(\tilde\theta)\}
-  \int\exp\{-\frac{1}{2}(\theta - \tilde\theta)^TH(\theta - \tilde\theta)\}.
-\end{equation}
-Note the integrand is the kernel of a multivariate normal distribution with
-mean $\tilde\theta$ and covariance matrix $H^{-1}$, which is assumed to be
-positive definite and exist. It follows,
-\begin{equation}
-  p(\data) \approx \exp\{-h(\tilde\theta)\} (2\pi)^{k/2} \Abs{H}^{-1/2},
-\end{equation}
-where $k$ is the number of parameters, or the dimension of $\theta$. Thus,
-\begin{equation}
-  -2\log p(\data) \approx
-  -2\log f(\data|\tilde\theta) - 2\log\pi(\tilde\theta) - k\log(2\pi) +
-  \log\Abs{H}.
-  \label{eq:bic approx}
-\end{equation}
-With \iid samples, for $n\to\infty$, $H/n \approx I$, where $I$ is the Fisher
-information matrix. It follows that $\Abs{H}\approx n^k \Abs{I}$ for
-large $n$. Omitting the $O(1)$ terms,
-\begin{equation}
-  -2\log p(\data) \approx -2\log f(\data|\tilde\theta) + k\log(n).
-\end{equation}
-With $n\to\infty$, $\tilde\theta\approx\hat{\theta}$, where $\hat{\theta}$ is
-the \mle, replace $\tilde\theta$ with $\hat{\theta}$, the right hand side of the
-above equation becomes the formula for what is commonly known as \bic. The
-\bic method choose the model with smallest \bic.
-
-In addition to the large sample assumption, which is difficult to assess in
-practice, \bic also assumes ``good behavior'' of the likelihood function such
-that the use of \mle in place of $\tilde\theta$ is justified. As seen in its
-formulation, \bic eliminates the prior for large data set.  The \bic requires
-that the $O(1)$ term in equation~\eqref{eq:bic approx} is negligible compared
-to other terms. These assumptions restricted the use of \bic in many
-situations.  See \cite{Gelfand:1994ux} for an example where the $O(1)$
-approximation failed. See \cite{Berger:2001uy} for examples that the
-irregularity of likelihood function causes the \bic method failed. Moreover,
-in non-\iid situations, the definition of the parameter dimension $k$ is
-ambiguous \cite{Spiegelhalter:1998uc, Kass:1995vb}. There are other criticism
-of the \bic strategy.  For example \cite[][sec.~7.2.3]{Robert:2007tc} argued
-that the \bic strategy eliminated the subjective input into the Bayes modeling
-since the value of \bic does not depend on the prior distribution. However
-this is equally argued as an advantage of this strategy in the case that
-priors, to which Bayes factors can be very sensitive, are hard to specify.
-
-\ifx\inthesis\undefined
-\printbibliography
-\end{document}\else\relax\fi

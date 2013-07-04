@@ -1,5 +1,12 @@
-\def\inthesis{}
-\input{header}
+\documentclass
+[11pt, hyper, bib, fontset=Minion, biblatexstyle=numeric]
+{mthesis}
+
+\input{macros}
+\addbibresource{thesis.bib}
+\author{Yan Zhou}
+\date{\today}
+
 \title{Bayesian Model Comparison \\with Sequential Monte Carlo}
 
 \begin{document}
@@ -9,13 +16,13 @@
 \tableofcontents
 
 \mainmatter
-\input{chap/notations}
 \input{chap/introduction}
 \input{chap/model-comparison}
 \input{chap/monte-carlo}
-\input{chap/bayesian-smc}
 \input{chap/bayesian-pet}
+\input{chap/bayesian-smc}
 \input{chap/vsmc}
+\input{chap/applications}
 \input{chap/conclusions}
 
 \backmatter
