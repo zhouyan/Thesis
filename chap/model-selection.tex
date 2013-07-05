@@ -8,6 +8,9 @@ is no universally best model selection strategy. As
 \cite[][chap.~4]{Myers:1990wt} pointed out, different model selection
 strategies have different purposes. Though he made the statement in the
 context of regression analysis, it is much true in more general situations.
+Selecting a suitable model selection strategy for a particular application is
+perhaps a more interesting and difficult problem than any specific method
+itself. We discuss more of this through out this chapter.
 
 It is beyond the scope of this thesis to give a comprehensive systematic
 review of the topic of model selection. We will review some of the most used
@@ -20,39 +23,34 @@ properties of a given method. They provide practical guidelines for how to
 select a model selection strategy. In the sections that follow, instead of
 diving into more technical details of each method, such as rigorous
 mathematical presentations of their derivations, we aim to give intuitive
-discussions of these two aspects of each method.  Section~\ref{sec:Information
+discussions of these two aspects of each method. Section~\ref{sec:Information
   criteria} reviews a few methods that take the form of information criteria,
 such as \aic and \bic. In section~\ref{sec:Cross-validation} the
 cross-validation method is reviewed. In section~\ref{sec:Minimum description
   length} the minimum description length (\mdl) method is reviewed. The last,
 in section~\ref{sec:Bayesian model comparison} the Bayesian framework for the
 purpose of model comparison is discussed, while its computation is reviewed in
-the next chapter. Essentially, those methods that take similar forms are
-reviewed together. The rational behind this structure is that, though some
+the next chapter. The rational behind this structure is that, though some
 methods have different origins, for instance, both \bic and deviation
 information criterion (\dic) can trace their development back to the Bayesian
 framework (section~\ref{sec:Bayesian model comparison}) instead of the
 information theory as \aic, they are more often compared to \aic and its
 variants in practice instead of other ``pure'' Bayesian approach, which are
 usually based on Monte Carlo approximations of Bayes factor or posterior model
-probabilities.
+probabilities. In addition, \aic and \bic are frequently compared and studied
+together in literature in the past.
 
-In this thesis, we restrict the discussions to parametric models. However, it
-shall be noted that model selection is not a topic only found in these
-situations.\sidenote{Need some reference showing that what does ``not a topic
-  only found...'' means} In addition, we only consider methods that can be
-applied in general situations, in contrast to those that can only be used for
-certain fields. For example, the Hannan-Quinn \cite{Hannan:1979us} criteria
-for autoregression analysis is not considered though it has been widely used
-in that specific field.
+In this thesis, we restrict the discussions to parametric models. In addition,
+we only consider methods that can be applied in general situations, in
+contrast to those that can only be used for certain fields. For example, the
+Hannan-Quinn \cite{Hannan:1979us} criteria for autoregression analysis is not
+considered though it has been widely used in that specific field.
 
 \section{Consistency and efficiency}
 \label{sec:Consistency and efficiency}
 
 Two properties of a model selection method are of particular interest for the
 purpose of this thesis, the consistency and efficiency of a given method.
-
-\sidenote{Many places in this section lacks references}
 
 By consistency, we mean a model selector shall pickup the true model if it
 exists and is among the candidate models. If we only assume that there is a
