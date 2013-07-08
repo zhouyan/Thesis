@@ -31,20 +31,21 @@ cross-validation method is reviewed. In section~\ref{sec:Minimum description
 in section~\ref{sec:Bayesian model comparison} the Bayesian framework for the
 purpose of model comparison is discussed, while its computation is reviewed in
 the next chapter. The rational behind this structure is that, though some
-methods have different origins, for instance, both \bic and deviation
-information criterion (\dic) can trace their development back to the Bayesian
-framework (section~\ref{sec:Bayesian model comparison}) instead of the
-information theory as \aic, they are more often compared to \aic and its
-variants in practice instead of other ``pure'' Bayesian approach, which are
-usually based on Monte Carlo approximations of Bayes factor or posterior model
-probabilities. In addition, \aic and \bic are frequently compared and studied
-together in literature in the past.
+methods have different origins, for instance, \bic can trace its development
+back to the Bayesian framework (section~\ref{sec:Bayesian model comparison})
+instead of the information theory as \aic, it is more often compared to
+\aic and its variants in practice instead of other ``pure'' Bayesian approach,
+which are usually based on Monte Carlo approximations of Bayes factor or
+posterior model probabilities. In addition, \aic and \bic are frequently
+compared and studied together in literature in the past.
 
 In this thesis, we restrict the discussions to parametric models. In addition,
 we only consider methods that can be applied in general situations, in
 contrast to those that can only be used for certain fields. For example, the
 Hannan-Quinn \cite{Hannan:1979us} criteria for autoregression analysis is not
 considered though it has been widely used in that specific field.
+\sidenote{I think HQ can be used outside autoregression, though I haven't seen
+  it yet. This may not be a proper example here}
 
 \section{Consistency and efficiency}
 \label{sec:Consistency and efficiency}
@@ -104,11 +105,9 @@ In this section, we review various model selection methods that take the form
 of information criteria. Among them, the Akaike's information criterion (\aic)
 is perhaps the most widely used, and discussed in section~\ref{sub:Akaike's
   information criterion}. It is followed by discussions of Bayesian
-information criterion (\bic), deviance information criterion (\dic) and
-focused information criterion (\fic). The first three all select a single
-model as the best model while \fic has a different approach, which allows
-different model to be selected for the purpose of estimating different
-parameters.
+information criterion (\bic). The first three all select a single model as the
+best model while \fic has a different approach, which allows different model
+to be selected for the purpose of estimating different parameters.
 
 Though these methods have been developed with different background and
 focuses. A common theme is that they tend to balance the goodness-of-fit with
@@ -165,6 +164,7 @@ estimator is the \kl, defined as,
   \dkl(g, f(\cdot;\theta))
   = \int g(y)\log\frac{g(y)}{f(y;\theta)}\intd y
   = \int g(y)\log g(y) - \Exp_g[\log f(Y;\theta)],
+  \label{eq:kl}
 \end{equation}
 where the expectation is taken with respect to the true data density $g$,
 assuming it exists. For \iid samples, applying the strong law of large
@@ -308,40 +308,79 @@ that maximize the posterior probability of a model, say $M$, defined as,
 where $f(y|M,\data)$ is the likelihood function; $\pi(\theta|M)$ is a prior
 distribution, which can be arbitrary yet critically influence the model
 selection results; and $f(\data)$ is the unconditional likelihood of the data
-and it is irrelevant here since it is a constant for all models.
+and it is irrelevant here since it is a constant for all models. The \bic is
+essentially a large sample approximation of the integration term, which is
+termed the \emph{marginal likelihood}, as it is also equal to $\pi(\data|M)$.
 
 It is clear from the formulation of \bic that the influence of the prior
 distribution $\pi(\theta|M)$ is eliminated in this strategy. This also leads
-to some argue that \bic is not a full fleged 
+to some argue that \bic is not a full fledged Bayesian approach. The Bayesian
+model comparison approach will be discussed in section~\ref{sec:Bayesian model
+  comparison}.
 
-In addition to the large sample assumption, \bic also assumes ``good
-behavior'' of the likelihood function such that the use of \mle in place of
-$\tilde\theta$ is justified. As seen in its formulation, \bic eliminates the
-prior for large data set.  The \bic requires that the $O(1)$ term in
-equation~\eqref{eq:bic approx} is negligible compared to other terms. These
-assumptions restricted the use of \bic in many situations.  See
-\cite{Gelfand:1994ux} for an example where the $O(1)$ approximation failed.
-See \cite{Berger:2001uy} for examples that the irregularity of likelihood
-function causes the \bic method failed. Moreover, in non-\iid situations, the
-definition of the parameter dimension $k$ is ambiguous
-\cite{Spiegelhalter:1998uc, Kass:1995vb}. There are other criticism of the
-\bic strategy.  For example \cite[][sec.~7.2.3]{Robert:2007tc} argued that the
-\bic strategy eliminated the subjective input into the Bayes modeling since
-the value of \bic does not depend on the prior distribution. However this is
-equally argued as an advantage of this strategy in the case that priors, to
-which Bayes factors can be very sensitive, are hard to specify.
+Similar to \aic, the \bic assumes that the sample size is large enough so that
+it can approximate the marginal likelihood properly. In addition \bic also
+assumes ``good behavior'' in the sense that the \mle is in the high posterior
+probability region. As seen in its formulation, \bic eliminates the prior for
+large data set. These assumptions restricted the use of \bic in many
+situations. For example, see \cite{Berger:2001uy} for examples that the
+irregularity of likelihood function causes the \bic method failed. Moreover,
+in non-\iid situations, the definition of the parameter dimension $k$ is
+ambiguous \cite{Spiegelhalter:1998uc, Kass:1995vb}. There are other criticism
+of the \bic strategy. For example \cite[][sec.~7.2.3]{Robert:2007tc} argued
+that the \bic strategy eliminated the subjective input into the Bayes modeling
+since the value of \bic does not depend on the prior distribution. However
+this is equally argued as an advantage of this strategy in the case that
+priors, to which Bayes factors can be very sensitive, are hard to specify.
 
-\subsection{Deviance information criterion}
-\label{sub:Deviance information criterion}
+Though the original development of \bic \cite{Schwarz:1978uv} does not really
+involves the consideration of \kl as \aic did. However, from an information
+theory perspective, \bic enjoys greater consistency than \aic in many
+applications. It was shown in \cite{Yang:2005vj} that, asymptotically (in the
+sense that the sample size goes to infinity), \bic is able to choose the
+simplest model that minimizing \kl between the true model and the candidate
+model for regression analysis. In \cite{Sin:1996vs}, a more general result can
+be found.
 
-\subsection{Focus information criterion}
-\label{sub:Focus information criterion}
+However, \bic also has its drawback. It may not be as efficient as \aic for
+some applications. For example, in \cite{Lee2001} it was shown that for
+autogressive process and some other time series applications, \bic is not
+efficient in the sense that \bic may not choose the model that minimize the
+prediction error. In \cite[][sec.~4.7]{Claeskens:2008tq}, it was also shown
+that \bic is not efficient for regression variable selection.
+
+\sidenote{Cross-validation still lacks some depth}
 
 \section{Cross-validation}
 \label{sec:Cross-validation}
 
-\section{Minimum description length}
-\label{sec:Minimum description length}
+Cross-validation is a model selection strategy that has long been practiced by
+statisticians, especially for predictive studies. It was formalized by
+\cite{Stone1974} and \cite{Geisser1975}. The idea is that the data is spitted
+into two parts. The majority of the data are used for model fitting. And the
+rest, called the \emph{left-out} data are predicted or estimated with
+the fitted model and compared with the observations. The model that estimate
+the left-out data best is the chosen model.
+
+The most common implementation of this scheme is to left one data at a time.
+Candidate models are fit with all but one data, and are then used to predict
+or estimate the case that is left out. There are many ways of comparing the
+models. One is related to \kl. Recall equation~\eqref{eq:kl}, where the term
+$\Exp_g[\log f(Y;\theta)]$ is the one that dependent on the density $f$ and
+hence the model. One way of approximate the quantity is,
+\begin{equation}
+  \frac{1}{n}\sum_{i=1}^n \log f(y_i;\hat\theta_i)
+\end{equation}
+where $\hat\theta_i$ is the \mle estimated with the data $y_i$ are left out
+from the data $\data = (y_1,\dots,y_n)$. Then the model with the highest
+value of the above quantity is chosen.
+
+Intuitively, it measures how well the model fitted without $y_i$ predict or
+estimate $Y_i$ using an approximation of (relative) \kl. The ``better'' model
+has higher likelihood for each data with parameter set to the one estimated
+without it. There are other ways of choosing model using the cross-validation
+scheme. For example, the \tic approximation of \kl can be used instead of the
+above.
 
 \section{Bayesian model comparison}
 \label{sec:Bayesian model comparison}
@@ -368,10 +407,6 @@ discipline. These topics, though will not be focused on in this thesis, are
 important in both theory and practice. For example, it can affects the choice
 of priors.
 
-\sidenote{Original I saw in Bernardo cited Finetti, which I never read. So I
-  previously cited sections in Bernardo which I did read. I am not quite sure
-  I cited the right work of Finetti here. The one I cited are the two volume
-  \emph{Theory of Probability}}
 A throughout treatment of Bayesian modeling from a decision theory perspective
 can be found in \cite{Robert:2007tc}. Formal mathematical representations can
 also be found in \cite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd}. Notion of
@@ -507,9 +542,6 @@ where
     -\frac{\partial^2}{\partial\theta_k^2}\log f(\data|\theta_k,\calM_k)}
   \intd\data,
 \end{equation}
-\sidenote{I recall that in the early stages I encountered a few improper
-  Jeffery's priors in practice and read something along the lines here.
-  However, still seeking reference to support the statements here}
 is the \emph{Fisher's information}. The basic idea behind Jeffrey's priors is
 that the prior shall contain no more information than the observed data do.
 Though intuitive, Jeffrey's priors derived for many models may be problemtic.

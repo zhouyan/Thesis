@@ -1,19 +1,17 @@
-\ifx\inthesis\undefined
-\def\rootdir{..}
-\else
-\def\rootdir{.}
-\fi
+\usepackage{algorithm,algorithmic}
 
 \def\DeclareAbbr#1#2{\def#1{\textsc{#2}\xspace}}
 \DeclareAbbr{\aic}{aic}
+\DeclareAbbr{\ais}{ais}
 \DeclareAbbr{\bic}{bic}
 \DeclareAbbr{\dic}{dic}
-\DeclareAbbr{\ess}{ess}
+\DeclareAbbr{\ds}{ds}
 \DeclareAbbr{\fic}{fic}
 \DeclareAbbr{\fpe}{fpe}
 \DeclareAbbr{\gic}{gic}
 \DeclareAbbr{\ic}{ic}
 \DeclareAbbr{\ieee}{ieee}
+\DeclareAbbr{\mala}{mala}
 \DeclareAbbr{\mcmc}{mcmc}
 \DeclareAbbr{\mdl}{mdl}
 \DeclareAbbr{\mle}{mle}
@@ -21,7 +19,9 @@
 \DeclareAbbr{\nic}{nic}
 \DeclareAbbr{\nls}{nls}
 \DeclareAbbr{\pet}{pet}
+\DeclareAbbr{\ps}{ps}
 \DeclareAbbr{\rjmcmc}{rjmcmc}
+\DeclareAbbr{\sis}{sis}
 \DeclareAbbr{\smc}{smc}
 \DeclareAbbr{\tic}{tic}
 \DeclareAbbr{\unix}{unix}
@@ -63,6 +63,12 @@
 \def\intd{\,\diff}
 \def\iid{\ifmmode\text{i.i.d.}\else{i.i.d.}\xspace\fi}
 
+\newcommand{\Mk}[1][k]{\ensuremath{{\calM_{#1}}}\xspace}
+\newcommand{\paramk}[1][k]{\ensuremath{\theta_{#1}}\xspace}
+\newcommand{\Paramk}[1][k]{\ensuremath{\Theta_{#1}}\xspace}
+\newcommand{\ess} {\ifmmode\text{\textsc{ess}}\else\textsc{ess}\xspace\fi}
+\newcommand{\cess}{\ifmmode\text{\textsc{cess}}\else\textsc{cess}\xspace\fi}
+
 \def\supi#1{#1^{(i)}}
 \def\Xiu{\supi{X}}
 \def\xiu{\supi{x}}
@@ -74,3 +80,6 @@
       \footnotesize\sffamily\raggedright#1%
     \end{flushleft}%
 }}
+
+\def\STATESKIP{\hskip.68cm}
+\newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
