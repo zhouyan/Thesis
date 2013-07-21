@@ -52,6 +52,31 @@ refinements of existing practices. Last, we conclude this chapter with a
 discussion of how the presented framework lead to an automatic and generic
 algorithms.
 
+The application of \smc samplers to the Bayesian model comparison problem is
+straightforward. However, it has been overlooked in recent years. In this
+section, we outline common strategies of using \smc samplers for Bayesian
+model comparison. In the next section, we introduce some innovative refinement
+and extensions to existing practices. As consistent with this thesis, the \pet
+compartmental model will be used as a running example to illustrate various
+methodologies. We will consider both simulated and real world data. The
+simulated data set is the same as in chapter~\ref{cha:Introduction}. Due to
+the large amount of the real data, it is beyond the resources we have to
+perform repeated simulations for a whole \pet scan. Instead, 20 real data sets
+are sampled from typical region of interest in a single \pet scan.
+Figure~\ref{fig:typical real pet} shows three of them. As we can see, they
+varies considerably in characteristics despite all can be described as
+``typical'' \pet data. The purpose of the current work is to advocate robust
+and self-tuning algorithms. And the variability in the data sets provides
+excellent test examples. In addition, in this chapter, the models are
+configured with the non-informative priors and thus the parameters are
+exchangeable, similar to that of a mixture model. This creates a multimodal
+posterior surface for models with two or more components.
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{fig/Typical_PET}
+  \caption{Typical real \pet data}
+\end{figure}
+
 \section{Sequential Monte Carlo samplers}
 \label{sec:Sequential Monte Carlo samplers}
 
@@ -641,28 +666,28 @@ In settings in which the importance weights at time $t$ depend only upon the
 sample at time $t-1$, such as that considered here, it is relatively
 straightforward to consider sample-dependent, adapative specification of the
 sequence of distributions (typically by choosing the value of a tempering
-parameter, such as $\alpha_t$ based upon the current sample).
-\cite{Jasra:2010eh} proposed such a method of adaptive placing the
-distributions in \smc algorithms based on controlling the rate at which the
-effective sample size (\ess; \cite{Kong:1994ul}) falls. With very little computation cost, this provides an automatic
-method of specifying a tempering schedule in such a way that the \ess decays
-in a regular fashion.  \cite[Algorithm 2]{Schafer:2011bx} used a similar
-technique but by moving the particle system only when it resamples they are in
-a setting which would be equivalent to resampling at every timestep (with
-longer time steps, followed by multiple applications of the MCMC kernel) in
-our formulation. We advocate resampling only adaptively when \ess is smaller
-than certain preset threshold, and here we propose a more general adaptive
-scheme for the selection of the sequence of distributions which has
-significantly better properties when adaptive resampling is employed.
+parameter, such as $\alpha_t$ based upon the current sample).  In
+\cite{Jasra:2010eh} such a method of adaptive placing the distributions in
+\smc algorithms based on controlling the rate at which the effective sample
+size (\ess; \cite{Kong:1994ul}) falls was proposed. With very little
+computation cost, this provides an automatic method of specifying a tempering
+schedule in such a way that the \ess decays in a regular fashion.
+\cite[Algorithm 2]{Schafer:2011bx} used a similar technique but by moving the
+particle system only when it resamples they are in a setting which would be
+equivalent to resampling at every time step (with longer time steps, followed
+by multiple applications of the MCMC kernel) in our formulation. We advocate
+resampling only adaptively when \ess is smaller than certain preset threshold,
+and here we propose a more general adaptive scheme for the selection of the
+sequence of distributions which has significantly better properties when
+adaptive resampling is employed.
 
-The ESS was designed to assess the loss of
-efficiency arising from the use a simple weighted sample (rather than a simple
-random sample from the distribution of interest) in the computation of
-expectations. It's obtained by considering a sample approximation of a low
-order Taylor expansion of the variance of the importance sampling estimator of
-an arbitrary test function to that of the simple Monte Carlo estimator; the
-test function itself vanishes from the expression as a consequence of this low
-order expansion.
+The \ess was designed to assess the loss of efficiency arising from the use a
+simple weighted sample (rather than a simple random sample from the
+distribution of interest) in the computation of expectations. It's obtained by
+considering a sample approximation of a low order Taylor expansion of the
+variance of the importance sampling estimator of an arbitrary test function to
+that of the simple Monte Carlo estimator; the test function itself vanishes
+from the expression as a consequence of this low order expansion.
 
 In our context, allowing $W_{t-1}^{(i)}$ to denote the \emph{normalized
   weights} of particle $i$ at the end of time $t - 1$, and $w_t^{(i)}$ to
@@ -730,12 +755,11 @@ considering sampling from $\pi_{t-1}$ and targeting $\pi_t$ by simple
 importance sampling.
 
 \begin{figure}
-  \includegraphics[width=\linewidth]{fig/adaptive}
+  \includegraphics[width=\linewidth]{fig/Adaptive_Dist}
   \caption{A typical plot of $\alpha_t - \alpha_{t-1}$ against $\alpha_t$ (for
-    the Gaussian mixture model example of Section~\ref{sub:Gaussian Mixture
-      Model} using the \smc2 algorithm). The specifications of the adaptive
-    parameter (\ess or \cess) are adjusted such that all four samplers use
-    roughly the same number of distributions.}
+    the \pet compartmental model using \smc2 algorithm.) The specifications of
+    the adaptive parameter (\ess or \cess) are adjusted such that all four
+    samplers use roughly the same number of distributions.}
   \label{fig:adaptive_alpha}
 \end{figure}
 
