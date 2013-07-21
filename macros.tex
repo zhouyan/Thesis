@@ -1,16 +1,22 @@
 \usepackage{algorithm,algorithmic}
 
 \def\DeclareAbbr#1#2{\def#1{\textsc{#2}\xspace}}
+
 \DeclareAbbr{\aic}{aic}
 \DeclareAbbr{\ais}{ais}
 \DeclareAbbr{\bic}{bic}
+\DeclareAbbr{\bugs}{bugs}
+\DeclareAbbr{\cpu}{cpu}
 \DeclareAbbr{\dic}{dic}
 \DeclareAbbr{\ds}{ds}
 \DeclareAbbr{\fic}{fic}
 \DeclareAbbr{\fpe}{fpe}
 \DeclareAbbr{\gic}{gic}
+\DeclareAbbr{\gmm}{gmm}
+\DeclareAbbr{\gpu}{gpu}
 \DeclareAbbr{\ic}{ic}
 \DeclareAbbr{\ieee}{ieee}
+\DeclareAbbr{\jags}{jags}
 \DeclareAbbr{\mala}{mala}
 \DeclareAbbr{\mcmc}{mcmc}
 \DeclareAbbr{\mdl}{mdl}
@@ -18,16 +24,15 @@
 \DeclareAbbr{\mse}{mse}
 \DeclareAbbr{\nic}{nic}
 \DeclareAbbr{\nls}{nls}
+\DeclareAbbr{\ode}{ode}
 \DeclareAbbr{\pet}{pet}
+\DeclareAbbr{\pmcmc}{pmcmc}
 \DeclareAbbr{\ps}{ps}
 \DeclareAbbr{\rjmcmc}{rjmcmc}
 \DeclareAbbr{\sis}{sis}
 \DeclareAbbr{\smc}{smc}
 \DeclareAbbr{\tic}{tic}
 \DeclareAbbr{\unix}{unix}
-
-\def\bugs{\textsc{\sffamily bugs}\xspace}
-\def\jags{\textsc{\sffamily jags}\xspace}
 
 \def\aicc{\hbox{\aic{}\ensuremath{_c}}\xspace}
 
@@ -42,6 +47,7 @@
 \def\svec#1#2{#1^1,\dots,#1^{#2}}
 \def\mcvec#1#2{#1^{(1)},\dots,#1^{(#2)}}
 
+\def\calD{\mathcal{D}}
 \def\calE{\mathcal{E}}
 \def\calGa{\mathcal{Ga}}
 \def\calK{\mathcal{K}}
@@ -62,12 +68,15 @@
 
 \def\intd{\,\diff}
 \def\iid{\ifmmode\text{i.i.d.}\else{i.i.d.}\xspace\fi}
+\def\ymin{y_{\textsc{min}}}
+\def\ymax{y_{\textsc{max}}}
 
 \newcommand{\Mk}[1][k]{\ensuremath{{\calM_{#1}}}\xspace}
 \newcommand{\paramk}[1][k]{\ensuremath{\theta_{#1}}\xspace}
 \newcommand{\Paramk}[1][k]{\ensuremath{\Theta_{#1}}\xspace}
 \newcommand{\ess} {\ifmmode\text{\textsc{ess}}\else\textsc{ess}\xspace\fi}
 \newcommand{\cess}{\ifmmode\text{\textsc{cess}}\else\textsc{cess}\xspace\fi}
+\newcommand{\sd}{\ifmmode\text{\textsc{s.d.}}\else\textsc{s.d.}\xspace\fi}
 
 \def\supi#1{#1^{(i)}}
 \def\Xiu{\supi{X}}
@@ -83,3 +92,4 @@
 
 \def\STATESKIP{\hskip.68cm}
 \newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
+\newcolumntype{C}{>{\centering\arraybackslash}X}

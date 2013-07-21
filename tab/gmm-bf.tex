@@ -1,0 +1,17 @@
+\begin{table}
+  \def\B{\color{blue}\it}
+  \def\R{\color{red}\bf}
+  \begingroup\small
+    \begin{tabularx}{\linewidth}{lCCCC}
+      \toprule
+      Proposal scales  & \multicolumn{2}{c}{Manual} & Adaptive & Automatic \\
+      \cmidrule(lr){1-1}\cmidrule(lr){2-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}
+      Annealing scheme & Prior (2) & \multicolumn{3}{c}{Adaptive} \\
+      \cmidrule(lr){1-1}\cmidrule(lr){2-2}\cmidrule(lr){3-5}
+      Algorithm   & \multicolumn{4}{c}{Bayes facor estimates ($\log B_{4,5}\pm\text{\sd}$)} \\ \midrule
+      \smc2-\ds & $2.15\pm0.25$ & $2.14\pm0.21$ & $\B2.15\pm0.19$ & $2.15\pm0.20$ \\
+      \smc2-\ps & $2.15\pm0.23$ & $2.15\pm0.20$ & $\R2.15\pm0.18$ & $2.15\pm0.21$ \\
+      \bottomrule
+    \end{tabularx}
+  \endgroup
+\end{table}

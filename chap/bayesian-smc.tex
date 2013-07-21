@@ -72,9 +72,10 @@ configured with the non-informative priors and thus the parameters are
 exchangeable, similar to that of a mixture model. This creates a multimodal
 posterior surface for models with two or more components.
 
-\begin{figure}
+\begin{figure}[t]
   \includegraphics[width=\linewidth]{fig/Typical_PET}
   \caption{Typical real \pet data}
+  \label{fig:typical real pet data}
 \end{figure}
 
 \section{Sequential Monte Carlo samplers}
@@ -238,7 +239,7 @@ Each approach admits a natural \smc strategy.
 \label{sub:smc1: An all-in-one approach}
 
 One could consider obtaining samples from the same distribution employed in
-the \rjmcmc approach to model comparison, namely:
+the \rjmcmc approach to model comparison, namely,
 \begin{equation}
   \pi^{(1)}(\Mk,\paramk) \propto \pi(\Mk)\pi(\paramk|\Mk)p(\data|\paramk,\Mk)
 \end{equation}
@@ -252,7 +253,7 @@ between them. In the remainder of this section, we use the notation
 $(\Mk[t],\paramk[t])$ to denote a random sample on the space
 $\bigcup_{k\in\calK}(\{\Mk\}\times\Paramk)$ at time $t$. One simple approach,
 which might be expected to work well, is the use of an annealing scheme such
-that:
+that,
 \begin{equation}
   \pi^{(1)}_t(\Mk[t],\paramk[t]) \propto \pi(\Mk[t])\pi(\paramk[t]|\Mk[t])
   p(\data|\paramk[t],\Mk[t])^{\alpha(t/T)},
@@ -273,7 +274,7 @@ generic approach. These choices lead to Algorithm~\ref{alg:smc1}.
 
 % Given a weighted collection of samples $\{W^{(k,i)}_T, X^{(k,i)}_{T} =
 % (K_T^{(k,i)},\theta_T^{(k,i)})\}_{i=1}^N$ targeting $\pi^{(1)}$, one may
-% approximate the two distributions of interest using the empirical measures:
+% approximate the two distributions of interest using the empirical measures,
 % \begin{align*}
 %   \widehat{\pi}^{(1)}(K = k) &= \sum\limits_{i=1}^N W^{(k,i)} \delta_{k,
 %   K^{(k,i)}_T} \\
@@ -348,7 +349,7 @@ Algorithm~\ref{alg:smc2}.
 The estimator of the posterior model probabilities depends upon the approach
 taken to estimate the normalizing constant. Direct estimation of the evidence
 can be performed using the output of this \smc algorithm and the standard
-unbiased estimator, termed \smc2-\ds below:
+unbiased estimator, termed \smc2-\ds below,
 \begin{equation}\label{eq:smc2-ds}
   \sum_{i=1}^N \frac{\pi(\theta_0^{(k,i)}|\Mk)}{\nu(\theta_0^{(k,i)})} \times
   \prod_{t=2}^T \sum_{i=1}^N W_{t-1}^{(k,i)}
@@ -364,7 +365,7 @@ and hence to obtain an estimate of the ratio of normalizing constants.
 Section~\ref{sub:Path Sampling via smc2/smc3} provides details.
 
 The posterior distribution of the parameters conditional upon a particular
-model can also be approximated with:
+model can also be approximated with,
 \begin{equation*}
   \widehat{\pi}_{T_k}^{(2,k)}(\diff\theta) =
   \sum\limits_{i=1}^{N} W_{T_k}^{(k,i)}
@@ -528,7 +529,7 @@ defines a family of distributions, $\{p_{\alpha} = q_{\alpha} /
 Z_\alpha\}_{\alpha \in [0,1]}$ which move smoothly from $p_0 = q_0 / Z_0$ to
 $p_1 = q_1 / Z_1$ as $\alpha$ increases from zero to one, one can estimate the
 logarithm of the ratio of their normalizing constants via a simple integral
-relationship which holds under very mild regularity conditions:
+relationship which holds under very mild regularity conditions,
 \begin{equation}
   \log\biggl( \frac{Z_1}{Z_0} \biggr) =
   \int_{0}^{1} \Exp_\alpha \biggl[ \rnd{\log q_{\alpha}(\cdot)}{\alpha}
@@ -692,8 +693,8 @@ from the expression as a consequence of this low order expansion.
 In our context, allowing $W_{t-1}^{(i)}$ to denote the \emph{normalized
   weights} of particle $i$ at the end of time $t - 1$, and $w_t^{(i)}$ to
 denote the \emph{unnormalized} incremental weights of particle $i$ during
-iteration $t$ the \ess calculated using the current weight of each particle is
-simply:
+iteration $t$, the \ess calculated using the current weight of each particle
+is simply,
 \begin{equation}
   \ess_t = \left[ {\sum_{j=1}^N\left( \frac{W_{t-1}^{(j)}
           w_t^{(j)}}{\sum_{k=1}^NW_{t-1}^{(k)}w_t^{(k)}}\right)^2}
@@ -726,7 +727,7 @@ this is via the sample approximation of a Taylor expansion of the relative
 variance of such an estimator exactly as in the \ess.
 
 Such a procedure leads us to a quantity which we have termed the
-\emph{conditional} \ess (\cess):
+\emph{conditional} \ess (\cess),
 \begin{equation}
   \cess_t = \left[ {\sum_{j=1}^N N W_{t-1}^{(j)} \left(
         \frac{w_t^{(j)}}{\sum_{k=1}^N
@@ -734,16 +735,6 @@ Such a procedure leads us to a quantity which we have termed the
   = \frac{\bigl(\sum_{j=1}^NW_{t-1}^{(j)}w_t^{(j)}\bigr)^2}
   {\sum_{k=1}^N \frac{1}{N} W_{t-1}^{(k)} \bigl(w_t^{(k)}\bigr)^2}
 \end{equation}
-%% \begin{equation}
-%%   \cess_n =
-%% \frac
-%%   {\bigl(\sum_{j=1}^N W_{t-1}^{(j)}w_t^{(j)}\bigr)^2}
-%%   {\sum_{j=1}^N W_{t-1}^{(j)}\bigl(w_t^{(j)}\bigr)^2}
-%% =
-%% \frac
-%%   {\bigl(\sum_{j=1}^NW_{t-1}^{(j)}w_t^{(j)}\bigr)^2}
-%%   {\sum_{j=1}^N \frac{1}{N} W_{t-1}^{(j)}\bigl(w_t^{(j)}\bigr)^2}
-%% \end{equation}
 which is equal to the \ess only when resampling is conducted during every
 iteration. The factor of $1/N$ in the denominator arises from the fact that
 $\{W_{t-1}^{(i)}\}$ is normalized to sum to unity rather than to have expectation
@@ -754,7 +745,7 @@ sample approximation of the expected sum of unnormalized weights when
 considering sampling from $\pi_{t-1}$ and targeting $\pi_t$ by simple
 importance sampling.
 
-\begin{figure}
+\begin{figure}[t]
   \includegraphics[width=\linewidth]{fig/Adaptive_Dist}
   \caption{A typical plot of $\alpha_t - \alpha_{t-1}$ against $\alpha_t$ (for
     the \pet compartmental model using \smc2 algorithm.) The specifications of
@@ -763,23 +754,64 @@ importance sampling.
   \label{fig:adaptive_alpha}
 \end{figure}
 
+When using \cess to adaptively place distributions, a value $\cess^* \in (0,
+1)$ is chosen, and at each iteration $t$, $\alpha_t$ is chosen such that
+$\cess_t = \cess^*$ (with a preset numeric error tolerance.)
 Figure~\ref{fig:adaptive_alpha} shows the variation of $\alpha_t -
 \alpha_{t-1}$ with $\alpha_t$ when fixed reductions in \ess and \cess are used
 to specify the sequence of distributions both when resampling is conducted
 during every iteration (or equivalently, when the \ess falls below a threshold
 of 1.0) and when resampling is conducted only when the \ess falls below a
-threshold of 0.5. As is demonstrated in Section~\ref{sec:Illustrative
-  Applications} the \cess-based scheme leads to a reduction in estimator
-variance of around 20\% relative to a manually tuned (quadratic; see Section
-\ref{sec:gmm_res}) schedule while the \ess-based strategy provides little improvement
-over the linear case unless resampling is conducted during every iteration.
+threshold of 0.5. It is found that for the simulated \pet data set, the
+\cess-based scheme leads to a reduction in estimator variance around 20\%
+relative to a manually tuned ($\alpha(t/T_k) = (t/T_k)^5$) schedule
+while the \ess-based strategy provides little improvement over the linear case
+($\alpha(t/T_k) = t/T_k$) unless resampling is conducted during every
+iteration. The effect for the real data sets, which varies considerably from
+each as seen in figure~\ref{fig:typical real pet data}, is more prominent. The
+variance reduction can more than 50\%.
 
-In addition to providing a significantly better performance at essentially no
-cost, the use of the \cess emphasizes the purpose of the adaptive
-specification of the sequence of distributions: to produce a sequence in which
-the difference between each successive pair is the same (when using the \cess
-one is seeking to ensure that the variance of the importance weights one would
-arrive at if using $\pi_{t-1}$ as a proposal for $\pi_t$ is constant).
+\subsubsection[cess*, number of distributions, and estimator variance]
+{$\cess^*$, number of distributions, and estimator variance}
+\label{ssub:cess*, number of distributions, and estimator variance}
+
+It is intuitively to see that, when using a \cess-based adaptive scheme, where
+at each iteration $t$, $\cess_t$ is fixed with a value $\cess^*$, the more
+close $\cess^*$ is to $1$, the larger number of distributions will be placed
+and better estimates can be obtained. Unfortunately it is not trivial to
+establish a quantitative relations among these three quantities even
+asymptotically. However, it is straightforward to conduct an empirical study
+of these relations.
+
+We consider the simulated \pet data set using the \smc2 sampler with 1,000
+particles. Figure~\ref{fig:cess iter mean} plots the average number of
+distributions (from 100 simulations for each value of $\cess^*$) against the
+value of $(1 - \cess^*)$ on log scales. It can be seen that the number of
+distributions is proposal to $1 / (1 - \cess^*)$. This relation holds even for
+sampler configurations where a very small number of distributions are used.
+Similarly, figure~\ref{fig:cess path var} shows the relation between the
+variance of path sampling estimator and the value of $\cess^*$.
+
+\begin{figure}[t]
+  \includegraphics[width=\linewidth]{fig/CESS_Iter_Mean}
+  \caption{Relations between average number of distributions and $\cess^*$.
+    The number of distributions ranges from $~30$ to $~1300$.}
+  \label{fig:cess iter mean}
+\end{figure}
+
+\begin{figure}[t]
+  \includegraphics[width=\linewidth]{fig/CESS_Path_Var}
+  \caption{Relations between variance of the path sampling estimator and
+    $\cess^*$.}
+  \label{fig:cess path var}
+\end{figure}
+
+Though the coefficient of the proportionality varies for different
+applications or data sets, the relation shown in figures~\ref{fig:cess iter
+  mean} and~\ref{fig:cess path var} provide a useful guidelines to select the
+value of $\cess^*$. A small sample experiment can be conducted before using a
+value of $\cess^*$ more close to $1$ to obtain satisfactory estimates or to
+utilize given computational resources.
 
 %% \ess only measures the performance of the particle system approximating the
 %% target distributions, rather than the variances of the target distributions
@@ -854,25 +886,23 @@ will considerably improve it. In the particular case of Metropolis-Hastings
 kernels, the mixing speed relies on adequate proposal scales.
 
 We adopt a simpler approach based on \cite{Jasra:2010eh}. They applied an idea
-used within adaptive \mcmc methods \cite{Andrieu:2006tw}
-to \smc samplers by using variance of parameters estimated from its particle
-system approximation as the proposal scale for the next iteration, suitably
-scaled with reference to the dimension of the parameters to be proposed.
-Although, in practice we found that such an automatic approach does not always
-lead to optimal acceptance rates it generally produces satisfactory results
-and is simple to implement. In difficult problems alternative approaches to
-adaptation could be employed; one approach demonstrated in
-\cite{Jasra:2010eh} is to simply employ a pair of acceptance rate  thresholds
-and to alter the proposal scale from the simply estimated value whenever the
-acceptance rate falls outside those threshold values.
+used within adaptive \mcmc methods \cite{Andrieu:2006tw} to \smc samplers by
+using variance of parameters estimated from its particle system approximation
+as the proposal scale for the next iteration, suitably scaled with reference
+to the dimension of the parameters to be proposed.  Although, in practice we
+found that such an automatic approach does not always lead to optimal accept
+rates it generally produces satisfactory results and is simple to implement.
+In difficult problems alternative approaches to adaptation could be employed;
+one approach demonstrated in \cite{Jasra:2010eh} is to simply employ a pair of
+accept rate  thresholds and to alter the proposal scale from the simply
+estimated value whenever the accept rate falls outside those threshold values.
 
-More sohisticated proposal strategies could undoubtedly improve performance
+More sophisticated proposal strategies could undoubtedly improve performance
 further and warrant further investigation. One possible approach is using the
-Metropolis adjusted Langevin algorithm
-(\mala; see \cite{Roberts:1996vd}). In summary, \mala derives a
-Metropolis-Hastings proposal kernel for a target $\pi$ which satisfies
-suitable differentiability and positivity conditions, from the Langevin
-diffusion,
+Metropolis adjusted Langevin algorithm (\mala; see \cite{Roberts:1996vd}). In
+summary, \mala derives a Metropolis-Hastings proposal kernel for a target
+$\pi$ which satisfies suitable differentiability and positivity conditions,
+from the Langevin diffusion,
 \begin{equation*}
   \diff L_t = \frac{1}{2}\nabla\log\pi(L_t)\diff t + \diff B_t
 \end{equation*}
@@ -895,6 +925,42 @@ $t = n - 1$ to estimate the covariance matrix of $\pi_{n}$ and thus tune the
 scale $h$ on-line. As these algorithms are known to be somewhat sensitive to
 scaling, and we seek approaches robust enough to employ with little user
 intervention, we have not investigated this strategy here.
+
+\begin{figure}[t]
+  \includegraphics[width=\linewidth]{fig/Adaptive_Proposal}
+  \caption{Average random walk accept rates for \pet compartmental models with
+    data sets in figure~\ref{fig:typical real pet data} using adaptive
+    proposal scales}
+  \label{fig:pet adaptive proposal}
+\end{figure}
+
+\begin{figure}[t]
+  \includegraphics[width=\linewidth]{fig/Fixed_Proposal}
+  \caption{Average random walk accept rates for \pet compartmental models with
+    data sets in figure~\ref{fig:typical real pet data} using fixed proposal
+    scales}
+  \label{fig:pet fixed proposal}
+\end{figure}
+
+Adaptive specification of proposals is most useful when manual tuning is
+difficult or even impossible. We consider the three real \pet data sets shown
+in figure~\ref{fig:typical real pet data}. When using adaptive proposal
+scales, the average accept rates of the four random walk blocks (for
+parameters $\phi_{1:r}$, $\theta_{1:r}$, $\tau$ and $\nu$, respectively), is
+shown in figure~\ref{fig:pet adaptive proposal}. Though the results are not
+close to the optimal value $0.234$, they are more than acceptable. In
+contrast, in figure~\ref{fig:pet fixed proposal} we shown the average accept
+rates when using a scheme of proposal scales which is obtained from another
+typical real \pet data set. The scheme is tuned such that for all parameters,
+the accept rates falls within the range $[0.2, 0.4]$ for $\alpha_t \in [0,
+1]$. It can be seen that, not only the results varies considerably due to the
+variety of the data sets, which is expected, for one of the data set, the
+parameter $\nu$ fails to move at all. Considering that there are about a
+quarter million such data sets to be estimated in a single \pet scan,
+adaptively specifying the proposal scales is the only vital approach. Note
+that, this problem is not unique to the \pet compartmental models at all. In
+many realistic applications, there are a large number of data sets varies
+considerably from each other.
 
 %A simpler alternative is based on the observation that in many situations,
 %especially in Bayesian model comparison context (for example using a \smc2
@@ -939,3 +1005,710 @@ intervention, we have not investigated this strategy here.
 
 \section{An automatic, generic framework}
 \label{sec:An automatic, generic framework}
+
+With the above refinements, we are ready to implement the \smc2 algorithm
+with minimal tuning and application-specific effort while providing robust and
+accurate estimates of the model evidence $p(\data|\Mk)$. First the geometric
+annealing scheme that connects the prior $\pi(\paramk|\Mk)$ and the posterior
+$\pi(\paramk|\data,\Mk)$, provides a smooth path for a wide range of problems.
+
+Second, the actual annealing schedule under this scheme can be determined
+through the adaptive schedule as described above. The advantage of the
+adaptive schedule will be shown empirically later.
+
+Third, we can adaptively specify the Metropolis random walk (or \mala) scales
+through the estimation of their scaling parameters as the sampler iterates. In
+contrast to the \mcmc setting, where such adaptive algorithms will usually
+require a burn-in period, which will not be used for further estimation, in
+\smc, the variance and covariance estimates come at almost no cost, as all the
+samples will later be used for marginal likelihood estimation. Additionally,
+adaptation within \smc does not require separate theoretical justification --
+something which can significantly complicate the development of effective,
+theoretically justified schemes in the \mcmc setting. Alternatively, we can
+also specify the proposal scales in a deterministic, but sensible way. Since
+\smc algorithms are relatively robust to the change of scales, such
+deterministic scales will not require the same degree of tuning as is required
+to obtain good performance in \mcmc algorithms.
+
+The adaptive strategy can be applied to both algorithms directly. The
+applicability to the \smc3 algorithm depends on the nature of the sequence
+of distributions. We outline the strategy in Algorithm~\ref{alg:adaptive}.
+
+\begin{algorithm}
+\begin{algorithmic}
+  \STATE \emph{Accuracy control}
+  \STATE\STATESKIP Set constant $\cess^\star\in(0,1)$, using a small pilot
+  simulation if necessary.
+
+  \STATE \emph{Initialization:} Set $t\leftarrow0$.
+  \STATE\STATESKIP Perform the \emph{Initialization} step
+    as in Algorithm~\ref{alg:smc1} or~\ref{alg:smc2}
+
+  \STATE \emph{Iteration:} Set $t\leftarrow t + 1$
+
+  \STATE\STATESKIP \emph{Step size selection}
+  \STATE\STATESKIP\STATESKIP Use a binary search %(or other search algorithms)
+  to find $\alpha^\star$ such that $\cess_{\alpha^\star} = \cess^\star$
+  \STATE\STATESKIP\STATESKIP Set $\alpha_t \leftarrow\alpha^\star$ if
+    $\alpha^\star \le 1$, otherwise set $\alpha_t\leftarrow1$
+
+  \STATE\STATESKIP \emph{Proposal scale calibration}
+  \STATE\STATESKIP\STATESKIP
+  Computing the importance sampling estimates of first two moments of
+  parameters.
+  \STATE\STATESKIP\STATESKIP
+  Set the proposal scale of the Markov proposal $K_t$ with the estimated
+  parameter variances.
+
+  \STATE\STATESKIP Perform the \emph{Iteration} step as in
+  Algorithm~\ref{alg:smc1} or~\ref{alg:smc2} with the found $\alpha_t$
+  and proposal scales.
+
+  \STATE \emph{Repeat} the \emph{Iteration} step %up to $t = T$ (or $T_k$ in the
+    %case of Algorithm~\ref{alg:smc2})}
+    \emph{until $\alpha_t = 1$} then set $T=t$.
+\end{algorithmic}
+\caption{An Automatic, Generic Algorithm for Bayesian Model Comparison}
+\label{alg:adaptive}
+\end{algorithm}
+
+As laid out above, the algorithms require minimal tuning. Its robustness,
+accuracy and efficiency will be shown in section~\ref{sec:Illustrative
+  applications} through comprehensive empirical studies. Here we shown some
+interesting yet intuitively expected results. We consider the simulated \pet
+data set, using a \smc2 sampler with $1000$ particles. It is already shown
+that using either the adaptive specification of distribution placement or the
+\mcmc proposal scales can give better results. The combination of the two can
+lead to even better results. The use \cess-based schedule scheme will not only
+place more distributions where the target distributions changes more rapidly,
+but also it will place more distributions where the \mcmc algorithm mixes
+slower. To illustrate the idea, we consider four configurations of the
+sampler. The proposal scales are specified either adaptively or using a fixed
+scheme which is manually tuned. The placement of the distributions is either
+\cess-based or using a schedule such that $\alpha(t/T_k) = (t/T_k)^5$.
+
+\begin{table}[t]
+  \begin{tabularx}{\linewidth}{lXX}
+    \toprule
+    & \multicolumn{2}{c}{Proposal scales} \\
+    \cmidrule(lr){2-3}
+    Schedule & Fixed & Adaptive \\
+    \midrule
+    Quadratic & $1.6\pm0.27$ & $1.6\pm0.22$ \\
+    \cess     & $1.6\pm0.19$ & $1.6\pm0.15$ \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Bayes factor estimates ($\log B_{1,2}\pm\sd$)
+    for the simulated \pet data set using \smc2 algorithm. All four samplers
+    are configured such that about $200$ distributions are used.}
+  \label{tab:pet four sampler same dist}
+\end{table}
+
+The results are shown in table~\ref{tab:pet four sampler same dist}. More
+comprehensive results can be found in section~\ref{sec:Illustrative
+  applications}. However, from this particular example, we can see that the
+combination of the two adaptive schemes provides superior performance at very
+little computation cost. Table~\ref{tab:pet four sampler same iter} shows
+actually equivalent results. Instead of fixing the number of distributions, we
+configured the samplers such that they all give roughly the same precision of
+the estimates. It is rather obvious to see that the use of adaptive methods
+actually give a considerable reduction of computational cost for a given
+desired precision of the estimates.
+
+\begin{table}[t]
+  \begin{tabularx}{\linewidth}{lXX}
+    \toprule
+    & \multicolumn{2}{c}{Proposal scales} \\
+    \cmidrule(lr){2-3}
+    Schedule & Fixed & Adaptive \\
+    \midrule
+    Quadratic & $200$ & $182$ \\
+    \cess     & $175$ & $157$ \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Number of distributions used for the simulated \pet data set using
+    \smc2 algorithm. All four samplers are configured such that the Bayes
+    factor estimates ($\log B_{1,2}$) have a standard deviation $0.27$.}
+  \label{tab:pet four sampler same iter}
+\end{table}
+
+We shall also note that \smc1 is less straightforward as the between model
+moves still require effort to design and implement. In \smc3, the
+specification of the sequences between posterior distributions are less
+generic compared to the geometric annealing scheme in \smc2. However, the
+adaptive schedule and automatic tuning of \mcmc proposal scales, both can be
+applied in these two algorithms in principal.
+
+Although further enhancements and refinements are clearly possible, we focus
+in the remainder of this article on this simple, generic algorithm which can
+be easily implemented in any application and has proved sufficiently powerful
+to provide good estimation in the examples we have encountered thus far.
+
+\section{Illustrative applications}
+\label{sec:Illustrative applications}
+
+In this section, we will use three examples to illustrate the algorithms. The
+Gaussian mixture model is discussed first, with implementations for all three
+\smc algorithms with comparison to \rjmcmc and \pmcmc. It will be shown that
+all five algorithms agree on the results while the performance in
+terms of Monte Carlo variance varies considerably. It will also be
+demonstrated how the adaptive refinements of the algorithms behaves in
+practice. We will reach the conclusion that considering ease of
+implementation, performance and generality, the \smc2 algorithm is most
+promising among all three strategies.
+
+Then two more realistic examples, a nonlinear \ode model and a Positron
+Emission Tomography compartmental model are used to study the performance and
+robustness of algorithm \smc2 compared to \ais and \pmcmc. Various
+configurations of the algorithms are considered including both sequential and
+parallelized implementations.
+
+The \texttt{C++} implementations, which make use of the vSMC library of
+\cite{software:VSMC}, of all examples can be found at
+\url{https://github.com/zhouyan/vSMC}.
+
+\subsection{Gaussian Mixture Model}
+\label{sub:Gaussian Mixture Model}
+
+Since \citet{Richardson:1997ea}, the Gaussian mixture model (\gmm) has
+provided a canonical example of a model-order-determination problem. We use
+the model formulation of \citet{DelMoral:2006hc} to illustrate the efficiency
+and robustness of the methods proposed in this paper compared to other
+approaches.  The model is as follows; data $\data = (y_1,\dots,y_n)$ are
+independently and identically distributed as
+\begin{equation*}
+  y_i|\theta_r \sim \sum_{j=1}^r \omega_j\calN(\mu_j,\lambda_j^{-1})
+\end{equation*}
+where $\calN(\mu_j,\lambda_j^{-1})$ denotes the Normal distribution with
+mean $\mu_j$ and precision $\lambda_j$; $\theta_r =
+(\mu_{1:r},\lambda_{1:r},\omega_{1:r})$ and $r$ is the number of components
+in each model. The parameter space is thus $\Real^r \times (\Real^{+})^r\times
+\Delta_r$ where $\Delta_r = \{\omega_{1:r}:0\le\omega_j\le1;
+\sum_{j=1}^r\omega_j=1\}$ is the standard $r$-simplex. The priors which are
+the same for each component are taken to be
+$\mu_j\sim\calN(\xi,\kappa^{-1})$, $\lambda_j\sim\calGa(\nu,\chi)$ and
+$\omega_{1:r}\sim\calD(\rho)$ where $\calD(\rho)$ is the symmetric Dirichlet
+distribution with parameter $\rho$ and $\calGa(\nu,\chi)$ is the Gamma
+distribution with shape $\nu$ and scale $\chi$. The prior parameters are set
+in the same manner as in \citet{Richardson:1997ea}. Specifically, let $\ymin$
+and $\ymax$ be the minimum and maximum of data $\data$, the prior parameters
+are set such that
+\begin{equation*}
+  \xi = (\ymax + \ymin) / 2, \quad \kappa = (\ymax - \ymin)^{-2}, \quad
+  \nu = 2, \quad \chi = 50\kappa, \quad \rho = 1
+\end{equation*}
+The data is simulated from a four components model with $\mu_{1:4} = (-3, 0,3,
+6)$, and $\lambda_j =2$, $\omega_j = 0.25$, $j = 1,\dots,4$.
+
+We consider several algorithms. First the \rjmcmc algorithm as in
+\citet{Richardson:1997ea}, and second an implementation of the \smc1
+algorithm. Next \ais, \pmcmc and \smc2 are used for within-model
+simulations. The last is an implementation of the \smc3 algorithm. In all
+the algorithms, the local move which does not change the dimension of the
+model is constructed as a composition of Metropolis-Hastings random walk
+kernels:
+\begin{enumerate}
+  \item Update $\mu_{1:r}$ using a multivariate Normal random walk proposal.
+  \item Update $\lambda_{1:r}$ using a multivariate Normal random walk on
+    logarithmic scale, i.e., on $\log\lambda_{j}$, $j = 1, \dots, r$.
+  \item Update $\omega_{1:r}$ using a multivariate Normal random walk on logit
+    scale, i.e., on $\omega_{j}/\omega_r$, $j = 1,\dots,r-1$.
+\end{enumerate}
+The \rjmcmc, \smc1 and \smc3 algorithms use two additional
+reversible jump moves. The first is a combine and split move; the second is a
+birth and death move. Both are constructed in the same manner as in
+\citet{Richardson:1997ea}. Also in these implementations, an adjacency
+condition was imposed on the means $\mu_{1:r}$, such that $\mu_1 < \mu_2 <
+\dots < \mu_r$. No such restriction was used for other algorithms.
+
+In \smc1, \smc2 and \pmcmc implementations, the distributions are chosen
+with a geometric schedule, i.e., as in Equation~\eqref{eq:geometry_1} for
+\smc1 and Equation~\eqref{eq:geometry_2} for the other two. This annealing
+scheme has been used in \citet{DelMoral:2006hc,Jasra:2007in} and many other
+works. The geometric scheme can also be seen in \citet{Calderhead:2009bd} for
+\pmcmc tempering. A schedule $\alpha(t/T) = (t/T)^p$, with $p = 2$ was used.
+The rationale behind this particular schedule can be seen in
+\citet{Calderhead:2009bd} and other values of $p$ were also tried while
+$p\approx2$ performs best in this particular example. The adaptive schedule
+was also implemented for \smc2 and \ais algorithms.
+
+The proposal scales for each block of the random walks are specified
+dynamically according to values of $\alpha(t/T)$ for the \smc2 and \ais
+algorithms and also manually tuned for other algorithms such that the
+acceptance rates fall in $[0.2, 0.5]$. Later for the \smc2 and \ais
+algorithms, we also consider adaptive schedule of the distribution
+specification parameter $\alpha(t/T)$ and the proposal scales of the random
+walks.
+
+For \smc2, \smc3 and \ais we consider both the direct estimator and the
+path sampling estimator. For \pmcmc we consider the path sampling estimator.
+
+\subsubsection{Results}\label{sec:gmm_res}
+
+The \smc1 implementation uses $10^4$ particles and $500$ distributions.
+The \rjmcmc implementation uses $5\times10^6$ iterations in addition to
+$10^6$ iterations of burn-in period. The resulting estimates of model
+probabilities are shown in Table~\ref{tab:gmm-rj}.
+
+\begin{table}
+  \begingroup\small\begin{tabularx}{\linewidth}{XXccccccc}
+    \toprule
+    & & \multicolumn{7}{c}{Number of components} \\
+    \cmidrule(lr){3-9}
+    Algorithm & Quantity & $\le2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $\ge8$ \\
+    \midrule
+    \smc1  & $\Prob(M = \Mk)$
+    & $0$ & $0.00257$ & $0.886$ & $0.103$ & $0.00715$ & $0.00128$ & $0$ \\
+    & $\log B_{4,k}$
+    & $\infty$ & $5.84$ & $0$ & $2.15$ & $4.82$ & $6.54$ & $\infty$ \\
+    \rjmcmc  & $\Prob(M = \Mk)$
+    & $0$ & $0.000526$ & $0.887$ & $0.103$ & $0.00623$ & $0.00324$ & $0$ \\
+    & $\log B_{4,k}$
+    & $\infty$ & $6.56$ & $0$ & $2.15$ & $4.96$ & $5.61$ & $\infty$ \\
+    \bottomrule
+  \end{tabularx}\endgroup
+  \caption{Gaussian mixture model estimates obtained via \smc1 and \rjmcmc}
+  \label{tab:gmm-rj}
+\end{table}
+
+The \smc2, \smc3 and \ais implementations use $1,000$ particles and
+$500$ iterations. The \pmcmc implementation uses $50$ chains and $10^4$
+iterations in addition to $10^4$ iterations of burn-in period --- these
+implementations have approximately equal computational costs. From the
+results obtained under the \smc1 and \rjmcmc algorithms it is clear that, in this
+particular example, simulations for models with fewer than ten components are
+adequate to characterize the model space. Therefore, under this
+configuration, the cost is roughly the same in terms of computational
+resources as that of the \smc1 and \rjmcmc algorithms. From the results of
+\rjmcmc and \smc1, we consider four and five components models (i.e., the
+true model and the most competitive amongst the others). The estimates are shown in
+Table~\ref{tab:gmm-pair}  which, like all of the other tables in this section,
+summarises the Monte Carlo variability of 100 replicate runs of each algorithm..
+
+\begin{table}
+  \begingroup\small\begin{tabularx}{\linewidth}{lXXXXXXX}
+    \toprule
+    & \multicolumn{7}{c}{Algorithms} \\
+    \cmidrule(lr){2-8}
+    Quantity
+    & \smc2-\ds & \smc2-\ps & \smc3-\ds & \smc3-\ps & \ais-\ds &
+    \ais-\ps & \pmcmc \\
+    \midrule
+    $\log B_{4,5}$
+    & $2.15$ & $2.15$ & $2.16$ & $2.21$ & $2.16$ & $2.17$ & $2.63$ \\
+    \sd
+    & $0.25$&$\color{red}{\bf 0.22}$ & $0.61$&$0.62$ & $1.12$&$1.10$ & $0.41$
+    \\
+    \bottomrule
+  \end{tabularx}\endgroup
+  \caption{Gaussian mixture model estimates obtained via \smc2, \smc3, \ais and \pmcmc}
+  \label{tab:gmm-pair}
+\end{table}
+
+From Tables~\ref{tab:gmm-rj} and~\ref{tab:gmm-pair}, it can be seen that the
+standard estimators (\rjmcmc, \smc1, \smc2-\ds, \smc3-\ds and
+\ais-\ds) agree with each other. Among the path sampling estimators,
+\smc2-\ps and \ais-\ps have little bias. \smc3-\ps shows a little more
+bias. The \pmcmc algorithm has a considerable larger bias as the number of
+distributions is relatively small (as noted previously, a larger number will
+negatively affect the mixing speed).
+
+In terms of Monte Carlo variance, in Table~\ref{tab:gmm-pair}, \smc2
+clearly has an advantage compared to its no-resampling variant, \ais. The
+differences of Monte Carlo \sd between \smc2, \smc3 and \pmcmc,
+although they do not affect model selection in this particular example, are
+considerable.
+
+\paragraph{Effects of resampling} It is clear from these results that
+resampling (when required) can substantially improve the estimation of
+normalising constants within an \smc framework. This doesn't contradict the
+statement in \cite{DelMoral:2006hc} which suggests that resampling may not
+much help when the normalising constant is the object of interest: the
+theoretical argument which supports this relies upon the assumption that the
+Markov kernel used to mutate the particles mixes extremely rapidly and the
+result is obtained under the assumption that resampling is performed after
+every iteration. When the Markov kernel is not so rapidly mixing, the
+additional stability provided by the resampling operation can outweight the
+attendant increase in Monte Carlo variance and that is what we observed here
+(and in the case of the other examples considered below; results not shown).
+
+\paragraph{Effects of adaptive schedules} To assess the evolution of
+distributions with an adaptive schedule, we consider the relation between
+$\alpha_t - \alpha_{t-1}$ and $\alpha_t$. As stated before, one of the
+motivations of using \cess for adaptive placement of distribution is to
+ensure that $\alpha_t$ evolves the same path regardless the resampling
+strategies. Figure~\ref{fig:adaptive_alpha} shows the evolution of $\alpha_t$
+when fixing \ess or \cess and resampling every iteration or only when $\ess <
+N/2$. As shown in the plot, when fixing \cess, the evolution of the
+distributions is not affected by the resampling strategy. In contrast, fixing
+\ess yields a sequence of distributions which depends strongly upon the
+resampling strategy.
+
+% Recall that, the purpose of using an adaptive schedule is to construct a
+% ``smooth'' sequence of distributions. Though the precise meaning of
+% ``smoothness'' may vary from one application to another and both changes in
+% \ess and \cess can be reasonably used as measures of it, it shall note that
+% at very least, this is a property of the sequence of the distributions
+% regardless of the resampling strategies. From this perspective, using is
+% \cess is a more plausible approach.
+
+% In terms of the actual performance when using the \cess adaptive strategy
+% in \smc2 algorithm, a reduction of standard deviation of 20\% was
+% observed comparing to $\alpha(t/T) = t/T$ and very close to the carefully
+% hand-chosen $\alpha(t/T) = (t/T)^2$. When applied to the \smc3
+% algorithm, 50\% reduction was observed. If the \ess adaptive strategy is
+% used instead, similar standard deviation reduction is observed when
+% resampling is performed every iteration but no significant effect was
+% observed when resampling was only performed when $\ess < N/2$.
+
+In terms of the actual performance when using the \cess adaptive strategy in
+the \smc2 and \ais algorithms, a reduction of standard deviation of 20\% was
+observed comparing to $\alpha(t/T) = (t/T)^2$, the one shown in
+Table~\ref{tab:gmm-pair}. When applied to the \smc3 algorithm, 50\%
+reduction was observed. If the \ess adaptive strategy is used instead,
+similar standard deviation reduction is observed when resampling is performed
+every iteration but no significant effect was observed when resampling
+was only performed when $\ess < N/2$ (i.e., using \ess rather than \cess
+entirely eliminated the benefit).
+
+\paragraph{Effects of adaptive proposal scales} When using the \smc2
+algorithm, if the adaptive strategy of \citet{Andrieu:2006tw} is applied,
+where the important sampling estimates of the variance of parameters are
+included in the adaptation, the acceptance rates fall within $[0.2, 0.5]$
+dynamically without manual tuning as for the results in
+Table~\ref{tab:gmm-pair}. It should be noted that in this particular example,
+it is the variance of $\log\lambda_i$ being estimated as the corresponding
+random walk block operates on the log scale.  The same principle applies to
+the weight parameters, which have random walks on logit scale.
+Approximately 20\% reduction in standard deviation was observed.
+
+% However, there are no significant improvement in terms of reduction of
+% estimator variances. This can be viewed as evidence that \smc algorithms
+% are more robust to the change of proposal scales.
+
+\subsection{Nonlinear Ordinary Differential Equations}
+
+The example from the previous section suggests that \smc2 performs well
+relative to the other \smc possibilities. Given the wide range of settings
+in which it can be easily deployed, we will now concentrate
+further on this method. It also suggests that in the simple case of Gaussian
+mixtures, a complete adaptive strategy for both distribution specification
+and proposal scales works well. In this section, this will now be further
+explored in a more complex model, a nonlinear ordinary differential equations
+system.  This model, which was studied in \cite{Calderhead:2009bd}, is known
+as the Goodwin model. The \ode system, for an $m$-component model, is:
+\begin{align*}
+  \frac{\diff X_1(t)}{\diff t} &= \frac{a_1}{1 + a_2 X_m(t)^{\rho}}
+  - \alpha X_1(t)  & \\
+  \frac{\diff X_i(t)}{\diff t} &= k_{i-1}X_{i-1}(t) - \alpha X_i(t)
+  & i = 2,\dots,m \\
+  X_i(0) &= 0 & i = 1,\dots,m
+\end{align*}
+The parameters $\{\alpha,a_1,a_2,k_{1:m-1}\}$ have common prior distribution
+$\calGa(0.1, 0.1)$.  Under this setting, $X_{1:m}(t)$ can exhibit either
+unstable oscillation or a constant steady state. The data are simulated for
+$m=\{3,5\}$ at equally spaced time points from $0$ to $60$, with time step
+$0.5$. The last $80$ data points of $(X_1(t), X_2(t))$ are used for inference.
+Normally-distributed noise with standard  deviation $\sigma=0.2$ is added to
+the simulated data. Following \cite{Calderhead:2009bd}, the variance of the
+additive measurement error is assumed to be known. Therefore, the posterior
+distribution has $m+2$ parameters for an $m$-component model.
+
+As shown in \cite{Calderhead:2009bd}, when $\rho > 8$, due to the possible
+instability of the \ode system, the posterior can have a considerable number
+of local modes. In this example, we set $\rho = 10$. Also, as the solution to
+the \ode system is somewhat unstable, slightly different data can result in
+very different posterior distributions.
+
+\subsubsection{Results}
+
+We compare results from the \smc2 and \pmcmc algorithms. For the \smc
+implementation, $1,000$ particles and $500$ iterations were used, with the
+distributions specified specified by Equation~\eqref{eq:geometry_2}, with
+$\alpha(t/T) = (t/T)^5$, or via the completely adaptive specification.  For
+the \pmcmc algorithm, $50,000$ iterations are performed for burn-in and
+another $10,000$ iterations are used for inference. The same tempering as was
+used for \smc is used here. Note that, in a sequential implementation of \pmcmc, with each
+iteration updating one local chain and attempting a global exchange, the
+computational cost of after burn-in iterations is roughly the same as the
+entire \smc algorithm. In addition, changing $T$ within the range of the
+number of cores available does not substantially change the
+computational cost of a generic parallel implementation of the \pmcmc
+algorithm. We compare results from $T = 10,30,100$.
+
+The results for data generated from the simple model ($m = 3$) and complex
+model ($m = 5$), again summarising variability amongst 100 runs of each
+algorithm, are shown in Table~\ref{tab:node-s-all} and~\ref{tab:node-c-all},
+respectively.
+
+\input{tab/node-s}
+\input{tab/node-c}
+
+As shown in both cases, the number of distributions can affect the
+performance of \pmcmc algorithms considerably. When using $10$ distributions,
+large bias from numerical integration for path sampling estimator was
+observed, as expected. With $30$ distributions, the performance is comparable
+to the \smc2 sampler, though some bias is still observable. With $100$
+distributions, there is a much larger variance because, with more chains, the
+information travels more slowly from rapidly mixing chains to slowly mixing ones and
+consequently the mixing of the overall system is inhibited.
+
+The \smc algorithm provides results comparable to the best of
+three \pmcmc implementations in essentially all settings, including one in
+which both the annealing schedule and proposal scaling were fully
+automatic. In fact, the completely adaptive strategy was the most successful.
+
+It can be seen that increasing the number of distributions not only reduces
+the bias of numerical integration for path sampling estimator, but also
+reduces the variance considerably. On the other hand increasing the number of
+particles can only reduce the variance of the estimates, in accordance with
+the central limit theorem (see \citet{DelMoral:2006hc} for the standard
+estimator and extensions for path sampling estimator,
+Proposition~\ref{prop:path_clt}) (as the bias arises from the numerical
+integration scheme). Therefore, though there exists the trade-off between the
+number of particles and the number distributions, increasing either of them
+can always benefit the accuracy of the estimators.
+
+\subsection{Positron Emission Tomography Compartmental Model}
+\label{sub:Positron Emission Tomography Compartmental Model}
+
+It is now interesting to compare the proposed algorithm with other
+state-of-art algorithms using the more realistic \pet compartmental model
+example.
+
+Real neuroscience data sets involve a very large number ($\sim200,000$ per
+brain) of time series, which are typically somewhat heterogeneous.
+Figure~\ref{fig:petplot} shows estimates of $V_D =
+\sum_{j=1}^m\phi_j/\theta_j$ from a typical \pet scan (generated using \smc2
+as will be discussed later). Robustness is therefore especially important. An
+application-specific \mcmc algorithm was developed for this problem in
+\citet{Zhou2013}. A significant amount of tuning of the algorithms was
+required to obtain good results.The results shown in Figure~\ref{fig:petplot}
+are very close to those of \citet{Zhou2013} but, as is shown later, they were
+obtained with almost no manual tuning effort and at similar computational
+cost.
+
+For \smc and \pmcmc algorithms, the requirement of robustness means that the
+algorithm must be able to calibrate itself automatically to different data
+(and thus different posterior surfaces). A sequence of distributions which
+performs well for one time series may not perform even adequately for another
+series.  Specification of proposal scales that produces fast-mixing kernels
+for one data series may lead to slow mixing for another. In the following
+experiment, we will use a single simulated time series, and choose schedules
+that performs both well and poorly for this particular time series. The
+objective is to see if the algorithm can recover from a relatively poorly
+specified schedule and obtain reasonably accurate results.
+
+\subsubsection{Results}
+
+In this example we focus on the comparison between \smc2 and \pmcmc. We also
+consider parallelized implementations of algorithms. In this case, due to its
+relatively small number of chains, \pmcmc can be parallelized completely (and
+often cannot fully utilize the hardware capability if a na\"\i ve approach to
+parallelization is taken; while we appreciate that more sophisticated
+parallelization strategies are possible, these depend instrinsicially upon the
+model under investigation and the hardware employed and given our focus on
+automatic and general algorithms, we don't consider such strategies here). The
+\pmcmc algorithm under this setting is implemented such that each chain is
+updated at each iteration. Further, for the \smc algorithms, we consider two
+cases. In the first we can parallelize the algorithm completely (in the sense
+that each core has a single particle associated with it). In this setting we
+use a relatively small number of particles and a larger number of time steps.
+In the second, we need a few passes to process a large number of particles at
+each time step, and accordingly we use fewer time steps to maintain the same
+total computation time. These two settings allow us to investigate the
+trade-off between the number of particles and time steps. In both
+implementations, we consider three schedules, $\alpha(t/T) = t/T$ (linear),
+$\alpha(t/T) = (t/T)^5$ (prior), and $\alpha(t/T) = 1 - (1 - t/T)^5$
+(posterior). In addition, the adaptive schedule based upon \cess is also
+implemented for the \smc2 algorithm.
+
+Results from 100 replicate runs of the two algorithms under various regimes can be found in
+Table~\ref{tab:pet-py-par-sel} and~\ref{tab:pet-bf-par-sel} for the marginal
+likelihood and Bayes factor estimates, respectively. The \smc algorithms
+consistently outperforms the \pmcmc algorithms in the parallel settings. The
+Monte Carlo \sd of \smc algorithms is typically of the order of one fifth of
+the corresponding estimates from \pmcmc in most scenarios. In some settings
+with the smaller number of samples, the two algorithms can be comparable.
+Also at the lowest computational costs, the samplers with more time steps and
+fewer particles outperform those with the converse configuration by a fairly
+large margin in terms of estimator variance. It shows that with limited
+resources, ensuring the similarity of consecutive distributions, and thus good
+mixing, can be more beneficial than a larger number of particles. However,
+when the computational budget is increased, the difference becomes negligible.
+The robustness of \smc to the change of schedules is again apparent.
+
+\input{tab/pet-py-par-sel-ja}
+\input{tab/pet-bf-par-sel-ja}
+
+\paragraph{Effects of adaptive schedule}
+
+A set of samplers with adaptive schedules are also used. Due to the nature of
+the schedule, it cannot be controlled to have exactly the same number of time
+steps as non-adaptive procedures.  However, the \cess was controlled such that
+the average number of time steps are comparable with the fixed schedules and
+in most cases slightly less than the fixed numbers.
+
+It is found that, with little computational overhead, adaptive schedules do
+provide the best results (or very nearly so) and do so without user
+intervention. The reduction of Monte Carlo \sd varies among different
+configurations. For moderate or larger number of distributions, a reduction
+about 50\% was observed. In addition, it shall be noted that, in this example,
+the bias of the path sampling estimates are much more sensitive to the
+schedules than the previous Gaussian mixture model example. A vanilla linear
+schedule does not provide a low bias estimator at all even when the number of
+distributions is increased to a considerably larger number. The prior schedule
+though provides a nearly unbiased estimator, there is no clear theoretical
+evidence showing that this shall work for other situations. %Even it has more
+%general usage, as suggested in \citet{Calderhead:2009bd}, the power still has
+%to be chosen (in the previous \gmm example, $p = 2$ was the best choice while
+%in this \pet example $p = 5$ is more suitable). In contrast,
+The adaptive schedule, without any manual calibration, can provide a nearly unbiased
+estimator, even when path-sampling is employed, in addition to potential
+variance reduction.
+
+\paragraph{Bias reduction for path sampling estimator}
+
+As seen in Table~\ref{tab:pet-py-par-sel} and~\ref{tab:pet-bf-par-sel}, a bad
+choice of schedule $\alpha(t/T)$ can results in considerable bias for the
+basic path sampling estimator, here for \smc2-\ps but the problem is
+independent of the mechanism by which the samples are obtained. Increasing the number of iterations can reduce
+this bias but at the cost of additional computation time. As outlined in
+Section~\ref{ssub:Improved Univariate Numerical Integration}, in the case of
+the \smc algorithms discussed here, it is possible
+to reduce the bias without increasing computational cost significantly. To
+demonstrate the bias reduction effect, we constructed \smc sampler for the
+above \pet example with only $1,000$ particles and about $20$ iterations
+specified using the \cess based adaptive strategy. The path sampling estimator was
+approximated using Equation~\eqref{eq:path_est} as well as other higher order
+numerical integration or by integrating over a grid that contains
+$\{\alpha_t\}$ at which the samples was generated. The results are shown in
+Table~\ref{tab:pet-py-bias-reduction}
+
+\begin{table}
+  \begin{tabularx}{\linewidth}{lXXXX}
+    \toprule
+    & \multicolumn{4}{c}{Number of grid points (compared to sampled iterations)} \\
+    \cmidrule(lr){2-5}
+    Integration rule & $\times1$ & $\times2$ & $\times4$ & $\times8$ \\
+    \midrule
+    Trapezoid
+    & $-52.2\pm5.01$ & $-45.5\pm1.93$ & $-42.1\pm1.21$ & $-40.5\pm1.06$ \\
+    Simpson
+    & $-43.2\pm1.39$ & $-41.0\pm1.10$ & $-40.0\pm1.04$ & $-39.4\pm1.04$ \\
+    Simpson $3/8$
+    & $-42.1\pm1.21$ & $-40.5\pm1.06$ & $-39.7\pm1.04$ & $-39.3\pm1.04$ \\
+    Boole
+    & $-40.9\pm1.09$ & $-39.9\pm1.04$ & $-39.4\pm1.04$ & $-39.2\pm1.05$ \\
+    \bottomrule
+  \end{tabularx}
+  \caption{Path sampling estimator of marginal likelihood of two components
+    \pet model. The estimator was approximated using samples from \smc2
+    algorithm with $1,000$ particles and $20$ iterations, with different
+    numerical integration strategies. Large sample result (see
+    Table~\ref{tab:pet-py-par-sel}) provide an estimate of
+    $-39.2$.}
+  \label{tab:pet-py-bias-reduction}
+\end{table}
+
+\paragraph{Real data results}
+
+Finally, the methodology of \smc2-\ps was applied to measured positron
+emission tomography data using the same compartmental setup as in the
+simulations. The data shown in Figure~\ref{fig:petplot} comes from a study
+into opioid receptor density in Epilepsy, with the data being described in
+detail in \cite{Jiang:2009kf}.  It is expected that there will be considerable
+spatial smoothness to the estimates of the volume of distribution, as this is
+in line with the biology of the system being somewhat regional. Some regions
+will have much higher receptor density while others will be much lower,
+yielding higher and lower values of the volume of distribution, respectively.
+While we did not impose any spatial smoothness but rather estimated the
+parameters independently for each time series at each spatial location, as can
+be seen, smooth spatial estimates of the volume of distribution consistent
+with neurological understanding were found using the approach. This method is
+computationally feasible for the entire brain on a voxel-by-voxel basis, due
+to the ease of parallelization of the \smc algorithm. In the analysis
+performed here, 1000 particles were used, along with an adaptive schedule
+using a constant $\cess^\star = 0.999$, resulting in about 180 to 200
+intermediate distributions. The model selection results are very close to
+those obtained by a  previous study of the same data \citep{Zhou2013},
+although the present approach requires much less implementation effort and has
+roughly the same computational cost.
+
+\subsection{Summary}
+
+These three illustrative applications have essentially shown three aspects of
+using \smc as a generic tool for Bayesian model selection. Firstly, as seen in
+the Gaussian mixture model example, all the different variants of \smc
+proposed, including both direct and path sampling versions, produce results
+which are competitive with other model selection methods such as \rjmcmc and
+\pmcmc. In addition, in this somewhat simple example, \smc2 performs well,
+and leads to low variance estimates with no appreciable bias. The effect
+of adaptation was studied more carefully in the nonlinear \ode example, and it
+was shown that using both adaptive selection of distributions as well as
+adaptive proposal variances leads to very competitive algorithms, even against
+those with significant manual tuning. This suggests that an automatic process
+of model selection using \smc2 is possible. In the final example,
+considering the easy parallelization of algorithms such as \smc2 suggests
+that great gains in variance estimation can be made using settings such as
+\gpu computing for application where computational resources are of
+particular importance (such as in image analysis as in the PET example). It is
+also clear that the negligible cost of the bias reduction techniques described
+means that one should always consider using these to reduce the bias inherent
+in path sampling estimation.
+
+\section{Discussion}
+\label{sec:Bayesian SMC discussion}
+
+It has been shown that \smc is an effective Monte Carlo method for Bayesian
+inference for the purpose of model comparison. Three approaches have been
+outlined and investigated in several illustrative applications including the
+challenging scenarios of nonlinear \ode models and \pet compartmental
+systems. The proposed strategy is always competitive and often substantially
+outperforms the state of the art in this area.
+
+It has been demonstrated that it is possible to use the \smc algorithms to
+estimate the model probabilities directly (\smc1), or through individual
+model evidence (\smc2), or pair-wise relative evidence (\smc3). In
+addition, both \smc2 and \smc3 algorithms can be coupled with the path
+sampling estimator.
+
+Among the three approaches, \smc1 is applicable to very general settings. It
+can provide a robust alternative to \rjmcmc when inference on a countable
+collection of models is required (and could be readily combined with the
+approach of \cite{Jasra:2008bb} at the expense of a little additional
+implementation effort). However, like all Monte Carlo methods involving
+between model moves, it can be difficult to design efficient algorithms in
+practice.  The \smc3 algorithm is conceptually appealing. However, the
+existence of a suitable sequence of distributions between two posterior
+distributions may not be obvious.
+
+The \smc2 algorithm, which only involves within-model simulation, is most
+straightforward to implement in many interesting problems. It has been shown
+to be exceedingly robust in many settings. As it depends largely upon a
+collection of within-model \mcmc moves, any existing \mcmc algorithms can be reused in the
+\smc2 framework. However, much less tuning is required because the algorithm
+is fundamentally less sensitive to the mixing of the Markov kernel and it is
+possible to implement effective adaptive strategies at little computational
+cost. With adaptive placement of the intermediate distributions and
+specification of the \mcmc kernel proposals, it provides a robust and essentially
+automatic model comparison method.
+
+Compared to the \pmcmc algorithm, \smc2 has greater flexibility in the
+specification of distributions. Unlike \pmcmc, where the number and placement
+of distributions can affect the mixing speed and hence performance
+considerably, increasing the number of distributions will always benefit a \smc
+sampler given the same number of particles. When coupled with a path
+sampling estimator, this leads to less bias and variance. Compared to its
+no-resampling variant, it has been shown that \smc samplers with resampling
+can reduce the variance of normalizing constant estimates considerably.
+
+Even after three decades of intensive development, no Monte Carlo method can
+solve the Bayesian model comparison problem completely automatically without
+any manual tuning. However, \smc algorithms and the adaptive strategies
+demonstrated in this paper show that even for realistic, interesting problems,
+these samplers can provide good results with very minimal tuning and few
+design difficulties. For many applications, they could already be used as
+near automatic, robust solutions. For more challenge problems, the robustness
+of the algorithms can serve as solid foundation for specific algorithm
+designs.
