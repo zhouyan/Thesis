@@ -56,27 +56,7 @@ The application of \smc samplers to the Bayesian model comparison problem is
 straightforward. However, it has been overlooked in recent years. In this
 section, we outline common strategies of using \smc samplers for Bayesian
 model comparison. In the next section, we introduce some innovative refinement
-and extensions to existing practices. As consistent with this thesis, the \pet
-compartmental model will be used as a running example to illustrate various
-methodologies. We will consider both simulated and real world data. The
-simulated data set is the same as in chapter~\ref{cha:Introduction}. Due to
-the large amount of the real data, it is beyond the resources we have to
-perform repeated simulations for a whole \pet scan. Instead, 20 real data sets
-are sampled from typical region of interest in a single \pet scan.
-Figure~\ref{fig:typical real pet} shows three of them. As we can see, they
-varies considerably in characteristics despite all can be described as
-``typical'' \pet data. The purpose of the current work is to advocate robust
-and self-tuning algorithms. And the variability in the data sets provides
-excellent test examples. In addition, in this chapter, the models are
-configured with the non-informative priors and thus the parameters are
-exchangeable, similar to that of a mixture model. This creates a multimodal
-posterior surface for models with two or more components.
-
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/Typical_PET}
-  \caption{Typical real \pet data}
-  \label{fig:typical real pet data}
-\end{figure}
+and extensions to existing practices.
 
 \section{Sequential Monte Carlo samplers}
 \label{sec:Sequential Monte Carlo samplers}
@@ -596,6 +576,28 @@ situations. However, it provide robust and reliable solutions for many
 realistic applications with minimal manual tuning of the algorithm. Further,
 for more difficult problems, they provide a vital foundation on top of which
 higher performance algorithms can be built.
+
+We will use the \pet compartmental model example for illustrative purpose in
+this section. More comprehensive performance comparisons is in
+section~\ref{sub:Positron Emission Tomography Compartmental Model}. We will
+consider both simulated and real world data. The simulated data set is the
+same as in chapter~\ref{cha:Introduction}. Due to the large amount of the real
+data, it is beyond the resources we have to perform repeated simulations for a
+whole \pet scan. Instead, 20 real data sets are sampled from typical region of
+interest in a single \pet scan.  Figure~\ref{fig:typical real pet} shows three
+of them. As we can see, they varies considerably in characteristics despite
+all can be described as ``typical'' \pet data. The purpose of the current work
+is to advocate robust and self-tuning algorithms. And the variability in the
+data sets provides excellent test examples. In addition, in this chapter, the
+models are configured with the non-informative priors and thus the parameters
+are exchangeable, similar to that of a mixture model. This creates a
+multimodal posterior surface for models with two or more components.
+
+\begin{figure}[t]
+  \includegraphics[width=\linewidth]{fig/Typical_PET}
+  \caption{Typical real \pet data}
+  \label{fig:typical real pet data}
+\end{figure}
 
 \subsection{Improved univariate numerical integration}
 \label{sub:Improved univariate numerical integration}
