@@ -1,0 +1,20 @@
+\begin{table}
+  \begingroup\small\begin{tabularx}{\linewidth}{llCCCCCCC}
+    \toprule
+    & & \multicolumn{7}{c}{Number of components} \\
+    \cmidrule(lr){3-9}
+    Algorithm & Quantity & $\le2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $\ge8$ \\
+    \midrule
+    \smc[1]  & $\Prob(M = \Mk)$
+    & $0$ & $0.00257$ & $0.886$ & $0.103$ & $0.00715$ & $0.00128$ & $0$ \\
+    & $\log B_{4,k}$
+    & $\infty$ & $5.84$ & $0$ & $2.15$ & $4.82$ & $6.54$ & $\infty$ \\
+    \rjmcmc  & $\Prob(M = \Mk)$
+    & $0$ & $0.000526$ & $0.887$ & $0.103$ & $0.00623$ & $0.00324$ & $0$ \\
+    & $\log B_{4,k}$
+    & $\infty$ & $6.56$ & $0$ & $2.15$ & $4.96$ & $5.61$ & $\infty$ \\
+    \bottomrule
+  \end{tabularx}\endgroup
+  \caption{Gaussian mixture model estimates obtained via \smc[1] and \rjmcmc}
+  \label{tab:gmm-rj}
+\end{table}

@@ -1,0 +1,25 @@
+\begin{table}
+  \begingroup\small
+  \begin{tabularx}{\linewidth}{lXXXX}
+    \toprule
+    & \multicolumn{4}{c}{Number of grid points (compared to sampled iterations)} \\
+    \cmidrule(lr){2-5}
+    Integration rule & $\times1$ & $\times2$ & $\times4$ & $\times8$ \\
+    \midrule
+    Trapezoid
+    & $-52.2\pm5.01$ & $-45.5\pm1.93$ & $-42.1\pm1.21$ & $-40.5\pm1.06$ \\
+    Simpson
+    & $-43.2\pm1.39$ & $-41.0\pm1.10$ & $-40.0\pm1.04$ & $-39.4\pm1.04$ \\
+    Simpson $3/8$
+    & $-42.1\pm1.21$ & $-40.5\pm1.06$ & $-39.7\pm1.04$ & $-39.3\pm1.04$ \\
+    Boole
+    & $-40.9\pm1.09$ & $-39.9\pm1.04$ & $-39.4\pm1.04$ & $-39.2\pm1.05$ \\
+    \bottomrule
+  \end{tabularx}\endgroup
+  \caption{Path sampling estimator of marginal likelihood of two components
+    \pet model. The estimator was approximated using samples from \smc[2]
+    algorithm with 1,000 particles and 20 iterations, with different numerical
+    integration strategies. Large sample result (see
+    Table~\ref{tab:pet-py-par-sel}) provide an estimate of $-39.2$.}
+  \label{tab:pet-py-bias-reduction}
+\end{table}
