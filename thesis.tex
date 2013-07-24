@@ -3,6 +3,7 @@
 {mthesis}
 
 \input{macros}
+\includeonly{chap/bayesian-smc}
 \addbibresource{thesis.bib}
 \author{Yan Zhou}
 \date{\today}
@@ -12,18 +13,17 @@
 \begin{document}
 
 \frontmatter
-% \maketitle
-% \tableofcontents
+\maketitle
+\tableofcontents
 
 \mainmatter
-% \input{chap/introduction}
-% \input{chap/model-selection}
-% \input{chap/monte-carlo}
-% \input{chap/bayesian-pet}
-\input{chap/bayesian-smc}
-% \input{chap/vsmc}
-% \input{chap/applications}
-% \input{chap/conclusions}
+\include{chap/introduction}
+\include{chap/model-selection}
+\include{chap/monte-carlo}
+\include{chap/bayesian-smc}
+\include{chap/vsmc}
+\include{chap/applications}
+\include{chap/conclusions}
 
 \backmatter
 \printbibliography

@@ -1,14 +1,12 @@
-\usepackage{algorithm,algorithmic}
-
-\def\DeclareAbbr#1#2{\def#1{\textsc{#2}\xspace}}
-
 \DeclareAbbr{\aic}{aic}
 \DeclareAbbr{\ais}{ais}
 \DeclareAbbr{\bic}{bic}
 \DeclareAbbr{\bugs}{bugs}
+\DeclareAbbr{\cess}{cess}
 \DeclareAbbr{\cpu}{cpu}
 \DeclareAbbr{\dic}{dic}
 \DeclareAbbr{\ds}{ds}
+\DeclareAbbr{\ess}{ess}
 \DeclareAbbr{\fic}{fic}
 \DeclareAbbr{\fpe}{fpe}
 \DeclareAbbr{\gic}{gic}
@@ -29,15 +27,34 @@
 \DeclareAbbr{\pmcmc}{pmcmc}
 \DeclareAbbr{\ps}{ps}
 \DeclareAbbr{\rjmcmc}{rjmcmc}
+\DeclareAbbr{\sd}{s.d.}
 \DeclareAbbr{\sis}{sis}
-\DeclareAbbr{\smc}{smc}
 \DeclareAbbr{\tic}{tic}
 \DeclareAbbr{\unix}{unix}
 
-\def\aicc{\hbox{\aic{}\ensuremath{_c}}\xspace}
+\UseMathCal{D}
+\UseMathCal{E}
+\UseMathCal{Ga}
+\UseMathCal{H}
+\UseMathCal{K}
+\UseMathCal{LN}
+\UseMathCal{L}
+\UseMathCal{La}
+\UseMathCal{M}
+\UseMathCal{N}
 
+\UseMathBB{I}
+\UseMathBB{N}
+\UseMathBB{R}
+
+\def\aicc{\hbox{\aic{}\ensuremath{_c}}\xspace}
 \def\kl{Kullback-Leibler divergence\xspace}
 \def\mha{Metropolis-Hastings algorithm\xspace}
+
+\newcommand{\Mk}[1][k]{\ensuremath{{\calM_{#1}}}\xspace}
+\newcommand{\paramk}[1][k]{\ensuremath{\theta_{#1}}\xspace}
+\newcommand{\Paramk}[1][k]{\ensuremath{\Theta_{#1}}\xspace}
+\newcommand{\smc}[1][]{\textsc{smc}#1\xspace}
 
 \def\dkl{D_{\mathrm{KL}}}
 \def\data{\mathbfit{y}}
@@ -47,36 +64,16 @@
 \def\svec#1#2{#1^1,\dots,#1^{#2}}
 \def\mcvec#1#2{#1^{(1)},\dots,#1^{(#2)}}
 
-\def\calD{\mathcal{D}}
-\def\calE{\mathcal{E}}
-\def\calGa{\mathcal{Ga}}
-\def\calK{\mathcal{K}}
-\def\calLN{\mathcal{LN}}
-\def\calL{\mathcal{La}}
-\def\calM{\mathcal{M}}
-\def\calN{\mathcal{N}}
-\def\bbI{\mathbb{I}}
-
-\def\bbN{\mathbb{N}}
-\def\bbR{\mathbb{R}}
-
 \def\bfX{\mathbfit{X}}
 \def\bfx{\mathbfit{x}}
 \def\bfY{\mathbfit{Y}}
 \def\bfy{\mathbfit{y}}
 \def\bfu{\mathbfit{u}}
 
-\def\intd{\,\diff}
 \def\iid{\ifmmode\text{i.i.d.}\else{i.i.d.}\xspace\fi}
 \def\ymin{y_{\textsc{min}}}
 \def\ymax{y_{\textsc{max}}}
-
-\newcommand{\Mk}[1][k]{\ensuremath{{\calM_{#1}}}\xspace}
-\newcommand{\paramk}[1][k]{\ensuremath{\theta_{#1}}\xspace}
-\newcommand{\Paramk}[1][k]{\ensuremath{\Theta_{#1}}\xspace}
-\newcommand{\ess} {\ifmmode\text{\textsc{ess}}\else\textsc{ess}\xspace\fi}
-\newcommand{\cess}{\ifmmode\text{\textsc{cess}}\else\textsc{cess}\xspace\fi}
-\newcommand{\sd}{\ifmmode\text{\textsc{s.d.}}\else\textsc{s.d.}\xspace\fi}
+\def\Lopt#1{L_{#1}^{\text{\textsc{opt}}}}
 
 \def\supi#1{#1^{(i)}}
 \def\Xiu{\supi{X}}
@@ -84,12 +81,5 @@
 \def\Wiu{\supi{W}}
 \def\wiu{\supi{w}}
 
-\long\def\sidenote#1{\marginpar{%
-    \begin{flushleft}%
-      \footnotesize\sffamily\raggedright#1%
-    \end{flushleft}%
-}}
-
 \def\STATESKIP{\hskip.68cm}
 \newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
-\newcolumntype{C}{>{\centering\arraybackslash}X}
