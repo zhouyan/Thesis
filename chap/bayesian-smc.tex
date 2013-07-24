@@ -127,10 +127,8 @@ $(W_t^{(i)},\dots,W_t^{(N)})$. See \cite{Douc:2005wa} for some commonly used
 resampling algorithms. Here we briefly review some of the most commonly used
 algorithms besides the multinomial resampling.
 
-\paragraph{Residual resampling}
-
-It was introduced in \cite{Liu:1998iu}. In this approach, for $i = 1,\dots,N$,
-we have
+\paragraph{Residual resampling} It was introduced in \cite{Liu:1998iu}. In
+this approach, for $i = 1,\dots,N$, we have
 \begin{equation}
   R_t^{(i)} = \Floor{NW_t^{(i)}} + \bar{R}_t^{(i)}
 \end{equation}
@@ -147,33 +145,29 @@ unlike multinomial resampling, in residual resampling, the replication number
 $R_t^{(i)}$ will differ from $NW_t^{(i)}$ by at most $1$. The next two
 resampling algorithms also share this property.
 
-\paragraph{Stratified resampling}
-
-Let $Q$ denote the inverse of the cumulative distribution of a multinomial
-distribution with size $N$ and eights $(W_1,\dots,W_N)$, the stratified
-resampling proceed by first drawing uniform random variates $U_t^{(i)}$ on
-$((i-1)/N, i/N]$ for $i = 1,\dots,N$, and then generate $I_t^{(i)} =
-Q(U_t^{(i)})$. The new particles system is formed by
+\paragraph{Stratified resampling} Let $Q$ denote the inverse of the cumulative
+distribution of a multinomial distribution with size $N$ and eights
+$(W_1,\dots,W_N)$, the stratified resampling proceed by first drawing uniform
+random variates $U_t^{(i)}$ on $((i-1)/N, i/N]$ for $i = 1,\dots,N$, and then
+generate $I_t^{(i)} = Q(U_t^{(i)})$. The new particles system is formed by
 $\{X_{0:t}^{(I_t^{(i)})}\}_{i=1}^N$.  This algorithm also outperforms the
 multinomial resampling.
 
-\paragraph{Systematic resampling}
+\paragraph{Systematic resampling} Similar to the stratified resampling, the
+systematic resampling also use the inversion method. However, instead of
+generating $N$ uniform random variates, it only generates one uniform random
+variate $U_t$ from $(0, 1/N]$ and deterministically set $U_t^{(i)} = (i - 1)/N
++ U_t$. Though it has the most simplistic implementation among all algorithms
+introduced so far, it is more complicated to study the behavior of the
+conditional variance of the generated samples. As shown in \cite{Douc:2005wa},
+there exists counter-examples that the systematic resampling does not
+outperform the multinomial resampling.
 
-Similar to the stratified resampling, the systematic resampling also use the
-inversion method. However, instead of generating $N$ uniform random variates,
-it only generates one uniform random variate $U_t$ from $(0, 1/N]$ and
-deterministically set $U_t^{(i)} = (i - 1)/N + U_t$. Though it has the most
-simplistic implementation among all algorithms introduced so far, it is more
-complicated to study the behavior of the conditional variance of the generated
-samples. As shown in \cite{Douc:2005wa}, there exists counter-examples that
-the systematic resampling does not outperform the multinomial resampling.
-
-\paragraph{Combination of residual and stratified/systematic resampling}
-
-Both the stratified and systematic resampling algorithms can be used together
-with the residual resampling. It operates by first compute the integer part
-and residuals of $NW_t^{(i)}$, and then stratified or systematic resampling
-are performed using the residuals as weights. It has the advantage that the
+\paragraph{Combination of residual and stratified/systematic resampling} Both
+the stratified and systematic resampling algorithms can be used together with
+the residual resampling. It operates by first compute the integer part and
+residuals of $NW_t^{(i)}$, and then stratified or systematic resampling are
+performed using the residuals as weights. It has the advantage that the
 resulting algorithm provide better performance the then residual resampling or
 the stratified or systematic resampling.
 
@@ -491,9 +485,9 @@ generic approach. These choices lead to Algorithm~\ref{alg:smc1}.
 % (K_T^{(k,i)},\theta_T^{(k,i)})\}_{i=1}^N$ targeting $\pi^{(1)}$, one may
 % approximate the two distributions of interest using the empirical measures,
 % \begin{align*}
-%   \widehat{\pi}^{(1)}(K = k) &= \sum\limits_{i=1}^N W^{(k,i)} \delta_{k,
+%   \hat{\pi}^{(1)}(K = k) &= \sum\limits_{i=1}^N W^{(k,i)} \delta_{k,
 %   K^{(k,i)}_T} \\
-%   \widehat{\pi}^{(1)}(d\theta|K=k) &= \frac{1}{\widehat{\pi}^{(1)}(K = k)}
+%   \hat{\pi}^{(1)}(d\theta|K=k) &= \frac{1}{\hat{\pi}^{(1)}(K = k)}
 %   \sum\limits_{i=1}^N W^{(k,i)} \delta_{k, K_T^{(k,i)}}
 %   \delta_{\theta^{(k,i)}_T}(d\theta),
 % \end{align*}
@@ -586,7 +580,7 @@ Section~\ref{sub:Path Sampling via smc2/smc3} provides details.
 The posterior distribution of the parameters conditional upon a particular
 model can also be approximated with,
 \begin{equation*}
-  \widehat{\pi}_{T_k}^{(2,k)}(\diff\theta) =
+  \hat{\pi}_{T_k}^{(2,k)}(\diff\theta) =
   \sum\limits_{i=1}^{N} W_{T_k}^{(k,i)}
   \delta_{\theta^{(k,i)}_{T_k}}(\diff\theta).
 \end{equation*}
@@ -781,7 +775,7 @@ $\{W_t^{(j)},X_t^{(j)}\}_{j=1}^N$, and $t = 0,\dots,T$, a path sampling
 estimator of the ratio of normalizing constants $\Xi_T = \log(Z_1/Z_0)$
 can be approximated (using an elementary trapezoidal scheme) by
 \begin{equation}
-  \widehat\Xi_{T}^{N} = \sum_{t=1}^T
+  \hat\Xi_{T}^{N} = \sum_{t=1}^T
   \frac{1}{2}(\alpha_t - \alpha_{t - 1})(U_t^N + U_{t-1}^N)
   \label{eq:path_est}
 \end{equation}
@@ -845,8 +839,8 @@ multimodal posterior surface for models with two or more components.
 \subsection{Improved univariate numerical integration}
 \label{sub:Improved univariate numerical integration}
 
-As seen in the last section, the path sampling estimator requires evaluation of
-the expectation,
+As seen in the last section, the path sampling estimator requires evaluation
+of the expectation,
 \begin{equation*}
   \Exp_\alpha \biggl[ \rnd{\log q_{\alpha}(\cdot)}{\alpha} \biggr]
 \end{equation*}
@@ -1404,19 +1398,19 @@ advocation of \smc[2]-\ps, we extend the results for the path sampling
 estimator from \smc samplers. Here we present Proposition~\ref{prop:path_clt},
 which is specific to path sampling estimator using the simplest Trapezoidal
 approach to numerical integration. It follows as a simple corollary to a more
-general result given in section~\ref{sec:proof of proposition 1} which could
+general result given in section~\ref{sub:proof of proposition 1} which could
 be used to characterize more general numerical integration schemes.
 
 %% Before we present the proposition, we formalize some notations, which follow
 %% \cite{DelMoral:2004ux}, where more detailed theoretical treatment of the
 %% topic can be found. The importance sampling estimates from a \smc sampler can
 %% be viewed as empirical approximation to a Feynman-Kac flow,
-%% $\{\widehat\eta_t\}_{t\ge0}$, on increasing spaces of
+%% $\{\hat\eta_t\}_{t\ge0}$, on increasing spaces of
 %% $\{E_t^\prime =\prod_{k=0}^tE_k\}_{t\ge0}$. At each iteration $t = n$, the sampling
 %% step, which update each particles with a Markov kernel, the distribution
-%% $\widehat\eta_{n-1}$ is updated with Markov transition $M_n$ to $\eta_n =
-%% \widehat\eta_{n-1}M_n$, and the resampling step, if multinomial resampling is
-%% applied, update the distribution $\eta_n$ to $\widehat\eta_n = \Psi_n(\eta_n)$,
+%% $\hat\eta_{n-1}$ is updated with Markov transition $M_n$ to $\eta_n =
+%% \hat\eta_{n-1}M_n$, and the resampling step, if multinomial resampling is
+%% applied, update the distribution $\eta_n$ to $\hat\eta_n = \Psi_n(\eta_n)$,
 %% where
 %% \begin{equation}
 %%   \Psi_n(\eta_n)(\diff x_{0:n}) =
@@ -1425,8 +1419,8 @@ be used to characterize more general numerical integration schemes.
 %% and $G_n(x_{0:n})$ is called the potential function and can be viewed as a
 %% generalization of the weighting function before. For example, in the generic
 %% algorithm describe in the beginning of Section~\ref{sec:Methodology}, the
-%% sequence of distributions on increasing dimensions $\widetilde\pi_n$ is
-%% interpreted as the flow $\widehat\eta_n$. The Markov transition $M_n$ can be
+%% sequence of distributions on increasing dimensions $\tilde\pi_n$ is
+%% interpreted as the flow $\hat\eta_n$. The Markov transition $M_n$ can be
 %% defined in terms of the Markov kernel on marginal distributions $K_n(x_{n-1},
 %% x_n)$.
 
@@ -1435,8 +1429,8 @@ be used to characterize more general numerical integration schemes.
 %%   later $x_n$ is the particle in previous sections. Maybe I shall rewrite this
 %%   part in terms of the $x_{0:n}$}{YZ}
 
-%% With a particular \smc algorithm output, $\widehat\eta_n$ is approximated by the
-%% empirical measure, $\widehat\eta_n(\diff x) \approx \frac{1}{N}\sum_{i=1}^N
+%% With a particular \smc algorithm output, $\hat\eta_n$ is approximated by the
+%% empirical measure, $\hat\eta_n(\diff x) \approx \frac{1}{N}\sum_{i=1}^N
 %% \delta_{X_n^{(i)}}(\diff x)$
 
 %% In the proposition and corollary, we also assume the following regularity
@@ -1460,7 +1454,7 @@ be used to characterize more general numerical integration schemes.
   theorem given in \cite{DelMoral:2006hc} to hold, given a \smc sampler that
   iterates over a sequence of distributions $\{\pi_t =
   q_{\alpha_t}/Z_{\alpha_t}\}_{t=0}^T$ and applies multinomial resampling at
-  each iteration, the path sampling estimator, $\widehat\Xi_{T}^{N}$, as
+  each iteration, the path sampling estimator, $\hat\Xi_{T}^{N}$, as
   defined in Equation~\eqref{eq:path_est} obeys a central limit theorem in the
   following sense: Let $\xi_t(\cdot) = \rnd{\log
     q_{\alpha}(\cdot)}{\alpha}\Bigm|_{\alpha = \alpha_t}$, $\beta_{0} =
@@ -1468,7 +1462,7 @@ be used to characterize more general numerical integration schemes.
   $\beta_t = (\alpha_{t + 1} - \alpha_{t-1})/2$, then, provided $\xi_t$ is
   bounded:
   \begin{equation}
-    \lim_{N\to\infty}\sqrt{N}(\widehat\Xi_{T}^{N} - \Xi_T)
+    \lim_{N\to\infty}\sqrt{N}(\hat\Xi_{T}^{N} - \Xi_T)
     \xrightarrow{D}\calN(0, V_T(\xi_{0:T}))
   \end{equation}
   where $V_t$, $0\le t \le T$ is defined by the following recursion:
@@ -1489,12 +1483,12 @@ be used to characterize more general numerical integration schemes.
   %% With a little effort, the recursion can be explicitly written in the form,
   %% \begin{equation}
   %%   V_T(\xi_{0:T}) = \sum_{j=0}^T\var_{\pi_j}\biggl(
-  %%   \sum_{i=j}^T\beta_i\frac{\widetilde\pi_{i,j}(X_j)}{\widetilde\pi_{j,j}(X_j)}
-  %%   \int\widetilde\pi_{i|j}(x_i|X_j)(\xi_i(x_i) - \pi_i(\xi_i))\intd x_i
+  %%   \sum_{i=j}^T\beta_i\frac{\tilde\pi_{i,j}(X_j)}{\tilde\pi_{j,j}(X_j)}
+  %%   \int\tilde\pi_{i|j}(x_i|X_j)(\xi_i(x_i) - \pi_i(\xi_i))\intd x_i
   %%   \biggr)
   %% \end{equation}
-  %% where $\widetilde{\pi}_{i,j}$ is the $j^{\text{th}}$ coordinate marginal of
-  %% $\widetilde{\pi}_i$ and we adopt the conventions that $\widetilde{\pi}_{j|j}
+  %% where $\tilde{\pi}_{i,j}$ is the $j^{\text{th}}$ coordinate marginal of
+  %% $\tilde{\pi}_i$ and we adopt the conventions that $\tilde{\pi}_{j|j}
   %% = \mathsf{Id}$ .
 
 \end{proposition}
@@ -1524,52 +1518,52 @@ function $\varphi$.
 
 A Feynman-Kac formula describes the law of a Markov chain on
 $\{(E_t,\mathcal{E}_t)\}_{t\geq 0}$ (with initial distribution
-$\widehat\eta_0$ and transitions $M_t$) evolving in the presence of a
+$\hat\eta_0$ and transitions $M_t$) evolving in the presence of a
 (time-varying) potential (described by $G_t$) such that the marginal law of
 the $t^\text{th}$ coordinate is:
 \begin{equation*}
-  \widehat\eta_t(A) = \frac
+  \hat\eta_t(A) = \frac
   {
     \int_{E_1 \times \ldots \times E_{t-1} \times A}
-    \widehat\eta_0(d\widetilde{x}_0)
-    \prod_{i=1}^t M_{i}(\widetilde{x}_{i-1},d\widetilde{x}_i)
-    G(\widetilde{x}_i)
+    \hat\eta_0(d\tilde{x}_0)
+    \prod_{i=1}^t M_{i}(\tilde{x}_{i-1},d\tilde{x}_i)
+    G(\tilde{x}_i)
   }{
     \int_{E_1 \times \ldots \times E_{t}}
-    \widehat\eta_0(d\widetilde{x}^\prime_0)
-    \prod_{i=1}^t M_{i}(\widetilde{x}^\prime_{i-1},d\widetilde{x}^\prime_i)
-    G(\widetilde{x}^\prime_i)
+    \hat\eta_0(d\tilde{x}^\prime_0)
+    \prod_{i=1}^t M_{i}(\tilde{x}^\prime_{i-1},d\tilde{x}^\prime_i)
+    G(\tilde{x}^\prime_i)
   }
 \end{equation*}
 for any measurable set $A$.
 
-It is convenient to define the operator $\widehat\Phi_t(\eta)(\diff
-\widetilde{x}_t) = G_t(\widetilde{x}_t)\eta M_t(\diff \widetilde{x}_t)/\eta
-M_t(G_t)$ which allows us to write, recursively, $\widehat\eta_t =
-\widehat\Phi_t(\widehat\eta_{t-1})$ and to define the intermediate
-distributions $\eta_t = \widehat\eta_{t-1}M_t$ such that $\widehat\eta_t(\diff
-\widetilde{x}_t) = G_t(\widetilde{x}_t) \eta_t(d\widetilde{x}_t) /
+It is convenient to define the operator $\hat\Phi_t(\eta)(\diff
+\tilde{x}_t) = G_t(\tilde{x}_t)\eta M_t(\diff \tilde{x}_t)/\eta
+M_t(G_t)$ which allows us to write, recursively, $\hat\eta_t =
+\hat\Phi_t(\hat\eta_{t-1})$ and to define the intermediate
+distributions $\eta_t = \hat\eta_{t-1}M_t$ such that $\hat\eta_t(\diff
+\tilde{x}_t) = G_t(\tilde{x}_t) \eta_t(d\tilde{x}_t) /
 \eta_t(G_t)$.
 
 If $\mathcal{X}$ denotes the space upon which an \smc sampler with \mcmc
 proposal $K_t$ at time $t$ and sequence of target distributions $\pi_t$
 operates, then we obtain $\pi_t$ as the final coordinate marginal of the
 Feynman-Kac distribution at time $t$ if we identify $E_t = \mathcal{X}^t$,
-$M_{t}(\widetilde{x}_{t-1},d\widetilde{x}_t) =
-\delta_{\widetilde{x}_{t-1}}(d\widetilde{x}_{t,1:t-1})
-K_t(\widetilde{x}_{t,t-1},d\widetilde{x}_t)$ and $G_t(\widetilde{x}_t) =
-\pi_{t}(\widetilde{x}_{t,t-1}) / \pi_{t-1}(\widetilde{x}_{t,t-1})$.
+$M_{t}(\tilde{x}_{t-1},d\tilde{x}_t) =
+\delta_{\tilde{x}_{t-1}}(d\tilde{x}_{t,1:t-1})
+K_t(\tilde{x}_{t,t-1},d\tilde{x}_t)$ and $G_t(\tilde{x}_t) =
+\pi_{t}(\tilde{x}_{t,t-1}) / \pi_{t-1}(\tilde{x}_{t,t-1})$.
 
 To provide symmetry between the simulation system and the ideal system which
-it targets, it is convenient to let $\widetilde{X}_t^i$ denote the extended
+it targets, it is convenient to let $\tilde{X}_t^i$ denote the extended
 sample corresponding to $X_t^i$ at iteration $t$ together with the full
 collection of values which its ancestors took during previous iterations
-(i.e., $\widetilde{X}_t^i$ corresponds to the particle system obtained by
+(i.e., $\tilde{X}_t^i$ corresponds to the particle system obtained by
 sampling according to $M_t$ above rather than $K_t$ at each iteration).  It is
 then convenient to write the particle approximation at time $t$ as
-$$\widehat\eta_t^N(d\widetilde{x}_t) = \sum_{i=1}^N
-\frac{G_t(\widetilde{X}_t^i)}{\sum_{j=1}^N G_t(\widetilde{X}_t^j)}
-\delta_{\widetilde{X}_t^i}(d\widetilde{x}_t).$$ We refer the reader to
+$$\hat\eta_t^N(d\tilde{x}_t) = \sum_{i=1}^N
+\frac{G_t(\tilde{X}_t^i)}{\sum_{j=1}^N G_t(\tilde{X}_t^j)}
+\delta_{\tilde{X}_t^i}(d\tilde{x}_t).$$ We refer the reader to
 \cite{DelMoral:2004ux} for further details of the connection between such
 particle systems and the Feynman-Kac formula.
 
@@ -1580,55 +1574,55 @@ Proposition~\ref{prop:path_clt} is a direct corollary.
   Under the regularity conditions given in \cite[section 9.4, pp.
   300--306]{DelMoral:2004ux}, a weighted sum of integrals obtained from
   successive generations of the particle approximation of a Feynman-Kac flow
-  $\{\widehat\eta_t\}_{t=0}^T$, with the application of multinomial resampling
+  $\{\hat\eta_t\}_{t=0}^T$, with the application of multinomial resampling
   at every iteration, obeys a central limit theorem in the following sense,
   for a collection of finite weights $\beta_t\in\Real$ and bounded measurable
   functions $\xi_t:E_t \to\Real$ (where, in the historical process case
-  described above it is required that $\xi_t(\widetilde{x}_t) =
-  \xi_t(\widetilde{x}_{t,t})$):
+  described above it is required that $\xi_t(\tilde{x}_t) =
+  \xi_t(\tilde{x}_{t,t})$):
   \begin{equation}
     \lim_{N\to\infty}\sqrt{N}
-    \sum_{t=0}^T\beta_t(\widehat\eta_t^N(\xi_t)-\widehat\eta_t(\xi_t))
+    \sum_{t=0}^T\beta_t(\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t))
     \xrightarrow{D}\calN(0,V_T(\xi_{0:T}))
   \end{equation}
   where $V_t$, $0\le t \le T$ is defined by the following recursion:
   \begin{align}
-    V_0(\xi_0) =& \beta_0 \int \widehat\eta_0(x_0)(\xi_0(x_0) -
+    V_0(\xi_0) =& \beta_0 \int \hat\eta_0(x_0)(\xi_0(x_0) -
     \eta_0(\xi_0))^2 dx_0\notag\\
     V_t(\xi_{0:t}) =& V_{t-1}\biggl(\xi_{0:t-2}, \xi_{t-1}
     + \frac{\beta_t}{\beta_{t-1}}
-    \frac{M_t(G_t[\xi_t-\widehat\eta_t(\xi_t)])}{\widehat\eta_{t-1}M_t(G_t)}\biggr)
-    + \beta_t^2\widehat\eta_t\left(\frac{G_t(\cdot) (\xi_t(\cdot)-\widehat\eta_t(\xi_t))^2}{\widehat\eta_t(G_t)}\right).
+    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}\biggr)
+    + \beta_t^2\hat\eta_t\left(\frac{G_t(\cdot) (\xi_t(\cdot)-\hat\eta_t(\xi_t))^2}{\hat\eta_t(G_t)}\right).
   \end{align}
 \end{proposition}
 
 The strategy of the proof is to decompose the error as that propagated forward
 from previous times and that due to sampling at the current time, just as in
 \cite{DelMoral:2004ux}.  First note that the term
-$\widehat\eta_t^N(\xi_t)-\widehat\eta_t(\xi_t)$ can be rewritten as
+$\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t)$ can be rewritten as
 \begin{equation}
-  \widehat\eta_t^N(\xi_t)-\widehat\eta_t(\xi_t) =
-  \widehat\eta_t^N(\xi_t) - \widehat\Phi_t(\widehat\eta_{t-1}^N)(\xi_t) +
-  \widehat\Phi_t(\widehat\eta_{t-1}^N)(\xi_t) - \widehat\eta_t(\xi_t)
+  \hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t) =
+  \hat\eta_t^N(\xi_t) - \hat\Phi_t(\hat\eta_{t-1}^N)(\xi_t) +
+  \hat\Phi_t(\hat\eta_{t-1}^N)(\xi_t) - \hat\eta_t(\xi_t)
 \end{equation}
 and the weighted sum,
 \begin{equation}
   T_t^N(\xi_{0:t}) =\sqrt{N}
-  \sum_{j=0}^t\beta_j(\widehat\eta_j^N(\xi_j)-\widehat\eta_j(\xi_j))
+  \sum_{j=0}^t\beta_j(\hat\eta_j^N(\xi_j)-\hat\eta_j(\xi_j))
 \end{equation}
 can therefore be written as
 \begin{align}
   T_t^N(\xi_{0:t}) &= T_{t-1}^N(\xi_{0:t-1}) +
-  \sqrt{N}\beta_t(\widehat\eta_t^N(\xi_t)-\widehat\eta_t(\xi_t)) \notag\\
+  \sqrt{N}\beta_t(\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t)) \notag\\
   &= \bar{T}_t^N(\xi_{0:t}) + \chi_t^N(\xi_t)
 \end{align}
 where
 \begin{align}
   \bar{T}_t^N(\xi_{0:t}) &= T_{t-1}^N(\xi_{0:t-1}) +
-  \sqrt{N}\beta_t(\widehat\Phi_t(\widehat\eta_{t-1}^N)(\xi_t) - \widehat\eta_t(\xi_t))
+  \sqrt{N}\beta_t(\hat\Phi_t(\hat\eta_{t-1}^N)(\xi_t) - \hat\eta_t(\xi_t))
   \label{eq:bar_t_t} \\
   \chi_t^N(\xi_t) &=
-  \sqrt{N}\beta_t(\widehat\eta_t^N(\xi_t) - \widehat\Phi_t(\eta_{t-1}^N)(\xi_t))
+  \sqrt{N}\beta_t(\hat\eta_t^N(\xi_t) - \hat\Phi_t(\eta_{t-1}^N)(\xi_t))
 \end{align}
 
 Lemma~\ref{lem:propagation} shows that error propagation leads to controlled
@@ -1647,45 +1641,45 @@ leading by induction to Proposition~\ref{prop:gen_clt}.
   \begin{equation}
     \bar{V}_t = V_{t-1}\biggl(\xi_{0:t-2}, \xi_{t-1} +
     \frac{\beta_t}{\beta_{t-1}}
-    \frac{M_t(G_t[\xi_t-\widehat\eta_t(\xi_t)])}{\widehat\eta_{t-1}M_t(G_t)}\biggr).
+    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}\biggr).
   \end{equation}
 \end{lemma}
 
 \begin{proof}
   We begin by re-expressing the difference of interest in a more convenient form:
   \begin{align}
-    \widehat\Phi(\widehat\eta_{t-1}^N)(\xi_t) - \widehat\eta_t(\xi_t)
-    &= \frac{1}{\widehat\eta_{t-1}^NM_t(G_t)}\{
-      \widehat\eta_{t-1}^NM_t(G_t\xi_t) -
-      \widehat\eta_{t-1}^NM_t(G_t)\widehat\eta_t(\xi_t)\} \notag\\
-    &= \frac{1}{\widehat\eta_{t-1}^NM_t(G_t)}
-    \{(\widehat\eta_{t-1}^N-\widehat\eta_{t-1})M_t(G_t[\xi_t-\widehat\eta_t(\xi_t)])\}
+    \hat\Phi(\hat\eta_{t-1}^N)(\xi_t) - \hat\eta_t(\xi_t)
+    &= \frac{1}{\hat\eta_{t-1}^NM_t(G_t)}\{
+      \hat\eta_{t-1}^NM_t(G_t\xi_t) -
+      \hat\eta_{t-1}^NM_t(G_t)\hat\eta_t(\xi_t)\} \notag\\
+    &= \frac{1}{\hat\eta_{t-1}^NM_t(G_t)}
+    \{(\hat\eta_{t-1}^N-\hat\eta_{t-1})M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])\}
   \end{align}
 where the final equality is a simple consequence of the fact that for any
 integrable test function $\varphi$:
 \begin{equation*}
-\widehat\eta_{t-1} M_t (G_t \varphi) = \eta_t(G_t) \widehat\eta_t(\varphi) \Rightarrow
-\widehat\eta_{t-1} M_t (G_t [\xi_t - \widehat\eta_t(\xi_t)]) = \eta_t(G_t)
-\underset{=0}{\underbrace{\widehat\eta_t(\xi_t - \widehat\eta_t(\xi_t))}} .
+\hat\eta_{t-1} M_t (G_t \varphi) = \eta_t(G_t) \hat\eta_t(\varphi) \Rightarrow
+\hat\eta_{t-1} M_t (G_t [\xi_t - \hat\eta_t(\xi_t)]) = \eta_t(G_t)
+\underset{=0}{\underbrace{\hat\eta_t(\xi_t - \hat\eta_t(\xi_t))}} .
 \end{equation*}
 
 Substituting this representation into Equation~\eqref{eq:bar_t_t},
   \begin{align}
     \bar{T}_t^N(\xi_{0:t})
     &= T_{t-1}^N(\xi_{0:t-1}) +
-    \frac{\sqrt{N}\beta_t}{\widehat\eta_{t-1}^NM_t(G_t)}
-    \{(\widehat\eta_{t-1}^N-\widehat\eta_{t-1})M_t(G_t[\xi_t-\widehat\eta_t(\xi_t)])\}
+    \frac{\sqrt{N}\beta_t}{\hat\eta_{t-1}^NM_t(G_t)}
+    \{(\hat\eta_{t-1}^N-\hat\eta_{t-1})M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])\}
     \notag\\
     &= T_{t-1}^N\biggl(\xi_{0:t-2},
     \xi_{t-1} + \frac{\beta_t}{\beta_{t-1}}
-    \frac{M_t(G_t[\xi_t-\widehat\eta_t(\xi_t)])}{\widehat\eta_{t-1}^NM_t(G_t)}\biggr)
+    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}^NM_t(G_t)}\biggr)
   \end{align}
   The proof is completed by using the result \cite[cf.
   Sec.~7.4.3]{DelMoral:2004ux}, that if $G_t$ is essentially bounded below
   then,
   \begin{equation*}
-    \frac{1}{\widehat\eta_{t-1}^NM_t(G_t)} \xrightarrow{p}
-    \frac{1}{\widehat\eta_{t-1}M_t(G_t)}
+    \frac{1}{\hat\eta_{t-1}^NM_t(G_t)} \xrightarrow{p}
+    \frac{1}{\hat\eta_{t-1}M_t(G_t)}
   \end{equation*}
   together with the induction hypothesis.
 \end{proof}
@@ -1693,11 +1687,11 @@ Substituting this representation into Equation~\eqref{eq:bar_t_t},
 \begin{lemma}\label{lem:sampling}
   Under the conditions of Proposition~\ref{prop:gen_clt},
   \begin{equation}
-    \lim_{N\to\infty}\chi_t^N(\xi_t)\xrightarrow{D}\calN(0, \widehat{V}_t(\xi_t))
+    \lim_{N\to\infty}\chi_t^N(\xi_t)\xrightarrow{D}\calN(0, \hat{V}_t(\xi_t))
   \end{equation}
   where
   \begin{equation}
-    \widehat{V}_t(\xi_t) = \beta_t^2\widehat\eta_t((\xi_t - \widehat\eta_t(\xi_t))^2)
+    \hat{V}_t(\xi_t) = \beta_t^2\hat\eta_t((\xi_t - \hat\eta_t(\xi_t))^2)
   \end{equation}
 \end{lemma}
 
@@ -1706,16 +1700,16 @@ Substituting this representation into Equation~\eqref{eq:bar_t_t},
   function $G_t$:
   \begin{equation}
 \sqrt{N}\beta_t
-    \sum_{j=1}^N\frac{\xi_t(\widetilde{X}_t^{(j)}) - \widehat\eta_{t-1}^N M_t(\xi_t)}{N}
+    \sum_{j=1}^N\frac{\xi_t(\tilde{X}_t^{(j)}) - \hat\eta_{t-1}^N M_t(\xi_t)}{N}
     = \sum_{j=1}^NU_{t,j}^N
   \end{equation}
-  where $U_{t,j}^N = \frac{\beta_t}{\sqrt{N}}\{\xi_t(\widetilde{X}_t^{(j)}) -
-    \widehat\eta_{t-1}^N M_t(\xi_t)\}$. Define, recursively, the $\sigma$-algebras
+  where $U_{t,j}^N = \frac{\beta_t}{\sqrt{N}}\{\xi_t(\tilde{X}_t^{(j)}) -
+    \hat\eta_{t-1}^N M_t(\xi_t)\}$. Define, recursively, the $\sigma$-algebras
     $\calH_t^N = \calH_{t-1}^N \vee
-    \sigma(\{\widetilde{X}_{t}^{(j)}\}_{j=1}^N)$, $\calH_{t-1} =
+    \sigma(\{\tilde{X}_{t}^{(j)}\}_{j=1}^N)$, $\calH_{t-1} =
     \sigma\left(\cup_{N=0}^\infty \calH_{t-1}^N \right)$ and the increasing (in $j$) sequence of
   $\sigma$-algebras $\calH_{t,j}^N =
-  \calH_{t-1}\vee\sigma(\{\widetilde{X}_t^{(l)}\}_{l=1}^j)$. It is clear that
+  \calH_{t-1}\vee\sigma(\{\tilde{X}_t^{(l)}\}_{l=1}^j)$. It is clear that
   \begin{equation}
     \Exp[U_{t,j}^N|\calH_{t,j-1}^N] = \Exp[U_{t,j}^N|\calH_{t-1}] = 0
   \end{equation}
@@ -1725,8 +1719,8 @@ Substituting this representation into Equation~\eqref{eq:bar_t_t},
   \begin{align*}
     \Exp[(U_{t,j}^N)^2|\calH_{t,j-1}^N]
     &= \Exp[(U_{t,j}^N)^2|\calH_{t-1}] \\
-    &= \frac{\beta_t^2}{N}\{\widehat\eta_{t-1}^N M_t(\xi_t^2) -
-      [\widehat\eta_{t-1}^N)(\xi_t)]^2\}
+    &= \frac{\beta_t^2}{N}\{\hat\eta_{t-1}^N M_t(\xi_t^2) -
+      [\hat\eta_{t-1}^N)(\xi_t)]^2\}
     < c_t \frac{\beta_t^2}{N} %\biggl\{
      % R_t\lVert\xi_t\rVert_{\infty}^2 + R_t^2\lVert\xi_t\rVert_{\infty}
      % \biggr\}
@@ -1745,8 +1739,8 @@ That is, for any $0 < u\le1$ and $\varepsilon>0$,
   \begin{align*}
     \sum_{j=1}^N\Exp[(U_{t,j}^N)^2|\calH_{t,j-1}^N]
     &= \frac{\beta_t^2}{N}\sum_{j=1}^N
-    \{\widehat\eta_{t-1}^N M_t(\xi_t^2) - [\widehat\eta_{t-1}^N M_t(\xi_t)]^2\} \\
-    &= \beta_t^2     \{\widehat\eta_{t-1}^N M_t(\xi_t^2) - [\widehat\eta_{t-1}^N M_t(\xi_t)]^2\}
+    \{\hat\eta_{t-1}^N M_t(\xi_t^2) - [\hat\eta_{t-1}^N M_t(\xi_t)]^2\} \\
+    &= \beta_t^2     \{\hat\eta_{t-1}^N M_t(\xi_t^2) - [\hat\eta_{t-1}^N M_t(\xi_t)]^2\}
   \end{align*}
   and we can invoke the martingale central
   limit theorem \cite[pp.~543]{Shiryaev:1995vp},
@@ -1757,28 +1751,28 @@ That is, for any $0 < u\le1$ and $\varepsilon>0$,
   where the asymptotic variance, $\check{V}_t(\xi_t)$, may be written as the limit
   of the sequence defined by
   \begin{equation}
-    \check{V}_t^N(\xi_t) = \beta_t^2 \{\widehat\eta_{t-1}^N M_t (\xi_t^2) -
-      [\widehat\eta_{t-1}^NM_t(\xi_t)]^2\}
+    \check{V}_t^N(\xi_t) = \beta_t^2 \{\hat\eta_{t-1}^N M_t (\xi_t^2) -
+      [\hat\eta_{t-1}^NM_t(\xi_t)]^2\}
   \end{equation}
   and as (again, see \cite[Section 7.4]{DelMoral:2004ux})
   \begin{align*}
     \check{V}_t^N(\xi_t)
-    &\xrightarrow{P} \beta_t^2 \{\widehat\eta_{t-1}M_t(\xi_t^2) -
-      [\widehat\eta_{t-1}M_t(\xi_t)]^2\}
+    &\xrightarrow{P} \beta_t^2 \{\hat\eta_{t-1}M_t(\xi_t^2) -
+      [\hat\eta_{t-1}M_t(\xi_t)]^2\}
   \end{align*}
   the proof is completed using Slutzky's lemma and applying \cite[Lemma A2]{Chopin:2004cn} which
   yields that:
 \begin{align*}
-\lim_{N \rightarrow \infty} \mathcal{X}_t^N \xrightarrow{D} \calN(0,\widehat{V}_t(\xi_t))
+\lim_{N \rightarrow \infty} \mathcal{X}_t^N \xrightarrow{D} \calN(0,\hat{V}_t(\xi_t))
 \end{align*}
 with
 \begin{align*}
-\widehat{V}_t(\xi_t) =
-\check{V}_t\left(\frac{G_t(\cdot)}{\widehat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
-\widehat\eta_t(\xi_t)) \right) =
-\beta_t^2 \widehat\eta_t\left(
-\frac{G_t(\cdot)}{\widehat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
-\widehat\eta_t(\xi_t))
+\hat{V}_t(\xi_t) =
+\check{V}_t\left(\frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
+\hat\eta_t(\xi_t)) \right) =
+\beta_t^2 \hat\eta_t\left(
+\frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
+\hat\eta_t(\xi_t))
 \right)
 \end{align*}
 \end{proof}
@@ -1798,18 +1792,18 @@ with
     &= \Exp[\exp(is\bar{T}_t^N(\xi_{0:t}))\exp(is\chi_t^N(\xi_t))] \\
     &= \Exp[\exp(is\bar{T}_t^N(\xi_{0:t}))
     \Exp[\exp(is\chi_t^N(\xi_t))|\calH_{t-1}^N]] \\
-    &= \Exp[(A_t - \exp(-s^2\widehat{V}_t(\xi_t)/2))B_t]
-    +\exp(-s^2\widehat{V}_t(\xi_t)/2)\Exp[B_t]
+    &= \Exp[(A_t - \exp(-s^2\hat{V}_t(\xi_t)/2))B_t]
+    +\exp(-s^2\hat{V}_t(\xi_t)/2)\Exp[B_t]
   \end{align*}
   where $A_t = \Exp[\exp(is\chi_t^N(\xi_t))|\calH_{t-1}^N]$ and $B_t =
-  \exp(is\bar{T}^N(\xi_{0:t}))$. The first term can easily be shown to converge
-  a.s. to zero as $N\to\infty$ by the asymptotic normality of $\xi_t^N$ and
-  the conditional independence of the particles at iteration $t$ given
-  $\mathcal{H}_{t-1}^N$.
-  The second term is the product of two Gaussian
+  \exp(is\bar{T}^N(\xi_{0:t}))$. The first term can easily be shown to
+  converge a.s. to zero as $N\to\infty$ by the asymptotic normality of
+  $\xi_t^N$ and the conditional independence of the particles at iteration $t$
+  given $\mathcal{H}_{t-1}^N$.  The second term is the product of two Gaussian
   characteristic functions and thus we have that $T_t^N$ also follows a
-  Gaussian distribution (see the argument of \cite{Kuensch:2005} shown in more detail in Lemma 10{} in
-  \cite{Johansen:2006iv}, which uses essentially the same argument, for details).
+  Gaussian distribution (see the argument of \cite{Kuensch:2005} shown in more
+  detail in Lemma 10{} in \cite{Johansen:2006iv}, which uses essentially the
+  same argument, for details).
 \end{proof}
 
 Using Lemma~\ref{lem:propagation} to~\ref{lem:normality}, the proof of
@@ -1930,9 +1924,9 @@ approximately equal computational costs. From the results obtained under the
 \smc[1] and \rjmcmc algorithms it is clear that, in this particular example,
 simulations for models with fewer than ten components are adequate to
 characterize the model space. Therefore, under this configuration, the cost is
-roughly the same in terms of computational resources as that of the \smc[1] and
-\rjmcmc algorithms. From the results of \rjmcmc and \smc[1], we consider four
-and five components models (i.e., the true model and the most competitive
+roughly the same in terms of computational resources as that of the \smc[1]
+and \rjmcmc algorithms. From the results of \rjmcmc and \smc[1], we consider
+four and five components models (i.e., the true model and the most competitive
 amongst the others.) The estimates are shown in Table~\ref{tab:gmm-pair}
 which, like all of the other tables in this section, summarises the Monte
 Carlo variability of 100 replicate runs of each algorithm.
@@ -1964,6 +1958,28 @@ every iteration. When the Markov kernel is not so rapidly mixing, the
 additional stability provided by the resampling operation can outweight the
 attendant increase in Monte Carlo variance and that is what we observed here
 (and in the case of the other examples considered below; results not shown.)
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{fig/GMM_Resample}
+  \caption{Monte Carlo variance of standard estimator and path sampling
+    estimator using different threshold of $\ess/N$ for Gaussian mixture model
+    with \smc[2] algorithm. The variance is ploted on log scale}
+  \label{fig:gmm resample}
+\end{figure}
+
+On the other hand, in this work we advocate resampling adaptively instead of
+resampling every iteration. The proposed adaptive schedule also has
+significant adavantage in this situation. It is of interest to see if adaptive
+resampling has performance improvement when compared to resampling every
+iteration. We consider using the \smc[2] algorithm with 1,000 particles, 100
+distributions scheduled as $\alpha(t/T) = (t/T)^2$, and various threshold of
+$\ess/N$ under which resampling is performed. The Monte Carlo variance of both
+the standard estimator and the path sampling estimator is shown in
+figure~\ref{fig:gmm resample}. It can be shown that either performing
+resampling every iteration or never performing resampling (i.e., \ais), gives
+optimal results. Though it may be difficult to determine an optimal value, the
+value 0.5 seems to be suitable for this particluar example, as commonly used
+in practice.
 
 \paragraph{Effects of adaptive schedules} To assess the evolution of
 distributions with an adaptive schedule, we consider the relation between
@@ -2208,23 +2224,25 @@ schedules than the previous Gaussian mixture model example. A vanilla linear
 schedule does not provide a low bias estimator at all even when the number of
 distributions is increased to a considerably larger number. The prior schedule
 though provides a nearly unbiased estimator, there is no clear theoretical
-evidence showing that this shall work for other situations. %Even it has more
-%general usage, as suggested in \cite{Calderhead:2009bd}, the power still has
-%to be chosen (in the previous \gmm example, $p = 2$ was the best choice while
-%in this \pet example $p = 5$ is more suitable). In contrast,
-The adaptive schedule, without any manual calibration, can provide a nearly unbiased
+evidence showing that this shall work for other situations. Even it has more
+general usage, as suggested in \cite{Calderhead:2009bd}, the power still has
+to be chosen (in the previous \gmm example, $p = 2$ was the best choice while
+in this \pet example $p = 5$ is more suitable). In contrast, The adaptive
+schedule, without any manual calibration, can provide a nearly unbiased
 estimator, even when path-sampling is employed, in addition to potential
 variance reduction.
 
 \paragraph{Bias reduction for path sampling estimator}
+
+\input{tab/pet-bias}
 
 As seen in Table~\ref{tab:pet-py-par-sel} and~\ref{tab:pet-bf-par-sel}, a bad
 choice of schedule $\alpha(t/T)$ can results in considerable bias for the
 basic path sampling estimator, here for \smc[2]-\ps but the problem is
 independent of the mechanism by which the samples are obtained. Increasing the
 number of iterations can reduce this bias but at the cost of additional
-computation time. As outlined in section~\ref{ssub:Improved Univariate
-  Numerical Integration}, in the case of the \smc algorithms discussed here,
+computation time. As outlined in section~\ref{sub:Improved univariate
+  numerical integration}, in the case of the \smc algorithms discussed here,
 it is possible to reduce the bias without increasing computational cost
 significantly. To demonstrate the bias reduction effect, we constructed \smc
 sampler for the above \pet example with only 1,000 particles and about 20
@@ -2301,8 +2319,6 @@ sufficient large number of samples, the difference is minimal.
   \label{fig:fast mcmc iter}
 \end{figure}
 
-\input{tab/pet-bias}
-
 \paragraph{Real data results}
 
 Finally, the methodology of \smc[2]-\ps was applied to measured positron
@@ -2323,9 +2339,9 @@ to the ease of parallelization of the \smc algorithm. In the analysis
 performed here 1,000 particles were used, along with an adaptive schedule
 using a constant $\cess^\star/N = 0.999$, resulting in about 180 to 200
 intermediate distributions. The model selection results are very close to
-those obtained by a  previous study of the same data \cite{Zhou2013},
-although the present approach requires much less implementation effort and has
-roughly the same computational cost.
+those obtained by a  previous study of the same data \cite{Zhou2013}, although
+the present approach requires much less implementation effort and has roughly
+the same computational cost.
 
 \subsection{Summary}
 
@@ -2335,19 +2351,19 @@ the Gaussian mixture model example, all the different variants of \smc
 proposed, including both direct and path sampling versions, produce results
 which are competitive with other model selection methods such as \rjmcmc and
 \pmcmc. In addition, in this somewhat simple example, \smc[2] performs well,
-and leads to low variance estimates with no appreciable bias. The effect
-of adaptation was studied more carefully in the nonlinear \ode example, and it
+and leads to low variance estimates with no appreciable bias. The effect of
+adaptation was studied more carefully in the nonlinear \ode example, and it
 was shown that using both adaptive selection of distributions as well as
 adaptive proposal variances leads to very competitive algorithms, even against
 those with significant manual tuning. This suggests that an automatic process
 of model selection using \smc[2] is possible. In the final example,
 considering the easy parallelization of algorithms such as \smc[2] suggests
 that great gains in variance estimation can be made using settings such as
-\gpu computing for application where computational resources are of
-particular importance (such as in image analysis as in the PET example). It is
-also clear that the negligible cost of the bias reduction techniques described
-means that one should always consider using these to reduce the bias inherent
-in path sampling estimation.
+\gpu computing for application where computational resources are of particular
+importance (such as in image analysis as in the PET example). It is also clear
+that the negligible cost of the bias reduction techniques described means that
+one should always consider using these to reduce the bias inherent in path
+sampling estimation.
 
 \section{Discussion}
 \label{sec:Bayesian SMC discussion}
@@ -2355,8 +2371,8 @@ in path sampling estimation.
 It has been shown that \smc is an effective Monte Carlo method for Bayesian
 inference for the purpose of model comparison. Three approaches have been
 outlined and investigated in several illustrative applications including the
-challenging scenarios of nonlinear \ode models and \pet compartmental
-systems. The proposed strategy is always competitive and often substantially
+challenging scenarios of nonlinear \ode models and \pet compartmental systems.
+The proposed strategy is always competitive and often substantially
 outperforms the state of the art in this area.
 
 It has been demonstrated that it is possible to use the \smc algorithms to
@@ -2378,19 +2394,19 @@ distributions may not be obvious.
 The \smc[2] algorithm, which only involves within-model simulation, is most
 straightforward to implement in many interesting problems. It has been shown
 to be exceedingly robust in many settings. As it depends largely upon a
-collection of within-model \mcmc moves, any existing \mcmc algorithms can be reused in the
-\smc[2] framework. However, much less tuning is required because the algorithm
-is fundamentally less sensitive to the mixing of the Markov kernel and it is
-possible to implement effective adaptive strategies at little computational
-cost. With adaptive placement of the intermediate distributions and
-specification of the \mcmc kernel proposals, it provides a robust and essentially
-automatic model comparison method.
+collection of within-model \mcmc moves, any existing \mcmc algorithms can be
+reused in the \smc[2] framework. However, much less tuning is required because
+the algorithm is fundamentally less sensitive to the mixing of the Markov
+kernel and it is possible to implement effective adaptive strategies at little
+computational cost. With adaptive placement of the intermediate distributions
+and specification of the \mcmc kernel proposals, it provides a robust and
+essentially automatic model comparison method.
 
 Compared to the \pmcmc algorithm, \smc[2] has greater flexibility in the
 specification of distributions. Unlike \pmcmc, where the number and placement
 of distributions can affect the mixing speed and hence performance
-considerably, increasing the number of distributions will always benefit a \smc
-sampler given the same number of particles. When coupled with a path
+considerably, increasing the number of distributions will always benefit a
+\smc sampler given the same number of particles. When coupled with a path
 sampling estimator, this leads to less bias and variance. Compared to its
 no-resampling variant, it has been shown that \smc samplers with resampling
 can reduce the variance of normalizing constant estimates considerably.
@@ -2400,7 +2416,6 @@ solve the Bayesian model comparison problem completely automatically without
 any manual tuning. However, \smc algorithms and the adaptive strategies
 demonstrated in this paper show that even for realistic, interesting problems,
 these samplers can provide good results with very minimal tuning and few
-design difficulties. For many applications, they could already be used as
-near automatic, robust solutions. For more challenge problems, the robustness
-of the algorithms can serve as solid foundation for specific algorithm
-designs.
+design difficulties. For many applications, they could already be used as near
+automatic, robust solutions. For more challenge problems, the robustness of
+the algorithms can serve as solid foundation for specific algorithm designs.
