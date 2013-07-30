@@ -12,6 +12,6 @@
 *.toc
 
 thesis.pdf
+thesis-*.*
 outline.pdf
-chap/*.pdf
 pieces/*.pdf
