@@ -1,27 +1,48 @@
 \begin{table}
-  \def\B{\color{MBlue}\it}
-  \def\R{\color{MRed}\bf}
-  \begingroup\small
-    \begin{tabularx}{\linewidth}{lCClCCC}
-      \toprule
-      &&&& \multicolumn{2}{c}{Marginal likelihood} & \\
-      &&&& \multicolumn{2}{c}{($\log p(\paramk|\data)\pm\text{\sd}$)} & \\
-      \cmidrule(lr){5-6}
-      $T$ & Proposal Scales & Annealing Scheme & Algorithm & $m = 3$ & $m = 5$ & Bayes factor $\log B_{3,5}$ \\ \midrule
-      $10 $ & Manual    & Prior (5) & \pmcmc      & $-109.7\pm3.2$   & $-120.3\pm2.5$   & $10.6\pm3.8$ \\
-      $30 $ &           &           &             & $\B-105.0\pm1.2$ & $\B-116.1\pm2.2$ & $\B11.2\pm2.5$ \\
-      $100$ &           &           &             & $-134.7\pm7.9$   & $-144.1\pm6.2$   & $9.4\pm11.2$ \\ \midrule
-      $500$ & Manual    & Prior (5) & \smc2-\ds & $-104.6\pm2.0$   & $-112.7\pm1.8$   & $8.1\pm2.8$ \\
-            &           &           & \smc2-\ps & $-104.5\pm1.8$   & $-112.7\pm1.5$   & $8.2\pm2.5$ \\
-      $500$ & Manual    & Adaptive  & \smc2-\ds & $-104.5\pm1.1$   & $-112.7\pm1.1$   & $8.1\pm1.6$ \\
-            &           &           & \smc2-\ps & $-104.6\pm1.0$   & $-112.8\pm1.0$   & $8.2\pm1.5$ \\
-      $500$ & Adaptive  & Adaptive  & \smc2-\ds & $-104.5\pm0.5$   & $-112.7\pm0.4$   & $8.1\pm0.8$ \\
-            &           &           & \smc2-\ps & $\R-104.6\pm0.4$ & $\R-112.8\pm0.3$ & $\R8.1\pm0.6$ \\
-      \bottomrule
-    \end{tabularx}
-  \endgroup
-  \caption{Results for non-linear \ode models with data generated from simple
-    model. {\B italic}: Minimum variance for the same algorithm. {\R Bold}: Minimum variance for all
-    samplers.}
-  \label{tab:node-s-all}
+  \caption{Nonlinear \ode model marginal likelihood and Bayes factor estimates
+    with data generated from simple (three components) model.}
+  \label{tab:node-s}
+  \begin{tabu}{X[1l]X[2c]X[2c]X[2c]X[4r]X[4r]X[6r]}
+    \toprule
+    &&&& \multicolumn{2}{c}{Marginal likelihood ($\log p(\data|\Mk)\pm\sd$)} & Bayes factor ($\log B_{3,5}\pm\sd$) \\
+    \cmidrule(lr){5-6}
+    $T$   & Proposal & Annealing & Algorithm   & $m = 3$                & $m = 5$                & \\ \midrule
+    $10 $ & Manual         & Prior (5) & \pmcmc      & $-109.7\pm3.2$         & $-120.3\pm2.5$         & $10.6\pm3.8$ \\
+    $30 $ &                &           &             & $\SubBest-105.0\pm1.2$ & $\SubBest-116.1\pm2.2$ & $\SubBest11.2\pm2.5$ \\
+    $100$ &                &           &             & $-134.7\pm7.9$         & $-144.1\pm6.2$         & $9.4\pm11.2$ \\ \midrule
+    $500$ & Manual         & Prior (5) & \smc[2]-\ds & $-104.6\pm2.0$         & $-112.7\pm1.8$         & $8.1\pm2.8$ \\
+          &                &           & \smc[2]-\ps & $-104.5\pm1.8$         & $-112.7\pm1.5$         & $8.2\pm2.5$ \\
+    $500$ & Manual         & Adaptive  & \smc[2]-\ds & $-104.5\pm1.1$         & $-112.7\pm1.1$         & $8.1\pm1.6$ \\
+          &                &           & \smc[2]-\ps & $-104.6\pm1.0$         & $-112.8\pm1.0$         & $8.2\pm1.5$ \\
+    $500$ & Adaptive       & Adaptive  & \smc[2]-\ds & $-104.5\pm0.5$         & $-112.7\pm0.4$         & $8.1\pm0.8$ \\
+          &                &           & \smc[2]-\ps & $\Best-104.6\pm0.4$    & $\Best-112.8\pm0.3$    & $\Best8.1\pm0.6$ \\
+    \bottomrule
+    \multicolumn{7}{r}{%
+      \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily
+        $T$: The number of distributions. That is, the number parallel \mcmc
+        chains for \pmcmc algorithm and the number of iterations for the \smc
+        algorithm. For the \pmcmc algorithm, at each iteration, a single \mcmc
+        chain is chosen randomly to be updated. There is a 50,000 iterations
+        burin period and another 10,000 iterations are used for inference. For
+        the \smc algorithm, 1,000 particles are used.
+
+        Proposal: The proposal scales of the \mcmc kernels. The ``Manual''
+        proposal is manually tuned such that the accept rates fall between
+        $[0.2, 0.6]$. The ``Adaptive'' proposal is dynamically set using
+        moments estimates from the last iteration of the particle system.
+
+        Annealing: The annealing scheme of the distributions, $\alpha(t/T_k)$
+        in Equation~\ref{eq:geometry_2}. The ``Prior (5)'' scheme is
+        concentrated around the prior distribuiton, with $\alpha(t/T_k) =
+        (t/T_k)^5$. The ``Adaptive'' scheme set $\alpha$ dynamically such that
+        for each iteration, \cess is a constant. The constant value of \cess
+        is chosen such that on average, 500 iterations was produced.
+
+        \Best: The estimate with the smallest variance among all algorithms
+        settings.
+
+        \SubBest: The estimate with the smallest variance for a single
+        algorithm (\smc[2] or \pmcmc) among different settings.
+      \end{minipage}}
+  \end{tabu}
 \end{table}

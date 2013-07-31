@@ -82,7 +82,12 @@
 \def\wiu{\supi{w}}
 
 \def\STATESKIP{\hskip.68cm}
+\def\TNOTESKIP{\hskip3em}
 \newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
 \newcolumntype{C}{>{\centering\arraybackslash}X}
 \newcolumntype{L}{>{\raggedright\arraybackslash}X}
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+
+\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\sffamily Red}\fi}
+\def\SubBest{\ifmmode\color{MGreen}\it\else\textcolor{MGreen}{\sffamily
+    Green}\fi}

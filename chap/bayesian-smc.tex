@@ -1915,7 +1915,7 @@ path sampling estimator. For \pmcmc we consider the path sampling estimator.
 The \smc[1] implementation uses 10,000 particles and 500 distributions. The
 \rjmcmc implementation uses five million iterations in addition to one million
 iterations of burn-in period. The resulting estimates of model probabilities
-are shown in Table~\ref{tab:gmm-rj}.
+are shown in Table~\ref{tab:gmm-prob}.
 
 The \smc[2], \smc[3] and \ais implementations use 1,000 particles and 500
 iterations. The \pmcmc implementation uses 50 chains and 10,000 iterations in
@@ -1934,7 +1934,7 @@ Carlo variability of 100 replicate runs of each algorithm.
 \input{tab/gmm-prob}
 \input{tab/gmm-pair}
 
-From Tables~\ref{tab:gmm-rj} and~\ref{tab:gmm-pair}, it can be seen that the
+From Tables~\ref{tab:gmm-prob} and~\ref{tab:gmm-pair}, it can be seen that the
 standard estimators (\rjmcmc, \smc[1], \smc[2]-\ds, \smc[3]-\ds and \ais-\ds)
 agree with each other. Among the path sampling estimators, \smc[2]-\ps and
 \ais-\ps have little bias. \smc[3]-\ps shows a little more bias. The \pmcmc
@@ -2087,12 +2087,15 @@ of a generic parallel implementation of the \pmcmc algorithm. We compare
 results from $T = 10,30,100$.
 
 The results for data generated from the simple model ($m = 3$) and complex
-model ($m = 5$), again summarising variability amongst 100 runs of each
-algorithm, are shown in Table~\ref{tab:node-s-all} and~\ref{tab:node-c-all},
+model ($m = 5$), again summarizing variability amongst 100 runs of each
+algorithm, are shown in Table~\ref{tab:node-s} and~\ref{tab:node-c},
 respectively.
 
-\input{tab/node-s}
-\input{tab/node-c}
+\afterpage{\clearpage
+  \begin{landscape}
+    \input{tab/node-s}
+    \input{tab/node-c}
+  \end{landscape}\clearpage}
 
 As shown in both cases, the number of distributions can affect the performance
 of \pmcmc algorithms considerably. When using 10 distributions, large bias
@@ -2201,10 +2204,11 @@ distributions, and thus good mixing, can be more beneficial than a larger
 number of particles. However, when the computational budget is increased, the
 difference becomes negligible.
 
-\begin{landscape}
-\input{tab/pet-py-par-sel-ja}
-\input{tab/pet-bf-par-sel-ja}
-\end{landscape}
+\afterpage{\clearpage
+  \begin{landscape}
+    \input{tab/pet-py-par-sel-ja}
+    \input{tab/pet-bf-par-sel-ja}
+  \end{landscape}\clearpage}
 
 \paragraph{Effects of adaptive schedule}
 
