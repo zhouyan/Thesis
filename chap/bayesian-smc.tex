@@ -2091,11 +2091,8 @@ model ($m = 5$), again summarizing variability amongst 100 runs of each
 algorithm, are shown in Table~\ref{tab:node-s} and~\ref{tab:node-c},
 respectively.
 
-\afterpage{\clearpage
-  \begin{landscape}
-    \input{tab/node-s}
-    \input{tab/node-c}
-  \end{landscape}\clearpage}
+\input{tab/node-s}
+\input{tab/node-c}
 
 As shown in both cases, the number of distributions can affect the performance
 of \pmcmc algorithms considerably. When using 10 distributions, large bias
@@ -2190,25 +2187,21 @@ $\alpha(t/T) = (t/T)^5$ (prior), and $\alpha(t/T) = 1 - (1 - t/T)^5$
 implemented for the \smc[2] algorithm.
 
 Results from 100 replicate runs of the two algorithms under various regimes
-can be found in Table~\ref{tab:pet-py-par-sel} and~\ref{tab:pet-bf-par-sel}
-for the marginal likelihood and Bayes factor estimates, respectively. The \smc
-algorithms consistently outperforms the \pmcmc algorithms in the parallel
-settings. The Monte Carlo \sd of \smc algorithms is typically of the order of
-one fifth of the corresponding estimates from \pmcmc in most scenarios. In
-some settings with the smaller number of samples, the two algorithms can be
-comparable. Also at the lowest computational costs, the samplers with more
-time steps and fewer particles outperform those with the converse
-configuration by a fairly large margin in terms of estimator variance. It
-shows that with limited resources, ensuring the similarity of consecutive
-distributions, and thus good mixing, can be more beneficial than a larger
-number of particles. However, when the computational budget is increased, the
-difference becomes negligible.
+can be found in Table~\ref{tab:pet-py} and~\ref{tab:pet-bf} for the marginal
+likelihood and Bayes factor estimates, respectively. The \smc algorithms
+consistently outperforms the \pmcmc algorithms in the parallel settings. The
+Monte Carlo \sd of \smc algorithms is typically of the order of one fifth of
+the corresponding estimates from \pmcmc in most scenarios. In some settings
+with the smaller number of samples, the two algorithms can be comparable. Also
+at the lowest computational costs, the samplers with more time steps and fewer
+particles outperform those with the converse configuration by a fairly large
+margin in terms of estimator variance. It shows that with limited resources,
+ensuring the similarity of consecutive distributions, and thus good mixing,
+can be more beneficial than a larger number of particles. However, when the
+computational budget is increased, the difference becomes negligible.
 
-\afterpage{\clearpage
-  \begin{landscape}
-    \input{tab/pet-py-par-sel-ja}
-    \input{tab/pet-bf-par-sel-ja}
-  \end{landscape}\clearpage}
+\input{tab/pet-py}
+\input{tab/pet-bf}
 
 \paragraph{Effects of adaptive schedule}
 
@@ -2240,21 +2233,21 @@ variance reduction.
 
 \input{tab/pet-bias}
 
-As seen in Table~\ref{tab:pet-py-par-sel} and~\ref{tab:pet-bf-par-sel}, a bad
-choice of schedule $\alpha(t/T)$ can results in considerable bias for the
-basic path sampling estimator, here for \smc[2]-\ps but the problem is
-independent of the mechanism by which the samples are obtained. Increasing the
-number of iterations can reduce this bias but at the cost of additional
-computation time. As outlined in section~\ref{sub:Improved univariate
-  numerical integration}, in the case of the \smc algorithms discussed here,
-it is possible to reduce the bias without increasing computational cost
+As seen in Table~\ref{tab:pet-py} and~\ref{tab:pet-bf}, a bad choice of
+schedule $\alpha(t/T)$ can results in considerable bias for the basic path
+sampling estimator, here for \smc[2]-\ps but the problem is independent of the
+mechanism by which the samples are obtained. Increasing the number of
+iterations can reduce this bias but at the cost of additional computation
+time. As outlined in section~\ref{sub:Improved univariate numerical
+  integration}, in the case of the \smc algorithms discussed here, it is
+possible to reduce the bias without increasing computational cost
 significantly. To demonstrate the bias reduction effect, we constructed \smc
 sampler for the above \pet example with only 1,000 particles and about 20
 iterations specified using the \cess based adaptive strategy. The path
 sampling estimator was approximated using Equation~\eqref{eq:path_est} as well
 as other higher order numerical integration or by integrating over a grid that
 contains $\{\alpha_t\}$ at which the samples was generated. The results are
-shown in Table~\ref{tab:pet-py-bias-reduction}
+shown in Table~\ref{tab:pet-bias}
 
 \paragraph{Trade-off between number of particles and distributions}
 
