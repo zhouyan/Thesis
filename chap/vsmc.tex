@@ -1,4 +1,101 @@
 \chapter{vSMC: A C++ Library for Parallel Sequential Monte Carlo}
 \label{cha:vSMC: A C++ Library for Parallel Sequential Monte Carlo}
 
+The vSMC library \cite{software:VSMC} was developed during the research to
+assist the implementation of various \smc and other algorithms, including but
+not limited to the implementation of the illustrative and performance
+comparison examples in previous chapters. It evolves into a sophisticated C++
+framework for implementing \smc algorithms on both sequential and parallel
+hardware.
+
+A more comprehensive (but also much more technical) tutorial of the library
+can be found in \cite{software:VSMC}. In this chapter, we provide a higher
+level overview of the library structure and usage. In section~\ref{sec:A
+  minimal example} we use a minimal example to demonstrate the most basic
+usage of the library. Section~\ref{sec:Extensions} we discuss how one can
+write simple extensions of the library to assist novel \smc related
+researches. In the field of \smc, and computational statistics in general,
+researchers are actively developing new algorithms. It is unlikely to have any
+existing software to provide directly functionality of the newly developed
+algorithms. One of the purpose of vSMC is to make it easier to develop new
+\smc related algorithms on top of the presented framework, and to free
+researchers from developing entirely new software to satisfy their particular
+needs. In section~\ref{sec:Performance benchmark} we compare the performance
+of different parallel programming models that can be used with vSMC. We also
+compare the performance of vSMC against other similar softwares.
+
+It shall be noted that, vSMC may be more ``developer friendly'' than ``user
+friendly''. It does not provide \bugs-like interface for the user. However,
+the more proficient one is at C++, vSMC may be used in a more flexible and
+productive way than other softwares. There is always a trade-off between
+easy of use and the productivity, flexibility and extensibility of a given
+software work.
+
+\section{A minimal example}
+\label{sec:A minimal example}
+
+In this section we use a minimal example to demonstrate an \smc algorithm
+implemented with vSMC.
+
+\subsection{Model and algorithm}
+\label{sub:Model and algorithm}
+
+Consider the problem of simulating a Normal distribution. Of course, for this
+toy example, a direct simulation is trivial. However, for the purpose of
+demonstration, we construct an \smc sampler on for sequence of distributions,
+$\{\pi_t\}_{t=0}^T$ with
+\begin{equation}
+  \pi_t(x) = \pi_0(x)^{1 - \alpha(t/T)}\pi_T(x)^{\alpha(t/T)}
+\end{equation}
+where $\pi_0$ is the initial distribution and $\pi_T$ is our target
+distribution. The mapping $\alpha:[0,1]\to[0,1]$ is strictly monotonic
+increasing with $\alpha(0) = 0$ and $\alpha(1) = 1$. For simplicity, we choose
+$\pi_0$ also be a Normal distribution. It is trivial to see that all the
+intermediate distributions are all Normal. Let $\mu_0$ and $\sigma_0^2$ denote
+the mean and variance of $\pi_0$, respectively; and let $\mu_T$ and
+$\sigma_T^2$ denote the mean and variance of $\pi_T$, respectively. Then
+$\pi_t$ has mean and variance, denoted by $\mu_t$ and $\sigma_t^2$,
+\begin{align}
+  \mu_t &= \frac{(1 - \alpha_t)\sigma_T^2\mu_0 + \alpha_t\sigma_0^2\mu_T}
+  {(1 - \alpha_t)\sigma_T^2 + \alpha_t\sigma_0^2} \label{eq:mini mu_t}\\
+  \sigma_t^2 &= \frac{\sigma_0^2\sigma_T^2}
+  {(1 - \alpha_t)\sigma_T^2 + \alpha_t\sigma_0^2} \label{eq:mini var_t}
+\end{align}
+where $\alpha_t = \alpha(t/T)$. Again, for demonstration purpose, at each
+iteration, instead of simulating from the Normal distribution directly, we use
+a Normal random walk, with a kernel invariant to $\pi_t$, to move the
+particles. The (unnormalized) incremental weights are thus,
+\begin{equation}
+  w_t(X_{t-1}^{(i)}, X_t^{(i)}) =
+  \frac{\phi(X_{t-1}^{(i)},\mu_t,\sigma_t^2}
+  {\phi(X_{t-1}^{(i)},\mu_{t-1},\sigma_{t-1}^2}
+\end{equation}
+where $\phi(x,\mu,\sigma^2)$ is the density function of Normal distribution
+with mean $\mu$ and variance $\sigma^2$.
+
+\subsection{Implementation}
+\label{sub:Implementation}
+
+Headers and definitions,
+\input{code/mini-header}
+
+Classes used in this example,
+\input{code/mini-using}
+
+The state type,
+\begin{cppcode}
+typedef StateMatrix<vsmc::RowMajor, 1, double> mini;
+\end{cppcode}
+
+The main function,
+\input{code/mini-main}
+
+Move particles,
+\input{code/mini-move}
+
+\section{Extensions}
+\label{sec:Extensions}
+
+\section{Performance benchmark}
+\label{sec:Performance benchmark}
 
