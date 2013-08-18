@@ -2,7 +2,6 @@
 \UseAbbr{aic}
 \UseAbbr{ais}
 \UseAbbr{bic}
-\UseAbbr{bugs}
 \UseAbbr{cess}
 \UseAbbr{cpu}
 \UseAbbr{dic}
@@ -12,6 +11,7 @@
 \UseAbbr{fpe}
 \UseAbbr{gic}
 \UseAbbr{gmm}
+\UseAbbr{gpgpu}
 \UseAbbr{gpu}
 \UseAbbr{ic}
 \UseAbbr{ieee}
@@ -20,6 +20,7 @@
 \UseAbbr{mcmc}
 \UseAbbr{mdl}
 \UseAbbr{mle}
+\UseAbbr{mpi}
 \UseAbbr{mse}
 \UseAbbr{nic}
 \UseAbbr{nls}
@@ -28,7 +29,9 @@
 \UseAbbr{pmcmc}
 \UseAbbr{ps}
 \UseAbbr{rjmcmc}
+\UseAbbr{rng}
 \UseAbbr{sis}
+\UseAbbr{smp}
 \UseAbbr{tic}
 \UseAbbr{unix}
 
@@ -81,6 +84,26 @@
 \def\Wiu{\supi{W}}
 \def\wiu{\supi{w}}
 
+\def\cpp{{\allcapt C++}\xspace}
+\def\cppne{{\allcapt C++98}\xspace}
+\def\cppoo{{\allcapt C++11}\xspace}
+
+\def\bugs{\textsf{\textsc{bugs}}\xspace}
+\def\cilk{\textsf{Intel Cilk Plus}\xspace}
+\def\clang{\textsf{Clang}\xspace}
+\def\cmake{\textsf{CMake}\xspace}
+\def\gcc{\textsf{GCC}\xspace}
+\def\git{\textsf{Git}\xspace}
+\def\html{\textsf{\textsc{html}}\xspace}
+\def\icpc{\textsf{Intel C++ Composer XE}\xspace}
+\def\libcpp{\textsf{libc++}\xspace}
+\def\msvc{\textsf{Microsoft Visual C++}\xspace}
+\def\opencl{\textsf{OpenCL}\xspace}
+\def\openmp{\textsf{OpenMP}\xspace}
+\def\rlang{\textsf{R}\xspace}
+\def\tbb{\textsf{Intel TBB}\xspace}
+\def\vsmc{\textsf{vSMC}\xspace}
+
 \def\STATESKIP{\hskip.68cm}
 \def\TNOTESKIP{\hskip3em}
 \newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
@@ -94,3 +117,7 @@
 
 \newminted{cpp}{}
 \usemintedstyle{solarizedlight}
+\makeatletter
+\newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
+\def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
+\makeatother

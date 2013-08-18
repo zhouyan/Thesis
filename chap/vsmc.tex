@@ -1,10 +1,10 @@
-\chapter{vSMC: A C++ Library for Parallel Sequential Monte Carlo}
-\label{cha:vSMC: A C++ Library for Parallel Sequential Monte Carlo}
+\chapter{\protect\vsmc: A C++ Library for Parallel SMC}
+\label{cha:vSMC: A C++ Library for Parallel SMC}
 
-The vSMC library \cite{software:VSMC} was developed during the research to
+The \vsmc library \cite{software:VSMC} was developed during the research to
 assist the implementation of various \smc and other algorithms, including but
 not limited to the implementation of the illustrative and performance
-comparison examples in previous chapters. It evolves into a sophisticated C++
+comparison examples in previous chapters. It evolves into a sophisticated \cpp
 framework for implementing \smc algorithms on both sequential and parallel
 hardware.
 
@@ -17,25 +17,838 @@ write simple extensions of the library to assist novel \smc related
 researches. In the field of \smc, and computational statistics in general,
 researchers are actively developing new algorithms. It is unlikely to have any
 existing software to provide directly functionality of the newly developed
-algorithms. One of the purpose of vSMC is to make it easier to develop new
+algorithms. One of the purpose of \vsmc is to make it easier to develop new
 \smc related algorithms on top of the presented framework, and to free
 researchers from developing entirely new software to satisfy their particular
 needs. In section~\ref{sec:Performance benchmark} we compare the performance
-of different parallel programming models that can be used with vSMC. We also
-compare the performance of vSMC against other similar softwares.
+of different parallel programming models that can be used with \vsmc. We also
+compare the performance of \vsmc against other similar softwares.
 
-It shall be noted that, vSMC may be more ``developer friendly'' than ``user
+It shall be noted that, \vsmc may be more ``developer friendly'' than ``user
 friendly''. It does not provide \bugs-like interface for the user. However,
-the more proficient one is at C++, vSMC may be used in a more flexible and
+the more proficient one is at \cpp, \vsmc may be used in a more flexible and
 productive way than other softwares. There is always a trade-off between
 easy of use and the productivity, flexibility and extensibility of a given
 software work.
+
+\section{Using the \protect\vsmc library}
+\label{sec:Using the vSMC library}
+
+\subsection{Overview}
+
+The \vsmc library makes use of \cpp's template generic programming to
+implement general \smc algorithms. This library is formed by a few major
+modules listed below. Some features not included in these modules are
+introduced later in context.
+\begin{description}
+  \item[Core] The highest level of abstraction of \smc samplers. Users
+    interact with classes defined within this module to create and manipulate
+    general \smc samplers. Classes in this module include \code{Sampler},
+    \code{Particle} and others. These classes use user defined callback
+    functions or callable objects, such as functors, to perform problem
+    specific operations, such as updating particle values and weights. This
+    module is documented in Section~\ref{sub:Core module}.
+  \item[Symmetric Multiprocessing (\smp)] This is the form of computing most
+    people use everyday, including multiprocessor workstations, multicore
+    desktops and laptops. Classes within this module make it possible to write
+    generic operations which manipulate a single particle that can be applied
+    either sequentially or in parallel through various parallel programming
+    models. A method defined through classes of this module can be used by
+    \code{Sampler} as callback objects. This module is documented in
+    section~\ref{sub:SMP module}.
+  \item[Message Passing Interface] \mpi is the \emph{de facto} standard
+    for parallel programming on distributed memory architectures. This module
+    enables users to adapt implementations of algorithms written for the \smp
+    module such that the same sampler can be parallelized using \mpi. In
+    addition, when used with the \smp module, it allows easy implementation of
+    hybrid parallelization such as \mpi/\openmp.
+  \item[\opencl] This module is similar to the two above except it eases the
+    parallelization through \opencl, such as for the purpose of General
+    Purpose \gpu Programming (\gpgpu). \opencl is a framework for writing
+    programs that can be execute across heterogeneous platforms. \opencl
+    programs can run on either \cpu{}s or \gpu{}s.
+\end{description}
+We will introduce the core and \smp modules in detail. The other two will
+requires substantial knowledge of the underlying programming models, and it is
+beyond the scope of this chapter to give them proper introduction. However,
+examples and performance comparison will be given in context later.
+
+\subsection{Obtaining and installation}
+
+\vsmc is a header only library. There is practically no installation step. The
+library can be downloaded from \url{http://zhouyan.github.io/vSMC/vSMC.zip}.
+After downloading and unpacking, one can start using \vsmc by ensuring that
+the compiler can find the headers inside the \code{include} directory. To
+permanently install the library in a system directory, one can simply copy the
+contents of the \code{include} directory to an appropriate place.
+
+Alternatively, one can use the \cmake (2.8 or later) configuration script and
+obtain the source by Git. On a Unix-like system (such as Mac OS X, BSD, Linux
+and others),
+\begin{minted}{sh}
+git clone git://github.com/zhouyan/\vsmc.git
+cd vSMC
+git submodule init
+git submodule update
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make install
+\end{minted}
+
+\subsection{Documentation}
+
+To build the reference manual, one need Doxygen, version~1.8.3 or later.
+Continuing the last step (still in the \code{build} directory), invoking
+\code{make docs} will create a \code{doc} directory inside \code{build}, which
+contains the \html references. Alternatively the reference manual can also be
+found on \url{http://zhouyan.github.io/vSMC/doc/html/index.html}. It is beyond
+the scope of this paper to document every feature of the \vsmc library. In many
+places we will refer to this reference manual for further information.
+
+\subsection{Third-party dependencies}
+
+\vsmc uses Random123 \cite{Salmon:2011um} counter-based \rng for random number
+generating. For an \smc sampler with $N$ particles, \vsmc constructs $N$
+(statistically) independent \rng streams. It is possible to use millions of
+such streams without a huge memory footprint or other performance penalties.
+Since each particle has its own independent \rng stream, it frees users from
+many thread-safety and statistical independence considerations. It is highly
+recommended that the users install this library. Within \vsmc, these \rng
+streams are wrapped under \cppoo \rng engines, and can be replaced by other
+compatible \rng engines seamlessly. Users only need to be familiar with
+classes defined in \cppoo{} \code{<random>} or their Boost equivalents to use
+these \rng streams. See the documentation of the corresponding libraries for
+details, as well as examples in Section~\ref{sec:A minimal example}.
+
+The other third-party dependency is the Boost library. Version 1.49 or later
+is required. However, this is actually optional provided that proper \cppoo
+features are available in the standard library, for example using \clang with
+\libcpp The \cppoo headers of concern are \code{<functional>} and
+\code{<random>}. To instruct \vsmc to use the standard library headers instead
+of falling back to the Boost library, one needs to define the configuration
+macros before including any \vsmc headers. For example,
+\begin{cppcode}
+clang++ -std=c++11 -stdlib=\libcpp     \
+    -DVSMC_HAS_CXX11LIB_FUNCTIONAL=1  \
+    -DVSMC_HAS_CXX11LIB_RANDOM=1      \
+    -o prog prog.cpp
+\end{cppcode}
+tells the library to use \cppoo{} \code{<functional>} and \code{<random>}.
+The availability of these headers are also checked by the \cmake configuration
+script.
+
+\subsection{Compiler support}
+
+\vsmc has been tested with recent versions of \clang, \gcc, \icpc and \msvc.
+\vsmc can optionally use some \cppoo features to improve performance and
+usability. In particular, as mentioned before, \vsmc can use \cppoo standard
+libraries instead of the Boost library. At the time of writing, \clang with
+\libcpp has the most comprehensive support of \cppoo with respect to standard
+compliant and feature completion. \gcc~4.8, \msvc~2012 and \icpc~2013 also
+have very good \cppoo support. Note that, provided the Boost library is
+available, all \cppoo language and library features are optional. \vsmc can be
+used with any \cppne conforming compilers.
+
+\section{The \protect\vsmc library}
+\label{sec:The vSMC library}
+
+\subsection{Core module}
+\label{sub:Core module}
+
+The core module abstracts general \smc samplers. \smc samplers can be viewed
+as formed by a few concepts regardless of the specific problems. The following
+is a list of the most commonly seen components of \smc samplers and their
+corresponding \vsmc abstractions.
+\begin{itemize}
+  \item A collection of all particle state values, namely
+    $\{X_t^{(i)}\}_{i=1}^N$. In \vsmc, users need to define a class, say
+    \code{T}, to abstract this concept. We refer to this as the \emph{value
+      collection}. We will slightly abuse the generic name \code{T} in this
+    paper. Whenever a template parameter is mentioned with the name \code{T},
+    it always refers to such a value collection type unless stated otherwise.
+  \item A collection of all particle state values and their associated
+    weights. This is abstracted by a \code{Particle<T>} object. We refer to
+    this as the \emph{particle collection}. A \code{Particle<T>} object has
+    three primary sub-objects. One is the above type \code{T} value collection
+    object. Another is an object that abstracts weights
+    $\{W_t^{(i)}\}_{i=1}^N$. By default this is a \code{WeightSet} object. The
+    last is a collection of \rng streams, one for each particle. By default
+    this is an \code{RngSet} object.
+  \item Operations that perform tasks common to all samplers to these
+    particles, such as resampling. These are the member functions of
+    \code{Particle<T>}.
+  \item A sampler that updates the particles (state values and weights) using
+    user defined callbacks. This is a \code{Sampler<T>} object.
+  \item Monitors that record the importance sampling estimates of certain
+    functions defined for the values when the sampler iterates. These are
+    \code{Monitor<T>} objects. A monitor for the estimates of $E[h(X_t)]$
+    computes $h(X_t^{(i)})$ for each $i = 1,\dots,N$. The function value
+    $h(X_t)$ is allowed to be a vector.
+\end{itemize}
+Note that within the core module, all operations are applied to
+\code{Particle<T>} objects, that is $\{W_t^{(i)},X_t^{(i)}\}_{i=1}^N$, instead
+of a single particle. Later we will see how to write operations that can be
+applied to individual particles and can be parallelized easily.
+
+\subsubsection{Program structures}
+
+A \vsmc program usually consists of the following tasks.
+\begin{itemize}
+  \item Define a value collection type \code{T}.
+  \item Constructing a \code{Sampler<T>} object.
+  \item Configure the behavior of initialization and updating by adding
+    callable objects to the sampler object.
+  \item Optionally add monitors.
+  \item Initialize and iterate the sampler.
+  \item Retrieve the outputs, estimates and other informations.
+\end{itemize}
+In this section we document how to implement each of these tasks. Within the
+\vsmc library, all public classes, namespaces and free functions, are declared
+in the namespace \code{vsmc}.
+
+\subsubsection{The value collection}
+
+The template parameter \code{T} is a user defined type that abstracts the
+value collection. \vsmc does not restrict how the values shall be actually
+stored. They can be stored in memory, spread among nodes of a cluster, in \gpu
+memory or even in a database. However this kind of flexibility comes with a
+small price. The value collection does need to fulfill two requirements. We
+will see later that for most common usage, \vsmc provides readily usable
+implementations, on top of which users can create problem specific classes.
+
+First, the value collection class \code{T} has to provide a constructor of the
+form
+\begin{cppcode}
+T (SizeType N)
+\end{cppcode}
+where \code{SizeType} is some integer type. Since \vsmc allows one to allocate
+the states in any way suitable, one needs to provide this constructor which
+\code{Particle<T>} can use to allocate them.
+
+Second, the class has to provide a member function named \code{copy} that
+copies each particle according to replication numbers given by a resampling
+algorithm. For the same reason as above \vsmc has no way to know how it can
+extract and copy a single particle when it is doing the resampling. The
+signature of this member function may look like
+\begin{cppcode}
+template <typename SizeType>
+void copy (std::size_t N, const SizeType *copy_from);
+\end{cppcode}
+The pointer \code{copy_from} points to an array that has $N$ elements,
+where $N$ is the number of particles. After calling this member function, the
+value of particle \code{i} shall be copied from the particle
+\code{j = copy_from[i]}. In other words, particle \code{i} is a child of
+particle \code{copy_from[i]}, or \code{copy_from[i]} is the parent of particle
+\code{i}. If a particle \code{j} shall remain itself, then
+\code{copy_from[j] == j}. How the values are actually copied is user defined.
+Note that, the member function can take other forms, as usual when using \cpp
+template generic programming.
+The actual type of the pointer \code{copy_from}, \code{SizeType}, is
+\code{Particle<T>::size_type}, which depends on the type \code{T}. For
+example, define the member function as the following is also allowed,
+\begin{cppcode}
+void copy (int N, const std::size_t *copy_from);
+\end{cppcode}
+provided that \code{Particle<T>::size_type} is indeed \code{std::size_t}.
+However, writing it as a member function template releases the users from
+finding the actual type of pointer \code{copy_from} and the sometimes
+troubling forward declaration issues. Will not elaborate such more technical
+issues further.
+
+\subsubsection{Constructing a sampler}
+
+Once the value collection class \code{T} is defined. One can start
+constructing \smc samplers. For example, the following line creates a sampler
+with $N$ particles
+\begin{cppcode}
+Sampler<T> sampler(N);
+\end{cppcode}
+The number of particles is the only mandatory argument of the constructor.
+There are two optional parameters. The complete signature of the constructor
+is,
+\begin{cppcode}
+explicit Sampler<T>::Sampler (Sampler<T>::size_type N,
+        ResampleScheme scheme = Stratified, double threshold = 0.5);
+\end{cppcode}
+The \code{scheme} parameter is self-explanatory. \vsmc provides a few built-in
+resampling schemes; see the reference manual for a list of them. User defined
+resampling algorithms can also be used. See the reference manual for details.
+The \code{threshold} is the threshold of $\ess/N$ below which a resampling
+will be performed. It is obvious that if $\text{\code{threshold}}\ge1$ then
+resampling will be performed at each iteration. If
+$\text{\code{threshold}}\le0$ then resampling will never be performed. Both
+parameters can be changed later. However the size of the sampler can never be
+changed after the construction.
+
+\subsubsection{Initialization and updating}
+
+All the callable objects that initialize, move and weight the particle
+collection can be added to a sampler through a set of member functions. All
+these objects operate on the \code{Particle<T>} object. Because \vsmc
+allows one to manipulate the particle collection as a whole, in principle many
+kinds of parallelization are possible.
+
+To set an initialization method, one need to implement a function with the
+following signature,
+\begin{cppcode}
+std::size_t init_func (Particle<T> &particle, void *param);
+\end{cppcode}
+or a class with \code{operator()} properly defined, such as
+\begin{cppcode}
+struct init_class
+{ std::size_t operator() (Particle<T> &particle, void *param); };
+\end{cppcode}
+They can be added to the sampler through
+\begin{cppcode}
+sampler.init(init_func);
+\end{cppcode}
+or
+\begin{cppcode}
+sampler.init(init_class());
+\end{cppcode}
+respectively. \cppoo{} \code{std::function} or its Boost equivalent
+\code{boost::function} can also be used. For example,
+\begin{cppcode}
+std::function<std::size_t (Particle<T> &, void *)> init_obj(init_func);
+sampler.init(init_obj);
+\end{cppcode}
+
+The addition of updating methods is more flexible. There are two kinds of
+updating methods. One is simply called \code{move} in \vsmc, and is performed
+before the possible resampling at each iteration. These moves usually perform
+the updating of the weights among other tasks. The other is called
+\code{mcmc}, and is performed after the possible resampling. They are often
+\mcmc type moves. Multiple \code{move}'s or \code{mcmc}'s are also allowed. In
+fact a \vsmc sampler consists of a queue of \code{move}'s and a queue of
+\code{mcmc}'s. The \code{move}'s in the queue can be changed through
+\code{Sampler<T>::move},
+\begin{cppcode}
+Sampler<T> &move (const Sampler<T>::move_type &new_move, bool append);
+\end{cppcode}
+If \code{append == true} then \code{new_move} is appended to the existing
+(possibly empty) queue. Otherwise, the existing queue is cleared and
+\code{new_move} is added. The member function returns a reference to the
+updated sampler. For example, the following move,
+\begin{cppcode}
+std::size_t move_func (std::size_t iter, Particle<T> &particle);
+\end{cppcode}
+can be added to a sampler by
+\begin{cppcode}
+sampler.move(move_func, false);
+\end{cppcode}
+This will clear the (possibly empty) existing queue of \code{move}'s and set a
+new one. To add multiple moves into the queue,
+\begin{cppcode}
+sampler.move(move1, true).move(move2, true).move(move3, true);
+\end{cppcode}
+Objects of class type with \code{operator()} properly defined can also be
+used, similarly to the initialization method. The queue of \code{mcmc}'s can
+be used similarly. See the reference manual for other methods that can be used
+to manipulate these two queues.
+
+In principle, one can combine all moves into a single move. However, sometimes
+it is more natural to think of a queue of moves. For instance, if a
+multi-block Metropolis random walk consists of kernels $K_1$ and $K_2$, then
+one can implement each of them as functions, say \code{mcmc_k1} and
+\code{mcmc_k2}, and add them to the sampler sequentially,
+\begin{cppcode}
+sampler.mcmc(mcmc_k1, true).mcmc(mcmc_k2, true);
+\end{cppcode}
+Then at each iteration, they will be applied to the particle collection
+sequentially in the order in which they are added.
+
+\subsubsection{Running the algorithm, monitoring and outputs}
+
+Having set all the operations, one can initialize and iterate the sampler by
+calling
+\begin{cppcode}
+sampler.initialize((void *)param);
+sampler.iterate(iter_num);
+\end{cppcode}
+The \code{param} argument to \code{initialize} is optional, with \code{NULL}
+as its default. This parameter is passed to the user defined \code{init_func}.
+The \code{iter_num} argument to \code{iterate} is also optional; the default
+is $1$.
+
+Before initializing the sampler or after a certain time point, one can add
+monitors to the sampler. The concept is similar to \bugs's \code{monitor}
+statement, except it does not monitor the individual values but rather the
+importance sampling estimates. Consider approximating $\Exp[h(X_t)]$, where
+$h(X_t) = (h_1(X_t),\dots,h_m(X_t))$ is an $m$-vector function. The importance
+sampling estimate can be obtained by $AW$ where $A$ is an $N$ by $m$ matrix
+where $A(i,j) = h_j(X_t^{(i)})$ and $W = (W_t^{(i)},\dots,W_t^{(N)})^T$ is the
+$N$-vector of normalized weights. To compute this importance sampling
+estimate, one need to define the following evaluation function (or a class
+with \code{operator()} properly defined),
+\begin{cppcode}
+void monitor_eval (std::size_t iter, std::size_t m,
+        const Particle<T> &particle, double *res)
+\end{cppcode}
+and add it to the sampler by calling,
+\begin{cppcode}
+sampler.monitor("some.user.chosen.variable.name", m, monitor_eval);
+\end{cppcode}
+When the function \code{monitor_eval} is called, \code{iter} is the iteration
+number of the sampler, \code{m} is the same value as the one the user passed
+to \code{Sampler<T>::monitor}; and thus one does not need global variable or
+other similar techniques to access this value. The output pointer \code{res}
+points to an $N \times m$ output array of row major order. That is, after the
+calling of the function, \code{res[i * dim + j]} shall be $h_j(X_t^{(i)})$.
+
+After each iteration of the sampler, the importance sampling estimate will be
+computed automatically. See the reference manual for various ways to retrieve
+the results. Usually it is sufficient to output the sampler by
+\begin{cppcode}
+std::ofstream output("file.name");
+output << sampler << std::endl;
+\end{cppcode}
+where the output file will contain the importance sampling estimates among
+other things. Alternatively, one can use the \code{Monitor<T>::record} member
+function to access specific historical results. See the reference manual for
+details of various overloaded version of this member function.
+
+A reference to the value collection \code{T} object can be retrieved through
+the \code{Particle<T>::value} member function. \code{Particle<T>} objects
+manage the weights through a weight set object, which by default is of type
+\code{WeightSet}. The \code{Particle<T>::weight_set} member function returns a
+reference to this weigh set object. A user defined weight set class that
+abstracts $\{W_t^{(i)}\}_{i=1}^N$ can also be used. The details involve some
+more advanced \cpp template techniques and are documented in the reference
+manual. One possible reason for replacing the default is to provide special
+memory management of the weight set. For example, the \mpi module provides a
+special weight set class that manages weights across multiple nodes and
+perform proper normalization, computation of \ess, and other tasks.
+
+The default \code{WeightSet} object provides some ways to retrieve weights.
+Here we document some of the most commonly used. See the reference manual for
+details of others. The weights can be accessed one by one, for example,
+\begin{cppcode}
+Particle<T> &particle = sampler.particle();
+double w_i     = particle.weight_set().weight(i);
+double log_w_i = particle.weight_set().log_weight(i);
+\end{cppcode}
+One can also read all weights into a container, for example,
+\begin{cppcode}
+std::vector<double> w(particle.size());
+particle.weight_set().read_weight(w.begin());
+double *lw = new double[particle.size()];
+particle.weight_set().read_log_weight(lw);
+\end{cppcode}
+Note that these member functions accept general output iterators.
+
+\subsubsection{Implementing initialization and updating}
+
+So far we have only discussed how to add initialization and updating objects
+to a sampler. To actually implement them, one writes callable objects that
+operate on the \code{Particle<T>} object. For example, a move can be
+implemented through the following function as mentioned before,
+\begin{cppcode}
+std::size_t move_func (std::size_t iter, Particle<T> &particle);
+\end{cppcode}
+Inside the body of this function, one can change the value by manipulating the
+object through the reference returned by \code{particle.value()}.
+
+When using the default weight set class, the weights can be updated through a
+set of member functions of \code{WeightSet}. For example,
+\begin{cppcode}
+std::vector<double> weight(particle.size());
+particle.weight_set().set_equal_weight();
+particle.weight_set().set_weight(weight.begin());
+particle.weight_set().mul_weight(weight.begin());
+particle.weight_set().set_log_weight(weight.begin());
+particle.weight_set().add_log_weight(weight.begin());
+\end{cppcode}
+The \code{set_equal_weight} member function sets all weights to be equal. The
+\code{set_weight} and \code{set_log_weight} member functions set the values of
+weights and logarithm weights, respectively. The \code{mul_weight} and
+\code{add_log_weight} member functions multiply the weights or add to the
+logarithm weights by the given values, respectively. All these member functions
+accept general input iterators as their arguments.
+
+One important thing to note is that, whenever one of these member functions is
+called, both the weights and logarithm weights will be re-calculated,
+normalized, and the \ess will be updated. The reason for not allowing changing
+a single particle's weight is that, in a multi-threading environment, it is
+possible for one to change one weight in one thread, and obtain another in
+another thread without proper normalizing. Conceptually, changing one weight
+actually changes all weights.
+
+\subsubsection{Generating random numbers}
+
+The \code{Particle<T>} object has a sub-object, a collection of \rng engines
+that can be used with \cppoo{} \code{<random>} or Boost distributions. For
+each particle \code{i}, one can obtain an engine that produces an \rng stream
+independent of others by
+\begin{cppcode}
+particle.rng(i);
+\end{cppcode}
+To generate distribution random variates, one can use the
+\cppoo{} \code{<random>} library. For example,
+\begin{cppcode}
+std::normal_distribution<double> rnorm(mean, sd);
+double r = rnorm(particle.rng(i));
+\end{cppcode}
+or use the Boost library,
+\begin{cppcode}
+boost::random::normal_distribution<double> rnorm(mean, sd);
+double r = rnorm(particle.rng(i));
+\end{cppcode}
+\vsmc itself also makes use of \cppoo{} \code{<random>} or Boost depending
+on the value of the configuration macro \code{VSMC_HAS_CXX11LIB_RANDOM}.
+Though the user is free to choose which one to use in their own code, there is
+a convenient alternative. For each class defined in \cppoo{} \code{<random>},
+it is imported to the \code{vsmc::cxx11} namespace. Therefore one can use
+\begin{cppcode}
+cxx11::normal_distribution<double> rnorm(mean, sd);
+\end{cppcode}
+while the underlying implementation of \code{normal_distribution} can be
+either \cppoo standard library or Boost. The benefit is that if one needs to
+develop on multiple platforms, and only some of them support \cppoo and some
+of them have the Boost library, then only the configure macro
+\code{VSMC_HAS_CXX11LIB_RANDOM} needs to be changed. This can be configured
+through \cmake and other build systems. Of course, one can also use an
+entirely different \rng system than those provided by \vsmc.
+
+\subsection{SMP module}
+\label{sub:SMP module}
+
+\subsubsection{The value collection}
+
+Many typical problems' value collections can be viewed as a matrix of certain
+type. For example, a simple particle filter whose state is a vector of length
+\code{Dim} and type \code{double} can be viewed as an $N$ by \code{Dim} matrix
+where $N$ is the number of particles. A trans-dimensional problem can use an
+$N$ by $1$ matrix whose type is a user defined class, say \code{StateType}.
+For this kind of problems, \vsmc provide a class template
+\begin{cppcode}
+template <MatrixOrder Order, std::size_t Dim, typename StateType>
+class StateMatrix;
+\end{cppcode}
+which provides the constructor and the \code{copy} member function required by
+the core module interface, as well as methods for accessing individual values.
+The first template parameter (possible value \code{RowMajor} or
+\code{ColMajor}) specifies how the values are ordered in memory. Usually one
+shall choose \code{RowMajor} to optimize data access. The second template
+parameter is the number of variables, an integer value no less than $1$ or the
+special value \code{Dynamic}, in which case \code{StateMatrix} provides a
+member function \code{resize_dim} such that the number of variables can be
+changed at runtime. The third template parameter is the type of the state
+values.
+
+Each particle's state is thus a vector of length \code{Dim}, indexed from
+\code{0} to \code{Dim - 1}. To obtain the value at position \code{pos} of the
+vector of particle \code{i}, one can use one of the following member
+functions,
+\begin{cppcode}
+StateBase<RowMajor, Dim, StateType> value(N);
+StateType val = value.state(i, pos);
+StateType val = value.state(i, Position<Pos>());
+StateType val = value.state<Pos>(i);
+\end{cppcode}
+where \code{Pos} is a compile time constant expression whose value is the same
+as \code{pos}, assuming the position is known at compile time. One can also
+read all values. To read the variable at position \code{pos},
+\begin{cppcode}
+std::vector<StateType> vec(value.size());
+value.read_state(pos, vec.begin());
+\end{cppcode}
+Or one can read all values through an iterator,
+\begin{cppcode}
+std::vector<StateType> mat(Dim * value.size());
+value.read_state_matrix(ColMajor, mat.first());
+\end{cppcode}
+Alternatively, one can also read all values through an iterator which points
+to iterators,
+\begin{cppcode}
+std::vector<std::vector<StateType> > mat(Dim);
+for (std::size_t i = 0; i != Dim; ++i)
+    mat[i].resize(value.size());
+std::vector<std::vector<StateType>::iterator> iter(Dim);
+for (std::size_t i = 0; i != Dim; ++i)
+    iter[i] = mat[i].begin();
+value.read_state_matrix(iter.first());
+\end{cppcode}
+
+If the compiler support \cppoo{} \code{<tuple>}, \vsmc also provides a
+\code{StateTuple} class template, which is similar to \code{StateMatrix}
+except that the types of values do not have to be the same for each variable.
+This is similar to \rlang's \code{data.frame}. For example, suppose each
+particle's state is formed by two \code{double}'s, an \code{int} and a user
+defined type \code{StateType}, then the following constructs a value
+collection using \code{StateTuple},
+\begin{cppcode}
+StateTuple<ColMajor, double, double, int, StateType> value(N);
+\end{cppcode}
+And there are a few ways to access the state values, similar to
+\code{StateMatrix},
+\begin{cppcode}
+double x0 = value.state(i, Position<0>());
+int x2 = value.state<2>(i);
+std::vector<StateType> vec(value.size());
+state.read_state(Position<3>(), vec.begin());
+\end{cppcode}
+See the reference manual for details.
+
+\subsubsection{A single particle}
+
+For a \code{Particle<T>} object, one can construct a \code{SingleParticle<T>}
+object that abstracts one of the particle from the collection. For example,
+\begin{cppcode}
+Particle<T> particle(N);
+SingleParticle<T> sp(i, &particle);
+\end{cppcode}
+create a \code{SingleParticle<T>} object corresponding to the particle at
+position \code{i}. There are a few member functions of
+\code{SingleParticle<T>} that makes access to individual particles easier than
+through the interface of \code{Particle<T>}. Firt \code{sp.id()} returns the
+value of the argument \code{i} in the above code that created this
+\code{SingleParticle<T>} object. In addition, \code{sp.rng()} is equivalent to
+\code{particle.rng(i)}. Also \code{sp.particle()} returns a constant reference
+to the \code{Particle<T>} object. And \code{sp.particle_ptr()} returns a
+pointer to such a constant \code{Particle<T>} object. Note that, one cannot
+get write access to a \code{Particle<T>} object through interface of
+\code{SingleParticle<T>}. Instead, one can only get write access to a single
+particle. For example, If \code{T} is a \code{StateMatrix} instantiation or
+its derived class, then \code{sp.state(pos)} is equivalent to
+\code{particle.value().state(i, pos)} and the reference it returns is mutable.
+See the reference manual for more informations on the interface of the
+\code{SingleParticle} class template. \code{SingleParticle<T>} objects are
+usually not constructed by users, but rather by the libraries' other classes
+in the \smp module, and passed to user defined functions, as we will see very
+soon.
+
+\subsubsection{Sequential and parallel implementations}
+
+Once we have the \code{SingleParticle<T>} concept, we are ready to introduce
+how to write implementations of \smc algorithms that manipulate a single
+particle and can be applied to all particles in parallel or sequentially. For
+sequential implementations, this can be done through five base classes,
+\begin{cppcode}
+template <typename BaseState> class StateSEQ;
+template <typename T, typename D = Virtual> class InitializeSEQ;
+template <typename T, typename D = Virtual> class MoveSEQ;
+template <typename T, typename D = Virtual> class MonitorEvalSEQ;
+template <typename T, typename D = Virtual> class PathEvalSEQ;
+\end{cppcode}
+The template parameter \code{BaseState} needs to satisfy the general value
+collection requirements in addition to a \code{copy_particle} member function,
+for example, \code{StateMatrix}. Other base classes expect \code{T} to satisfy
+general value collection requirements. The details of all these class
+templates can be found in the reference manual. Here we use the
+\code{MoveSEQ<T>} class as an example to illustrate their usage. Recall that
+\code{Sampler<T>} expect a callable object which has the following signature
+as a move,
+\begin{cppcode}
+std::size_t move_func (std::size_t iter, Particle<T> &particle);
+\end{cppcode}
+For the purpose of illustration, the type \code{T} is defined as,
+\begin{cppcode}
+typedef StateMatrix<RowMajor, 1, double> T;
+\end{cppcode}
+Here is a typical example of implementation of such a function,
+\begin{cppcode}
+std::size_t move_func (std::size_t iter, Particle<T> &particle)
+{
+    std::vector<double> inc_weight(particle.size());
+    for (Particle<T>::size_type i = 0; i != particle.size(); ++i) {
+        cxx11::normal_distribution<double> rnorm(0, 1);
+        particle.value().state(i, 0) = rnorm(particle.rng(i));
+        inc_weight[i] = cal_inc_weight(particle.value().state(i, 0);
+    }
+    particle.weight_set().add_log_weight(inc_weight.begin());
+}
+\end{cppcode}
+where \code{cal_inc_weight} is some function that calculates the logarithm
+incremental weights. As we see, there are three main parts of a typical move.
+First, we allocate a vector \code{inc_weight}. Second, we generate normal
+random variates for each particle and calculate the incremental weights. This
+is done through a \code{for} loop. Third, we add the logarithm incremental
+weights. The first and the third are \emph{global} operations while the second
+is \emph{local}. The first and the third are often optional and absent. The
+local operation is also usually the most computational intensive part of \smc
+algorithms and can benefit the most from parallelizations.
+
+With \code{MoveSEQ<T>}, one can derive from this class, which defines
+the \code{operator()} required by the core module interface,
+\begin{cppcode}
+std::size_t operator() (std::size_t iter, Particle<T> &particle);
+\end{cppcode}
+and customize what this operator does by defining one or more of the following
+three member functions, corresponding to the three parts, respectively,
+\begin{cppcode}
+void pre_processor (std::size_t iter, Particle<T> &particle);
+std::size_t move_state (std::size_t iter, SingleParticle<T> sp);
+void post_processor (std::size_t iter, Particle<T> &particle);
+\end{cppcode}
+For example,
+\begin{cppcode}
+#include <vsmc/smp/backend_seq.hpp>
+
+class move : public MoveSEQ<T>
+{
+    public :
+
+    void pre_processor (std::size_t iter, Particle<T> &particle)
+    {inc_weight_.resize(particle.size());}
+
+    std::size_t move_state (std::size_t iter, SingleParticle<T> sp)
+    {
+        cxx11::normal_distribution<double> rnorm(0, 1);
+        sp.state(0) = rnorm(sp.rng());
+        inc_weight_[sp.id()] = cal_inc_weight(sp.state(0));
+    }
+
+    void post_processor (std::size_t iter, Particle<T> &particle)
+    {particle.weight_set().add_log_weight(inc_weight_.begin());}
+
+    private :
+
+    std::vector<double> inc_weight_;
+};
+\end{cppcode}
+The \code{operator()} of \code{MoveSEQ<T>} is equivalent to the single
+function implementation as shown before.
+
+In the simplest case, \code{MoveSEQ} only takes away the loop around Part 2.
+However if one implement the move in such a way, and then replace
+\code{MoveSEQ} with \code{MoveOMP}, the changing of the base class name causes
+\vsmc to use \openmp to parallelize the loop. For example, one can declare the
+class as
+\begin{cppcode}
+#include <vsmc/smp/backend_omp.hpp>
+class move : public MoveOMP<T>;
+\end{cppcode}
+and use exactly the same implementation as before. Now when
+\code{move::operator()} is called, it will be parallelized by \openmp. Other
+backends are available in case \openmp is not available. Among them there are
+\cilk and \tbb. In addition to these well known parallelization programming
+models, \vsmc also has its own implementation using \cppoo{} \code{<thread>}.
+There are other backends documented in the reference manual. To use any of
+these parallelization, all one need to do is to change a few base class names.
+In practice, one can use conditional compilation, for example, to use a
+sequential implementation or a \openmp parallelized one, we can write,
+\begin{cppcode}
+#ifdef USE_SEQ
+#include <vsmc/smp/backend_seq.hpp>
+#define BASE_MOVE MoveSEQ
+#endif
+
+#ifdef USE_OMP
+#include <vsmc/smp/backend_omp.hpp>
+#define BASE_MOVE MoveOMP
+#endif
+
+class move : public BASE_MOVE<T>;
+\end{cppcode}
+And we can compile the same source into different samplers with
+\code{Makefile} rules such as the following,
+\begin{cppcode}
+prog-seq : prog.cpp
+        $(CXX) $(CXXFLAGS) -DUSE_SEQ -o prog-seq prog.cpp
+prog-omp : prog.cpp
+        $(CXX) $(CXXFLAGS) -DUSE_omp -o prog-omp prog.cpp
+\end{cppcode}
+Or one can configure the source file through a build system such as \cmake,
+which can also determine which programming model is available on the system.
+
+\subsubsection{Adapter}
+
+Sometimes, the cumbersome task of writing a class to implement a move and
+other operations can out weight the power we gain through object oriented
+programming. For example, a simple \code{move_state}-like function is all that
+we need to get the work done. In this case, one can create a move through the
+\code{MoveAdapter}. For example, say we have implemented
+\begin{cppcode}
+std::size_t move_state (std::size_t iter, SingleParticle<T> sp);
+\end{cppcode}
+as a function. Then one can create a callable object acceptable to
+\code{Sampler<T>::move} through
+\begin{cppcode}
+MoveAdapter<T, MoveSEQ>  move_obj(move_state);
+MoveAdapter<T, MoveSTD>  move_obj(move_state);
+MoveAdapter<T, MoveTBB>  move_obj(move_state);
+MoveAdapter<T, MoveCILK> move_obj(move_state);
+MoveAdapter<T, MoveOMP>  move_obj(move_state);
+sampler.move(move_obj, false);
+\end{cppcode}
+These are respectively, sequential, \cppoo{} \code{<thread>}, \tbb, \cilk,
+and \openmp implementations. The first template parameter is the type of value
+collection and the second is the name of the base class template. Actually,
+the \code{MoveAdapter}'s constructor accepts two more optional arguments, the
+\code{pre_processor} and the \code{post_processor}, corresponding to the other
+two aforementioned member functions. Similar adapters for the other three base
+classes also exist.
+
+Another scenario where an adapter is desired is that which backend to use
+needs be decided at runtime. The above simple adapters can already be used for
+this purpose. In addition, another form of the adapter is as the following,
+\begin{cppcode}
+class move;
+MoveAdapter<T, MoveTBB, move> move_obj;
+sampler.move(move_obj, false);
+\end{cppcode}
+where the class \code{move} has the same definition as before but it no longer
+derives from any base class. The class \code{move} is required to have a
+default constructor, a copy constructor and an assignment operator.
+
+\subsection{Thread-safety and scalability considerations}
+\label{sub:Thread-safety and scalability considerations}
+
+When implementing parallelized \smc algorithms, issues such as thread-safety
+cannot be avoided even though the \vsmc library hides most parallel constructs
+from the user.
+
+Classes in the \vsmc library usually guarantee that their member functions are
+thread-safe in the sense that calling the same member function on different
+objects at the same time from different threads is safe. However, calling
+mutable member functions on the same object from different threads is usually
+not safe. Calling immutable member functions is generally safe. There are a
+few exceptions,
+\begin{itemize}
+  \item The constructors of \code{Particle} and \code{Sampler} are not
+    thread-safe. Therefore if one need to construct multiple \code{Sampler}
+    from different threads, a mutex protection is needed. However, subsequent
+    member function calls on the constructed objects are thread-safe according
+    to the above rules.
+  \item Member functions that concern a single particle are generally
+    thread-safe in the sense that one can call them on the same object from
+    different threads as long as they are called for different particles. For
+    example \code{Particle::rng} and \code{StateMatrix::state} are
+    thread-safe.
+\end{itemize}
+In general, one can safely manipulate different individual particles from
+different threads, which is the minimal requirement for scalable
+parallelization. But one cannot manipulate the whole particle collection from
+different threads, for example \code{WeightSet::set_log_weight}.
+
+User defined callbacks shall generally follow the same rules. For example, for
+a \code{MoveOMP} subclass, \code{pre_processor} and \code{post_processor} does
+not have be thread-safe, but \code{move_state} needs to be. In general, avoid
+write access to memory locations shared by all particles from
+\code{move_state} and other similar member functions. One needs to take some
+extra care when using third-party libraries. For example, in our example
+implementation of the \code{move} class, the \code{rnorm} object, which is
+used to generate Normal random variates, is defined within \code{move_state}
+instead of being a class member data even though it is created with the same
+parameters for each particle. This is because the call \code{rnorm(sp.rng())}
+is not thread-safe in some implementations, for example, when using the Boost
+library.
+
+For scalable performance, certain practices should be avoided when
+implementing member functions such as \code{move_state}. For example, dynamic
+memory allocation is usually lock-based and thus should be avoided.
+Alternatively one can use a scalable memory allocator such as the one provided
+by \tbb. In general, in functions such as \code{move_state}, one should avoid
+using locks to guarantee thread-safety, which can be a bottleneck to parallel
+performance.
+
 
 \section{A minimal example}
 \label{sec:A minimal example}
 
 In this section we use a minimal example to demonstrate an \smc algorithm
-implemented with vSMC.
+implemented with \vsmc.
 
 \subsection{Model and algorithm}
 \label{sub:Model and algorithm}
