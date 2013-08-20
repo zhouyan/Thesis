@@ -30,6 +30,7 @@
 \UseAbbr{ps}
 \UseAbbr{rjmcmc}
 \UseAbbr{rng}
+\UseAbbr{simd}
 \UseAbbr{sis}
 \UseAbbr{smp}
 \UseAbbr{tic}
@@ -88,6 +89,7 @@
 \def\cppne{{\allcapt C++98}\xspace}
 \def\cppoo{{\allcapt C++11}\xspace}
 
+\def\aocl{\textsf{AMD APP OpenCL}\xspace}
 \def\bugs{\textsf{\textsc{bugs}}\xspace}
 \def\cilk{\textsf{Intel Cilk Plus}\xspace}
 \def\clang{\textsf{Clang}\xspace}
@@ -96,10 +98,12 @@
 \def\git{\textsf{Git}\xspace}
 \def\html{\textsf{\textsc{html}}\xspace}
 \def\icpc{\textsf{Intel C++ Composer XE}\xspace}
+\def\iocl{\textsf{Intel OpenCL}\xspace}
 \def\libcpp{\textsf{libc++}\xspace}
 \def\msvc{\textsf{Microsoft Visual C++}\xspace}
 \def\opencl{\textsf{OpenCL}\xspace}
 \def\openmp{\textsf{OpenMP}\xspace}
+\def\random{\textsf{Random123}\xspace}
 \def\rlang{\textsf{R}\xspace}
 \def\tbb{\textsf{Intel TBB}\xspace}
 \def\vsmc{\textsf{vSMC}\xspace}
@@ -115,8 +119,10 @@
 \def\SubBest{\ifmmode\color{MGreen}\it\else\textcolor{MGreen}{\sffamily
     Green}\fi}
 
-\newminted{cpp}{}
 \usemintedstyle{solarizedlight}
+\newminted{cpp}{}
+\newcommand\inputcppcode[2][]{\inputminted[#1]{cpp}{#2}}
+
 \makeatletter
 \newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
 \def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
