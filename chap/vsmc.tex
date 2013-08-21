@@ -14,18 +14,17 @@ chapter. In this chapter, we provide a higher level overview of the library
 structure and usage. Section~\ref{sec:Using the vSMC library} and~\ref{sec:The
   vSMC library} details the usage and structure of the library. In
 section~\ref{sec:A minimal example} we use a minimal example to demonstrate
-the most basic features of the library. Section~\ref{sec:Extensions} discusses
-how one can write simple extensions of the library to assist novel \smc
-related researches. In the field of \smc, and computational statistics in
-general, researchers are actively developing new algorithms. It is unlikely to
-have any existing software to directly provide functionality of the newly
-developed algorithms. One of the purpose of \vsmc is to make it easier to
-develop new \smc related algorithms on top of the presented framework, and to
-free researchers from developing entirely new software to satisfy their
-particular needs. In section~\ref{sec:Performance benchmark} we compare the
-performance of different parallel programming models that can be used with
-\vsmc. We also compare the performance of \vsmc against other similar
-softwares.
+the most basic features of the library. Section~\ref{sec:Beyond the basics}
+discusses how one can implement the adaptive algorithms studied in the last
+chapter and how the library can assist novel \smc related researches. In the
+field of \smc, and computational statistics in general, researchers are
+actively developing new algorithms. It is unlikely to have any existing
+software to directly provide functionality of the newly developed algorithms.
+One of the purpose of \vsmc is to make it easier to develop new \smc related
+algorithms on top of the presented framework, and to free researchers from
+developing entirely new software to satisfy their particular needs. In
+section~\ref{sec:Performance benchmark} we compare the performance of
+different parallel programming models that can be used with \vsmc.
 
 It shall be noted that, \vsmc may be more ``developer friendly'' than ``user
 friendly''. It does not provide \bugs-like interface for the user. However,
@@ -162,7 +161,9 @@ used with any \cppne conforming compilers.
 The core module abstracts general \smc samplers. \smc samplers can be viewed
 as formed by a few concepts regardless of the specific problems. The following
 is a list of the most commonly seen components of \smc samplers and their
-corresponding \vsmc abstractions.
+corresponding \vsmc abstractions. Here and in the remaining of this chapter,
+unless stated otherwise, all documented classes resides in the \code{vsmc}
+namespace.
 \begin{itemize}
   \item A collection of all particle state values, namely
     $\{X_t^{(i)}\}_{i=1}^N$. In \vsmc, users need to define a class, say
@@ -1135,13 +1136,13 @@ parallelization. We use the Gaussian mixture model with \smc[2] algorithm
 as shown in section~\ref{sub:Gaussian mixture model}. For a complete
 documentation on its implementation with \vsmc, see \cite{software:VSMC}.
 
-\subsection{Using the SMP module}
+\subsection{Using the \protect\smp module}
 \label{sub:Using the SMP module}
 
 We consider five different implementations supported by \icpc~2013:
 sequential, \tbb, \cilk, \openmp and \cppoo{} \code{<thread>}. The samplers
 are compiled with
-\begin{minted}{sh}
+\begin{minted}{make}
 CXX=icpc -std=c++11 -gcc-name=gcc-4.7 -gxx-name=g++-4.7
 CXXFLAGS=-O3 -xHost -fp-model precise  \
          -DVSMC_HAS_CXX11LIB_FUNCTIONAL=1  \
@@ -1169,8 +1170,8 @@ applications, the difference is not very significant.
   \label{fig:bench-smp-perf}
 \end{figure}
 
-\subsection{Using the OpenCL module}
-\label{sub:Using the module}
+\subsection{Using the \protect\opencl module}
+\label{sub:Using the OpenCL module}
 
 The implementation of the same algorithm using \opencl is quite similar to
 those using the \smp module.

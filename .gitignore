@@ -16,3 +16,5 @@ thesis-*.*
 outline.pdf
 pieces/*.pdf
 chap/*.pdf
+
+.minted-thesis
