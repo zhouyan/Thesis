@@ -2,19 +2,20 @@ class mini_move : pubic BASE_MOVE<mini>
 {
     public :
 
-    mini_move (/* same as before */ ) : /* same as before */ {}
+    mini_move ( /* same as before */ ) : /* same as before */ {}
 
     void pre_processor (size_t iter, Particle<mini> &particle)
     {
         inc_weight_.resize(particle.size());
 
         if (iter == 1) {
+            alpha_.clear();
             alpha_.push_back(0);
         }
 
         if (iter == T_) {
             alpha_.push_back(1);
-            return
+            return;
         }
 
         inc_weight_base_.resize(particle.size());

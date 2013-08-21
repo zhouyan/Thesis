@@ -51,7 +51,10 @@
 \UseMathBB{N}
 \UseMathBB{R}
 
+\def\Data{\mathbfit{Y}}
 \def\aicc{\hbox{\aic{}\ensuremath{_c}}\xspace}
+\def\data{\mathbfit{y}}
+\def\dkl{D_{\mathrm{KL}}}
 \def\kl{Kullback-Leibler divergence\xspace}
 \def\mha{Metropolis-Hastings algorithm\xspace}
 
@@ -60,19 +63,9 @@
 \newcommand{\Paramk}[1][k]{\ensuremath{\Theta_{#1}}\xspace}
 \newcommand{\smc}[1][]{\textsc{smc}#1\xspace}
 
-\def\dkl{D_{\mathrm{KL}}}
-\def\data{\mathbfit{y}}
-\def\Data{\mathbfit{Y}}
-
 \def\lvec#1#2{#1_1,\dots,#1_{#2}}
 \def\svec#1#2{#1^1,\dots,#1^{#2}}
 \def\mcvec#1#2{#1^{(1)},\dots,#1^{(#2)}}
-
-\def\bfX{\mathbfit{X}}
-\def\bfx{\mathbfit{x}}
-\def\bfY{\mathbfit{Y}}
-\def\bfy{\mathbfit{y}}
-\def\bfu{\mathbfit{u}}
 
 \def\iid{\ifmmode\text{i.i.d.}\else{i.i.d.}\xspace\fi}
 \def\ymin{y_{\textsc{min}}}
@@ -84,6 +77,14 @@
 \def\xiu{\supi{x}}
 \def\Wiu{\supi{W}}
 \def\wiu{\supi{w}}
+
+\def\STATESKIP{\hskip.68cm}
+\def\TNOTESKIP{\hskip3em}
+\newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
+
+\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\sffamily Red}\fi}
+\def\SubBest{\ifmmode\color{MGreen}\it\else\textcolor{MGreen}{\sffamily
+    Green}\fi}
 
 \def\cpp{{\allcapt C++}\xspace}
 \def\cppne{{\allcapt C++98}\xspace}
@@ -108,22 +109,14 @@
 \def\tbb{\textsf{Intel TBB}\xspace}
 \def\vsmc{\textsf{vSMC}\xspace}
 
-\def\STATESKIP{\hskip.68cm}
-\def\TNOTESKIP{\hskip3em}
-\newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
-\newcolumntype{C}{>{\centering\arraybackslash}X}
-\newcolumntype{L}{>{\raggedright\arraybackslash}X}
-\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
-
-\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\sffamily Red}\fi}
-\def\SubBest{\ifmmode\color{MGreen}\it\else\textcolor{MGreen}{\sffamily
-    Green}\fi}
-
 \usemintedstyle{solarizedlight}
-\newminted{cpp}{}
-\newcommand\inputcppcode[2][]{\inputminted[#1]{cpp}{#2}}
 
-\makeatletter
-\newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
-\def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
-\makeatother
+\newmintedfile{cpp}{mathescape}
+
+\newminted{cpp}{}
+\newminted{sh}{}
+\newminted{make}{}
+
+\newmintinline{cpp}{}
+\newmintinline{sh}{}
+\newmintinline{make}{}

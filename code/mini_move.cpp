@@ -36,7 +36,8 @@ class mini_move : public BASE_MOVE<mini>
     void post_processor (size_t, Particle<mini> &particle)
     {
         // Add the log of the incremental weights
-        particle.weight_set().add_log_weight(inc_weight_.begin());
+        particle.weight_set().add_log_weight(
+		inc_weight_.begin());
     }
 
     private :

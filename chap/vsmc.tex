@@ -29,8 +29,8 @@ different parallel programming models that can be used with \vsmc.
 It shall be noted that, \vsmc may be more ``developer friendly'' than ``user
 friendly''. It does not provide \bugs-like interface for the user. However,
 the more proficient one is at \cpp, \vsmc may be used in a more flexible and
-productive way than other softwares. There is always a trade-off between
-easy of use and the productivity, flexibility and extensibility of a given
+productive way than other softwares. There is always a trade-off between easy
+of use and the productivity, flexibility and extensibility of a given
 software.
 
 \section{Using the vSMC library}
@@ -45,8 +45,8 @@ introduced later in context.
 \begin{description}
   \item[Core] The highest level of abstraction of \smc samplers. Users
     interact with classes defined within this module to create and manipulate
-    general \smc samplers. Classes in this module include \code{Sampler},
-    \code{Particle} and others. These classes use user defined callback
+    general \smc samplers. Classes in this module include \cppinline{Sampler},
+    \cppinline{Particle} and others. These classes use user defined callback
     functions or callable objects, such as functors, to perform problem
     specific operations, such as updating particle values and weights. This
     module is documented in Section~\ref{sub:Core module}.
@@ -56,10 +56,10 @@ introduced later in context.
     generic operations which manipulate a single particle that can be applied
     either sequentially or in parallel through various parallel programming
     models. A method defined through classes of this module can be used by
-    \code{Sampler} as callback objects. This module is documented in
+    \cppinline{Sampler} as callback objects. This module is documented in
     section~\ref{sub:SMP module}.
-  \item[Message Passing Interface] \mpi is the \emph{de facto} standard
-    for parallel programming on distributed memory architectures. This module
+  \item[Message Passing Interface] \mpi is the \emph{de facto} standard for
+    parallel programming on distributed memory architectures. This module
     enables users to adapt implementations of algorithms written for the \smp
     module such that the same sampler can be parallelized using \mpi. In
     addition, when used with the \smp module, it allows easy implementation of
@@ -80,14 +80,14 @@ examples and performance comparison will be given in context later.
 \vsmc is a header only library. There is practically no installation step. The
 library can be downloaded from \url{http://zhouyan.github.io/vSMC/vSMC.zip}.
 After downloading and unpacking, one can start using \vsmc by ensuring that
-the compiler can find the headers inside the \code{include} directory. To
+the compiler can find the headers inside the \cppinline{include} directory. To
 permanently install the library in a system directory, one can simply copy the
-contents of the \code{include} directory to an appropriate place.
+contents of the \cppinline{include} directory to an appropriate place.
 
 Alternatively, one can use the \cmake (version~2.8 or later) configuration
 script and obtain the source by \git. On a Unix-like system (such as Mac OS X,
 BSD, Linux and others),
-\begin{minted}{sh}
+\begin{shcode}
 git clone git://github.com/zhouyan/vSMC.git
 cd vSMC
 git submodule init
@@ -96,17 +96,18 @@ mkdir build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make install
-\end{minted}
+\end{shcode}
 
 \subsection{Documentation}
 
 To build the reference manual, one needs Doxygen (version~1.8.3 or later).
-Continuing the last step (still in the \code{build} directory), invoking
-\code{make docs} will create a \code{doc} directory inside \code{build}, which
-contains the \html references. Alternatively the reference manual can also be
-found on \url{http://zhouyan.github.io/vSMC/doc/html/index.html}. It is beyond
-the scope of this chapter to document every feature of the \vsmc library. In
-many places we will refer to this reference manual for further information.
+Continuing the last step (still in the \cppinline{build} directory), invoking
+\shinline{make docs} will create a \shinline{doc} directory inside
+\shinline{build}, which contains the \html references. Alternatively the
+reference manual can also be found on
+\url{http://zhouyan.github.io/vSMC/doc/html/index.html}. It is beyond the
+scope of this chapter to document every feature of the \vsmc library. In many
+places we will refer to this reference manual for further information.
 
 \subsection{Third-party dependencies}
 
@@ -119,26 +120,26 @@ many thread-safety and statistical independence considerations. It is highly
 recommended that the users install this library. Within \vsmc, these \rng
 streams are wrapped under \cppoo{} \rng engines, and can be replaced by other
 compatible \rng engines seamlessly. Users only need to be familiar with
-classes defined in \cppoo{} \code{<random>} or their Boost equivalents to use
-these \rng streams. See the documentation of the corresponding libraries for
-details, as well as examples in Section~\ref{sec:A minimal example}.
+classes defined in \cppoo{} \cppinline{<random>} or their Boost equivalents to
+use these \rng streams. See the documentation of the corresponding libraries
+for details, as well as examples in Section~\ref{sec:A minimal example}.
 
 The other third-party dependency is the Boost library. Version~1.49 or later
 is required. However, this is actually optional provided that proper \cppoo
 features are available in the standard library, for example using \clang with
-\libcpp The \cppoo headers of concern are \code{<functional>} and
-\code{<random>}. To instruct \vsmc to use the standard library headers instead
-of falling back to the Boost library, one needs to define the configuration
-macros before including any \vsmc headers. For example,
-\begin{cppcode}
+\libcpp The \cppoo headers of concern are \cppinline{<functional>} and
+\cppinline{<random>}. To instruct \vsmc to use the standard library headers
+instead of falling back to the Boost library, one needs to define the
+configuration macros before including any \vsmc headers. For example,
+\begin{shcode}
 clang++ -std=c++11 -stdlib=lib++     \
     -DVSMC_HAS_CXX11LIB_FUNCTIONAL=1  \
     -DVSMC_HAS_CXX11LIB_RANDOM=1      \
     -o prog prog.cpp
-\end{cppcode}
-tells the library to use \cppoo{} \code{<functional>} and \code{<random>}.
-The availability of these headers are also checked by the \cmake configuration
-script.
+\end{shcode}
+tells the library to use \cppoo{} \cppinline{<functional>} and
+\cppinline{<random>}. The availability of these headers are also checked by
+the \cmake configuration script.
 
 \subsection{Compiler support}
 
@@ -162,47 +163,47 @@ The core module abstracts general \smc samplers. \smc samplers can be viewed
 as formed by a few concepts regardless of the specific problems. The following
 is a list of the most commonly seen components of \smc samplers and their
 corresponding \vsmc abstractions. Here and in the remaining of this chapter,
-unless stated otherwise, all documented classes resides in the \code{vsmc}
-namespace.
+unless stated otherwise, all documented classes resides in the
+\cppinline{vsmc} namespace.
 \begin{itemize}
   \item A collection of all particle state values, namely
     $\{X_t^{(i)}\}_{i=1}^N$. In \vsmc, users need to define a class, say
-    \code{T}, to abstract this concept. We refer to this as the \emph{value
-      collection}. We will slightly abuse the generic name \code{T} in this
-    chapter. Whenever a template parameter is mentioned with the name
-    \code{T}, it always refers to such a value collection type unless stated
-    otherwise.
+    \cppinline{T}, to abstract this concept. We refer to this as the
+    \emph{value collection}. We will slightly abuse the generic name
+    \cppinline{T} in this chapter. Whenever a template parameter is mentioned
+    with the name \cppinline{T}, it always refers to such a value collection
+    type unless stated otherwise.
   \item A collection of all particle state values and their associated
-    weights. This is abstracted by a \code{Particle<T>} object. We refer to
-    this as the \emph{particle collection}. A \code{Particle<T>} object has
-    three primary sub-objects. One is the above type \code{T} value collection
-    object. Another is an object that abstracts weights
-    $\{W_t^{(i)}\}_{i=1}^N$. By default this is a \code{WeightSet} object. The
-    last is a collection of \rng streams, one for each particle. By default
-    this is an \code{RngSet} object.
+    weights. This is abstracted by a \cppinline{Particle<T>} object. We refer
+    to this as the \emph{particle collection}. A \cppinline{Particle<T>}
+    object has three primary sub-objects. One is the above type \cppinline{T}
+    value collection object. Another is an object that abstracts weights
+    $\{W_t^{(i)}\}_{i=1}^N$. By default this is a \cppinline{WeightSet}
+    object. The last is a collection of \rng streams, one for each particle.
+    By default this is an \cppinline{RngSet} object.
   \item Operations that perform tasks common to all samplers to these
     particles, such as resampling. These are the member functions of
-    \code{Particle<T>}.
+    \cppinline{Particle<T>}.
   \item A sampler that updates the particles (state values and weights) using
-    user defined callbacks. This is a \code{Sampler<T>} object.
+    user defined callbacks. This is a \cppinline{Sampler<T>} object.
   \item Monitors that record the importance sampling estimates of certain
     functions defined for the values when the sampler iterates. These are
-    \code{Monitor<T>} objects. A monitor for the estimates of $E[h(X_t)]$
+    \cppinline{Monitor<T>} objects. A monitor for the estimates of $E[h(X_t)]$
     computes $h(X_t^{(i)})$ for each $i = 1,\dots,N$. The function value
     $h(X_t)$ is allowed to be a vector.
 \end{itemize}
 Note that within the core module, all operations are applied to
-\code{Particle<T>} objects, that is $\{W_t^{(i)},X_t^{(i)}\}_{i=1}^N$, instead
-of a single particle. Later we will see how to write operations that can be
-applied to individual particles and can be parallelized easily.
+\cppinline{Particle<T>} objects, that is $\{W_t^{(i)},X_t^{(i)}\}_{i=1}^N$,
+instead of a single particle. Later we will see how to write operations that
+can be applied to individual particles and can be parallelized easily.
 
 \subsubsection{Program structures}
 \label{ssub:Program structures}
 
 A \vsmc program usually consists of the following tasks.
 \begin{itemize}
-  \item Define a value collection type \code{T}.
-  \item Constructing a \code{Sampler<T>} object.
+  \item Define a value collection type \cppinline{T}.
+  \item Constructing a \cppinline{Sampler<T>} object.
   \item Configure the behavior of initialization and updating by adding
     callable objects to the sampler object.
   \item Optionally add monitors.
@@ -211,12 +212,12 @@ A \vsmc program usually consists of the following tasks.
 \end{itemize}
 In this section we document how to implement each of these tasks. Within the
 \vsmc library, all public classes, namespaces and free functions, are declared
-in the namespace \code{vsmc}.
+in the namespace \cppinline{vsmc}.
 
 \subsubsection{The value collection}
 \label{ssub:The value collection}
 
-The template parameter \code{T} is a user defined type that abstracts the
+The template parameter \cppinline{T} is a user defined type that abstracts the
 value collection. \vsmc does not restrict how the values shall be actually
 stored. They can be stored in memory, spread among nodes of a cluster, in \gpu
 memory or even in a database. However this kind of flexibility comes with a
@@ -224,16 +225,16 @@ small price. The value collection does need to fulfill two requirements. We
 will see later that for most common usage, \vsmc provides readily usable
 implementations, on top of which users can create problem specific classes.
 
-First, the value collection class \code{T} has to provide a constructor of the
-form
+First, the value collection class \cppinline{T} has to provide a constructor
+of the form
 \begin{cppcode}
 T (SizeType N)
 \end{cppcode}
-where \code{SizeType} is some integer type. Since \vsmc allows one to allocate
-the states in any way suitable, one needs to provide this constructor which
-\code{Particle<T>} can use to allocate them.
+where \cppinline{SizeType} is some integer type. Since \vsmc allows one to
+allocate the states in any way suitable, one needs to provide this constructor
+which \cppinline{Particle<T>} can use to allocate them.
 
-Second, the class has to provide a member function named \code{copy} that
+Second, the class has to provide a member function named \cppinline{copy} that
 copies each particle according to replication numbers given by a resampling
 algorithm. For the same reason as above \vsmc has no way to know how it can
 extract and copy a single particle when it is doing the resampling. The
@@ -242,31 +243,31 @@ signature of this member function may look like
 template <typename SizeType>
 void copy (std::size_t N, const SizeType *copy_from);
 \end{cppcode}
-The pointer \code{copy_from} points to an array that has $N$ elements,
+The pointer \cppinline{copy_from} points to an array that has $N$ elements,
 where $N$ is the number of particles. After calling this member function, the
-value of particle \code{i} shall be copied from the particle
-\code{j = copy_from[i]}. In other words, particle \code{i} is a child of
-particle \code{copy_from[i]}, or \code{copy_from[i]} is the parent of particle
-\code{i}. If a particle \code{j} shall remain itself, then
-\code{copy_from[j] == j}. How the values are actually copied is user defined.
-Note that, the member function can take other forms, as usual when using \cpp
-template generic programming.
-The actual type of the pointer \code{copy_from}, \code{SizeType}, is
-\code{Particle<T>::size_type}, which depends on the type \code{T}. For
-example, define the member function as the following is also allowed,
+value of particle \cppinline{i} shall be copied from the particle \cppinline{j
+  = copy_from[i]}. In other words, particle \cppinline{i} is a child of
+particle \cppinline{copy_from[i]}, or \cppinline{copy_from[i]} is the parent
+of particle \cppinline{i}. If a particle \cppinline{j} shall remain itself,
+then \cppinline{copy_from[j] == j}. How the values are actually copied is user
+defined. Note that, the member function can take other forms, as usual when
+using \cpp template generic programming. The actual type of the pointer
+\cppinline{copy_from}, \cppinline{SizeType}, is
+\cppinline{Particle<T>::size_type}, which depends on the type \cppinline{T}.
+For example, define the member function as the following is also allowed,
 \begin{cppcode}
 void copy (int N, const std::size_t *copy_from);
 \end{cppcode}
-provided that \code{Particle<T>::size_type} is indeed \code{std::size_t}.
-However, writing it as a member function template releases the users from
-finding the actual type of pointer \code{copy_from} and the sometimes
-troubling forward declaration issues. Will not elaborate such more technical
-issues further.
+provided that \cppinline{Particle<T>::size_type} is indeed
+\cppinline{std::size_t}. However, writing it as a member function template
+releases the users from finding the actual type of pointer
+\cppinline{copy_from} and the sometimes troubling forward declaration issues.
+Will not elaborate such more technical issues further.
 
 \subsubsection{Constructing a sampler}
 \label{ssub:Constructing a sampler}
 
-Once the value collection class \code{T} is defined. One can start
+Once the value collection class \cppinline{T} is defined. One can start
 constructing \smc samplers. For example, the following line creates a sampler
 with $N$ particles
 \begin{cppcode}
@@ -275,31 +276,31 @@ Sampler<T> sampler(N);
 The number of particles is the only mandatory argument of the constructor.
 There are two optional parameters. The complete signature of the constructor
 is,
-\inputcppcode{code/sampler_constructor.cpp}
-The \code{scheme} parameter is self-explanatory. \vsmc provides a few built-in
-resampling schemes; see the reference manual for a list of them. User defined
-resampling algorithms can also be used. See the reference manual for details.
-The \code{threshold} is the threshold of $\ess/N$ below which a resampling
-will be performed. It is obvious that if $\text{\code{threshold}}\ge1$ then
-resampling will be performed at each iteration. If
-$\text{\code{threshold}}\le0$ then resampling will never be performed. Both
-parameters can be changed later. However the size of the sampler can never be
-changed after the construction.
+\cppfile{code/sampler_constructor.cpp}
+The \cppinline{scheme} parameter is self-explanatory. \vsmc provides a few
+built-in resampling schemes; see the reference manual for a list of them. User
+defined resampling algorithms can also be used. See the reference manual for
+details. The \cppinline{threshold} is the threshold of $\ess/N$ below which a
+resampling will be performed. It is obvious that if
+$\text{\cppinline{threshold}}\ge1$ then resampling will be performed at each
+iteration. If $\text{\cppinline{threshold}}\le0$ then resampling will never be
+performed. Both parameters can be changed later. However the size of the
+sampler can never be changed after the construction.
 
 \subsubsection{Initialization and updating}
 \label{ssub:Initialization and updating}
 
 All the callable objects that initialize, move and weight the particle
 collection can be added to a sampler through a set of member functions. All
-these objects operate on the \code{Particle<T>} object. Because \vsmc
+these objects operate on the \cppinline{Particle<T>} object. Because \vsmc
 allows one to manipulate the particle collection as a whole, in principle many
 kinds of parallelization are possible.
 
 To set an initialization method, one need to implement a function with the
 following signature,
-\inputcppcode{code/init_function.cpp}
-or a class with \code{operator()} properly defined, such as
-\inputcppcode{code/init_class.cpp}
+\cppfile{code/init_function.cpp}
+or a class with \cppinline{operator()} properly defined, such as
+\cppfile{code/init_class.cpp}
 They can be added to the sampler through
 \begin{cppcode}
 sampler.init(init_func);
@@ -308,23 +309,23 @@ or
 \begin{cppcode}
 sampler.init(init_class());
 \end{cppcode}
-respectively. \cppoo{} \code{std::function} or its Boost equivalent
-\code{boost::function} can also be used. For example,
-\inputcppcode{code/init_obj.cpp}
+respectively. \cppoo{} \cppinline{std::function} or its Boost equivalent
+\cppinline{boost::function} can also be used. For example,
+\cppfile{code/init_obj.cpp}
 
 The addition of updating methods is more flexible. There are two kinds of
-updating methods. One is simply called \code{move} in \vsmc, and is performed
-before the possible resampling at each iteration. These moves usually perform
-the updating of the weights among other tasks. The other is called
-\code{mcmc}, and is performed after the possible resampling. They are often
-\mcmc type moves. Multiple \code{move}'s or \code{mcmc}'s are also allowed. In
-fact a \vsmc sampler consists of a queue of \code{move}'s and a queue of
-\code{mcmc}'s. The \code{move}'s in the queue can be changed through
-\code{Sampler<T>::move},
-\inputcppcode{code/sampler_move.cpp}
-If \code{append == true} then \code{new_move} is appended to the existing
-(possibly empty) queue. Otherwise, the existing queue is cleared and
-\code{new_move} is added. The member function returns a reference to the
+updating methods. One is simply called \cppinline{move} in \vsmc, and is
+performed before the possible resampling at each iteration. These moves
+usually perform the updating of the weights among other tasks. The other is
+called \cppinline{mcmc}, and is performed after the possible resampling. They
+are often \mcmc type moves. Multiple \cppinline{move}'s or \cppinline{mcmc}'s
+are also allowed. In fact a \vsmc sampler consists of a queue of
+\cppinline{move}'s and a queue of \cppinline{mcmc}'s. The \cppinline{move}'s
+in the queue can be changed through \cppinline{Sampler<T>::move},
+\cppfile{code/sampler_move.cpp}
+If \cppinline{append == true} then \cppinline{new_move} is appended to the
+existing (possibly empty) queue. Otherwise, the existing queue is cleared and
+\cppinline{new_move} is added. The member function returns a reference to the
 updated sampler. For example, the following move,
 \begin{cppcode}
 std::size_t move_func (std::size_t iter, Particle<T> &particle);
@@ -333,21 +334,21 @@ can be added to a sampler by
 \begin{cppcode}
 sampler.move(move_func, false);
 \end{cppcode}
-This will clear the (possibly empty) existing queue of \code{move}'s and set a
-new one. To add multiple moves into the queue,
+This will clear the (possibly empty) existing queue of \cppinline{move}'s and
+set a new one. To add multiple moves into the queue,
 \begin{cppcode}
 sampler.move(move1, true).move(move2, true).move(move3, true);
 \end{cppcode}
-Objects of class type with \code{operator()} properly defined can also be
-used, similarly to the initialization method. The queue of \code{mcmc}'s can
-be used similarly. See the reference manual for other methods that can be used
-to manipulate these two queues.
+Objects of class type with \cppinline{operator()} properly defined can also be
+used, similarly to the initialization method. The queue of \cppinline{mcmc}'s
+can be used similarly. See the reference manual for other methods that can be
+used to manipulate these two queues.
 
 In principle, one can combine all moves into a single move. However, sometimes
 it is more natural to think of a queue of moves. For instance, if a
 multi-block Metropolis random walk consists of kernels $K_1$ and $K_2$, then
-one can implement each of them as functions, say \code{mcmc_k1} and
-\code{mcmc_k2}, and add them to the sampler sequentially,
+one can implement each of them as functions, say \cppinline{mcmc_k1} and
+\cppinline{mcmc_k2}, and add them to the sampler sequentially,
 \begin{cppcode}
 sampler.mcmc(mcmc_k1, true).mcmc(mcmc_k2, true);
 \end{cppcode}
@@ -363,13 +364,13 @@ calling
 sampler.initialize((void *)param);
 sampler.iterate(iter_num);
 \end{cppcode}
-The \code{param} argument to \code{initialize} is optional, with \code{NULL}
-as its default. This parameter is passed to the user defined \code{init_func}.
-The \code{iter_num} argument to \code{iterate} is also optional; the default
-is $1$.
+The \cppinline{param} argument to \cppinline{initialize} is optional, with
+\cppinline{NULL} as its default. This parameter is passed to the user defined
+\cppinline{init_func}. The \cppinline{iter_num} argument to
+\cppinline{iterate} is also optional; the default is $1$.
 
 Before initializing the sampler or after a certain time point, one can add
-monitors to the sampler. The concept is similar to \bugs's \code{monitor}
+monitors to the sampler. The concept is similar to \bugs's \cppinline{monitor}
 statement, except it does not monitor the individual values but rather the
 importance sampling estimates. Consider approximating $\Exp[h(X_t)]$, where
 $h(X_t) = (h_1(X_t),\dots,h_m(X_t))$ is an $m$-vector function. The importance
@@ -377,21 +378,19 @@ sampling estimate can be obtained by $AW$ where $A$ is an $N$ by $m$ matrix
 where $A(i,j) = h_j(X_t^{(i)})$ and $W = (W_t^{(i)},\dots,W_t^{(N)})^T$ is the
 $N$-vector of normalized weights. To compute this importance sampling
 estimate, one need to define the following evaluation function (or a class
-with \code{operator()} properly defined),
-\begin{cppcode}
-void monitor_eval (std::size_t iter, std::size_t m,
-        const Particle<T> &particle, double *res)
-\end{cppcode}
+with \cppinline{operator()} properly defined),
+\cppfile{code/monitor_eval.cpp}
 and add it to the sampler by calling,
 \begin{cppcode}
 sampler.monitor("variable.name", m, monitor_eval);
 \end{cppcode}
-When the function \code{monitor_eval} is called, \code{iter} is the iteration
-number of the sampler, \code{m} is the same value as the one the user passed
-to \code{Sampler<T>::monitor}; and thus one does not need global variable or
-other similar techniques to access this value. The output pointer \code{res}
-points to an $N \times m$ output array of row major order. That is, after the
-calling of the function, \code{res[i * dim + j]} shall be $h_j(X_t^{(i)})$.
+When the function \cppinline{monitor_eval} is called, \cppinline{iter} is the
+iteration number of the sampler, \cppinline{m} is the same value as the one
+the user passed to \cppinline{Sampler<T>::monitor}; and thus one does not need
+global variable or other similar techniques to access this value. The output
+pointer \cppinline{res} points to an $N \times m$ output array of row major
+order. That is, after the calling of the function,
+\cppinline{res[i * dim + j]} shall be $h_j(X_t^{(i)})$.
 
 After each iteration of the sampler, the importance sampling estimate will be
 computed automatically. See the reference manual for various ways to retrieve
@@ -401,25 +400,26 @@ std::ofstream output("file.name");
 output << sampler << std::endl;
 \end{cppcode}
 where the output file will contain the importance sampling estimates among
-other things. Alternatively, one can use the \code{Monitor<T>::record} member
-function to access specific historical results. See the reference manual for
-details of various overloaded version of this member function.
+other things. Alternatively, one can use the \cppinline{Monitor<T>::record}
+member function to access specific historical results. See the reference
+manual for details of various overloaded version of this member function.
 
-A reference to the value collection \code{T} object can be retrieved through
-the \code{Particle<T>::value} member function. The weights through a weight
-set object, which by default is of type \code{WeightSet}. The
-\code{Particle<T>::weight_set} member function returns a reference to this
-weigh set object. A user defined weight set class that abstracts
-$\{W_t^{(i)}\}_{i=1}^N$ can also be used. The details involve some more
-advanced \cpp template techniques and are documented in the reference manual.
-One possible reason for replacing the default is to provide special memory
-management of the weight set. For example, the \mpi module provides a special
-weight set class that manages weights across multiple nodes and perform proper
-normalization, computation of \ess, and other tasks.
+A reference to the value collection \cppinline{T} object can be retrieved
+through the \cppinline{Particle<T>::value} member function. The weights
+through a weight set object, which by default is of type
+\cppinline{WeightSet}. The \cppinline{Particle<T>::weight_set} member function
+returns a reference to this weigh set object. A user defined weight set class
+that abstracts $\{W_t^{(i)}\}_{i=1}^N$ can also be used. The details involve
+some more advanced \cpp template techniques and are documented in the
+reference manual. One possible reason for replacing the default is to provide
+special memory management of the weight set. For example, the \mpi module
+provides a special weight set class that manages weights across multiple nodes
+and perform proper normalization, computation of \ess, and other tasks.
 
-The default \code{WeightSet} object provides some ways to retrieve weights.
-Here we document some of the most commonly used. See the reference manual for
-details of others. The weights can be accessed one by one, for example,
+The default \cppinline{WeightSet} object provides some ways to retrieve
+weights. Here we document some of the most commonly used. See the reference
+manual for details of others. The weights can be accessed one by one, for
+example,
 \begin{cppcode}
 Particle<T> &particle = sampler.particle();
 double w_i     = particle.weight_set().weight(i);
@@ -439,16 +439,16 @@ Note that these member functions accept general output iterators.
 
 So far we have only discussed how to add initialization and updating objects
 to a sampler. To actually implement them, one writes callable objects that
-operate on the \code{Particle<T>} object. For example, a move can be
+operate on the \cppinline{Particle<T>} object. For example, a move can be
 implemented through the following function as mentioned before,
 \begin{cppcode}
 std::size_t move_func (std::size_t iter, Particle<T> &particle);
 \end{cppcode}
 Inside the body of this function, one can change the value by manipulating the
-object through the reference returned by \code{particle.value()}.
+object through the reference returned by \cppinline{particle.value()}.
 
 When using the default weight set class, the weights can be updated through a
-set of member functions of \code{WeightSet}. For example,
+set of member functions of \cppinline{WeightSet}. For example,
 \begin{cppcode}
 std::vector<double> weight(particle.size());
 particle.weight_set().set_equal_weight();
@@ -457,12 +457,13 @@ particle.weight_set().mul_weight(weight.begin());
 particle.weight_set().set_log_weight(weight.begin());
 particle.weight_set().add_log_weight(weight.begin());
 \end{cppcode}
-The \code{set_equal_weight} member function sets all weights to be equal.
-Similarly, the \code{set_weight} and \code{set_log_weight} member functions
-set the values of weights and logarithm weights, respectively. And the
-\code{mul_weight} and \code{add_log_weight} member functions multiply the
-weights or add to the logarithm weights by the given values, respectively. All
-these member functions accept general input iterators as their arguments.
+The \cppinline{set_equal_weight} member function sets all weights to be equal.
+Similarly, the \cppinline{set_weight} and \cppinline{set_log_weight} member
+functions set the values of weights and logarithm weights, respectively. And
+the \cppinline{mul_weight} and \cppinline{add_log_weight} member functions
+multiply the weights or add to the logarithm weights by the given values,
+respectively. All these member functions accept general input iterators as
+their arguments.
 
 One important thing to note is that, whenever one of these member functions is
 called, both the weights and logarithm weights will be re-calculated,
@@ -475,15 +476,15 @@ actually changes all weights.
 \subsubsection{Generating random numbers}
 \label{ssub:Generating random numbers}
 
-The \code{Particle<T>} object has a sub-object, a collection of \rng engines
-that can be used with \cppoo{} \code{<random>} or Boost distributions. For
-each particle \code{i}, one can obtain an engine that produces an \rng stream
-independent of others by
+The \cppinline{Particle<T>} object has a sub-object, a collection of \rng
+engines that can be used with \cppoo{} \cppinline{<random>} or Boost
+distributions. For each particle \cppinline{i}, one can obtain an engine that
+produces an \rng stream independent of others by
 \begin{cppcode}
 particle.rng(i);
 \end{cppcode}
 To generate distribution random variates, one can use the
-\cppoo{} \code{<random>} library. For example,
+\cppoo{} \cppinline{<random>} library. For example,
 \begin{cppcode}
 std::normal_distribution<double> rnorm(mean, sd);
 double r = rnorm(particle.rng(i));
@@ -493,21 +494,22 @@ or use the Boost library,
 boost::random::normal_distribution<double> rnorm(mean, sd);
 double r = rnorm(particle.rng(i));
 \end{cppcode}
-\vsmc itself also makes use of \cppoo{} \code{<random>} or Boost depending
-on the value of the configuration macro \code{VSMC_HAS_CXX11LIB_RANDOM}.
-Though the user is free to choose which one to use in their own code, there is
-a convenient alternative. For each class defined in \cppoo{} \code{<random>},
-it is imported to the \code{vsmc::cxx11} namespace. Therefore one can use
+\vsmc itself also makes use of \cppoo{} \cppinline{<random>} or Boost
+depending on the value of the configuration macro
+\cppinline{VSMC_HAS_CXX11LIB_RANDOM}. Though the user is free to choose which
+one to use in their own code, there is a convenient alternative. For each
+class defined in \cppoo{} \cppinline{<random>}, it is imported to the
+\cppinline{vsmc::cxx11} namespace. Therefore one can use
 \begin{cppcode}
 cxx11::normal_distribution<double> rnorm(mean, sd);
 \end{cppcode}
-while the underlying implementation of \code{normal_distribution} can be
+while the underlying implementation of \cppinline{normal_distribution} can be
 either \cppoo standard library or Boost. The benefit is that if one needs to
 develop on multiple platforms, and only some of them support \cppoo and some
 of them have the Boost library, then only the configure macro
-\code{VSMC_HAS_CXX11LIB_RANDOM} needs to be changed. This can be configured
-through \cmake and other build systems. Of course, one can also use an
-entirely different \rng system than those provided by \vsmc.
+\cppinline{VSMC_HAS_CXX11LIB_RANDOM} needs to be changed. This can be
+configured through \cmake and other build systems. Of course, one can also use
+an entirely different \rng system than those provided by \vsmc.
 
 \subsection{SMP module}
 \label{sub:SMP module}
@@ -517,38 +519,39 @@ entirely different \rng system than those provided by \vsmc.
 
 Many typical problems' value collections can be viewed as a matrix of certain
 type. For example, a simple particle filter whose state is a vector of length
-\code{Dim} and type \code{double} can be viewed as an $N$ by \code{Dim} matrix
-where $N$ is the number of particles. A trans-dimensional problem can use an
-$N$ by $1$ matrix whose type is a user defined class, say \code{StateType}.
-For this kind of problems, \vsmc provide a class template
+\cppinline{Dim} and type \cppinline{double} can be viewed as an $N$ by
+\cppinline{Dim} matrix where $N$ is the number of particles. A
+trans-dimensional problem can use an $N$ by $1$ matrix whose type is a user
+defined class, say \cppinline{StateType}. For this kind of problems, \vsmc
+provide a class template
 \begin{cppcode}
 template <MatrixOrder Order, std::size_t Dim, typename StateType>
 class StateMatrix;
 \end{cppcode}
-which provides the constructor and the \code{copy} member function required by
-the core module interface, as well as methods for accessing individual values.
-The first template parameter (possible value \code{RowMajor} or
-\code{ColMajor}) specifies how the values are ordered in memory. Usually one
-shall choose \code{RowMajor} to optimize data access. The second template
-parameter is the number of variables, an integer value no less than $1$ or the
-special value \code{Dynamic}, in which case \code{StateMatrix} provides a
-member function \code{resize_dim} such that the number of variables can be
-changed at runtime. The third template parameter is the type of the state
-values.
+which provides the constructor and the \cppinline{copy} member function
+required by the core module interface, as well as methods for accessing
+individual values. The first template parameter (possible value
+\cppinline{RowMajor} or \cppinline{ColMajor}) specifies how the values are
+ordered in memory. Usually one shall choose \cppinline{RowMajor} to optimize
+data access. The second template parameter is the number of variables, an
+integer value no less than $1$ or the special value \cppinline{Dynamic}, in
+which case \cppinline{StateMatrix} provides a member function
+\cppinline{resize_dim} such that the number of variables can be changed at
+runtime. The third template parameter is the type of the state values.
 
-Each particle's state is thus a vector of length \code{Dim}, indexed from
-\code{0} to \code{Dim - 1}. To obtain the value at position \code{pos} of the
-vector of particle \code{i}, one can use one of the following member
-functions,
+Each particle's state is thus a vector of length \cppinline{Dim}, indexed from
+\cppinline{0} to \cppinline{Dim - 1}. To obtain the value at position
+\cppinline{pos} of the vector of particle \cppinline{i}, one can use one of
+the following member functions,
 \begin{cppcode}
 StateBase<RowMajor, Dim, StateType> value(N);
 StateType val = value.state(i, pos);
 StateType val = value.state(i, Position<Pos>());
 StateType val = value.state<Pos>(i);
 \end{cppcode}
-where \code{Pos} is a compile time constant expression whose value is the same
-as \code{pos}, assuming the position is known at compile time. One can also
-read all values. To read the variable at position \code{pos},
+where \cppinline{Pos} is a compile time constant expression whose value is the
+same as \cppinline{pos}, assuming the position is known at compile time. One
+can also read all values. To read the variable at position \cppinline{pos},
 \begin{cppcode}
 std::vector<StateType> vec(value.size());
 value.read_state(pos, vec.begin());
@@ -560,28 +563,21 @@ value.read_state_matrix(ColMajor, mat.first());
 \end{cppcode}
 Alternatively, one can also read all values through an iterator which points
 to iterators,
-\begin{cppcode}
-std::vector<std::vector<StateType> > mat(Dim);
-for (std::size_t i = 0; i != Dim; ++i)
-    mat[i].resize(value.size());
-std::vector<std::vector<StateType>::iterator> iter(Dim);
-for (std::size_t i = 0; i != Dim; ++i)
-    iter[i] = mat[i].begin();
-value.read_state_matrix(iter.first());
-\end{cppcode}
+\cppfile{code/state_matrix_read.cpp}
 
-If the compiler support \cppoo{} \code{<tuple>}, \vsmc also provides a
-\code{StateTuple} class template, which is similar to \code{StateMatrix}
-except that the types of values do not have to be the same for each variable.
-This is similar to \rlang's \code{data.frame}. For example, suppose each
-particle's state is formed by two \code{double}'s, an \code{int} and a user
-defined type \code{StateType}, then the following constructs a value
-collection using \code{StateTuple},
+If the compiler support \cppoo{} \cppinline{<tuple>}, \vsmc also provides a
+\cppinline{StateTuple} class template, which is similar to
+\cppinline{StateMatrix} except that the types of values do not have to be the
+same for each variable. This is similar to \rlang's \cppinline{data.frame}.
+For example, suppose each particle's state is formed by two
+\cppinline{double}'s, an \cppinline{int} and a user defined type
+\cppinline{StateType}, then the following constructs a value collection using
+\cppinline{StateTuple},
 \begin{cppcode}
 StateTuple<ColMajor, double, double, int, StateType> value(N);
 \end{cppcode}
 And there are a few ways to access the state values, similar to
-\code{StateMatrix},
+\cppinline{StateMatrix},
 \begin{cppcode}
 double x0 = value.state(i, Position<0>());
 int x2 = value.state<2>(i);
@@ -593,39 +589,42 @@ See the reference manual for details.
 \subsubsection{A single particle}
 \label{ssub:A single particle}
 
-For a \code{Particle<T>} object, one can construct a \code{SingleParticle<T>}
-object that abstracts one of the particle from the collection. For example,
+For a \cppinline{Particle<T>} object, one can construct a
+\cppinline{SingleParticle<T>} object that abstracts one of the particle from
+the collection. For example,
 \begin{cppcode}
 Particle<T> particle(N);
 SingleParticle<T> sp(i, &particle);
 \end{cppcode}
-create a \code{SingleParticle<T>} object corresponding to the particle at
-position \code{i}. There are a few member functions of
-\code{SingleParticle<T>} that makes access to individual particles easier than
-through the interface of \code{Particle<T>}. Firt \code{sp.id()} returns the
-value of the argument \code{i} in the above code that created this
-\code{SingleParticle<T>} object. In addition, \code{sp.rng()} is equivalent to
-\code{particle.rng(i)}. Also \code{sp.particle()} returns a constant reference
-to the \code{Particle<T>} object. And \code{sp.particle_ptr()} returns a
-pointer to such a constant \code{Particle<T>} object. Note that, one cannot
-get write access to a \code{Particle<T>} object through interface of
-\code{SingleParticle<T>}. Instead, one can only get write access to a single
-particle. For example, If \code{T} is a \code{StateMatrix} instantiation or
-its derived class, then \code{sp.state(pos)} is equivalent to
-\code{particle.value().state(i, pos)} and the reference it returns is mutable.
-See the reference manual for more informations on the interface of the
-\code{SingleParticle} class template. Note that, these
-\code{SingleParticle<T>} objects are usually not constructed by users, but
-rather by the libraries' other classes in the \smp module, and passed to user
-defined functions, as we will see very soon.
+create a \cppinline{SingleParticle<T>} object corresponding to the particle at
+position \cppinline{i}. There are a few member functions of
+\cppinline{SingleParticle<T>} that makes access to individual particles easier
+than through the interface of \cppinline{Particle<T>}. Firt
+\cppinline{sp.id()} returns the value of the argument \cppinline{i} in the
+above code that created this \cppinline{SingleParticle<T>} object. In
+addition, \cppinline{sp.rng()} is equivalent to \cppinline{particle.rng(i)}.
+Also \cppinline{sp.particle()} returns a constant reference to the
+\cppinline{Particle<T>} object. And \cppinline{sp.particle_ptr()} returns a
+pointer to such a constant \cppinline{Particle<T>} object. Note that, one
+cannot get write access to a \cppinline{Particle<T>} object through interface
+of \cppinline{SingleParticle<T>}. Instead, one can only get write access to a
+single particle. For example, If \cppinline{T} is a \cppinline{StateMatrix}
+instantiation or its derived class, then \cppinline{sp.state(pos)} is
+equivalent to \cppinline{particle.value().state(i, pos)} and the reference it
+returns is mutable. See the reference manual for more informations on the
+interface of the \cppinline{SingleParticle} class template. Note that, these
+\cppinline{SingleParticle<T>} objects are usually not constructed by users,
+but rather by the libraries' other classes in the \smp module, and passed to
+user defined functions, as we will see very soon.
 
 \subsubsection{Sequential and parallel implementations}
 \label{ssub:Sequential and parallel implementations}
 
-Once we have the \code{SingleParticle<T>} concept, we are ready to introduce
-how to write implementations of \smc algorithms that manipulate a single
-particle and can be applied to all particles in parallel or sequentially. For
-sequential implementations, this can be done through five base classes,
+Once we have the \cppinline{SingleParticle<T>} concept, we are ready to
+introduce how to write implementations of \smc algorithms that manipulate a
+single particle and can be applied to all particles in parallel or
+sequentially. For sequential implementations, this can be done through five
+base classes,
 \begin{cppcode}
 template <typename BaseState> class StateSEQ;
 template <typename T, typename D = Virtual> class InitializeSEQ;
@@ -633,35 +632,36 @@ template <typename T, typename D = Virtual> class MoveSEQ;
 template <typename T, typename D = Virtual> class MonitorEvalSEQ;
 template <typename T, typename D = Virtual> class PathEvalSEQ;
 \end{cppcode}
-The template parameter \code{BaseState} needs to satisfy the general value
-collection requirements in addition to a \code{copy_particle} member function,
-for example, \code{StateMatrix}. Other base classes expect \code{T} to satisfy
-general value collection requirements. The details of all these class
-templates can be found in the reference manual. Here we use the
-\code{MoveSEQ<T>} class as an example to illustrate their usage. Recall that
-\code{Sampler<T>} expect a callable object which has the following signature
-as a move,
+The template parameter \cppinline{BaseState} needs to satisfy the general
+value collection requirements in addition to a \cppinline{copy_particle}
+member function, for example, \cppinline{StateMatrix}. Other base classes
+expect \cppinline{T} to satisfy general value collection requirements. The
+details of all these class templates can be found in the reference manual.
+Here we use the \cppinline{MoveSEQ<T>} class as an example to illustrate their
+usage. Recall that \cppinline{Sampler<T>} expect a callable object which has
+the following signature as a move,
 \begin{cppcode}
 std::size_t move_func (std::size_t iter, Particle<T> &particle);
 \end{cppcode}
-For the purpose of illustration, the type \code{T} is defined as,
+For the purpose of illustration, the type \cppinline{T} is defined as,
 \begin{cppcode}
 typedef StateMatrix<RowMajor, 1, double> T;
 \end{cppcode}
 Here is a typical example of implementation of such a function,
-\inputcppcode{code/move_func.cpp}
-where \code{cal_inc_weight} is some function that calculates the logarithm
-incremental weights. As we see, there are three main parts of a typical move.
-First, we allocate a vector \code{inc_weight}. Second, we generate normal
-random variates for each particle and calculate the incremental weights. This
-is done through a \code{for} loop. Third, we add the logarithm incremental
-weights. The first and the third are \emph{global} operations while the second
-is \emph{local}. The first and the third are often optional and absent. The
-local operation is also usually the most computational intensive part of \smc
-algorithms and can benefit the most from parallelizations.
+\cppfile{code/move_func.cpp}
+where \cppinline{cal_inc_weight} is some function that calculates the
+logarithm incremental weights. As we see, there are three main parts of a
+typical move. First, we allocate a vector \cppinline{inc_weight}. Second, we
+generate normal random variates for each particle and calculate the
+incremental weights. This is done through a \cppinline{for} loop. Third, we
+add the logarithm incremental weights. The first and the third are
+\emph{global} operations while the second is \emph{local}. The first and the
+third are often optional and absent. The local operation is also usually the
+most computational intensive part of \smc algorithms and can benefit the most
+from parallelizations.
 
-With \code{MoveSEQ<T>}, which defines the \code{operator()} as required by the
-core module interface, one can derive from this class,
+With \cppinline{MoveSEQ<T>}, which defines the \cppinline{operator()} as
+required by the core module interface, one can derive from this class,
 \begin{cppcode}
 std::size_t operator() (std::size_t iter, Particle<T> &particle);
 \end{cppcode}
@@ -673,28 +673,29 @@ std::size_t move_state (std::size_t iter, SingleParticle<T> sp);
 void post_processor (std::size_t iter, Particle<T> &particle);
 \end{cppcode}
 For example,
-\inputcppcode{code/move_class.cpp}
-The \code{operator()} of \code{MoveSEQ<T>} is equivalent to the single
-function implementation as shown before.
+\cppfile{code/move_class.cpp}
+The \cppinline{operator()} of \cppinline{MoveSEQ<T>} is equivalent to the
+single function implementation as shown before.
 
-In the simplest case, \code{MoveSEQ} only takes away the loop around Part 2.
-However if one implement the move in such a way, and then replace
-\code{MoveSEQ} with \code{MoveOMP}, the changing of the base class name causes
-\vsmc to use \openmp to parallelize the loop. For example, one can declare the
-class as
+In the simplest case, \cppinline{MoveSEQ} only takes away the loop around Part
+2. However if one implement the move in such a way, and then replace
+\cppinline{MoveSEQ} with \cppinline{MoveOMP}, the changing of the base class
+name causes \vsmc to use \openmp to parallelize the loop. For example, one can
+declare the class as
 \begin{cppcode}
 #include <vsmc/smp/backend_omp.hpp>
 class move : public MoveOMP<T>;
 \end{cppcode}
-and use exactly the same implementation as before. Now when
-\code{move::operator()} is called, it will be parallelized by \openmp. Other
-backends are available in case \openmp is not available. Among them there are
-\cilk and \tbb. In addition to these well known parallelization programming
-models, \vsmc also has its own implementation using \cppoo{} \code{<thread>}.
-There are other backends documented in the reference manual. To use any of
-these parallelization, all one need to do is to change a few base class names.
-In practice, one can use conditional compilation, for example, to use a
-sequential implementation or a \openmp parallelized one, we can write,
+and use exactly the same implementation as before. Now when the member
+function \cppinline{move::operator()} is called, it will be parallelized by
+\openmp.  Other backends are available in case \openmp is not available. Among
+them there are \cilk and \tbb. In addition to these well known parallelization
+programming models, \vsmc also has its own implementation using \cppoo{}
+\cppinline{<thread>}. There are other backends documented in the reference
+manual. To use any of these parallelization, all one need to do is to change a
+few base class names. In practice, one can use conditional compilation, for
+example, to use a sequential implementation or a \openmp parallelized one, we
+can write,
 \begin{cppcode}
 #ifdef USE_SEQ
 #include <vsmc/smp/backend_seq.hpp>
@@ -709,13 +710,13 @@ sequential implementation or a \openmp parallelized one, we can write,
 class move : public BASE_MOVE<T>;
 \end{cppcode}
 And we can compile the same source into different samplers with
-\code{Makefile} rules such as the following,
-\begin{minted}{make}
+\shinline{Makefile} rules such as the following,
+\begin{makecode}
 prog-seq : prog.cpp
         $(CXX) $(CXXFLAGS) -DUSE_SEQ -o prog-seq prog.cpp
 prog-omp : prog.cpp
         $(CXX) $(CXXFLAGS) -DUSE_omp -o prog-omp prog.cpp
-\end{minted}
+\end{makecode}
 Or one can configure the source file through a build system such as \cmake,
 which can also determine which programming model is available on the system.
 
@@ -724,9 +725,9 @@ which can also determine which programming model is available on the system.
 
 Sometimes, the cumbersome task of writing a class to implement a move and
 other operations can out weight the power we gain through object oriented
-programming. For example, a simple \code{move_state}-like function is all that
-we need to get the work done. In this case, one can create a move through the
-\code{MoveAdapter}. For example, say we have implemented
+programming. For example, a simple \cppinline{move_state}-like function is all
+that we need to get the work done. In this case, one can create a move through
+the \cppinline{MoveAdapter}. For example, say we have implemented
 \begin{cppcode}
 std::size_t move_state (std::size_t iter, SingleParticle<T> sp);
 \end{cppcode}
@@ -739,13 +740,13 @@ MoveAdapter<T, MoveCILK> move_obj(move_state);
 MoveAdapter<T, MoveOMP>  move_obj(move_state);
 sampler.move(move_obj, false);
 \end{cppcode}
-These are respectively, sequential, \cppoo{} \code{<thread>}, \tbb, \cilk,
-and \openmp implementations. The first template parameter is the type of value
-collection and the second is the name of the base class template. Actually,
-the \code{MoveAdapter}'s constructor accepts two optional arguments, the
-\code{pre_processor} and the \code{post_processor}, corresponding to the other
-two aforementioned member functions. Similar adapters for the other three base
-classes also exist.
+These are respectively, sequential, \cppoo{} \cppinline{<thread>}, \tbb,
+\cilk, and \openmp implementations. The first template parameter is the type
+of value collection and the second is the name of the base class template.
+Actually, the \cppinline{MoveAdapter}'s constructor accepts two optional
+arguments, the \cppinline{pre_processor} and the \cppinline{post_processor},
+corresponding to the other two aforementioned member functions. Similar
+adapters for the other three base classes also exist.
 
 Another scenario where an adapter is desired is that which backend to use
 needs be decided at runtime. The above simple adapters can already be used for
@@ -755,9 +756,9 @@ class move;
 MoveAdapter<T, MoveTBB, move> move_obj;
 sampler.move(move_obj, false);
 \end{cppcode}
-where the class \code{move} has the same definition as before but it no longer
-derives from any base class. The class \code{move} is required to have a
-default constructor, a copy constructor and an assignment operator.
+where the class \cppinline{move} has the same definition as before but it no
+longer derives from any base class. The class \cppinline{move} is required to
+have a default constructor, a copy constructor and an assignment operator.
 
 \subsection{Thread-safety and scalability considerations}
 \label{sub:Thread-safety and scalability considerations}
@@ -773,43 +774,43 @@ mutable member functions on the same object from different threads is usually
 not safe. Calling immutable member functions is generally safe. There are a
 few exceptions,
 \begin{itemize}
-  \item The constructors of \code{Particle} and \code{Sampler} are not
-    thread-safe. Therefore if one need to construct multiple \code{Sampler}
-    from different threads, a mutex protection is needed. However, subsequent
-    member function calls on the constructed objects are thread-safe according
-    to the above rules.
+  \item The constructors of \cppinline{Particle} and \cppinline{Sampler} are
+    not thread-safe. Therefore if one need to construct multiple
+    \cppinline{Sampler} from different threads, a mutex protection is needed.
+    However, subsequent member function calls on the constructed objects are
+    thread-safe according to the above rules.
   \item Member functions that concern a single particle are generally
     thread-safe in the sense that one can call them on the same object from
     different threads as long as they are called for different particles. For
-    example \code{Particle::rng} and \code{StateMatrix::state} are
+    example \cppinline{Particle::rng} and \cppinline{StateMatrix::state} are
     thread-safe.
 \end{itemize}
 In general, one can safely manipulate different individual particles from
 different threads, which is the minimal requirement for scalable
 parallelization. But one cannot manipulate the whole particle collection from
-different threads, for example \code{WeightSet::set_log_weight}.
+different threads, for example \cppinline{WeightSet::set_log_weight}.
 
 User defined callbacks shall generally follow the same rules. For example, for
-a \code{MoveOMP} subclass, \code{pre_processor} and \code{post_processor} does
-not have be thread-safe, but \code{move_state} needs to be. In general, avoid
-write access to memory locations shared by all particles from
-\code{move_state} and other similar member functions. One needs to take some
-extra care when using third-party libraries. For example, in our example
-implementation of the \code{move} class, the \code{rnorm} object, which is
-used to generate Normal random variates, is defined within \code{move_state}
+a \cppinline{MoveOMP} subclass, \cppinline{pre_processor} and
+\cppinline{post_processor} does not have be thread-safe, but
+\cppinline{move_state} needs to be. In general, avoid write access to memory
+locations shared by all particles from \cppinline{move_state} and other
+similar member functions. One needs to take some extra care when using
+third-party libraries. For example, in our example implementation of the
+\cppinline{move} class, the \cppinline{rnorm} object, which is used to
+generate Normal random variates, is defined within \cppinline{move_state}
 instead of being a class member data even though it is created with the same
-parameters for each particle. This is because the call \code{rnorm(sp.rng())}
-is not thread-safe in some implementations, for example, when using the Boost
-library.
+parameters for each particle. This is because the call
+\cppinline{rnorm(sp.rng())} is not thread-safe in some implementations, for
+example, when using the Boost library.
 
 For scalable performance, certain practices should be avoided when
-implementing member functions such as \code{move_state}. For example, dynamic
-memory allocation is usually lock-based and thus should be avoided.
+implementing member functions such as \cppinline{move_state}. For example,
+dynamic memory allocation is usually lock-based and thus should be avoided.
 Alternatively one can use a scalable memory allocator such as the one provided
-by \tbb. In general, in functions such as \code{move_state}, one should avoid
-using locks to guarantee thread-safety, which can be a bottleneck to parallel
-performance.
-
+by \tbb. In general, in functions such as \cppinline{move_state}, one should
+avoid using locks to guarantee thread-safety, which can be a bottleneck to
+parallel performance.
 
 \section{A minimal example}
 \label{sec:A minimal example}
@@ -822,8 +823,8 @@ implemented with \vsmc.
 
 Consider the problem of simulating a Normal distribution. Of course, for this
 toy example, a direct simulation is trivial. However, for the purpose of
-demonstration, we construct an \smc sampler on for sequence of distributions,
-$\{\pi_t\}_{t=0}^T$ with
+demonstration, we construct an \smc sampler on the sequence of distributions,
+$\{\pi_t\}_{t=0}^T$,
 \begin{equation}
   \pi_t(x) = \pi_0(x)^{1 - \alpha(t/T)}\pi_T(x)^{\alpha(t/T)}
 \end{equation}
@@ -837,7 +838,7 @@ $\sigma_T^2$ denote the mean and variance of $\pi_T$, respectively. Then
 $\pi_t$ has mean and variance, denoted by $\mu_t$ and $\sigma_t^2$,
 \begin{align}
   \mu_t &= \frac{(1 - \alpha_t)\sigma_T^2\mu_0 + \alpha_t\sigma_0^2\mu_T}
-  {(1 - \alpha_t)\sigma_T^2 + \alpha_t\sigma_0^2} \label{eq:mini mu_t}\\
+  {(1 - \alpha_t)\sigma_T^2 + \alpha_t\sigma_0^2} \label{eq:mini mu_t} \\
   \sigma_t^2 &= \frac{\sigma_0^2\sigma_T^2}
   {(1 - \alpha_t)\sigma_T^2 + \alpha_t\sigma_0^2} \label{eq:mini var_t}
 \end{align}
@@ -857,6 +858,12 @@ particles. The (unnormalized) incremental weights are thus,
 where $\phi(x,\mu,\sigma^2)$ is the density function of Normal distribution
 with mean $\mu$ and variance $\sigma^2$.
 
+In this example, we set the following parameters,
+\begin{align*}
+  N &= 1000 & \mu_0 &= -5 & \sigma_0 &= 10 \\
+  T &= 100  & \mu_T &= 5  & \sigma_T &= 1
+\end{align*}
+
 \subsection{Implementation}
 \label{sub:Implementation}
 
@@ -865,98 +872,102 @@ with mean $\mu$ and variance $\sigma^2$.
 
 First, this example use the following header files and defines a few macros
 for later use.
-\inputcppcode{code/mini_header.hpp}
+\cppfile{code/mini_header.cpp}
+\begin{cppcode}
+#define BASE_INIT    vsmc::InitializeSEQ
+#define BASE_MOVE    vsmc::MoveSEQ
+#define BASE_MONITOR vsmc::MonitorEvalSEQ
+
+#include <vsmc/core/sampler.hpp>
+#include <vsmc/smp/adapter.hpp>
+#include <vsmc/smp/state_matrix.hpp>
+#include <vsmc/mrw/normal.hpp>
+#include <vsmc/smp/backend_seq.hpp>
+\end{cppcode}
 In this example, we use a sequential implementation. As demonstrated earlier,
 if one want to use a parallel implementation, only these macros need to be
-redefined (preferably through a build system) and the header
-\code{vsmc/smp/backend_seq.hpp} need to be replaced.
+redefined (preferably through a build system), and replace the header
+\begin{cppcode}
+#include <vsmc/smp/backend_seq.hpp>
+\end{cppcode}
+with a parallel backend, for example,
+\begin{cppcode}
+#define BASE_INIT    vsmc::InitializeOMP
+#define BASE_MOVE    vsmc::MoveOMP
+#define BASE_MONITOR vsmc::MonitorEvalOMP
+#include <vsmc/smp/backend_omp.hpp>
+\end{cppcode}
+enables \openmp parallelization.
 
 The following is the \vsmc classes used in this example, we declare them here
-with the \code{using} declaration, so we do not need to prefix them with
-\code{vsmc::}, etc., namespaces.
-\inputcppcode{code/mini_using.cpp}
+with the \cppinline{using} declaration, so we do not need to prefix them with
+\cppinline{vsmc::}, etc., namespaces.
+\cppfile{code/mini_using.cpp}
+\begin{cppcode}
+using vsmc::Sampler;
+using vsmc::Particle;
+using vsmc::StateMatrix;
+using vsmc::InitializeAdapter;
+using vsmc::MonitorEvalAdapter;
+using vsmc::SingleParticle;
+using vsmc::ConstSingleParticle;
+using vsmc::NormalRW;
+using vsmc::cxx11::normal_distribution;
+\end{cppcode}
 
 This example is so simple that we do not even need to define our own value
-collection type. However, we use a \code{typedef} here to simplify the coding,
+collection type. However, we use a \cppinline{typedef} here to simplify the
+coding,
 \begin{cppcode}
 typedef StateMatrix<vsmc::RowMajor, 1, double> mini;
 \end{cppcode}
-That is, the type \code{mini} will be the value collection type in the
+That is, the type \cppinline{mini} will be the value collection type in the
 remaining of this section.
 
 \subsubsection{The main function}
 \label{ssub:The main function}
 
-We first document the \code{main} function of this program.
-\inputcppcode[mathescape]{code/mini_main.cpp}
+We first explain the \cppinline{main} function of this program.
+\cppfile{code/mini_main.cpp}
 At the beginning of the function, we defined a few constants. For
 demonstration purpose, we set their values directly instead of asking for user
-inputs. Then we created a simple sampler of type \code{Sampler<mini>} with $N$
-particles. Next, we add the initialization method, a move that update the
-particles and weights, and a monitor that records the first and second moments
-of the particle values. Then we initialize and iterate the sampler for $T$
-times. Last, we output the results into a file called \code{mini_sampler}.
+inputs. Then we created a simple sampler of type \cppinline{Sampler<mini>}
+with $N$ particles. Next, we add the initialization method, a move that update
+the particles and weights, and a monitor that records the first and second
+moments of the particle values. Then we initialize and iterate the sampler for
+$T$ times. Last, we output the results into a file called
+\cppinline{mini_sampler}.
 
-The move that update the particles and weights are implemented as a class
-object, of type \code{mini_move}. This is perhaps the only (relatively)
-non-trivial part of this program and it is documented in later.
+The move that updates the particles and weights are implemented as a class
+object, of type \cppinline{mini_move}. This is perhaps the only (relatively)
+non-trivial part of this program and it is discussed later.
+
+\paragraph{The use of \cppoo lambda expressions in \vsmc}
 
 The initialization and monitoring may look strange to novice \cpp users. We
 used \cppoo{} \emph{lambda expressions} together with \vsmc's adapter feature
 here. Lambda expressions, also called \emph{local functions} in some other
-programming languages allows us to define function object locally. The
-\code{InitializeAdapter} class template is much like the \code{MoveAdapter}
-documented earlier. The first, and the only mandatory argument is a function
-object that initialize a single particle (see the reference manual). More
-specifically, here it expects a function takes the following signature,
+programming languages allow us to define function object locally. The
+\cppinline{InitializeAdapter} class template is much like the
+\cppinline{MoveAdapter} documented earlier. The first, and the only mandatory
+argument is a function object that initialize a single particle (see the
+reference manual). More specifically, here it expects a callable object that
+takes the following signature,
 \begin{cppcode}
 std::size_t initialize_state (SingleParticle<mini> sp);
 \end{cppcode}
-If the initialization use a accept-reject type algorithm, the returned value
+If the initialization uses a accept-reject type algorithm, the returned value
 can be the accept counts (usually $0$ or $1$), otherwise it has little
 semantic meaning here. In our example, the initialization is simply generating
 normal random variates with mean $\mu_0$ and variance $\sigma_0^2$. Therefore,
 we can write,
-\begin{cppcode}
-std::size_t mini_init (SingleParticle<mini> sp)
-{
-    normal_distribution<> rnorm(mu0, sd0);
-    sp.state(0) = rnorm(sp.rng());
-
-    return 1;
-}
-
-// in main function
-sampler.init(InitializeAdapter<mini, BASE_INIT>(mini_init));
-\end{cppcode}
+\cppfile{code/mini_init_function.cpp}
 However, there are a few problems here. The most prominent one is that this
-function has to access \code{mu0} etc. A naive modification is to move
-\code{mu0} etc., to the global namespace and define this function beforehand.
-However, this kind of solution never scales well in larger project. An
-alternative is to use a class object,
-\begin{cppcode}
-class mini_init :
-{
-    public :
-
-    mini_init (double mu0, double sd0) : mu0_(mu0), sd0_(sd0) {}
-
-    size_t operator() (SingleParticle<mini> sp)
-    {
-        normal_distribution<> rnorm(mu0, sd0);
-        sp.state(0) = rnorm(sp.rng());
-
-        return 1;
-    }
-
-    private :
-
-    double mu0_, sd0_;
-};
-
-// in main function
-sampler.init(InitializeAdapter<mini, BASE_INIT>(mini_init(mu0, sd0)));
-\end{cppcode}
+function has to access \cppinline{mu0} etc. A naive modification is to move
+\cppinline{mu0} etc., to the global namespace and define this function
+beforehand. However, this kind of solution never scales well in larger
+projects. An alternative is to use a class object,
+\cppfile{code/mini_init_class.cpp}
 This is the kind of ``old-fashion'' object-oriented solution. But the length
 of this solution is clearly undesirable to this simple problem. Lambda
 expressions allows us to define simple local, \emph{nameless}, functions in
@@ -968,16 +979,16 @@ This is more or less equivalent to a function of the form,
 \begin{cppcode}
 /* return type */ func ( /* parameters */ ) { /* definitions */ }
 \end{cppcode}
-The symbol \code{[=]} says that this lambda expression shall capture local
-variables by value. In our example, \code{mu0} and \code{sd0} are used inside
-the function yet not defined there. Their values will be copied from the
-enclosing scope.
+The symbol \cppinline{[=]} says that this lambda expression shall capture
+local variables by value. In our example, \cppinline{mu0} and \cppinline{sd0}
+are used inside the function yet not defined there. Their values will be
+copied from the enclosing scope.
 
-The use of \code{MonitorEvalAdapter} is more or less similar, except now we
-don't need to capture any local variables, and thus we use \code{[]} instead
-of \code{[=]}. And in addition, the function shall have a return type
-\code{void}, and thus we no longer have the return type declaration. The full
-form is,
+The use of \cppinline{MonitorEvalAdapter} is more or less similar, except now
+we don't need to capture any local variables, and thus we use \cppinline{[]}
+instead of \cppinline{[=]}. And in addition, the function shall have a return
+type \cppinline{void}, and thus we no longer have the return type declaration.
+The full form is,
 \begin{cppcode}
 [] (/* parameters */) { /* definitions */ }
 \end{cppcode}
@@ -987,37 +998,34 @@ form is,
 
 As demonstrated above, for most part of the vSMC library, wherever a user
 callback function is expected, it works equally well with functions, class
-objects with \code{operator()} (also called functors), and lambda expressions.
-The updating of particle values and weights are a little bit more complex than
-a few lines of codes. Therefore, now we use a class to define it.
-\inputcppcode[mathescape]{code/mini_move.cpp}
-The class is pretty straight forward. Most of the work is done inside the
-\code{move_state} member function. First we compute the incremental weight
-according to equation~\eqref{eq:mini inc_weight}. Then we create a use the
-\code{NormalRW} to create a Normal random walk object. It defines an
-\code{operator()} with the following signature,
-\begin{cppcode}
-typedef vsmc::cxx11::function<double (double)> ftype;
-template <typename URNG>
-bool operator() (double &val, double scale, URNG &eng, const ftype &f);
-\end{cppcode}
+objects with \cppinline{operator()} (also called functors), and lambda
+expressions. The updating of particle values and weights are a little bit more
+complex than a few lines of codes. Therefore, now we use a class to define it.
+\cppfile{code/mini_move.cpp}
+The class is pretty straightforward. Most of the work is done inside the
+\cppinline{move_state} member function. First we compute the incremental
+weights according to equation~\eqref{eq:mini inc_weight}. Then we use the
+\vsmc's \cppinline{NormalRW} to create a Normal random walk object. It defines
+an \cppinline{operator()} with the following signature,
+\cppfile{code/normal_rw_operator.cpp}
 where the first argument is the value to be updated according to the
 Metropolis rule, the second is the scale of the Normal random walk which is
 set to the true standard deviation of the target distribution here, and the
 third is a reference to a \cppoo type \rng engine. The last is a function
 object that takes a value and return the logarithm of the target density at
 that value. Here we used the \cppoo lambda expression again to wrap the
-function \code{normal_log_pdf}, which compute the log density of a normal
-distribution, given its mean and standard deviation. This operator returns
-\code{true} if the proposed move is accepted and \code{false} otherwise. The
-\code{NormalRW} also provide overloaded operators that can be used to
-construct multivariate Normal random walk. See the reference manual for
-details as well as classes for other commonly used Metropolis random walks.
+function \cppinline{normal_log_pdf}, which compute the log density of a normal
+distribution, given its mean and standard deviation. Its definition is trivial
+and is not shown here. This operator returns \cppinline{true} if the proposed
+move is accepted and \cppinline{false} otherwise. The \cppinline{NormalRW}
+also provide overloaded operators that can be used to construct multivariate
+Normal random walk. See the reference manual for details as well as classes
+for other commonly used Metropolis random walks.
 
 A few member functions' definitions are not shown here. The member function
-\code{alpha} simply computes $\alpha(t/T) = t/T$. And \code{mu} and \code{sd}
-compute the value of $\mu_t$ and $\sigma_t$ given the iteration number (and
-thus $t$) according to equations~\eqref{eq:mini mu_t} and~\eqref{eq:mini
+\cppinline{alpha} simply computes $\alpha(t/T) = t/T$. And \cppinline{mu} and
+\cppinline{sd} compute the value of $\mu_t$ and $\sigma_t$ given the iteration
+number, $t$, according to equations~\eqref{eq:mini mu_t} and~\eqref{eq:mini
   var_t}.
 
 \subsection{Results}
@@ -1025,8 +1033,8 @@ thus $t$) according to equations~\eqref{eq:mini mu_t} and~\eqref{eq:mini
 
 The output from the program is a white spaces separated table. It can be
 processed with most statistical softwares. Here we use an \rlang script to
-produce the figure~\ref{fig:mini mean} and~\ref{fig:mini var}, which mean and
-shows the estimated mean and standard deviation against the truth.
+produce figure~\ref{fig:mini mean} and~\ref{fig:mini var}, which shows the
+estimated mean and standard deviation against the truth.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/mini_mu}
@@ -1050,7 +1058,7 @@ of the \vsmc library. In this section, we demonstrate the strength of the
 presented framework by extend it with a few features. The first two shows that
 it is trivial to implement the adaptive algorithms discussed in
 section~\ref{sec:Extensions and refinements}. The third one shows that it is
-easy to add extend the framework with new algorithms, such as replacing the
+easy to extend the framework with new algorithms, such as replacing the
 built-in resampling algorithm.
 
 \subsection{Implement the adaptive random walk scale}
@@ -1060,49 +1068,50 @@ In the minimal example, we use the true standard deviation of the target
 distribution for the Normal random walk. However, since we already implemented
 a monitor that records the Monte Carlo estimates of the first and second raw
 moments, it shall be trivial to use them to adaptively set the random walk
-scales. To do this, we can use the \code{pre_processor} member function of the
-\code{mini_move} class. Recall that, this member function is called before any
-\code{move_state} at each iteration. Here is the modified \code{mini_move}
-class,
-\inputcppcode{code/mini_move_adaptive_scale.cpp}
-The new class has a new member data \code{sampler_}, which is a pointer to the
-sampler. And through it, we can access the monitor named \code{"moments"}. The
-\code{Monitor} class provides several ways to read the record. Two of them are
-the overloaded \code{record} member function. It takes the index of the
-variable (starting with \code{0}) as its first argument. If no other arguments
-are provided, it simply returns the most recent estimate. Alternatively, one
-can provide a second argument, which shall be the iteration number. See the
-reference manual for details.
+scales. To do this, we can use the \cppinline{pre_processor} member function
+of the \cppinline{mini_move} class. Recall that, this member function is
+called before any \cppinline{move_state} at each iteration. Here is the
+modified \cppinline{mini_move} class,
+\cppfile{code/mini_move_adaptive_scale.cpp}
+The new class has a new member data \cppinline{sampler_}, which is a pointer
+to the sampler. And through it, we can access the monitor named
+\cppinline{"moments"}. The \cppinline{Monitor} class provides several ways to
+read the record. Two of them are the overloaded \cppinline{record} member
+function. It takes the index of the variable (starting with \cppinline{0}) as
+its first argument. If no other arguments are provided, it simply returns the
+most recent estimate. Alternatively, one can provide a second argument, which
+shall be the iteration number. See the reference manual for details.
 
 \subsection{Implement the CESS based adaptive schedule}
 \label{sub:Implement the CESS based adaptive schedule}
 
 To implement the \cess based adaptive schedule, again, we can use the member
-function \code{pre_processor} of the \code{mini_move} class. In particular the
-\code{WeightSet} class provides the ability to compute the value of $\cess/N$
-(scaled to $[0,1]$) given (log) incremental weights. Below is the modified
-\code{mini_move} class,
-\inputcppcode{code/mini_move_adaptive_schedule.cpp}
-Now we have a member data \code{alpha_}, which are simply indexed by the
-iteration number. Inside member function \code{pre_processor}, we make sure
-that the first element is always $0$ and the last one is $1$. For any value in
-between, we use a binary search to find the value that produce a new target
-distribution with $\cess/N$ equal to a preset value $\cess^*/N$, which we hard
-coded here as \code{cess_star}. The call to \code{WeightSet::cess} takes an
-input iterator as its first argument, and a boolean value, which indicate
-whether the incremental weights are on log scale as its second argument. Now
-the \code{alpha} member function no longer compute $\alpha(t/T) = t/T$,
-instead it simply lookup in the vector \code{alpha_}.
+function \cppinline{pre_processor} of the \cppinline{mini_move} class. In
+\vsmc, the \cppinline{WeightSet} class provides the ability to compute the
+value of $\cess/N$ (scaled to $[0,1]$) given (log) incremental weights. Below
+is the modified \cppinline{mini_move} class,
+\cppfile{code/mini_move_adaptive_schedule.cpp}
+Now we have a member data \cppinline{alpha_}, which are simply indexed by the
+iteration number. Inside member function \cppinline{pre_processor}, we make
+sure that the first element is always $0$ and the last one is $1$. For any
+value in between, we use a binary search to find the value that produce a new
+target distribution with $\cess/N$ equal to a preset value $\cess^*/N$, which
+we hard coded here as \cppinline{cess_star}. The call to
+\cppinline{WeightSet::cess} takes an input iterator as its first argument, and
+a boolean value, which indicate whether the incremental weights are on log
+scale as its second argument. Now the \cppinline{alpha} member function no
+longer compute $\alpha(t/T) = t/T$, instead it simply lookup in the vector
+\cppinline{alpha_}.
 
 \subsection{Use a new resampling algorithm}
 \label{sub:Use a new resampling algorithm}
 
 There are many areas of \vsmc algorithm been actively developed. Some of them
 can be easy implemented with \vsmc through somehow ``creative'' use of the
-classes like \code{mini_move}, as demonstrated above. Other algorithms may
-need to change \vsmc's internal. For example, \vsmc provide several built-in
-resampling algorithms, which can be chosen through the constructor of
-\code{Sampler}. For example,
+classes like \cppinline{mini_move}, as demonstrated above. Other algorithms
+may need to change \vsmc's internal. For example, \vsmc provide several
+built-in resampling algorithms, which can be chosen through the constructor of
+\cppinline{Sampler}. For example,
 \begin{cppcode}
 Sampler<mini> sampler(N, vsmc::Systematic);
 \end{cppcode}
@@ -1110,12 +1119,13 @@ will construct a sampler with systematic resampling instead of the default
 stratified resampling. Now consider that one has developed a new resampling
 algorithm, to use it, one only need to define a function (or functor) similar
 to the following,
-\inputcppcode{code/resample.cpp}
-where the input parameter \code{N}, \code{rng} and \code{weight} are the
-number of particles, an \cppoo{} \rng engine, and the normalized weights,
-respectively. The output parameter \code{replication} shall be the number of
-replicates of each particle after the resampling. To use it instead of one of
-the built-in algorithm, one simply construct a sampler like the following,
+\cppfile{code/resample.cpp}
+where the input parameter \cppinline{N}, \cppinline{rng} and
+\cppinline{weight} are the number of particles, an \cppoo{} \rng engine, and
+the normalized weights, respectively. The output parameter
+\cppinline{replication} shall be the number of replicates of each particle
+after the resampling. To use it instead of one of the built-in algorithm, one
+simply construct a sampler like the following,
 \begin{cppcode}
 Sampler<mini> sampler(N, resalg);
 \end{cppcode}
@@ -1132,22 +1142,22 @@ parallelization with different programming models. The same implementation can
 be used to built different samplers based on what kind of parallel programming
 model is supported on the users' platforms. In this section we compare the
 performance of various \smp parallel programming models and \opencl
-parallelization. We use the Gaussian mixture model with \smc[2] algorithm
-as shown in section~\ref{sub:Gaussian mixture model}. For a complete
+parallelization. We use the Gaussian mixture model with \smc[2] algorithm as
+shown in section~\ref{sub:Gaussian mixture model}. For a complete
 documentation on its implementation with \vsmc, see \cite{software:VSMC}.
 
 \subsection{Using the \protect\smp module}
 \label{sub:Using the SMP module}
 
 We consider five different implementations supported by \icpc~2013:
-sequential, \tbb, \cilk, \openmp and \cppoo{} \code{<thread>}. The samplers
-are compiled with
-\begin{minted}{make}
+sequential, \tbb, \cilk, \openmp and \cppoo{} \cppinline{<thread>}. The
+samplers are compiled with
+\begin{makecode}
 CXX=icpc -std=c++11 -gcc-name=gcc-4.7 -gxx-name=g++-4.7
 CXXFLAGS=-O3 -xHost -fp-model precise  \
          -DVSMC_HAS_CXX11LIB_FUNCTIONAL=1  \
          -DVSMC_HAS_CXX11LIB_RANDOM=1
-\end{minted}
+\end{makecode}
 on a Ubuntu~12.10 workstation with an Xeon~W3550 (3.06GHz, 4 cores, 8 hardware
 threads through hyper-threading) \cpu. A four components model and $100$
 iterations with a prior annealing scheme is used for all implementations. A
@@ -1183,7 +1193,7 @@ run on both \cpu{}s and \gpu{}s. For \cpu implementation, there are \iocl and
 The same \opencl implementation are used for all the \cpu and \gpu runtimes.
 Therefore they are not particularly optimized for any of them. For the \gpu
 implementation, in addition to double precision, we also tested a single
-precision configuration.  Unlike modern \cpu{}s, which have the same
+precision configuration. Unlike modern \cpu{}s, which have the same
 performance for double and single precision floating point operations (unless
 \simd instructions are used, which can have at most a speedup by a factor of
 2), \gpu{}s penalize double precision performance heavily.
