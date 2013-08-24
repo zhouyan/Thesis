@@ -33,6 +33,112 @@ productive way than other softwares. There is always a trade-off between easy
 of use and the productivity, flexibility and extensibility of a given
 software.
 
+\section{Monte Carlo computing}
+\label{sec:Monte Carlo computing}
+
+The advancement of the Monte Carlo research is tightly related to the
+improvement in computer performance and development of various software. In
+this section, we review the recent history and state of statistical software
+with a particular emphasis on their application for implementation of Monte
+Carlo algorithm.
+
+In recent years, there is a new trend in computer technologies. Parallel
+computing has become more accessible to many researchers. How to take
+advantage of this new trend to develop and implement novel Monte Carlo
+algorithms is one of the main purpose of the work presented in this chapter.
+
+\subsection{Sequential software for Monte Carlo computing}
+\label{sub:Sequential software for Monte Carlo computing}
+
+\subsection{Parallel computing}
+\label{sub:Parallel computing}
+
+Parallel computing is a form of computation in which many calculations are
+carried out simultaneously. It operates on the principle that large problems
+can be divided into independent smaller ones and can be solved concurrently
+(``in parallel''). Parallelism has been practiced for many years, in the form
+of high performance computing. In recent year, it has also become the dominant
+paradigm for desktop computing in the form of multicore processor. However,
+most of today's popular statistical softwares are written with serialization
+as an assumption, meaning that they do not easily take advantage of
+contemporary computer architectures.
+
+More recently, there is also increasing interest in massive-parallel computing
+devices in the form of \gpu{}s or other co-processors. They presents different
+advantage as well as challenges for practitioners other than multicore
+programming.
+
+\subsubsection{Parallel patterns}
+\label{ssub:Parallel patterns}
+
+The term \emph{pattern} in computer science, introduced and popularized by
+\cite{GangOfFour}, is a way of codifying best practices for software
+engineering. Instead of discuss different hardware implementations or abstract
+classification of parallelism, we found patterns is more useful to
+statisticians for reasoning the parallel structure of a given algorithm. This
+section is not an exhaustive discussion of parallel patterns. Instead, we
+choose some of the most commonly seen in practice, in particular those
+particularly relevant to Monte Carlo algorithms.
+
+Note that, patterns can be nested. A certain part of one pattern can be formed
+by other patterns.
+
+\paragraph{Map}
+
+This is perhaps the simplest form of parallelism. A function, called
+\emph{elemental function}, is replicated for each element of a data collection
+concurrently. The elemental function must have no side-effects in order for
+the map to be implementable in parallel while achieving deterministic results.
+In particular, it cannot modify global data that other instances of that
+function depend on.
+
+In \smc algorithm, the updating of particle values is clearly implementable
+using a map pattern. The operation of the kernel $K(x_{t-1},x_t)$ depends only
+on the history of the particle that it will be used to update, but not other
+particles to be updated.
+
+\paragraph{Fork-join}
+
+\paragraph{Reduction}
+
+\paragraph{Scan}
+
+\paragraph{Pipeline}
+
+\subsubsection{Classes of parallel computers}
+\label{ssub:Classes of parallel computers}
+
+\paragraph{Instruction level}
+
+\paragraph{Multicore processors}
+
+\paragraph{Symmetric multiprocessing}
+
+\paragraph{Distributed computing}
+
+\paragraph{Massive parallel computing}
+
+\subsubsection{Softwares}
+\label{ssub:Softwares}
+
+\subsubsection{Performance of parallel computing}
+\label{ssub:Performance of parallel computing}
+
+\subsection{Challenges of parallel computing for Monte Carlo algorithms}
+\label{sub:Challenges of parallel computing for Monte Carlo algorithms}
+
+\subsubsection{Generating random numbers}
+\label{ssub:Generating random numbers}
+
+\subsubsection{Asymmetric structures of algorithms}
+\label{ssub:Asymmetric structures of algorithms}
+
+\subsubsection{Scalability of algorithms}
+\label{ssub:Scalability of algorithms}
+
+\section{An overview of C++ and template metaprogramming}
+\label{sec:An overview of C++ and template metaprogramming}
+
 \section{Using the vSMC library}
 \label{sec:Using the vSMC library}
 
