@@ -33,9 +33,6 @@ productive way than other softwares. There is always a trade-off between easy
 of use and the productivity, flexibility and extensibility of a given
 software.
 
-\section{Monte Carlo computing}
-\label{sec:Monte Carlo computing}
-
 The advancement of the Monte Carlo research is tightly related to the
 improvement in computer performance and development of various software. In
 this section, we review the recent history and state of statistical software
@@ -47,11 +44,15 @@ computing has become more accessible to many researchers. How to take
 advantage of this new trend to develop and implement novel Monte Carlo
 algorithms is one of the main purpose of the work presented in this chapter.
 
-\subsection{Sequential software for Monte Carlo computing}
-\label{sub:Sequential software for Monte Carlo computing}
+\section{The state of softwares for Monte Carlo computing}
+\label{sec:The state of software for Monte Carlo computing}
 
-\subsection{Parallel computing}
-\label{sub:Parallel computing}
+The use of computer for statistical computing and Monte Carlo computing in
+particular an be dated as far as back to 1950s. It has seen the most
+development
+
+\section{Parallel computing in statistics}
+\label{sec:Parallel computing in statistics}
 
 Parallel computing is a form of computation in which many calculations are
 carried out simultaneously. It operates on the principle that large problems
@@ -63,25 +64,47 @@ most of today's popular statistical softwares are written with serialization
 as an assumption, meaning that they do not easily take advantage of
 contemporary computer architectures.
 
-More recently, there is also increasing interest in massive-parallel computing
-devices in the form of \gpu{}s or other co-processors. They presents different
-advantage as well as challenges for practitioners other than multicore
-programming.
+\subsection{Strategies}
+\label{sub:Strategies}
+
+The best overall strategy for \emph{scalable parallelism} is \emph{data
+  parallelism} \cite{datapar}. There are various definitions of data
+parallelism. Narrower definitions only permit collection-oriented operations,
+such as applying the same function to all elements of an array. A wider view
+is that the parallelism grows (preferably linearly) as the data size or the
+problem size grows. For example, parallelize an vanilla algorithm belongs to
+this strategy. As the number of samples increases, one can always use more
+parallel computing resources to run the sampler with the same amount of time
+without increasing the speed of each computing unit. Note that, here we
+ignored issues such as generating random numbers in parallel, which will be
+discussed later. In contrast, a \mcmc algorithm is cannot be parallelized in a
+scalable way. To obtain better statistical results, often the only way is to
+increase the number and iterations, and thus no matter how much parallel
+computing resources are available, the computing time will increase without
+increasing of the speed of the processors.
+
+The opposite of data parallelism is \emph{functional parallelism}, an approach
+that runs different functional parts of a program in parallel. At best,
+functional parallelism can improvement the performance. For example, say a
+program performs function $f_1,\dots,f_k$, then at best the computing time can
+be reduced by $k$-fold through parallelism. In the remaining of this chapter,
+we focus on data parallelism.
 
 \subsubsection{Parallel patterns}
 \label{ssub:Parallel patterns}
 
+In a more micro level, parallelism can be implemented with different patterns.
+In this section, we introduce a few that are particularly related to
+statistical computing.
+
 The term \emph{pattern} in computer science, introduced and popularized by
-\cite{GangOfFour}, is a way of codifying best practices for software
+\cite{software:GoF}, is a way of codifying best practices for software
 engineering. Instead of discuss different hardware implementations or abstract
 classification of parallelism, we found patterns is more useful to
 statisticians for reasoning the parallel structure of a given algorithm. This
 section is not an exhaustive discussion of parallel patterns. Instead, we
 choose some of the most commonly seen in practice, in particular those
 particularly relevant to Monte Carlo algorithms.
-
-Note that, patterns can be nested. A certain part of one pattern can be formed
-by other patterns.
 
 \paragraph{Map}
 
@@ -99,30 +122,229 @@ particles to be updated.
 
 \paragraph{Fork-join}
 
+This pattern lets control flows fork into multiple parallel flows that rejoin
+later. The major difference between fork-join and map is that fork-joint does
+not necessarily apply the same function on different data. Instead, usually
+different functions are applied to different or the same data. There are
+different programming models that implement this pattern.  The \openmp's
+\cppinline{parallel region} fork control into multiple threads that all
+execute the \emph{same} statements and use other constructs to determine which
+thread does what. The \cilk's \cppinline{spawn} fork a new thread to execute
+the calling function on a new thread and it is later joined with the callee.
+
+The fork-join pattern are often used by programming models to implement other
+patterns and is widely used in practice. One example is numerical
+integrations, especially for adaptive schemes. Whenever a new segment of the
+integral interval is chosen, the program can fork a new thread to compute the
+results. And after all segments are computed, the program can join all threads
+and sum up the final result.
+
 \paragraph{Reduction}
 
-\paragraph{Scan}
+This pattern uses an associative operator to combine every element in a
+collection into a single element. Given the associativity of the operator,
+many different orderings are possible and hence multiple threads can be used
+to parallelize the computation. This is most often used for parallelization of
+computations such as summations.
 
-\paragraph{Pipeline}
+For example, the computation of \ess, \cess, normalizing of weights, etc., are
+all parallelized using the reduction pattern within \vsmc.
 
-\subsubsection{Classes of parallel computers}
-\label{ssub:Classes of parallel computers}
+\subsubsection{Pipeline}
+\label{ssub:Pipeline}
 
-\paragraph{Instruction level}
+A pipeline connects tasks in a \emph{producer-consumer} relationship. A few
+computation units are active at the same time. The first one consume the data,
+and produce new data to be used by the second, and so on.
 
-\paragraph{Multicore processors}
+There are several applications of pipeline in Monte Carlo computing. For
+example, an \mcmc algorithm often need to compute various convergence
+statistics, say $h(X_{0:t})$. Often, this statistic can be written as
+$h(X_{0:t}) = h(X_t, h(X_{0:{t-1}}))$. Instead of compute it after all
+iterations, one can use one thread to update the \mcmc chain and another one
+to compute the statistics, using the pipeline pattern. In this case, the
+Markov kernel that update the states is the \emph{producer} and the thread
+that update the statistics is the \emph{consumer}.
 
-\paragraph{Symmetric multiprocessing}
+\subsection{Classes of parallel computers}
+\label{sub:Classes of parallel computers}
 
-\paragraph{Distributed computing}
+There are a few types of parallel computers. Here we introduce the four types
+of hardware parallelism that are most commonly seen. Parallel computers can be
+nested. In a multicore \cpu, each core can perform instruction level
+parallelism. On the other hand, a distributed system can be formed by multiple
+multicore \cpu.
 
-\paragraph{Massive parallel computing}
+\subsubsection{Instruction level}
+\label{ssub:Instruction level}
 
-\subsubsection{Softwares}
-\label{ssub:Softwares}
+Modern \cpu all implement the so called \simd instructions, short for
+\emph{single instruction, multiple data}. The \cpu can execute a single
+instruction on different data in a single cycle. However, unlike the higher
+level parallelism discussed later, \simd often has strict requirement of the
+arrangement of the data. In addition, the implementation often requires using
+low level assembly language or intrinsics functions.
 
-\subsubsection{Performance of parallel computing}
-\label{ssub:Performance of parallel computing}
+Though \vsmc does not directly implement this level of parallelism, it can be
+used by the user nonetheless. In addition, many operations within \vsmc can be
+performed using libraries that are implemented with \simd parallelization,
+such as \mkl. Also note that, most modern \cpp compilers also perform \simd
+optimizations on simple loop and some of them, such as \clang performs \simd
+optimizations for non-loop structures. This kind of optimization is also
+called \emph{vectorization}.
+
+\subsubsection{Multicore processors and symmetric multiprocessing}
+\label{ssub:Multicore processors and symmetric multiprocessing}
+
+In the late 1990s, computer \cpu are most advanced by increasing the clock
+speed. However, this strategy soon hit some bottlenecks, mainly the control of
+heat and power. The industry started to develop multicore processors. Each
+\cpu has several cores, each running at a modest clock speed. By executing
+different threads on different cores, the \cpu can process the same amount of
+work with less time without increasing the clock speed.
+
+When a computer has multiple \cpu and each of then has the same speed to
+access the memory, the system is often called \emph{symmetric multiprocessing}
+(\smp). Most higher end workstations are \smp systems. The programming tools
+are usually the same for \smp and multicore processors.
+
+Though multicore processors now sit in a vast majority of consumer and
+professional computers, its programming is more difficult than sequential
+programming. Parallel programs are more difficult to reasoning and issues such
+as data race often cause surprising behaviors of the program. Such issues will
+be briefly discussed in section~\ref{sub:Thread-safety and scalability
+  considerations}.
+
+The \vsmc library support various \smp programming models. In addition, \vsmc
+allows the same user implementation source code to be compiled into different
+parallel samplers using different programming models.
+
+\subsubsection{Distributed computing}
+\label{ssub:Distributed computing}
+
+Distributed computing usually refers to the form of computing where both
+memory and computing processors are spread among computing nodes. It can take
+different forms, such as grid and clusters. The \emph{de facto} programming
+model for distributed computing is \mpi. This is also supported by \vsmc. In
+addition, the library also allows easy integration of \mpi and various \smp
+programming models.
+
+\subsubsection{Massive parallel computing}
+\label{ssub:Massive parallel computing}
+
+In recent years, there is a new trend of using specialized massive parallel
+computing devices, such as \gpu for scientific computing. Modern \gpu often
+has hundreds or thousands co-processors. The main difference between \gpu and
+\cpu is that, \cpu has more logic control units, and thus is more suited for
+general programs. In contrast, \gpu are better at applying the same arithmetic
+operations on a collection of data. It performs the best if each computing
+units are executing \emph{exactly the same} instructions. In addition, it is
+often much more efficient if there are a large amount data to be processed.
+Another significant feature of these devices is that they provide much higher
+\emph{local} memory bandwidth and can use various techniques to reduce local
+data latency than traditional \cpu.
+
+Massive parallel computing is extremely suitable for the \smc algorithms,
+which can have a large number of particles, while each of then need to be
+updated using the same \mcmc kernel.
+
+There are two major programming models for general purpose \gpu programming
+(\gpgpu), Nvidia's \cuda framework and the \opencl standard. The \vsmc library
+provides direct support for the \opencl programming model.
+
+\subsection{Importance and limitations of parallel computing}
+\label{sub:Importance and limitations of parallel computing}
+
+Parallel computers has been developed for decades. Several recent reasons have
+led to increased level of parallel computing in individual, mainstream
+personal computers.
+
+\subsubsection{The hardware trend and the cost of computing}
+\label{ssub:The hardware trend and the cost of computing}
+
+The most significant one is the hardware trend. From 1973 to 2003, clock rates
+of processors increased from 1 MHz to 1 GHz. However, since then there are
+little improvement on this front. Now most high end workstations has
+processors with clock rates at about 2.5 GHz. However, virtually all
+processors produced now have multiple cores. Eight to twelve cores
+configurations are common in middle to high end workstations and personal
+computers often have at least two cores with quadric configurations more and
+more commonly seen, while the clock rates not only remains flat, but also has
+the trend of decreasing. These changes are due to various technical
+difficulties in increasing the clock rates among other reasons, which we will
+not elaborate further here.
+
+Scientists are ever seeking to solving more complex problems, which requires
+more computations. To solve larger problems without use significantly longer
+computing times, the only way is to use parallelism.
+
+Even for the same problem size, parallelism, whenever possible also has other
+benefits apart from reduced computational time. One more important of then is
+the power consumption. The power consumption of a \cmos circuit, the dominant
+technology used in today's computer, is
+\begin{equation}
+  P \propto V^2f
+\end{equation}
+where $V$ is the voltage and $f$ is the frequency. However, the highest
+frequency is roughly proportional to the voltage. In other words, the power
+consumption is roughly proportional to the \emph{cube} of the frequency.
+Therefore, say running two processors, each has half the frequency and doing
+the same amount of work with the same computing time, only a quarter of power
+will be used.
+
+In summary, parallel computing is much more economic than sequential
+computing. In realistic, it means researchers can invest the same or less
+amount of funding, yet get more computing work done with the same or less
+time.
+
+\subsection{Work-span model and speedup}
+\label{sub:Work-span model and speedup}
+
+Unlike sequential computing, the performance of parallel computing is more
+difficult to study. In sequential situation, the computational cost can often
+be deduced from the algorithms easily. For example, a Monte Carlo algorithm
+can use the total number of samples to be generated as a measure of its
+computational cost. However, in the case of parallel computing, the total
+amount of computation, whether measured as number arithmetic operations or
+data operations, cannot reflect the cost in reality. This is due to the fact
+that, today's parallel computers is much more cost efficient when more work
+are parallelized, for reasons such as power consumption mentioned before.
+
+The study of the performance of parallel programming is usually based on the
+work-span model. In this model, tasks form a \emph{direct acyclic graph}
+(\dag). A task is ready to run if all of its predecessors in the graph are
+done. The basic model ignores communication and memory access costs. It also
+assumes the task scheduling is \emph{greedy}, which means that is will never
+let a hardware worker idle while there is a task ready to run.
+
+Let $P$ be the number of hardware workers, e.g., cores in multicore processor
+and nodes in a cluster, and $T_P$ be the total time of computation. In this
+model, $T_1$ is called the \emph{work} of the program and $T_{\infty}$ is
+called the span, which is equal to the longest path in the \dag measured in
+time, the \emph{critical path}. Because the existence of the critical path,
+$T_P \ge T_1/P$. Thus the speedup, defined as $S_P = T_1/T_P$, is bounded,
+\begin{equation}
+  S_P \le \frac{T_1}{T_1/P} = P
+\end{equation}
+In addition, assuming that adding processors never slows down the program,
+\begin{equation}
+  S_P \le T_1/T_{\infty}
+\end{equation}
+Therefore, the structure of the algorithm determine the maximum speedup it can
+obtain.
+
+Implementations on different hardwares often are interested in one of the
+three quantities, $T_1$, $T_P$ and $T_{\infty}$. For sequential
+implementations clearly $T_1$ is the only one of interest. For multicore and
+\smp systems, $T_P$ is of interest for a particular value $P$. $T_{\infty}$ is
+previously of less interest, which is only considered as an ideal situation.
+However, the recent development on massive parallel computers has made it
+close to a reality for many algorithms.
+
+\subsection{Limitations}
+\label{sub:Limitations}
+
+
 
 \subsection{Challenges of parallel computing for Monte Carlo algorithms}
 \label{sub:Challenges of parallel computing for Monte Carlo algorithms}
@@ -130,14 +352,173 @@ particles to be updated.
 \subsubsection{Generating random numbers}
 \label{ssub:Generating random numbers}
 
-\subsubsection{Asymmetric structures of algorithms}
-\label{ssub:Asymmetric structures of algorithms}
+One significant challenge, often well understood yet over sighted by
+statisticians in practice is the generating of random numbers in parallel.
+Most well known random number generators (\rng) are pseudo-\rng, such as
+\textsc{mt19937}. They operates by applying a deterministic function on some
+internal state sequentially. That is, given the state $x_t$, the next random
+number $x_{t+1}$ is generated by $x_{t+1} = f(x_t)$. The entire sequence is
+determined by the state $x_0$, often called the \emph{seed} and the procedure
+that initialize the sequence is called \emph{seeding}.
+
+There are many efforts to parallelize pseudo-\rng. The common strategy is that
+each thread has its own \rng sequence with a different seed. However, without
+proper seeding, it is possible that at some point, part of the sequence of one
+thread is exactly the same as another thread. Algorithms that generating
+proper seeds often has an order greater than $O(n)$ where $n$ is the number of
+threads, and thus its scalability is limited.
+
+One interesting development in recent year is by \cite{Salmon:2011um}. They
+took idea from the encryption literature, where for an integer $x$, a number
+$y$ is generated through a deterministic, one-to-one mapping, $y = f(x)$. This
+function has such a property that, given a collection $\{x_i\}_{i=1}^N$, the
+generated collection $\{y_i\}_{i=1}^N$ appears to be random for statistical
+use. When implemented in parallel, as long as each thread has different input
+sequence $\{x_i\}$, even they are just $\{1,2,\dots\}$, the output will be
+legitimate.
+
+The library provided by \cite{Salmon:2011um} has a performance close to
+the well known \textsc{mt19937} generator while can be easily parallelized.
+And it is used extensively by \vsmc.
+
+\subsubsection{Structures of algorithms}
+\label{ssub:Structures of algorithms}
+
+Some algorithms, or part of its structures are unsuitable for parallelization.
+This is often due to the dependence among data. For example, the most \mcmc
+algorithm cannot be efficiently parallelized. The \smc algorithms, though many
+of them can be parallelized easily, in most situations, the resampling step
+still cannot be efficiently parallelized. In some situations, resampling only
+consumes a small amount of computational time and does not matter much.
+However, in some algorithms, the resampling algorithm can be a performance
+bottleneck. In addition, requirement of synchronization points (so each
+thread has the same view of the weight before and after the resampling step),
+can significantly reduce the performance when the computational cost of
+updating each particle is not even. In this case, most particles could be
+waiting for the new state and weight of a few particles.
+
+These problems cannot be easily solved by the improvement of computers or
+software tools. Instead, they require researchers to design algorithms that
+are more suitable for the new trend of computer hardware. This is also one of
+the reason that population based Monte Carlo algorithms have attracted
+considerable attention in recent years. For example, there are recent
+development of the particle \mcmc algorithm \cite{Andrieu:2010gc}, which
+combines the strength of \mcmc and \smc algorithms and the \smc part can be
+parallelized. In particular case of \smc, there are also development on
+solving the bottleneck issue of resampling, for example, see
+\cite{presampling}.
 
 \subsubsection{Scalability of algorithms}
 \label{ssub:Scalability of algorithms}
 
+Many Monte Carlo algorithms enjoys some form of the central limit theorem and
+the computational cost is often $O(N)$ where $N$ is the number of samples
+(iterations in \mcmc and number of particles in \smc, etc.) In sequential
+implementations, this leads to that to get $K$ times the performance (in the
+sense of, e.g., $1/K$ times the estimator variance), one can archive that by
+investing $K$ times the computational cost.
+
+The situation is more complex in parallelized programs. As we can see in
+section~\ref{sec:Performance benchmark}, these programs does not generally
+enjoy such a linear relation. The programs often perform more efficiently when
+there is a large number of samples in the sense that, the computational time
+can be reduced close to linearly by increasing the number of threads. However,
+the performance of Monte Carlo algorithms cannot be measured by computational
+time along. For example, in the case of the \pmcmc algorithm, to increase the
+number of threads leads to increasing the number of \mcmc chains within the
+algorithm. As we see in the earlier chapter, such a change can lead to slower
+global mixing speed and hence slow down the whole algorithm.
+
+The \smc algorithm, though is more desirable in the sense that increasing
+number of particles improve the efficiency of parallelization while the
+variance of estimators reduce according to some form of the central limit
+theorem. However, given the same computational time, there is still the
+trade-off between the number of particles and the number of distributions.
+Increasing the former improves the computational efficiency while increasing
+the later improves the mixing speed of the forward Markov kernel.
+
+Nonetheless, among all algorithms studied in this thesis, \smc is perhaps the
+most scalable one.
+
 \section{An overview of C++ and template metaprogramming}
 \label{sec:An overview of C++ and template metaprogramming}
+
+\cpp is a static strong type language. It requires the user to declare
+variables, functions, and most other kinds of entities using specific types.
+However, a lot of code looks the same for different types. Especially for
+implementation of algorithms, including but not limited to Monte Carlo
+computing. The \cpp template technique allows one to write generic code to
+solve a class of problems, while the involved types can be seamlessly replaced
+at compile time. In this section, we briefly introduce the basic knowledges of
+\cpp template, to ease the reading of what follows. We assume the reader has
+at least some working knowledge of \cpp, including concepts such as
+object-oriented programming.
+
+\subsection{Function template}
+\label{sub:Function template}
+
+The following lines define a simple function template,
+\cppfile{code/function_template_def.cpp}
+This template definition specifies a \emph{family} of functions that returns
+the maximum of two values, which are passed as function parameters
+\cppinline{a} and \cppinline{b}. They type of these parameters is left open as
+\emph{template parameter} \cppinline{T}. Here we see one form of the template
+parameter \cppinline{typename T}. A generic type is declared in this form.
+There are two other forms, non-type parameter and template template parameter.
+Non-type parameter can be any compile time constant expression, such as
+integer literates. Template template parameter can use a class template name
+as a parameter, which is a more complex topic. All three forms are used in
+\vsmc, and we will see examples of the usage of them in context.
+
+In this template definition, the assumption about \cppinline{T} is that the
+operator \cppinline{<} is properly defined. The actual types are deduced at
+compile time when the function template is used. A detailed account of this
+topic is beyond the scope of this section. However, below we give some correct
+and incorrect examples of the usage of this template.
+\cppfile{code/function_template_usage.cpp}
+
+\subsection{Class template}
+\label{sub:Class template}
+
+Class template is similar to function template, yet somehow simpler. A class
+template define a family of classes. For example,
+\cppfile{code/class_template_def.cpp}
+defines a \cppinline{Stack} class template. For simplicity, some edge cases
+and exceptional situations such as calling \cppinline{top} on an empty
+\cppinline{Stack} is not handled here. This class template can be used as the
+following,
+\cppfile{code/class_template_usage.cpp}
+As we can see, to use a class template, one \emph{explicitly} supply the type
+of the template parameter. Unlike function template, there is no template
+parameter deduction here.
+
+\subsection{Specialization}
+\label{sub:Specialization}
+
+There are many more in-depths topics and features of \cpp template that we
+have note discussed in this section, due to the limit of the scope. There are
+books devoted entirely to such topics \cite{cpptemplate, moderncpp}. One
+feature used extensively in the \vsmc library is \emph{specialization},
+especially specialization of class template. Specialization allows one to
+provide special definition of a class template for one particular type of the
+template parameter. And hence it allows one to manipulate types at compile
+time.
+
+One simple example is the following,
+\cppfile{code/class_template_spec.cpp}
+The first definition of the class \cppinline{SizeType} is generic and the
+second is its specialization for type \cppinline{SomeSpecialType}. The class
+\cppinline{Sampler}, which uses the type \cppinline{size_type}, will define
+this type to be \cppinline{std::size_t}. However, for some special type
+\cppinline{SomeSpecialType}, this type will be defined as \cppinline{int}.
+
+There are more advanced usages of template specialization. These are used
+extensively in \vsmc to provide extensibility. The key observation from the
+above example is that, template specialization provides special behavior for
+some type in addition to the generic behavior to other types. The ability to
+programming on types of \cpp templates leads to the popularity of \cpp
+template metaprogramming in the past decade. See \cite{moderncpp} for some
+advanced techniques.
 
 \section{Using the vSMC library}
 \label{sec:Using the vSMC library}
@@ -174,7 +555,7 @@ introduced later in context.
     parallelization through \opencl, such as for the purpose of General
     Purpose \gpu Programming (\gpgpu). \opencl is a framework for writing
     programs that can be execute across heterogeneous platforms. \opencl
-    programs can run on either \cpu{}s or \gpu{}s.
+    programs can run on either \cpu or \gpu.
 \end{description}
 We will introduce the core and \smp modules in detail. The other two will
 requires substantial knowledge of the underlying programming models, and it is
@@ -1294,15 +1675,15 @@ those using the \smp module.
 
 \opencl implementations are also compared on the same workstation, which also
 has an NVIDIA Quadro 2000 graphic card. \opencl programs can be compiled to
-run on both \cpu{}s and \gpu{}s. For \cpu implementation, there are \iocl and
-\aocl platforms. We use the \tbb implementation as a baseline for comparison.
-The same \opencl implementation are used for all the \cpu and \gpu runtimes.
+run on both \cpu and \gpu. For \cpu implementation, there are \iocl and \aocl
+platforms. We use the \tbb implementation as a baseline for comparison.  The
+same \opencl implementation are used for all the \cpu and \gpu runtimes.
 Therefore they are not particularly optimized for any of them. For the \gpu
 implementation, in addition to double precision, we also tested a single
-precision configuration. Unlike modern \cpu{}s, which have the same
-performance for double and single precision floating point operations (unless
-\simd instructions are used, which can have at most a speedup by a factor of
-2), \gpu{}s penalize double precision performance heavily.
+precision configuration. Unlike modern \cpu, which have the same performance
+for double and single precision floating point operations (unless \simd
+instructions are used, which can have at most a speedup by a factor of 2),
+\gpu penalize double precision performance heavily.
 
 For different number of particles, the wall clock time and speed up are
 plotted in Figure~\ref{fig:bench-ocl-perf}. With smaller number of particles,
