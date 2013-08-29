@@ -1,4 +1,5 @@
-\chapter{vSMC: A C++ Library for Parallel SMC}
+\chapter[vSMC: A C++ Library for Parallel SMC]
+{\protect\vsmc: A C++ Library for Parallel SMC}
 \label{cha:vSMC: A C++ Library for Parallel SMC}
 
 The \vsmc library \cite{software:VSMC} was developed during the research to
@@ -8,48 +9,151 @@ comparison examples in previous chapters. It evolves into a sophisticated \cpp
 framework for implementing \smc algorithms on both sequential and parallel
 hardware.
 
+In section~\ref{sec:The state of softwares for Monte Carlo computing} we
+review the state of computer softwares for Monte Carlo computing. We introduce
+parallel computing in section~\ref{sec:Parallel computing} and there we also
+reviews its strengths and limitations, and particular challenges faced by
+researchers when using it for Monte Carlo computing. Two modern \cpp
+techniques are introduced in section~\ref{sec:Modern C++ techniques},
+templates and callable objects. They are used extensively by \vsmc but may not
+be familiar to non-experts.
+
 A more comprehensive (but also much more technical) tutorial of the library
-can be found in \cite{software:VSMC}, part of which is also presented in this
-chapter. In this chapter, we provide a higher level overview of the library
-structure and usage. Section~\ref{sec:Using the vSMC library} and~\ref{sec:The
-  vSMC library} details the usage and structure of the library. In
-section~\ref{sec:A minimal example} we use a minimal example to demonstrate
-the most basic features of the library. Section~\ref{sec:Beyond the basics}
-discusses how one can implement the adaptive algorithms studied in the last
-chapter and how the library can assist novel \smc related researches. In the
-field of \smc, and computational statistics in general, researchers are
-actively developing new algorithms. It is unlikely to have any existing
-software to directly provide functionality of the newly developed algorithms.
-One of the purpose of \vsmc is to make it easier to develop new \smc related
-algorithms on top of the presented framework, and to free researchers from
-developing entirely new software to satisfy their particular needs. In
-section~\ref{sec:Performance benchmark} we compare the performance of
-different parallel programming models that can be used with \vsmc.
+can be found in \cite{software:VSMC}, part of which is also presented here.
+In this chapter, we provide a higher level overview of the library structure
+and usage. Section~\ref{sec:The vSMC library} details the usage and structure
+of the library. In section~\ref{sec:A minimal example} we use a minimal
+example to demonstrate the most basic features of the library.
+Section~\ref{sec:Beyond the basics} discusses how one can implement the
+adaptive algorithms studied in the last chapter and how the library can assist
+novel \smc related researches. In the field of \smc, and computational
+statistics in general, researchers are actively developing new algorithms. It
+is unlikely to have any existing software to directly provide functionality of
+the newly developed algorithms. One of the purpose of \vsmc is to make it
+easier to develop new \smc related algorithms on top of the presented
+framework, and to free researchers from developing entirely new software to
+satisfy their particular needs. In section~\ref{sec:Performance benchmark} we
+compare the performance of different parallel programming models that can be
+used with \vsmc.
 
 It shall be noted that, \vsmc may be more ``developer friendly'' than ``user
-friendly''. It does not provide \bugs-like interface for the user. However,
+friendly''. It does not provide interfaces similar \bugs for users. However,
 the more proficient one is at \cpp, \vsmc may be used in a more flexible and
-productive way than other softwares. There is always a trade-off between easy
+productive way than other softwares. There is always a trade-off between ease
 of use and the productivity, flexibility and extensibility of a given
 software.
 
-The advancement of the Monte Carlo research is tightly related to the
-improvement in computer performance and development of various software. In
-this section, we review the recent history and state of statistical software
-with a particular emphasis on their application for implementation of Monte
-Carlo algorithm.
-
-In recent years, there is a new trend in computer technologies. Parallel
-computing has become more accessible to many researchers. How to take
-advantage of this new trend to develop and implement novel Monte Carlo
-algorithms is one of the main purpose of the work presented in this chapter.
-
 \section{The state of softwares for Monte Carlo computing}
-\label{sec:The state of software for Monte Carlo computing}
+\label{sec:The state of softwares for Monte Carlo computing}
 
-The use of computer for statistical computing and Monte Carlo computing in
-particular an be dated as far as back to 1950s. It has seen the most
-development
+The advancement of the Monte Carlo research and statistics in general is
+tightly related to the improvement in computer performance and development of
+various software. The use of computers for statistical computation can be seen
+in early research such as \cite{metropolis1953}. However, in the early days
+researchers wrote application specific softwares using low level programming
+languages.
+
+There are softwares designed specific for statisticians, such as \sas and
+\spss. These packages provide easy access to widely used statistical
+procedures while also provide functionalities that enables researchers to
+write custom programs. However, their extensibility and flexibility are quite
+limited when compared to a full fledged programming language. There are also
+statistical softwares designed for specific application areas such as \minitab
+for engineering process improvement methods. A common trait of these softwares
+is that they are designed for people that practice statistics in industries
+better than researchers, who are continuously development new methodologies
+and procedures.
+
+Starting from 1970s and 1980s, a few general numerical computation softwares
+gained significant popularities among researchers. For example \matlab was
+released in 1984 and \mathematica was released in 1988. These tools put more
+emphasize on general numerical algorithms or symbolic computation. They are
+also widely used by statisticians. The \slang programming language and its
+derivative, notably \rlang \cite{rlang}, is one of the most widely used
+programming language among statisticians. It provides many features that are
+particularly suitable for statistical computing. These softwares, unlike \sas
+and alike, are general purpose programming language on their own while
+providing features such as matrix computations. Therefore, they enable
+researchers to easily write softwares that implement novel algorithms.
+Numerous research works have been published with softwares written in them in
+the past three decades.
+
+One drawback of these programming languages is that they are often slow
+compared to compiled languages such as \cpp. However, to develop statistical
+softwares using system programming languages like \cpp not only requires
+considerable expertise, but also is less productive than using a language like
+\rlang. There are attempts to provide ease of use similar to \matlab and
+\rlang to languages like \cpp. Thanks to \cpp's expression template technique,
+pioneered by \blitzpp and more recently \armadillo and \eigen, the
+productivity of developing in \cpp has been improved significantly. However,
+most of these developments focus on providing linear algebra support in \cpp,
+while statisticians also need functionalities such as computation of special
+functions, distribution densities, etc. The \boost \cite{boost} library's
+\cppinline{math} module is a notable exception.
+
+There are some tools designed specifically for Monte Carlo computing. The
+\bugs \cite{bugs} package is perhaps one of the most widely used for
+implementation of \mcmc algorithms. It contributed to the popularity of \mcmc
+algorithms and Bayesian statistics. Recently, there are attempts to provide
+\bugs-like functionality for \smc algorithms, for instance \biips \cite{biips}
+and \libbi \cite{libbi}.
+
+\subsection{The need of new softwares for parallel computing}
+\label{sub:The need of new softwares for parallel computing}
+
+Most of the softwares mentioned so far was developed for single thread
+sequential computing. Some of them parallelize operations internally, for
+example \libbi. Some programming tools also have limited support of
+parallelization. For example, both \matlab and \mathematica are capable of
+parallelizing simple loop. And recent versions \rlang has a core package
+\textsf{parallel} that provides functionalities modeled after the \unix
+threads.
+
+When people need to develop high performance parallel programs for
+applications not directly supported by these softwares, they often resolve to
+low level languages such as \cpp, much like the situation before the
+development of tools such as \slang. People often rely on programming models
+such as \openmp \cite{openmp}, \tbb \cite{tbb} and \mpi \cite{mpi} to
+implement parallel structures. For many applications, people can either enjoy
+the ease of use of softwares such as \rlang and settle for a sequential
+implementation or write their own software using low level programming tools
+with non-trivial efforts.
+
+In the particular case of \smc, we believe there are a few layers need to be
+fulfilled in future in order to provide researchers easy access to parallel
+computing.
+\begin{enumerate}
+  \item Softwares that enable researchers to write programs in languages like
+    \cpp, but does not need to implement many common features of algorithms
+    manually or resolve to low level programming models such as \tbb. This is
+    much like what \armadillo and \eigen did for linear algebra in \cpp.
+  \item Softwares that use the tools developed above to provide user friendly
+    features for more application specific usage. This is much like what \bugs
+    did for Bayesian modeling.
+  \item Softwares that links these application specific tools with general
+    numerical computation tools like \matlab and \rlang.
+\end{enumerate}
+The tools like \biips and \libbi actually provides functionality of the second
+layer. However, they lack the flexibility provided in the first one and thus
+cannot satisfy the needs of many scenarios. The work presented in this chapter
+aims to fulfill the first layer for \smc algorithms. There are a few
+design goals,
+\begin{enumerate}
+  \item One should be able to implement simple or standard algorithms easily.
+    This is demonstrated in section~\ref{sec:A minimal example}.
+  \item Non-standard algorithms shall be possible within the framework. The
+    internal implementation of most of the components of a sampler constructed
+    with \vsmc can be replaced by users from the outside. Of course, if most
+    or all of them need to be replaced, it shall not be surprised that one
+    need to put in effort as much as developing new software from scratch.
+  \item It shall provide support for various parallel programming models and
+    it shall be possible to support new programming models in future without
+    significant changing its user interface. Parallel programming is much less
+    portable than sequential programming at the time of writing. Many
+    platforms only support certain tools. The library shall give users choice
+    on what programming models to use based on the specific platform the user
+    is using.
+\end{enumerate}
 
 \section{Parallel computing}
 \label{sec:Parallel computing}
@@ -57,18 +161,18 @@ development
 Parallel computing is a form of computation in which many calculations are
 carried out simultaneously. It operates on the principle that large problems
 can be divided into independent smaller ones and can be solved concurrently
-(``in parallel''). Parallelism has been practiced for many years, in the form
+(``in parallel''). Parallelism has been practiced for many years in the form
 of high performance computing. In recent years, it has also become the
 dominant paradigm for desktop computing in the form of multicore processors.
-However, most of today's popular statistical softwares are written with
+However, many of today's popular statistical softwares are written with
 serialization as an assumption, meaning that they do not easily take advantage
 of contemporary computer architectures.
 
 In this section, we first introduce some most used strategies of parallelism.
-It is followed by a description some of the commonly seen of parallel
-computers. Then we discuss the importance and limitations of parallel
-computing in general. This section is concluded with a discussion of its use
-in the particular field of Monte Carlo algorithms.
+It is followed by a description of some commonly seen parallel computers.
+Then we discuss the importance and limitations of parallel computing in
+general. This section is concluded with a discussion of its use in the
+particular field of Monte Carlo algorithms.
 
 \subsection{Parallelism strategies}
 \label{sub:Parallelism strategies}
@@ -78,31 +182,29 @@ The best overall strategy for \emph{scalable parallelism} is \emph{data
 parallelism. Narrower definitions only permit collection-oriented operations,
 such as applying the same function to all elements of an array. A wider view
 is that the parallelism grows (preferably linearly) as the data size or the
-problem size grows. For example, parallelizing a vanilla algorithm belongs to
-this strategy. As the number of samples increases, one can always use more
-parallel computing resources to run the sampler with the same amount of time
-without increasing the speed of each computing unit. Note that, here we
-ignored issues such as generating random numbers in parallel, which will be
-discussed later. In contrast, an \mcmc algorithm usually cannot be
-parallelized in a scalable way. To obtain better statistical results, often
-the only way is to increase the number of iterations, and thus no matter how
-much parallel computing resources are available, the computing time will
-increase without increasing of the speed of the processors.
+problem size grows. For example, parallelizing a vanilla Monte Carlo
+integration algorithm belongs to this strategy. As the number of samples
+increases, one can always use more parallel computing resources to run the
+sampler with the same amount of time without increasing the speed of each
+computing unit. Note that, here we ignored issues such as generating random
+numbers in parallel, which will be discussed later. In contrast, an \mcmc
+algorithm usually cannot be parallelized in a scalable way. To obtain better
+statistical results, often the only way is to increase the number of
+iterations, and thus no matter how much parallel computing resources are
+available, the computing time will increase without increasing of the speed of
+the processors.
 
 The opposite of data parallelism is \emph{functional parallelism}, an approach
 that runs different functional parts of a program in parallel. At best,
 functional parallelism can improvement the performance by a constant speedup.
-For example, say a program performs functions $f_1,\dots,f_k$, then at best the
-computing time can be reduced by $k$-fold through parallelism. In the
+For example, say a program performs functions $f_1,\dots,f_k$, then at best
+the computing time can be reduced by $k$-fold through parallelism. In the
 remaining of this chapter, we focus on data parallelism.
 
 \subsubsection{Parallel patterns}
 \label{ssub:Parallel patterns}
 
 In a more micro level, parallelism can be implemented with different patterns.
-In this section, we introduce a few that are particularly related to
-statistical computing.
-
 The term \emph{pattern} in computer science, introduced and popularized by
 \cite{software:GoF}, is a way of codifying best practices for software
 engineering. We found patterns are more useful to statisticians for reasoning
@@ -130,11 +232,12 @@ This pattern lets control flows fork into multiple parallel flows that rejoin
 later. The major difference between fork-join and map is that fork-joint does
 not necessarily apply the same function on different data. Instead, usually
 different functions are applied to different or the same data. There are
-different programming models that implement this pattern.  The \openmp's
+different programming models that implement this pattern. The \openmp
 \cppinline{parallel region} fork control into multiple threads that all
 execute the \emph{same} statements and use other constructs to determine which
-thread does what. The \cilk's \cppinline{spawn} fork a new thread to execute
-the calling function on a new thread and it is later joined with the callee.
+thread does what. The \cilk \cite{cilk} \cppinline{spawn} fork a new thread to
+execute the calling function on a new thread and it is later joined with the
+callee.
 
 The fork-join pattern are often used by programming models to implement other
 patterns and is widely used in practice itself. One example is numerical
@@ -194,9 +297,9 @@ Though \vsmc does not directly implement this level of parallelism, it can be
 used by the user nonetheless. In addition, many operations within \vsmc can be
 performed using libraries that are implemented with \simd parallelization,
 such as \mkl. Also note that, most modern \cpp compilers perform \simd
-optimizations on simple loop and some of them, such as \clang performs \simd
-optimizations for non-loop structures. This kind of optimization is also
-called \emph{vectorization}.
+optimizations on simple loop and some of them, such as \clang \cite{clang}
+performs \simd optimizations for non-loop structures. This kind of
+optimization is also called \emph{vectorization}.
 
 \subsubsection{Multicore processors and symmetric multiprocessing}
 \label{ssub:Multicore processors and symmetric multiprocessing}
@@ -247,15 +350,16 @@ which can have a large number of particles, while each of then need to be
 updated using the same \mcmc kernel.
 
 There are two major programming models for general purpose \gpu programming
-(\gpgpu), Nvidia's \cuda framework and the \opencl standard. The \vsmc library
-provides direct support for the \opencl programming model.
+(\gpgpu), Nvidia's \cuda framework and the \opencl \cite{opencl} standard. The
+\vsmc library provides direct support for the \opencl programming model.
 
-\subsection{Importance and limitations of parallel computing}
-\label{sub:Importance and limitations of parallel computing}
+\subsection{Importance, performance and limitations of parallel computing}
+\label{sub:Importance, performnace and limitations of parallel computing}
 
 Parallel computers has been developed for decades. Several reasons have led to
 increased level of parallel computing in individual, mainstream personal
-computers.
+computers. The benefits and thus its importance, the performance issues and
+limitations of parallel computing are of interest here.
 
 \subsubsection{The hardware trend and the cost of computing}
 \label{ssub:The hardware trend and the cost of computing}
@@ -291,9 +395,8 @@ amount of work with the same computing time, only a quarter of power will be
 used.
 
 In summary, parallel computing is much more economic than sequential
-computing. In realistic, it means researchers can invest the same or less
-amount of funding, yet get more computing work done with the same or less
-time.
+computing. In reality, it means researchers can invest the same or less amount
+of funding, yet get more computing work done with the same or less time.
 
 \subsubsection{Work-span model and speedup}
 \label{sub:Work-span model and speedup}
@@ -436,8 +539,8 @@ order greater than $O(n)$ where $n$ is the number of threads, and thus its
 scalability is limited, especially for devices such as \gpu{}s.
 
 One interesting development in recently is by \cite{Salmon:2011um}. They took
-ideas from the encryption literature, where for an integer $x$, a number $y$ is
-generated through a deterministic, one-to-one mapping, $y = f(x)$. This
+ideas from the encryption literature, where for an integer $x$, a number $y$
+is generated through a deterministic, one-to-one mapping, $y = f(x)$. This
 function has such a property that, given a collection $\{x_i\}_{i=1}^N$, the
 generated collection $\{y_i\}_{i=1}^N$ appears to be random for statistical
 use. When implemented in parallel, as long as each thread has different input
@@ -453,10 +556,10 @@ used extensively by \vsmc.
 
 Some algorithms, or part of its structures are unsuitable for parallelization.
 This is often due to the dependencies among data. For example, most \mcmc
-algorithms cannot be efficiently parallelized. The \smc algorithms, though many
-of them can be parallelized easily, in most situations, the resampling step
-still cannot be efficiently parallelized. In some situations, resampling only
-consumes a small amount of computational time and does not matter much.
+algorithms cannot be efficiently parallelized. The \smc algorithms, though
+many of them can be parallelized easily, in most situations, the resampling
+step still cannot be efficiently parallelized. In some situations, resampling
+only consumes a small amount of computational time and does not matter much.
 However, in some algorithms, the resampling algorithm can be a performance
 bottleneck. In addition, requirement of synchronization points (so each thread
 has the same view of the weight before and after the resampling step), can
@@ -507,22 +610,47 @@ the later improves the mixing speed of the forward Markov kernel.
 Nonetheless, among all algorithms studied in this thesis, \smc is perhaps the
 most scalable one.
 
-\section{Introducing some advanced C++ techniques}
-\label{sec:Introducing some advanced C++ techniques}
+\section{Modern \protect\cpp techniques}
+\label{sec:Modern C++ techniques}
+
+The \vsmc library makes extensive use of some modern \cpp techniques. Most
+notably, it use templates for metaprogramming and type erasures for callbacks
+passing.
 
 \subsection{Templates and metaprogramming}
 \label{sub:Templates and metaprogramming}
 
 \cpp is a static strong type language. It requires the user to declare
 variables, functions, and most other kinds of entities using specific types.
-However, a lot of code looks the same for different types. Especially for
+However, a lot of code looks the same for different types, especially for
 implementation of algorithms, including but not limited to Monte Carlo
 computing. The \cpp template technique allows one to write generic code to
 solve a class of problems, while the involved types can be seamlessly replaced
 at compile time. In this section, we briefly introduce the basic knowledges of
 \cpp template, to ease the reading of what follows. We assume the reader has
 at least some working knowledge of \cpp, including concepts such as
-object-oriented programming.
+object-oriented programming (\oop).
+
+Templates are useful for a few reasons. It reduces duplication of the same
+code for multiple types. Though conventional \oop, in \cpp through virtual
+functions and abstract classes, can also provide polymorphism behaviors, they
+rely on runtime decisions. In contrast, templates rely on compile time
+decisions and are more type safe. Templates emphasize that the same operation
+can be applied to many types. It allows unlimited extension of existing
+functionality. It is possible to have any combination of the allowed
+operations on a certain type and the allowed types of a certain operations.
+More specifically, given a collection of operations and a collection of types,
+each operation may support any subset of the types and each type can support
+any subset of the operations. Such combinatorial behavior is difficult to
+implement using conventional \oop, where a collection of types have a common
+interface that provides a fixed set of operations.
+
+Another significant benefit of templates is due to the \cpp feature of
+template specialization, introduced later in this section. Specialization
+allows one to provide different implementations of a given operation for a
+very specific type. For example, in \vsmc, the user can use specialization to
+alter its internal implementations without actually seeing or modifying
+source code of the library.
 
 \subsubsection{Function template}
 \label{ssub:Function template}
@@ -533,7 +661,7 @@ This template definition specifies a \emph{family} of functions that returns
 the maximum of two values, which are passed as function parameters
 \cppinline{a} and \cppinline{b}. They type of these parameters is left open as
 \emph{template parameter} \cppinline{T}. Here we see one form of the template
-parameter \cppinline{typename T}. A generic type is declared in this form.
+parameter, \cppinline{typename T}. A generic type is declared in this form.
 There are two other forms, non-type parameter and template template parameter.
 Non-type parameter can be any compile time constant expression, such as
 integer literates. Template template parameter can use a class template name
@@ -566,17 +694,17 @@ parameter deduction here.
 \label{ssub:Specialization}
 
 There are many more in-depths topics and features of \cpp template that we
-have note discussed in this section, due to the limit of the scope. There are
+will not discuss in this section, due to the limit of the scope. There are
 books devoted entirely to such topics \cite{cpptemplate, moderncpp}. One
 feature used extensively in the \vsmc library is \emph{specialization},
-especially specialization of class template. Specialization allows one to
+especially specialization of class templates. Specialization allows one to
 provide special definition of a class template for one particular type of the
 template parameter. And hence it allows one to manipulate types at compile
 time.
 
 One simple example is the following,
 \cppfile{code/class_template_spec.cpp}
-The first definition of the class \cppinline{SizeType} is generic and the
+The first definition of the class \cppinline{SizeTypeTrait} is generic and the
 second is its specialization for type \cppinline{SomeSpecialType}. The class
 \cppinline{Sampler}, which uses the type \cppinline{size_type}, will define
 this type to be \cppinline{std::size_t}. However, for some special type
@@ -585,10 +713,16 @@ this type to be \cppinline{std::size_t}. However, for some special type
 There are more advanced usages of template specialization. These are used
 extensively in \vsmc to provide extensibility. The key observation from the
 above example is that, template specialization provides special behavior for
-some type in addition to the generic behavior to other types. The ability to
-programming on types of \cpp templates leads to the popularity of \cpp
-template metaprogramming in the past decade. See \cite{moderncpp} for some
-advanced techniques.
+some type in addition to the generic behavior for other types. The ability to
+program on types of \cpp templates leads to the popularity of \cpp template
+metaprogramming in the past decade. See \cite{moderncpp} for some advanced
+techniques.
+
+The example given above shows how one can modify \cppinline{Sampler}'s
+internal without actually modifying the source code. The \vsmc library support
+many extensions through template specialization. Limited by the scope we will
+not introduce much of it in this chapter. They are all documented in the
+reference manual that accompany the library.
 
 \subsection{Callable objects}
 \label{sub:Callable objects}
@@ -609,13 +743,18 @@ callable( /* arguments */ );
 However, the object may or may not be a function. It can be a function pointer
 or a functor. It can also be a \cppoo lambda expression.
 
+The library also use type erasures, introduced later in this section, to
+enforce certain interfaces. The benefits of techniques introduced below
+increases the productivity and flexibility of the library compared to
+conventional techniques of passing callbacks through function pointer.
+
 \subsubsection{Function pointers, functors and lambda expressions}
 \label{ssub:Function pointers, functors and lambda expressions}
 
 A \emph{function pointer}, similar to other kind of pointers in \cpp, stores
 the memory address a function. Its type specifies the function's signature,
 namely its return type and its parameter list types. The following defines a
-function and a pointer, \cppinline{f_ptr}, that point to it,
+function and a pointer, \cppinline{f_ptr}, that points to it,
 \begin{cppcode}
 double f (double x) { return x * x; }
 double (*f_ptr) (double) = &func;
@@ -634,7 +773,7 @@ g(3.14, f_ptr);
 \end{cppcode}
 
 There are a few drawbacks of using function pointers to pass callbacks.
-Because it can only points to free functions, which are defined in the
+Because it can only point to free functions, which are defined in the
 namespace scope, if the function need to access some shared states, it has to
 resolve to using global or namespace scope variables. In \cpp, there is an
 alternative approach using the operator overloading feature. A class object
@@ -649,10 +788,9 @@ C c_obj;
 c_obj(3.14);
 \end{cppcode}
 This kind of classes are also called \emph{functors}. It can take the full
-advantage of object-oriented programming. The class can have constructors and
-data members just as any other classes. It can also be used as a way of
-passing callbacks, similar to function pointers, through templates. For
-instance,
+advantage of \oop. The class can have constructors and data members just as
+any other classes. It can also be used as a way of passing callbacks, similar
+to function pointers, through templates. For instance,
 \begin{cppcode}
 template <typename F>
 double g (double x, const F &f) { return f(x); }
@@ -660,7 +798,8 @@ g(3.14, f_ptr);
 g(3.14, c_obj);
 \end{cppcode}
 The new definition of function \cppinline{g} accepts both the function pointer
-and the class object as its argument.
+and the class object as its argument, since they both support the syntax
+\cppinline{f(x)}.
 
 In \cppoo, a new feature called \emph{lambda expression} is introduced. It is
 also called \emph{local function} or \emph{closure} in other programming
@@ -677,16 +816,16 @@ The full declaration of a lambda expression is as the following,
 /* attribute specification */
 -> /* return type */ { /* body * };
 \end{cppcode}
-The \cppinline{/* mutable */} part can be either empty of the keyword
+The \cppinline{/* mutable */} part can be either empty or the keyword
 \cppinline{mutable}, which allows the body to modify captured parameters
 (explained soon). The exception specification is similar to a normal function
 and the attribute specification is a new feature for all functions in \cppoo,
 that specifies things like parameter passing conventions among other things,
 which we will not go into details. The part \cppinline{-> /* return type */}
 specifies the return type of the lambda expression. If omitted, it is deduced
-from the body. And if the body does contain any \cppinline{return} statement, it
-is deduced to be \cppinline{void}. If the expression takes no arguments, the
-parameter list can also be omitted.
+from the body. And if the body does contain any \cppinline{return} statement,
+it is deduced to be \cppinline{void}. If the expression takes no arguments,
+the parameter list can also be omitted.
 
 The \cppinline{/* capture */} specifies which symbols visible at the scope of
 the definition of the lambda expression will be visible inside the body. There
@@ -694,7 +833,7 @@ are a few forms,
 \begin{description}
   \item[\cppinline{[a, &b]}] captures \cppinline{a} by value and \cppinline{b}
     by reference.
-  \item[\cppinline{[this]}] captures the \cppinline{this} pointer.
+  \item[\cppinline{[this]}] captures the \cppinline{this} pointer by value.
   \item[\cppinline{[=]}] captures all automatic variables \emph{used} in the
     body by value.
   \item[\cppinline{[&]}] captures all automatic variables \emph{used} in the
@@ -703,64 +842,56 @@ are a few forms,
 \end{description}
 
 In the previous example, our function \cppinline{f} or class \cppinline{C}
-only computes the square of a number. Now consider the problem that we want it
-take compute the product of its parameter with an external variable of
-function \cppinline{g}. Here is a comparison of the solutions using function
-pointers, functors, and lambda expressions,
-
-Using function pointers,
+only computes the square of a number. In reality often the function
+\cppinline{g}, usually defined in a library that the user is using, requires a
+certain interface of its callback. The function, functor or lambda expression
+is used to wrap another function to satisfy this interface requirement.
+Consider the problem that we have a definition of a function that computes the
+density of Normal distribution given its mean and standard deviation for a
+given value. There is also another function that computes the Metroplis
+acceptance probability for two values given a callback function that takes a
+single value as its parameter. For example,
 \begin{cppcode}
-double A; // A global variable
-double f (double x) { return x * A; }
+double normal_pdf (double x, double mean, double sd)
+{ return /* the mathematical formula */; }
 
-// The following may be in a local scope
-double y = 1.414; // A local variable
-A = y; // Modify the global variable used by f
-g(3.14, &f);
-\end{cppcode}
-Using functors,
-\begin{cppcode}
-struct C
+template <typename Func>
+double prob (double old_val, double new_val, const Func &target)
 {
-    C (double a) : a_(a);
-
-    double operator() (double x) const { return x * a_; }
-
-    private :
-
-    double a_;
-};
-
-double y = 1.414; // A local variable
-g(3.14, C(y));
+    return target(new_val) / target(old_val);
+}
 \end{cppcode}
-And the last, using lambda expressions,
-\begin{cppcode}
-double y = 1.414; // A local variable
-g(3.14, [=] (double x) -> double { return x * y });
-\end{cppcode}
-
+It is clear that we cannot use \cppinline{normal_pdf} direclty with
+\cppinline{prob}. What we want is in context, to be able to write something
+like,
+\cppfile{code/callable_update_mcmc.cpp}
+The callback \cppinline{target}, defined somewhere else, shall accept a single
+value as its parameter yet it shall return \cppinline{normal_pdf(x, mean, sd)}
+with \cppinline{mean} and \cppinline{sd} take values of the arguments of
+\cppinline{update_mcmc}. This problem can be solved using one of the three
+kinds of callable objects introduced in this section,
+\cppfile{code/callable_update_mcmc_impl.cpp}
 The function pointer approach relies on the global variable. The functor
 approach requires quite a few lines of code to accomplish a simple task. The
-lambda expression is clean, elegant and yet it does not requires the use of
+lambda expression is clean, elegant and yet it does not rely on the use of
 global variables.
 
 \subsubsection{Type erasures}
 \label{ssub:Type erasures}
 
 In the example above, the function template \cppinline{g} does not actually
-enforce the signature of the function or functor, in contrast to the defintion
-of it that takes a function pointer as an argument. For example, the
-following is perfect valid \cpp,
+enforce the signature of the function or functor, in contrast to the
+definition of it that takes a function pointer as an argument. For example,
+the following is perfect valid \cpp,
 \begin{cppcode}
 int h (int x) {return x * x};
 g(3.14, &h);
 \end{cppcode}
-while it may be not what one wants. The use of \cppinline{h} with
-\cppinline{g} is perhaps an typo. The type erasure through \cppoo{}
-\cppinline{std::function} provides a solution to this problem. A \emph{type
-  erasure} can convert various types of objects into a single type. Below is
-a basic usage of \cppinline{std::function},
+while it may not be what one wants. The use of \cppinline{h} with
+\cppinline{g} is perhaps an typo. The type erasure in \cppoo{},
+\cppinline{std::function}, provides a solution to this problem. A \emph{type
+  erasure} can convert various types of objects into a single type. Below is a
+basic usage of \cppinline{std::function},
 \begin{cppcode}
 #include <functional> // the header that defines std::function
 
@@ -836,9 +967,9 @@ the compiler can find the headers inside the \cppinline{include} directory. To
 permanently install the library in a system directory, one can simply copy the
 contents of the \cppinline{include} directory to an appropriate place.
 
-Alternatively, one can use the \cmake (version~2.8 or later) configuration
-script and obtain the source by \git. On a Unix-like system (such as Mac OS X,
-BSD, Linux and others),
+Alternatively, one can use the \cmake \cite{cmake} (version~2.8 or later)
+configuration script and obtain the source by \git \cite{git}. On a \unix-like
+system (such as Mac OS X, \bsd, Linux and others),
 \begin{shcode}
 git clone git://github.com/zhouyan/vSMC.git
 cd vSMC
@@ -853,11 +984,11 @@ make install
 \subsubsection{Documentation}
 \label{ssub:Documentation}
 
-To build the reference manual, one needs Doxygen (version~1.8.3 or later).
-Continuing the last step (still in the \cppinline{build} directory), invoking
-\shinline{make docs} will create a \shinline{doc} directory inside
-\shinline{build}, which contains the \html references. Alternatively the
-reference manual can also be found on
+To build the reference manual, one needs \doxygen \cite{doxygen}
+(version~1.8.3 or later).  Continuing the last step (still in the
+\cppinline{build} directory), invoking \shinline{make docs} will create a
+\shinline{doc} directory inside \shinline{build}, which contains the \html
+references. Alternatively the reference manual can also be found on
 \url{http://zhouyan.github.io/vSMC/doc/html/index.html}. It is beyond the
 scope of this chapter to document every feature of the \vsmc library. In many
 places we will refer to this reference manual for further information.
@@ -874,17 +1005,19 @@ many thread-safety and statistical independence considerations. It is highly
 recommended that the users install this library. Within \vsmc, these \rng
 streams are wrapped under \cppoo{} \rng engines, and can be replaced by other
 compatible \rng engines seamlessly. Users only need to be familiar with
-classes defined in \cppoo{} \cppinline{<random>} or their \boost equivalents to
-use these \rng streams. See the documentation of the corresponding libraries
-for details, as well as examples in Section~\ref{sec:A minimal example}.
+classes defined in \cppoo{} \cppinline{<random>} or their \boost equivalents
+to use these \rng streams. See the documentation of the corresponding
+libraries for details, as well as examples in Section~\ref{sec:A minimal
+  example}.
 
 The other third-party dependency is the \boost library. Version~1.49 or later
 is required. However, this is actually optional provided that proper \cppoo
 features are available in the standard library, for example using \clang with
-\libcpp The \cppoo headers of concern are \cppinline{<functional>} and
-\cppinline{<random>}. To instruct \vsmc to use the standard library headers
-instead of falling back to the \boost library, one needs to define the
-configuration macros before including any \vsmc headers. For example,
+\libcpp \cite{libcpp} The \cppoo headers of concern are
+\cppinline{<functional>} and \cppinline{<random>}. To instruct \vsmc to use
+the standard library headers instead of falling back to the \boost library,
+one needs to define the configuration macros before including any \vsmc
+headers. For example,
 \begin{shcode}
 clang++ -std=c++11 -stdlib=lib++     \
     -DVSMC_HAS_CXX11LIB_FUNCTIONAL=1  \
@@ -898,15 +1031,15 @@ the \cmake configuration script.
 \subsubsection{Compiler support}
 \label{ssub:Compiler support}
 
-\vsmc has been tested with recent versions of \clang, \gcc, \icpc and \msvc.
-\vsmc can optionally use some \cppoo features to improve performance and
-usability. In particular, as mentioned before, \vsmc can use \cppoo standard
-libraries instead of the \boost library. At the time of writing, \clang with
-\libcpp has the most comprehensive support of \cppoo with respect to standard
-compliant and feature completion. \gcc~4.8, \msvc~2012 and \icpc~2013 also
-have very good \cppoo support. Note that, provided the \boost library is
-available, all \cppoo language and library features are optional. \vsmc can be
-used with any \cppne conforming compilers.
+\vsmc has been tested with recent versions of \clang, \gcc \cite{gcc}, \icpc
+\cite{icpc} and \msvc \cite{msvc}. \vsmc can optionally use some \cppoo
+features to improve performance and usability. In particular, as mentioned
+before, \vsmc can use \cppoo standard libraries instead of the \boost library.
+At the time of writing, \clang with \libcpp has the most comprehensive support
+of \cppoo with respect to standard compliant and feature completion. \gcc~4.8,
+\msvc~2012 and \icpc~2013 also have very good \cppoo support. Note that,
+provided the \boost library is available, all \cppoo language and library
+features are optional. \vsmc can be used with any \cppne conforming compilers.
 
 \subsection{Core module}
 \label{sub:Core module}
@@ -1320,11 +1453,10 @@ to iterators,
 If the compiler support \cppoo{} \cppinline{<tuple>}, \vsmc also provides a
 \cppinline{StateTuple} class template, which is similar to
 \cppinline{StateMatrix} except that the types of values do not have to be the
-same for each variable. This is similar to \rlang's \cppinline{data.frame}.
-For example, suppose each particle's state is formed by two
-\cppinline{double}'s, an \cppinline{int} and a user defined type
-\cppinline{StateType}, then the following constructs a value collection using
-\cppinline{StateTuple},
+same for each variable. This is similar to \rlang \cppinline{data.frame}.  For
+example, suppose each particle's state is formed by two \cppinline{double}'s,
+an \cppinline{int} and a user defined type \cppinline{StateType}, then the
+following constructs a value collection using \cppinline{StateTuple},
 \begin{cppcode}
 StateTuple<ColMajor, double, double, int, StateType> value(N);
 \end{cppcode}
@@ -1351,23 +1483,23 @@ SingleParticle<T> sp(i, &particle);
 create a \cppinline{SingleParticle<T>} object corresponding to the particle at
 position \cppinline{i}. There are a few member functions of
 \cppinline{SingleParticle<T>} that makes access to individual particles easier
-than through the interface of \cppinline{Particle<T>}. Firt
+than through the interface of \cppinline{Particle<T>}. First
 \cppinline{sp.id()} returns the value of the argument \cppinline{i} in the
 above code that created this \cppinline{SingleParticle<T>} object. In
 addition, \cppinline{sp.rng()} is equivalent to \cppinline{particle.rng(i)}.
-Also \cppinline{sp.particle()} returns a constant reference to the
-\cppinline{Particle<T>} object. And \cppinline{sp.particle_ptr()} returns a
-pointer to such a constant \cppinline{Particle<T>} object. Note that, one
+A constant reference to the \cppinline{Particle<T>} object can be obtained
+through \cppinline{sp.particle()}. And \cppinline{sp.particle_ptr()} returns
+a pointer to such a constant \cppinline{Particle<T>} object. Note that, one
 cannot get write access to a \cppinline{Particle<T>} object through interface
 of \cppinline{SingleParticle<T>}. Instead, one can only get write access to a
 single particle. For example, If \cppinline{T} is a \cppinline{StateMatrix}
-instantiation or its derived class, then \cppinline{sp.state(pos)} is
-equivalent to \cppinline{particle.value().state(i, pos)} and the reference it
-returns is mutable. See the reference manual for more informations on the
-interface of the \cppinline{SingleParticle} class template. Note that, these
-\cppinline{SingleParticle<T>} objects are usually not constructed by users,
-but rather by the libraries' other classes in the \smp module, and passed to
-user defined functions, as we will see very soon.
+instantiation or its derived class, then calling \cppinline{sp.state(pos)} is
+equivalent to calling \cppinline{particle.value().state(i, pos)} and the
+reference it returns is mutable. See the reference manual for more
+informations on the interface of the \cppinline{SingleParticle} class
+template. Note that, these \cppinline{SingleParticle<T>} objects are usually
+not constructed by users, but rather by the libraries' other classes in the
+\smp module, and passed to user defined functions, as we will see very soon.
 
 \subsubsection{Sequential and parallel implementations}
 \label{ssub:Sequential and parallel implementations}
@@ -1440,7 +1572,7 @@ class move : public MoveOMP<T>;
 \end{cppcode}
 and use exactly the same implementation as before. Now when the member
 function \cppinline{move::operator()} is called, it will be parallelized by
-\openmp.  Other backends are available in case \openmp is not available. Among
+\openmp. Other backends are available in case \openmp is not available. Among
 them there are \cilk and \tbb. In addition to these well known parallelization
 programming models, \vsmc also has its own implementation using \cppoo{}
 \cppinline{<thread>}. There are other backends documented in the reference
@@ -1890,15 +2022,15 @@ those using the \smp module.
 
 \opencl implementations are also compared on the same workstation, which also
 has an NVIDIA Quadro 2000 graphic card. \opencl programs can be compiled to
-run on both \cpu and \gpu. For \cpu implementation, there are \iocl and \aocl
-platforms. We use the \tbb implementation as a baseline for comparison.  The
-same \opencl implementation are used for all the \cpu and \gpu runtimes.
-Therefore they are not particularly optimized for any of them. For the \gpu
-implementation, in addition to double precision, we also tested a single
-precision configuration. Unlike modern \cpu, which have the same performance
-for double and single precision floating point operations (unless \simd
-instructions are used, which can have at most a speedup by a factor of 2),
-\gpu penalize double precision performance heavily.
+run on both \cpu and \gpu. For \cpu implementation, there are \iocl
+\cite{iocl} and \aocl \cite{aocl} platforms. We use the \tbb implementation as
+a baseline for comparison. The same \opencl implementation are used for all
+the \cpu and \gpu runtimes.  Therefore they are not particularly optimized for
+any of them. For the \gpu implementation, in addition to double precision, we
+also tested a single precision configuration. Unlike modern \cpu, which have
+the same performance for double and single precision floating point operations
+(unless \simd instructions are used, which can have at most a speedup by a
+factor of 2), \gpu penalize double precision performance heavily.
 
 For different number of particles, the wall clock time and speed up are
 plotted in Figure~\ref{fig:bench-ocl-perf}. With smaller number of particles,

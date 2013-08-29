@@ -1,11 +1,11 @@
 template <typename T>
-struct SizeType
+struct SizeTypeTrait
 {
     typedef std::size_t size_type;
 };
 
 template <>
-struct SizeType<SomeSpecialType>
+struct SizeTypeTrait<SomeSpecialType>
 {
     typedef int size_type;
 };
@@ -13,5 +13,5 @@ struct SizeType<SomeSpecialType>
 template <typename T>
 struct Sampler
 {
-    typedef typename SizeType<T>::type size_type;
+    typedef typename SizeTypeTrait<T>::type size_type;
 };
