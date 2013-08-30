@@ -120,7 +120,7 @@ random sample $\{\bar{X}_{0:t}^{(i)}\}_{i=1}^N$ directly, a random sample of
 integers $\{R_t^{(i)}\}_{i=1}^N$ is generated, such that $R_t^{(i)} \ge 0$ for
 $i = 1,\dots,N$ and $\sum_{i=1}^N R_t^{(i)} = N$. And each particle value
 $X_{0:t}^{(i)}$ is replicated for $R_t^{(i)}$ times in the new particle
-system.  The distribution of $\{R_t^{(i)}\}_{i=1}^N$ shall fulfill the
+system. The distribution of $\{R_t^{(i)}\}_{i=1}^N$ shall fulfill the
 requirement of Equation~\ref{eq:resample}. One such distribution is a
 multinomial distribution of size $N$ and weights
 $(W_t^{(i)},\dots,W_t^{(N)})$. See \cite{Douc:2005wa} for some commonly used
@@ -150,7 +150,7 @@ distribution of a multinomial distribution with size $N$ and eights
 $(W_1,\dots,W_N)$, the stratified resampling proceed by first drawing uniform
 random variates $U_t^{(i)}$ on $((i-1)/N, i/N]$ for $i = 1,\dots,N$, and then
 generate $I_t^{(i)} = Q(U_t^{(i)})$. The new particles system is formed by
-$\{X_{0:t}^{(I_t^{(i)})}\}_{i=1}^N$.  This algorithm also outperforms the
+$\{X_{0:t}^{(I_t^{(i)})}\}_{i=1}^N$. This algorithm also outperforms the
 multinomial resampling.
 
 \paragraph{Systematic resampling} Similar to the stratified resampling, the
@@ -349,7 +349,7 @@ the transition kernel $\{K_t\}_{t=0}^T$. As shown in proposition~1{} in
 \cite{DelMoral:2006hc}, the backward kernel $L_{t-1}(x_t, x_{t-1})$ that
 minimize the variance of unnormalized importance weights is given by,
 \begin{equation}
-  \Lopt{t-1}(x_t,x_{t-1}) =
+  L_{t-1}^{\opt}(x_t,x_{t-1}) =
   \frac{\eta_{t-1}(x_{t-1})K_t(x_{t-1},x_t)}{\eta_t(x_t)}
 \end{equation}
 and in this case the weights,
@@ -372,10 +372,10 @@ This approach is justified if the particles has been resampled at time $t-1$,
 in which case $\eta_{n-1}$ is indeed approximately equal to $\pi_{n-1}$ or
 when resampling was at least performed occasionally such that the degeneracy
 between $\eta_{t-1}$ and $\pi_{t-1}$ is controlled. The incremental weights
-can be computed if the integration above can be computed.  Usually this is
-done through the unnormalized distribution $\gamma_{t-1}$ instead of
-$\pi_{t-1}$. When $\gamma_{t-1}$ is known analytically, the unnormalized
-incremental weights are,
+can be computed if the integration above can be computed. Usually this is done
+through the unnormalized distribution $\gamma_{t-1}$ instead of $\pi_{t-1}$.
+When $\gamma_{t-1}$ is known analytically, the unnormalized incremental
+weights are,
 \begin{equation}
   w_t(X_{t-1}^{(i)},X_t^{(i)}) =
   \frac{\gamma_t(X_t^{(i)})}
@@ -431,15 +431,15 @@ model comparison. In the next section, we introduce some innovative refinement
 and extensions to existing practices.
 
 The problem of interest is characterizing the posterior distribution over
-$\{\Mk\}_{k\in\calK}$, a set of possible models, with model $\Mk$ having
-parameter vector $\paramk\in\Paramk$ which must also usually be inferred.
-Given prior distributions $\pi(\Mk)$ and $\pi(\paramk|\Mk)$ and likelihood
-$p(\data|\paramk,\Mk)$ we seek the posterior distributions $\pi(\Mk|\data)
-\propto p(\data|\Mk)\pi(\Mk)$. There are three fundamentally different
-approaches to the computations,
+$\{\calM_k\}_{k\in\calK}$, a set of possible models, with model $\calM_k$
+having parameter vector $\theta_k\in\Theta_k$ which must also usually be
+inferred. Given prior distributions $\pi(\calM_k)$ and $\pi(\theta_k|\calM_k)$
+and likelihood $p(\data|\theta_k,\calM_k)$ we seek the posterior distributions
+$\pi(\calM_k|\data) \propto p(\data|\calM_k)\pi(\calM_k)$. There are three
+fundamentally different approaches to the computations,
 \begin{enumerate}
   \item Calculate posterior model probabilities directly.
-  \item Calculate the evidence, $p(\data|\Mk)$, of each model.
+  \item Calculate the evidence, $p(\data|\calM_k)$, of each model.
   \item Calculate pairwise evidence ratios.
 \end{enumerate}
 Each approach admits a natural \smc strategy.
@@ -450,22 +450,23 @@ Each approach admits a natural \smc strategy.
 One could consider obtaining samples from the same distribution employed in
 the \rjmcmc approach to model comparison, namely,
 \begin{equation}
-  \pi^{(1)}(\Mk,\paramk) \propto \pi(\Mk)\pi(\paramk|\Mk)p(\data|\paramk,\Mk)
+  \pi^{(1)}(\calM_k,\theta_k) \propto
+  \pi(\calM_k)\pi(\theta_k|\calM_k)p(\data|\theta_k,\calM_k)
 \end{equation}
 which is defined on the disjoint union space
-$\bigcup_{k\in\calK}(\{\Mk\}\times\Paramk)$.
+$\bigcup_{k\in\calK}(\{\calM_k\}\times\Theta_k)$.
 
 One obvious \smc approach is to define a sequence of distributions
 $\{\pi_t^{(1)}\}_{t=0}^T$ such that $\pi^{(1)}_0$ is easy to sample from,
 $\pi_{T}^{(1)} = \pi^{(1)}$ and the intermediate distributions move smoothly
 between them. In the remainder of this section, we use the notation
-$(\Mk[t],\paramk[t])$ to denote a random sample on the space
-$\bigcup_{k\in\calK}(\{\Mk\}\times\Paramk)$ at time $t$. One simple approach,
-which might be expected to work well, is the use of an annealing scheme such
-that,
+$(\calM_t,\theta_t)$ to denote a random sample on the space
+$\bigcup_{k\in\calK}(\{\calM_k\}\times\Theta_k)$ at time $t$. One simple
+approach, which might be expected to work well, is the use of an annealing
+scheme such that,
 \begin{equation}
-  \pi^{(1)}_t(\Mk[t],\paramk[t]) \propto \pi(\Mk[t])\pi(\paramk[t]|\Mk[t])
-  p(\data|\paramk[t],\Mk[t])^{\alpha(t/T)},
+  \pi^{(1)}_t(\calM_t,\theta_t) \propto \pi(\calM_t)\pi(\theta_t|\calM_t)
+  p(\data|\theta_t,\calM_t)^{\alpha(t/T)},
   \label{eq:geometry_1}
 \end{equation}
 for some monotonically increasing $\alpha:[0,1]\to[0,1]$ such that $\alpha(0)
@@ -547,11 +548,11 @@ of distributions for each model: starting from the parameter prior and
 sweeping through a sequence of distributions to the posterior.
 
 Numerous strategies are possible to construct such a sequence of
-distributions, but one option is to use for each model $\Mk$, $k\in\calK$, the
-sequence $\{\pi_t^{(2,k)}\}_{t=0}^{T_k}$, defined by
+distributions, but one option is to use for each model $\calM_k$, $k\in\calK$,
+the sequence $\{\pi_t^{(2,k)}\}_{t=0}^{T_k}$, defined by
 \begin{equation}
-  \pi_t^{(2,k)}(\paramk[t]) \propto
-  \pi(\paramk[t]|\Mk)p(\data|\paramk[t],\Mk)^{\alpha_k(t/T_k)}.
+  \pi_t^{(2,k)}(\theta_t) \propto
+  \pi(\theta_t|\calM_k)p(\data|\theta_t,\calM_k)^{\alpha_k(t/T_k)}.
   \label{eq:geometry_2}
 \end{equation}
 where the number of distribution $T_k$, and the annealing schedule,
@@ -564,18 +565,19 @@ can be performed using the output of this \smc algorithm and the standard
 unbiased estimator, termed \smc[2]-\ds below (see also
 equation~\eqref{eq:ratio normalized}),
 \begin{equation}\label{eq:smc2-ds}
-  \sum_{i=1}^N \frac{\pi(\theta_0^{(k,i)}|\Mk)}{\nu(\theta_0^{(k,i)})} \times
-  \prod_{t=2}^T \sum_{i=1}^N W_{t-1}^{(k,i)}
-  p(\data|\theta_{t-1}^{(k,i)}\Mk)^{\alpha_k(t/T_k) - \alpha_k([t-1]/T_k)}
+  \sum_{i=1}^N \frac{\pi(\theta_0^{(k,i)}|\calM_k)}{\nu(\theta_0^{(k,i)})}
+  \times \prod_{t=2}^T \sum_{i=1}^N W_{t-1}^{(k,i)}
+  p(\data|\theta_{t-1}^{(k,i)}\calM_k)^{\alpha_k(t/T_k) - \alpha_k([t-1]/T_k)}
 \end{equation}
 where $W_{t-1}^{(k,i)}$ is the importance weight of sample $i$,
-$\theta_{t-1}^{(k,i)}$, during iteration $t-1$ for model $\Mk$. An alternative
-approach to computing the evidence is also worthy of consideration. As has
-been suggested, and shown to perform well empirically previously \cite[see,
-for example]{Johansen:2006wm}, it is possible to use all of the samples from
-every generation of an \smc sampler to approximate the path sampling estimator
-and hence to obtain an estimate of the ratio of normalizing constants.
-Section~\ref{sub:Path Sampling via smc2/smc3} provides details.
+$\theta_{t-1}^{(k,i)}$, during iteration $t-1$ for model $\calM_k$. An
+alternative approach to computing the evidence is also worthy of
+consideration. As has been suggested, and shown to perform well empirically
+previously \cite[see, for example]{Johansen:2006wm}, it is possible to use all
+of the samples from every generation of an \smc sampler to approximate the
+path sampling estimator and hence to obtain an estimate of the ratio of
+normalizing constants. Section~\ref{sub:Path Sampling via smc2/smc3} provides
+details.
 
 The posterior distribution of the parameters conditional upon a particular
 model can also be approximated with,
@@ -617,12 +619,12 @@ offset this limitation.
   \STATE\STATESKIP Sample $\theta_0^{(k,i)}\sim\nu_k$ for some proposal
   distribution $\nu_k$ (usually the parameter prior).
   \STATE\STATESKIP Weight $W_0^{(k,i)} \propto w_0(\theta_0^{(k,i)}) =
-  {\pi(\theta_0^{(k,i)}|\Mk)}/{\nu_k(\theta_0^{(k,i)})}$.
+  {\pi(\theta_0^{(k,i)}|\calM_k)}/{\nu_k(\theta_0^{(k,i)})}$.
   \STATE\STATESKIP Apply resampling if necessary.
 
   \STATE \emph{Iteration:} Set $t\leftarrow t + 1$.
   \STATE\STATESKIP Weight $W_t^{(k,i)} \propto W_{t-1}^{(k,i)}
-  p(\data|\theta_{t-1}^{(k,i)},\Mk)^{\alpha(t/T_k) - \alpha([t-1]/T_k)}$.
+  p(\data|\theta_{t-1}^{(k,i)},\calM_k)^{\alpha(t/T_k) - \alpha([t-1]/T_k)}$.
   \STATE\STATESKIP Apply resampling if necessary.
   \STATE\STATESKIP Sample $\theta_t^{(k,i)} \sim
   K_t(\cdot|\theta_{t-1}^{(k,i)})$, a $\pi_t^{(k,2)}$-invariant kernel.
@@ -644,16 +646,17 @@ from a separate \smc sampler starting from its prior) and moves towards the
 posterior of another related model. Then the sampler can continue towards
 another related model.
 
-Given a finite collection of models $\{\Mk\}$, $k\in\calK$, suppose the models
-are ordered in a sensible way (e.g., $\Mk[k-1]$ is nested within $\Mk$ or
-$\paramk$ is of higher dimension than $\paramk[k-1]$). For each
+Given a finite collection of models $\{\calM_k\}$, $k\in\calK$, suppose the
+models are ordered in a sensible way (e.g., $\calM_{k-1}$ is nested within
+$\calM_k$ or $\theta_k$ is of higher dimension than $\theta_{k-1}$). For each
 $k\in\calK$, we consider a sequence of distributions
-$\{\pi_t^{(3,k)}\}_{t=0}^{T_k}$, such that $\pi_0^{(3,k)}(\Mk[],\paramk[]) =
-\pi(\paramk[]|\data,\Mk) \mathbb{I}_{\{\Mk\}}(\Mk[])$ and $\pi_{T_k}^{(3,k)}(\Mk[],\paramk[]) =
-\pi(\paramk[]|\data,\Mk[k+1]) \mathbb{I}_{\{\Mk[k+1]\}}(\Mk[]) = \pi_{0}^{(3,k+1)}(\Mk[],\paramk[])$.
-When it is possible to construct a \smc sampler that iterates over this
-sequence of distributions, the estimate of the ratio of normalizing constants
-is the Bayes factor estimate of model $\Mk[k+1]$ in favour of model $\Mk$.
+$\{\pi_t^{(3,k)}\}_{t=0}^{T_k}$, such that $\pi_0^{(3,k)}(\calM,\theta) =
+\pi(\theta|\data,\calM_k) \bbI_{\{\calM_k\}}(\calM)$ and
+$\pi_{T_k}^{(3,k)}(\calM,\theta) = \pi(\theta|\data,\calM_{k+1})
+\mathbb{I}_{\{\calM_{k+1}\}}(\calM) = \pi_{0}^{(3,k+1)}(\calM,\theta)$. When
+it is possible to construct a \smc sampler that iterates over this sequence of
+distributions, the estimate of the ratio of normalizing constants is the Bayes
+factor estimate of model $\calM_{k+1}$ in favor of model $\calM_k$.
 
 This approach is conceptually appealing, but requires the construction of a
 smooth path between the posterior distributions of interest. The geometric
@@ -663,16 +666,16 @@ distributions is non-increasing. This is unlikely to be the case in
 interesting model comparison problems.
 
 In this paper we consider a sequence of distributions on the disjoint union
-$\{\Mk,\Paramk\}\cup\{\Mk[k+1],\Paramk[k+1]\},$ with the sequence of
+$\{\calM_k,\Theta_k\}\cup\{\calM_{k+1},\Theta_{k+1}\},$ with the sequence of
 distributions $\{\pi_t^{(3,k)}\}_{t=0}^{T_k}$ defined as the full posterior,
 \begin{equation}
-  \pi_t^{(3,k)}(\Mk[t],\paramk[t]) \propto
-  \pi_t(\Mk[t]) \pi(\paramk[t]|\Mk[t]) p(\data|\paramk[t],\Mk[t])
+  \pi_t^{(3,k)}(\calM_t,\theta_t) \propto
+  \pi_t(\calM_t) \pi(\theta_t|\calM_t) p(\data|\theta_t,\calM_t)
 \end{equation}
-where $\Mk[t]\in\{\Mk,\Mk[k+1]\}$ and the prior of models at time $t$,
-$\pi_t(\Mk[t])$ is defined by
+where $\calM_t\in\{\calM_k,\calM_{k+1}\}$ and the prior of models at time $t$,
+$\pi_t(\calM_t)$ is defined by
 \begin{equation}
-  \pi_t(\Mk[k+1]) = \alpha(t/T_k)
+  \pi_t(\calM_{k+1}) = \alpha(t/T_k)
   \label{eq:smc3_prior}
 \end{equation}
 for some monotonically increasing $\alpha:[0,1]\to[0,1]$ such that $\alpha(0)
@@ -703,7 +706,7 @@ estimator provides a direct estimate of the Bayes factor.
   \tophrule
   \STATE \emph{Initialisation:} Set $k\leftarrow1$.
   \STATE\STATESKIP Use Algorithm~\ref{alg:smc2} to obtain weighted samples
-  for $\pi_{T_1}^{(3,1)}$, the parameter posterior for model $\Mk[1]$
+  for $\pi_{T_1}^{(3,1)}$, the parameter posterior for model $\calM_1$
 
   \STATE \emph{Relative Evidence Calculation}
   \STATE\STATESKIP Set $k\leftarrow k + 1$, $t\leftarrow0$.
@@ -749,7 +752,8 @@ logarithm of the ratio of their normalizing constants via a simple integral
 relationship which holds under very mild regularity conditions,
 \begin{equation}
   \log\biggl( \frac{Z_1}{Z_0} \biggr) =
-  \int_{0}^{1} \Exp_\alpha \biggl[ \rnd{\log q_{\alpha}(\cdot)}{\alpha}
+  \int_{0}^{1} \Exp_\alpha \biggl[
+  \frac{\diff\log q_{\alpha}(\cdot)}{\diff\alpha}
   \biggr] \intd\alpha, \label{eq:path_identity}
 \end{equation}
 where $\Exp_\alpha$ denotes expectation under $p_\alpha$. Note that the
@@ -782,7 +786,8 @@ can be approximated (using an elementary trapezoidal scheme) by
 where
 \begin{equation}
   U_t^N = \sum_{j=1}^N
-  W_t^{(j)} \rnd{\log q_{\alpha}(X_t^{(j)})}{\alpha}\Bigm|_{\alpha = \alpha_t}
+  W_t^{(j)} \frac{\diff\log q_{\alpha}(X_t^{(j)})}{\diff\alpha}
+  \Bigm|_{\alpha = \alpha_t}
 \end{equation}
 
 We term these estimators \smc[2]-\ps and \smc[3]-\ps in the followings. The
@@ -842,7 +847,7 @@ multimodal posterior surface for models with two or more components.
 As seen in the last section, the path sampling estimator requires evaluation
 of the expectation,
 \begin{equation*}
-  \Exp_\alpha \biggl[ \rnd{\log q_{\alpha}(\cdot)}{\alpha} \biggr]
+  \Exp_\alpha \biggl[ \frac{\diff\log q_{\alpha}(\cdot)}{\diff\alpha} \biggr]
 \end{equation*}
 for $\alpha\in[0,1]$, which can be approximated by importance sampling using
 samples generated by a \smc sampler operating on the sequence of distributions
@@ -1251,9 +1256,10 @@ data sets varies considerably from each other.
 
 With the above refinements, we are ready to implement the \smc[2] algorithm
 with minimal tuning and application-specific effort while providing robust and
-accurate estimates of the model evidence $p(\data|\Mk)$. First the geometric
-annealing scheme that connects the prior $\pi(\paramk|\Mk)$ and the posterior
-$\pi(\paramk|\data,\Mk)$, provides a smooth path for a wide range of problems.
+accurate estimates of the model evidence $p(\data|\calM_k)$. First the
+geometric annealing scheme that connects the prior $\pi(\theta_k|\calM_k)$ and
+the posterior $\pi(\theta_k|\data,\calM_k)$, provides a smooth path for a wide
+range of problems.
 
 Second, the actual annealing schedule under this scheme can be determined
 through the adaptive schedule as described above. The advantage of the
@@ -1456,8 +1462,8 @@ be used to characterize more general numerical integration schemes.
   q_{\alpha_t}/Z_{\alpha_t}\}_{t=0}^T$ and applies multinomial resampling at
   each iteration, the path sampling estimator, $\hat\Xi_{T}^{N}$, as
   defined in Equation~\eqref{eq:path_est} obeys a central limit theorem in the
-  following sense: Let $\xi_t(\cdot) = \rnd{\log
-    q_{\alpha}(\cdot)}{\alpha}\Bigm|_{\alpha = \alpha_t}$, $\beta_{0} =
+  following sense: Let $\xi_t(\cdot) = \frac{\diff\log
+    q_{\alpha}(\cdot)}{\diff\alpha}\Bigm|_{\alpha = \alpha_t}$, $\beta_{0} =
   \alpha_0 / 2$, $\beta_{T} = \alpha_T / 2$ and for $t \in \{1,\ldots,T-1\}$
   $\beta_t = (\alpha_{t + 1} - \alpha_{t-1})/2$, then, provided $\xi_t$ is
   bounded:
@@ -1495,15 +1501,15 @@ be used to characterize more general numerical integration schemes.
 
 Application of similar arguments to those used in \cite{DelMoral:2006hc} to
 the historical process associated with the \smc sampler would lead to
-essentially the same result, but we find this approach more transparent.  We
+essentially the same result, but we find this approach more transparent. We
 note that much recent analysis of \smc algorithms has focused on relaxing the
 relatively strong assumptions used in the results upon which this result is
-based -- looking at more general resampling schemes \cite{DelMoral:2012jq}
-and relaxing compactness assumptions \cite{Whiteley:2013} for example.
-However, we feel that this simple result is sufficient to show the
-relationship between the path sampling and simple estimators and that in this
-instance the relatively simplicity of the resulting expression justifies these
-stronger assumptions.
+based -- looking at more general resampling schemes \cite{DelMoral:2012jq} and
+relaxing compactness assumptions \cite{Whiteley:2013} for example. However, we
+feel that this simple result is sufficient to show the relationship between
+the path sampling and simple estimators and that in this instance the
+relatively simplicity of the resulting expression justifies these stronger
+assumptions.
 
 \subsection{Proof of proposition 1}
 \label{sub:Proof of proposition 1}
@@ -1559,11 +1565,14 @@ it targets, it is convenient to let $\tilde{X}_t^i$ denote the extended
 sample corresponding to $X_t^i$ at iteration $t$ together with the full
 collection of values which its ancestors took during previous iterations
 (i.e., $\tilde{X}_t^i$ corresponds to the particle system obtained by
-sampling according to $M_t$ above rather than $K_t$ at each iteration).  It is
+sampling according to $M_t$ above rather than $K_t$ at each iteration). It is
 then convenient to write the particle approximation at time $t$ as
-$$\hat\eta_t^N(d\tilde{x}_t) = \sum_{i=1}^N
-\frac{G_t(\tilde{X}_t^i)}{\sum_{j=1}^N G_t(\tilde{X}_t^j)}
-\delta_{\tilde{X}_t^i}(d\tilde{x}_t).$$ We refer the reader to
+\begin{equation*}
+  \hat\eta_t^N(d\tilde{x}_t) = \sum_{i=1}^N
+  \frac{G_t(\tilde{X}_t^i)}{\sum_{j=1}^N G_t(\tilde{X}_t^j)}
+  \delta_{\tilde{X}_t^i}(d\tilde{x}_t).
+\end{equation*}
+We refer the reader to
 \cite{DelMoral:2004ux} for further details of the connection between such
 particle systems and the Feynman-Kac formula.
 
@@ -1598,7 +1607,7 @@ Proposition~\ref{prop:path_clt} is a direct corollary.
 
 The strategy of the proof is to decompose the error as that propagated forward
 from previous times and that due to sampling at the current time, just as in
-\cite{DelMoral:2004ux}.  First note that the term
+\cite{DelMoral:2004ux}. First note that the term
 $\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t)$ can be rewritten as
 \begin{equation}
   \hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t) =
@@ -1799,7 +1808,7 @@ with
   \exp(is\bar{T}^N(\xi_{0:t}))$. The first term can easily be shown to
   converge a.s. to zero as $N\to\infty$ by the asymptotic normality of
   $\xi_t^N$ and the conditional independence of the particles at iteration $t$
-  given $\mathcal{H}_{t-1}^N$.  The second term is the product of two Gaussian
+  given $\mathcal{H}_{t-1}^N$. The second term is the product of two Gaussian
   characteristic functions and thus we have that $T_t^N$ also follows a
   Gaussian distribution (see the argument of \cite{Kuensch:2005} shown in more
   detail in Lemma 10{} in \cite{Johansen:2006iv}, which uses essentially the
@@ -1845,22 +1854,23 @@ independently and identically distributed as
 \begin{equation*}
   y_i|\theta_r \sim \sum_{j=1}^r \omega_j\calN(\mu_j,\lambda_j^{-1})
 \end{equation*}
-where $\calN(\mu_j,\lambda_j^{-1})$ denotes the Normal distribution with
-mean $\mu_j$ and precision $\lambda_j$; $\theta_r =
-(\mu_{1:r},\lambda_{1:r},\omega_{1:r})$ and $r$ is the number of components
-in each model. The parameter space is thus $\Real^r \times (\Real^{+})^r\times
+where $\calN(\mu_j,\lambda_j^{-1})$ denotes the Normal distribution with mean
+$\mu_j$ and precision $\lambda_j$; $\theta_r =
+(\mu_{1:r},\lambda_{1:r},\omega_{1:r})$ and $r$ is the number of components in
+each model. The parameter space is thus $\Real^r \times (\Real^{+})^r\times
 \Delta_r$ where $\Delta_r = \{\omega_{1:r}:0\le\omega_j\le1;
 \sum_{j=1}^r\omega_j=1\}$ is the standard $r$-simplex. The priors which are
-the same for each component are taken to be
-$\mu_j\sim\calN(\xi,\kappa^{-1})$, $\lambda_j\sim\calGa(\nu,\chi)$ and
-$\omega_{1:r}\sim\calD(\rho)$ where $\calD(\rho)$ is the symmetric Dirichlet
-distribution with parameter $\rho$ and $\calGa(\nu,\chi)$ is the Gamma
-distribution with shape $\nu$ and scale $\chi$. The prior parameters are set
-in the same manner as in \cite{Richardson:1997ea}. Specifically, let $\ymin$
-and $\ymax$ be the minimum and maximum of data $\data$, the prior parameters
-are set such that
+the same for each component are taken to be $\mu_j\sim\calN(\xi,\kappa^{-1})$,
+$\lambda_j\sim\calGa(\nu,\chi)$ and $\omega_{1:r}\sim\calD(\rho)$ where
+$\calD(\rho)$ is the symmetric Dirichlet distribution with parameter $\rho$
+and $\calGa(\nu,\chi)$ is the Gamma distribution with shape $\nu$ and scale
+$\chi$. The prior parameters are set in the same manner as in
+\cite{Richardson:1997ea}. Specifically, let $y_{\text{\textsc{min}}}$ and
+$y_{\text{\textsc{max}}}$ be the minimum and maximum of data $\data$, the
+prior parameters are set such that
 \begin{equation*}
-  \xi = (\ymax + \ymin) / 2, \quad \kappa = (\ymax - \ymin)^{-2}, \quad
+  \xi = (y_{\text{\textsc{max}}} + y_{\text{\textsc{min}}}) / 2, \quad
+  \kappa = (y_{\text{\textsc{max}}} - y_{\text{\textsc{min}}})^{-2}, \quad
   \nu = 2, \quad \chi = 50\kappa, \quad \rho = 1
 \end{equation*}
 The data is simulated from a four components model with $\mu_{1:4} = (-3, 0,3,

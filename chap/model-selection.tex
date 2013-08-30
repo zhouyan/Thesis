@@ -161,7 +161,7 @@ say $g(\cdot)$. There are several methods to measure the difference between
 densities. However, the one most directly linked to the maximum likelihood
 estimator is the \kl, defined as,
 \begin{equation}
-  \dkl(g, f(\cdot;\theta))
+  D_{\text{\textsc{kl}}}(g, f(\cdot;\theta))
   = \int g(y)\log\frac{g(y)}{f(y;\theta)}\intd y
   = \int g(y)\log g(y) - \Exp_g[\log f(Y;\theta)],
   \label{eq:kl}
@@ -178,8 +178,9 @@ and thus,
   \hat\theta \xrightarrow{\text{a.s.}} \tilde\theta
 \end{equation}
 where $\tilde\theta$ is the value of $\theta$ that minimize
-$\dkl(g,f(\cdot;\theta))$ for a given model. The \aic formula,
-equation~\eqref{eq:aic} is essentially an approximation to the expectation of
+$D_{\text{\textsc{kl}}}(g,f(\cdot;\theta))$ for a given model. The \aic
+formula, equation~\eqref{eq:aic} is essentially an approximation to the
+expectation of
 \begin{equation}
   R_n = \Exp_g[\log f(Y;\hat\theta)],
 \end{equation}
@@ -256,18 +257,18 @@ As shown in \cite{Sugiura:1978be}, the first order approximation can perform
 poorly when the data size is small when compared to the number of parameters
 to be estimated. A second order variant is derived in the same paper and
 further studied by \cite{Hurvich:1989ev}, which led to a criterion that is
-called \aicc, the corrected \aic,
+called \aic{}$_c$, the corrected \aic,
 \begin{equation}
-  \text{\aicc} = -2\ell_n(\hat\theta) + \frac{2nk}{n-k-1}
+  \aic_c = -2\ell_n(\hat\theta) + \frac{2nk}{n-k-1}
 \end{equation}
 where $n$ is the sample size. It is clearly that the additional bias
 correction is negligible if $n$ is large when compared to $k$, as
 $\lim_{n\to\infty}2nk/(n-k-1) = 2k$, which is exactly the penalty term in the
-original \aic formula. A rule of thumb, found in various source, is that \aicc
-shall be used in place of \aic when $n/k\le40$, see e.g.,
+original \aic formula. A rule of thumb, found in various source, is that
+\aic{}$_c$ shall be used in place of \aic when $n/k\le40$, see e.g.,
 \cite[][sec.~2.4]{Burnham:2002wc}.
 
-It should be noted that \aicc is just one way to improve \aic for small
+It should be noted that \aic{}$_c$ is just one way to improve \aic for small
 samples. In particular, it is derived in the case of a model with linear
 structure and normal errors \cite{Hurvich:1989ev, Burnham:2002wc}. Under other
 models, other form of improved \aic can be derived. However, this form has

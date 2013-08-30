@@ -28,10 +28,10 @@ expectation of a function $\varphi$ with respect to a distribution $\pi$,
   \Exp_{\pi}[\varphi(X)] = \int\varphi(x)\pi(x)\intd x
 \end{equation}
 provided that the above expectation exists, by drawing \iid samples from
-$\pi$, say $\{\Xiu\}_{i=1}^N$, and approximating the expectation by the
+$\pi$, say $\{X^{(i)}\}_{i=1}^N$, and approximating the expectation by the
 empirical average,
 \begin{equation}
-  \hat\varphi^N = \frac{1}{N}\sum_{i=1}^N\varphi(\Xiu).
+  \hat\varphi^N = \frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)}).
   \label{eq:vanilla mc}
 \end{equation}
 The estimator $\hat\varphi^N$ converges almost surely to
@@ -54,12 +54,12 @@ method is based on the identity, termed \emph{importance fundamental
   = \Exp_{\eta}\Square[Big]{\varphi(X)\frac{\pi(X)}{\eta(X)}},
 \end{equation}
 where $\eta$ is a distribution with respect to which $\pi$ is absolutely
-continuous. Thus given \iid samples $\{\Xiu\}_{i=1}^N$ from distribution
+continuous. Thus given \iid samples $\{X^{(i)}\}_{i=1}^N$ from distribution
 $\eta$, the expectation $\Exp_{\pi}[\varphi(X)]$ can be approximated by the
 following importance sampling estimator,
 \begin{equation}
   \hat\varphi_{\text{\textsc{is}}}^N
-  = \frac{1}{N}\sum_{i=1}^N\varphi(\Xiu)\frac{\pi(\Xiu)}{\eta(\Xiu)}.
+  = \frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)})\frac{\pi(X^{(i)})}{\eta(X^{(i)})}.
 \end{equation}
 The above estimator also converges almost surely to $\Exp_{\pi}[\varphi(X)]$
 when $N\to\infty$. However its variance is not necessarily finite. In general
@@ -83,15 +83,15 @@ constants, which can be approximated with the same samples. This leads to the
 estimator,
 \begin{equation}
   \hat\varphi_{w\text{\textsc{is}}}^N
-  = \frac{\sum_{i=1}^N\wiu\varphi(\Xiu)}{\sum_{i=1}^N\wiu}
+  = \frac{\sum_{i=1}^Nw^{(i)}\varphi(X^{(i)})}{\sum_{i=1}^Nw^{(i)}}
 \end{equation}
-where $\wiu = \pi(\Xiu)/\eta(\Xiu)$, and is termed the \emph{weights}. This
-estimator also converges almost surely to $\Exp_{\pi}[\varphi(X)]$ when
-$N\to\infty$. Though this estimator has a small bias, the variance and mean
-square errors are improved in some situations when compared to the vanilla
-Monte Carlo methods as in equation~\eqref{eq:vanilla mc}, see
-\cite{Casella:1998tj} for some examples. However, either the importance
-sampling or direct sampling is uniformly better than the other. The
+where $w^{(i)} = \pi(X^{(i)})/\eta(X^{(i)})$, and is termed the
+\emph{weights}. This estimator also converges almost surely to
+$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$. Though this estimator has a small
+bias, the variance and mean square errors are improved in some situations when
+compared to the vanilla Monte Carlo methods as in equation~\eqref{eq:vanilla
+  mc}, see \cite{Casella:1998tj} for some examples. However, either the
+importance sampling or direct sampling is uniformly better than the other. The
 performance depends not only on the choice of the proposal distribution
 $\eta$, but also the function of interest $\varphi$, as shown in
 \cite{Casella:1998tj}. As suggested in \cite[][sec.~3.3.2]{Robert:2004tn}, to
@@ -127,12 +127,12 @@ desired integration. A limiting distribution, informally is one such that if
 $X_n$, the state of the Markov chain at step $n$ is distributed with $\pi$,
 then $X_{n+1}$, the next step is also distributed with $\pi$.
 
-The basic idea is that, given a Markov chain $(X^{(1)},\dots,\Xiu,\dots)$,
+The basic idea is that, given a Markov chain $(X^{(1)},\dots,X^{(i)},\dots)$,
 whose has a limiting distribution $\pi$ over a measurable space $(E,\calE)$,
 then with suitable conditions (outlined for each algorithm later), for a
 $\pi$-integrable function $\varphi \in L^1(\pi)$
 \begin{equation}
-  \lim_{N\to\infty}\frac{1}{N}\sum_{i=1}^N\varphi(\Xiu) =
+  \lim_{N\to\infty}\frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)}) =
   \Exp_{\pi}[\varphi(X)]
   \label{eq:mcmc convergence}
 \end{equation}
@@ -218,7 +218,7 @@ general treatment of the topic of Markov chain.
 A Markov chain $(X_n)$ with transition kernel $K$ on $(E,\calE)$ is said to be
 $\psi$-\emph{irreducible}, for a given measure $\psi$, if for every
 $A\in\calE$ with $\psi(A)>0$, there exists $n$ such that $K^n(x,A)>0$ for all
-$x\in E$.  This chain is said to be \emph{strongly} $\psi$-\emph{irreducible}
+$x\in E$. This chain is said to be \emph{strongly} $\psi$-\emph{irreducible}
 if $n=1$ for all measurable $A\in\calE$.
 
 An equivalent way of saying irreducibility is that for $x\in E$, $A\in\calE$,
@@ -359,7 +359,7 @@ $\pi$. This result establishes the validity of using dependent samples from
 \mcmc algorithms for the approximation of integration with respect to $\pi$.
 
 However, the above results only states that the Markov chain will converge. It
-does not imply how fast the chain converges to its limiting distribution.  Two
+does not imply how fast the chain converges to its limiting distribution. Two
 stronger form of convergence is \emph{geometric} and \emph{uniform}
 ergodicity.
 
@@ -620,7 +620,7 @@ technique.
 Not unlike other \mcmc algorithms, \rjmcmc also relies on the existence of the
 detailed balance condition, only the parameter space is more complicated and
 hence the design the Markov transition kernel. The \rjmcmc algorithm adapts
-the Metropolis-Hastings algorithm to construct such kernels.  Instead of a
+the Metropolis-Hastings algorithm to construct such kernels. Instead of a
 single type of moves defined a proposal density, a countable set of moves are
 considered, say $m\in\calM$. Each type of moves is capable of moving the
 current state of the Markov chain between, say $\Theta_k$ and $\theta_{k'}$
@@ -811,11 +811,11 @@ For simplicity, in this section we drop the dependency on the model $\calM_k$
 and simply write $p(\data) = \int f(\data|\theta)\pi(\theta)\intd\theta$.
 With samples generated by an \mcmc algorithm targeting the posterior
 distribution $\pi(\theta|\data) \propto f(\data|\theta) \pi(\theta)$
-available, say $\{\supi\theta\}_{i=1}^N$, an estimator of $p(\data)$ can be
+available, say $\{\theta^{(i)}\}_{i=1}^N$, an estimator of $p(\data)$ can be
 obtained by the harmonic mean \cite{Newton:1994wm},
 \begin{equation}
   \widehat{p(\data)}_{\text{\textsc{hm}}}^N =
-  \Round[Big]{\frac{1}{N}\sum_{i=1}^N\frac{1}{f(\data|\supi\theta)}}^{-1}
+  \Round[Big]{\frac{1}{N}\sum_{i=1}^N\frac{1}{f(\data|\theta^{(i)})}}^{-1}
 \end{equation}
 Unfortunately this estimator can suffer instability problem when samples with
 small likelihoods are generated. In fact this estimator does not always has a
@@ -824,7 +824,7 @@ Theorem. An improvement seen in \cite{Kass:1995vb} is,
 \begin{equation}
   \widehat{p(\data)}_{\text{\textsc{ghm}}}^N = \Round[Big]{
     \frac{1}{N}\sum_{i=1}^N
-    \frac{\gamma(\supi\theta)}{f(\data|\supi\theta)\pi(\supi\theta)}}^{-1},
+    \frac{\gamma(\theta^{(i)})}{f(\data|\theta^{(i)})\pi(\theta^{(i)})}}^{-1},
 \end{equation}
 where $\gamma$ is a proper density function. This is based on the identity,
 \begin{equation}
@@ -846,7 +846,7 @@ $1/\widehat{p(\data)}$ from the posterior samples through,
 \begin{equation}
   \var\Square[Big]{\frac{1}{\widehat{p(\data)}_{\text{\textsc{ghm}}}^N}} =
   \frac{1}{N^2}\sum_{i=1}^N \Round[Big]{
-    \frac{\gamma(\supi\theta)}{f(\data|\supi\theta)\pi(\supi\theta)}
+    \frac{\gamma(\theta^{(i)})}{f(\data|\theta^{(i)})\pi(\theta^{(i)})}
     - \frac{1}{\widehat{p(\data)}_{\text{\textsc{ghm}}}^N}}^2.
 \end{equation}
 The above equation provides a way of monitoring the convergence of the
@@ -898,12 +898,12 @@ the sequence of distributions in equation~\eqref{eq:power post} can both be
 interpreted as belong to such a family of distributions with $\alpha =
 \alpha(t/T)$. The population \mcmc provides samples that can be used to
 approximate this path sampling estimator. Given samples
-$\{supi{X_0},\dots,\supi{X_T}\}_{i=1}^N$ from $N$ iterations of a population
+$\{X_0^{(i)},\dots,X_T^{(i)}\}_{i=1}^N$ from $N$ iterations of a population
 \mcmc sampler, one can approximate the expectation under distribution
 $\pi_{\alpha} = \pi_{\alpha(t/T)} = \pi_t$ by the empirical average of the
-subchain $\{\supi{X_t}\}_{i=1}^N$. And the integration~\eqref{eq:path
-  integral} can be approximate with a numerical integration scheme such as
-the Trapezoidal rule.
+subchain $\{X_t^{(i)}\}_{i=1}^N$. And the integration~\eqref{eq:path integral}
+can be approximate with a numerical integration scheme such as the Trapezoidal
+rule.
 
 The use of path sampling for estimating of Bayes factor will be revisited in
 chapter~\ref{cha:Sequential Monte Carlo for Bayesian Model Comparison}.

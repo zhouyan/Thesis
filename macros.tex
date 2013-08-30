@@ -1,3 +1,5 @@
+\UseAbbr[\iid][]{i.i.d.}
+\UseAbbr[\kl][]{Kullback-Leibler divergence}
 \UseAbbr[\sd]{s.d.}
 \UseAbbr{aic}
 \UseAbbr{ais}
@@ -5,8 +7,8 @@
 \UseAbbr{bsd}
 \UseAbbr{cess}
 \UseAbbr{cmos}
-\UseAbbr{cuda}
 \UseAbbr{cpu}
+\UseAbbr{cuda}
 \UseAbbr{dag}
 \UseAbbr{dic}
 \UseAbbr{ds}
@@ -30,6 +32,7 @@
 \UseAbbr{nls}
 \UseAbbr{ode}
 \UseAbbr{oop}
+\UseAbbr{opt}
 \UseAbbr{pet}
 \UseAbbr{pmcmc}
 \UseAbbr{ps}
@@ -40,6 +43,45 @@
 \UseAbbr{smp}
 \UseAbbr{tic}
 \UseAbbr{unix}
+
+\UseAbbr[\aocl][\sffamily]{AMD APP OpenCL}
+\UseAbbr[\armadillo][\sffamily]{Armadillo}
+\UseAbbr[\biips][\sffamily]{BiiPS}
+\UseAbbr[\blitzpp][\sffamily]{Blitz++}
+\UseAbbr[\boost][\sffamily]{Boost}
+\UseAbbr[\bugs][\sffamily\textsc]{bugs}
+\UseAbbr[\cilk][\sffamily]{Intel Cilk Plus}
+\UseAbbr[\clang][\sffamily]{Clang}
+\UseAbbr[\clangstatic][\sffamily]{Clang Static Analyzer}
+\UseAbbr[\cmake][\sffamily]{CMake}
+\UseAbbr[\cpp][\allcapt]{C++}
+\UseAbbr[\cppne][\allcapt]{C++98}
+\UseAbbr[\cppoo][\allcapt]{C++11}
+\UseAbbr[\doxygen][\sffamily]{Doxygen}
+\UseAbbr[\eigen][\sffamily]{Eigen}
+\UseAbbr[\gcc][\sffamily]{GCC}
+\UseAbbr[\git][\sffamily]{Git}
+\UseAbbr[\html][\sffamily\textsc]{html}
+\UseAbbr[\icpc][\sffamily]{Intel C++ Composer XE}
+\UseAbbr[\inspector][\sffamily]{Intel Inspector XE}
+\UseAbbr[\iocl][\sffamily]{Intel OpenCL}
+\UseAbbr[\libbi][\sffamily]{LibBi}
+\UseAbbr[\libcpp][\sffamily]{libc++}
+\UseAbbr[\lldb][\sffamily\textsc]{lldb}
+\UseAbbr[\mathematica][\sffamily]{Mathematica}
+\UseAbbr[\matlab][\sffamily]{MatLab}
+\UseAbbr[\minitab][\sffamily]{Minitab}
+\UseAbbr[\mkl][\sffamily]{Intel MKL}
+\UseAbbr[\msvc][\sffamily]{Microsoft Visual C++}
+\UseAbbr[\opencl][\sffamily]{OpenCL}
+\UseAbbr[\openmp][\sffamily]{OpenMP}
+\UseAbbr[\random][\sffamily]{Random123}
+\UseAbbr[\rlang][\sffamily]{R}
+\UseAbbr[\sas][\sffamily\textsc]{sas}
+\UseAbbr[\slang][\sffamily]{S}
+\UseAbbr[\spss][\sffamily\scshape]{spss}
+\UseAbbr[\tbb][\sffamily]{Intel TBB}
+\UseAbbr[\vsmc][\sffamily]{vSMC}
 
 \UseMathCal{D}
 \UseMathCal{E}
@@ -56,88 +98,24 @@
 \UseMathBB{N}
 \UseMathBB{R}
 
-\def\Data{\mathbfit{Y}}
-\def\aicc{\hbox{\aic{}\ensuremath{_c}}\xspace}
-\def\data{\mathbfit{y}}
-\def\dkl{D_{\mathrm{KL}}}
-\def\kl{Kullback-Leibler divergence\xspace}
-\def\mha{Metropolis-Hastings algorithm\xspace}
-
-\newcommand{\Mk}[1][k]{\ensuremath{{\calM_{#1}}}\xspace}
-\newcommand{\paramk}[1][k]{\ensuremath{\theta_{#1}}\xspace}
-\newcommand{\Paramk}[1][k]{\ensuremath{\Theta_{#1}}\xspace}
-\newcommand{\smc}[1][]{\textsc{smc}#1\xspace}
-
-\def\lvec#1#2{#1_1,\dots,#1_{#2}}
-\def\svec#1#2{#1^1,\dots,#1^{#2}}
-\def\mcvec#1#2{#1^{(1)},\dots,#1^{(#2)}}
-
-\def\iid{\ifmmode\text{i.i.d.}\else{i.i.d.}\xspace\fi}
-\def\ymin{y_{\textsc{min}}}
-\def\ymax{y_{\textsc{max}}}
-\def\Lopt#1{L_{#1}^{\text{\textsc{opt}}}}
-
-\def\supi#1{#1^{(i)}}
-\def\Xiu{\supi{X}}
-\def\xiu{\supi{x}}
-\def\Wiu{\supi{W}}
-\def\wiu{\supi{w}}
-
-\def\STATESKIP{\hskip.68cm}
-\def\TNOTESKIP{\hskip3em}
-\newcommand{\rnd}[2]{\ensuremath{\frac{\diff#1}{\diff#2}}\xspace}
-
-\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\sffamily Red}\fi}
-\def\SubBest{\ifmmode\color{MGreen}\it\else\textcolor{MGreen}{\sffamily
-    Green}\fi}
-
-\def\cpp{{\allcapt C++}\xspace}
-\def\cppne{{\allcapt C++98}\xspace}
-\def\cppoo{{\allcapt C++11}\xspace}
-
-\def\aocl{\textsf{AMD APP OpenCL}\xspace}
-\def\armadillo{\textsf{Armadillo}\xspace}
-\def\biips{\textsf{BiiPS}\xspace}
-\def\blitzpp{\textsf{Blitz++}\xspace}
-\def\boost{\textsf{Boost}\xspace}
-\def\bugs{\textsf{\textsc{bugs}}\xspace}
-\def\cilk{\textsf{Intel Cilk Plus}\xspace}
-\def\clangstatic{\textsf{Clang Static Analyzer}\xspace}
-\def\clang{\textsf{Clang}\xspace}
-\def\cmake{\textsf{CMake}\xspace}
-\def\doxygen{\textsf{Doxygen}\xspace}
-\def\eigen{\textsf{Eigen}\xspace}
-\def\gcc{\textsf{GCC}\xspace}
-\def\git{\textsf{Git}\xspace}
-\def\html{\textsf{\textsc{html}}\xspace}
-\def\icpc{\textsf{Intel C++ Composer XE}\xspace}
-\def\inspector{\textsf{Intel Inspector XE}\xspace}
-\def\iocl{\textsf{Intel OpenCL}\xspace}
-\def\libbi{\textsf{LibBi}\xspace}
-\def\libcpp{\textsf{libc++}\xspace}
-\def\lldb{\textsf{\textsc{lldb}}\xspace}
-\def\mathematica{\textsf{Mathematica}\xspace}
-\def\matlab{\textsf{MatLab}\xspace}
-\def\minitab{\textsf{Minitab}\xspace}
-\def\mkl{\textsf{Intel MKL}\xspace}
-\def\msvc{\textsf{Microsoft Visual C++}\xspace}
-\def\opencl{\textsf{OpenCL}\xspace}
-\def\openmp{\textsf{OpenMP}\xspace}
-\def\random{\textsf{Random123}\xspace}
-\def\rlang{\textsf{R}\xspace}
-\def\sas{\textsf{\textsc{sas}}\xspace}
-\def\slang{\textsf{S}\xspace}
-\def\spss{\textsf{\textsc{spss}}\xspace}
-\def\tbb{\textsf{Intel TBB}\xspace}
-\def\vsmc{\textsf{vSMC}\xspace}
-
 \usemintedstyle{solarizedlight}
 \newmintedfile{cpp}{mathescape}
-
 \newminted{cpp}{}
 \newminted{sh}{}
 \newminted{make}{}
-
 \newmintinline{cpp}{}
 \newmintinline{sh}{}
 \newmintinline{make}{}
+
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+
+\def\STATESKIP{\hskip.68cm}
+
+\def\data{\mathbfit{y}}
+\newcommand{\smc}[1][]{\textsc{smc}#1\xspace}
+
+\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\sffamily Red}\fi}
+\def\SubBest{\ifmmode\color{MGreen}\else\textcolor{MGreen}{\sffamily
+    Green}\fi}
