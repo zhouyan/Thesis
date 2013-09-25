@@ -1,3 +1,1 @@
-Sampler<T> &move (
-        const Sampler<T>::move_type &new_move,
-        bool append);
+Sampler<T> &move (const Sampler<T>::move_type &f, bool append);

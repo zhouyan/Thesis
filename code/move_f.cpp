@@ -1,4 +1,4 @@
-std::size_t move_func (std::size_t iter, Particle<T> &particle)
+std::size_t move_f (std::size_t iter, Particle<T> &particle)
 {
     const std::size_t N = particle.size();
     std::vector<double> inc_weight(N);
