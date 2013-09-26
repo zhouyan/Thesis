@@ -18,44 +18,171 @@ to \cpp templates and callable objects, two features used extensively in the
 \section{Background}
 \label{sec:vSMC Background}
 
-\subsection{Monte Carlo computing}
-\label{sub:Monte Carlo computing}
-
 \subsection{Parallel computing}
 \label{sub:Parallel computing}
+
+Parallel computing is a form of computation in which many calculations are
+carried out simultaneously. It operates on the principle that large problems
+can be divided into independent smaller ones and can be solved concurrently
+(``in parallel''). Parallelism has been practiced for many years in the form
+of high performance computing. In recent years, it has also become the
+dominant paradigm for desktop computing in the form of multicore processors.
+However, many of today's popular statistical softwares are written with
+serialization as an assumption, meaning that they do not easily take advantage
+of contemporary computer architectures. (see appendix~\ref{sub:Classes of
+  parallel computers} for a discussion of the commonly used parallel
+computers.)
+
+\subsubsection{Parallelism strategies}
+\label{ssub:Parallelism strategies}
+
+The best overall strategy for \emph{scalable parallelism} is \emph{data
+  parallelism} \cite{datapar}. There are various definitions of data
+parallelism. Narrower definitions only permit collection-oriented operations,
+such as applying the same function to all elements of an array. A wider view
+is that the parallelism grows (preferably linearly) as the data size or the
+problem size grows. For example, parallelizing a vanilla Monte Carlo
+integration algorithm belongs to this strategy. As the number of samples
+increases, one can always use more parallel computing resource to run the
+sampler with the same amount of time without increasing the speed of each
+computing unit. Note that, here we ignored issues such as generating random
+numbers in parallel, which will be discussed later. In contrast, an \mcmc
+algorithm usually cannot be parallelized in a scalable way. To obtain better
+statistical results, often the only way is to increase the number of
+iterations, and thus no matter how much parallel computing resource are
+available, the computing time will increase without increasing of the speed of
+the processors. It shall be obvious that many \smc algorithms can be
+parallelized using data parallelization in a scalable way.
+
+The opposite of data parallelism is \emph{functional parallelism}, an approach
+that runs different functional parts of a program in parallel. At best,
+functional parallelism can improvement the performance by a constant speedup.
+For example, say a program performs functions $f_1,\dots,f_k$, then at best
+the computing time can be reduced by $k$-fold through parallelism. In the
+remaining of this chapter, we focus on data parallelism.
+
+For specific problems, there are various design patterns to parallelize the
+computation. Interested readers can see appendix~\ref{sub:Parallel patterns}
+for a discussion on this topic.
+
+\subsubsection{Importance of parallel computing}
+\label{ssub:Importance of parallel computing}
+
+Parallel computers has been developed for decades. Several reasons have led to
+increased level of parallel computing in individual, mainstream personal
+computers.
+
+The most significant one is the hardware trend. From 1973 to 2003, clock rates
+of processors increased from 1 MHz to 1 GHz. However, since then there are
+little improvement on this front. Now most high end workstations have
+processors with clock rates at about 2.5 GHz. However, virtually all
+processors produced now have multiple cores \cite{parallel}. Eight to twelve
+cores configurations are common in middle to high end workstations and
+personal computers often have at least two cores with quadric configurations
+more and more commonly seen, while the clock rates not only remains flat, but
+also has the trend of decreasing. These changes are due to various technical
+difficulties in increasing the clock rates among other reasons, which we will
+not elaborate further here.
+
+Scientists are ever seeking to solve more complex problems, which often
+requires more computations. To solve larger problems without use significantly
+longer computing times, in the foreseeable future the only way is to use
+parallelism.
+
+Parallel computing is also much more economic in both power consumption and
+processors' production than sequential computing \cite{parallel}. In reality,
+it means researchers can invest the same or less amount of funding, yet get
+more computing work done with the same or less time.
+
+\subsubsection{Performance measurement}
+\label{ssub:Performance measurement}
+
+Unlike sequential computing, the performance of parallel computing is more
+difficult to study. In sequential situation, the computational cost can often
+be deduced from the algorithms easily. For example, a Monte Carlo algorithm
+can use the total number of samples to be generated as a measure of its
+computational cost. However, in the case of parallel computing, the total
+amount of computation, whether measured as number arithmetic operations or
+data operations, cannot reflect the cost in reality. This is due to the fact
+that, today's parallel computers is much more cost efficient when more work
+are parallelized \cite{parallel}. In practice, one is most concerned with the
+speedup of a parallel program, defined as the ratio between running time of a
+sequential program and the one of a parallel program that does the same work.
+
+Let $P$ be the number of hardware workers, e.g., cores in a multicore
+processor or nodes in a cluster, and $T_P$ be the total time of computation.
+$T_1$ is usually called the \emph{work} of the program and $T_{\infty}$ is
+called the \emph{span}. The speedup, defined as $S_P = T_1/T_P$, is upper
+bounded,
+\begin{equation}
+  S_P \le \frac{T_1}{T_1/P} = P
+\end{equation}
+In addition, assuming that adding processors never slows down the program (it
+is only the case when $P$ is modest in reality),
+\begin{equation}
+  S_P \le T_1/T_{\infty}
+\end{equation}
+
+Implementations on different hardwares often are interested in one of the
+three quantities, $T_1$, $T_P$ and $T_{\infty}$. For sequential
+implementations clearly $T_1$ is the only one of interest. For multicore and
+\smp systems, $T_P$ is of interest for a particular value $P$. $T_{\infty}$ is
+previously of less interest, which is only considered as an ideal situation.
+However, the recent development on massive parallel computers has made it
+close to a reality for many algorithms.
+
+\subsubsection{Limitations}
+\label{ssub:Limitations}
+
+Parallel computing is not without drawbacks. Two main factors that limit its
+widespread use in practice is the difficulty in reasoning of the program and
+the tuning of performance.
+
+Parallel programs are more difficult to construct \emph{correctly} than a
+sequential program. Because its parallel natural, many operations may be
+performed concurrently and may happen with random orders or at the same time.
+However, due to reasons such as data dependency, some operations have to be
+performed in a deterministic order in order to obtain meaningful results.
+Informally, when two workers try to modify the same location of data, the
+behavior is undefined. This is also called \emph{data race}.
+
+Another difficulties of parallel computing is the tuning and portability of
+performance. Since the development of language such as Fortran and C,
+scientists have relied on them to develop portable softwares. There are two
+sides of portability. One is the programming portability, meaning that the
+same source code can be used to build softwares for different platforms with
+little or no modifications. The other one is the performance portability,
+meaning that the softwares built from the same source code for different
+platforms have comparable performance. In the early days, people need to
+optimize programs for each platform individually. However, with the
+development of modern compiler techniques, such practices are much less seen.
+
+In the era of parallel computing, many low level details need to be taken care
+of to obtain reasonable performance. For example, while using the \openmp
+programming model, which is widely used by scientists to write parallel
+programs, issues such as thread affinity (associate each thread with a
+particular processor) can often cause large performance differences. More
+recently, devices such as \gpu{}s are even less performance portable. The same
+\opencl \cite{opencl} program can have an order of magnitude difference in
+performance when running on devices from different vendors even they have
+similar raw computational power.
+
+However, we believe that with the development of developer tools for parallel
+computing, such issues will become less common and it will help the wider
+spread of parallel computing.
+
+The last but not least problem with parallel computing is that, not all
+algorithms can be parallelized or at least not efficiently. Many \mcmc
+algorithms are typical examples. And they can hardly benefit much from future
+computer technology advancement. This issue can only be solved by developing
+new algorithms that are more suitable for today's and future computers.
+
+\subsection{Softwares for Monte Carlo computing}
+\label{sub:Softwares for Monte Carlo computing}
 
 \section{The vSMC library}
 \label{sec:The vSMC library}
 
-The \vsmc library makes use of \cpp's template generic programming to
-implement general \smc algorithms. The library is formed by a few major
-modules.
-\begin{description}
-  \item[Core] The highest level of abstraction of \smc samplers. Users
-    interact with classes defined within this module to create and manipulate
-    general \smc samplers. Classes in this module include \cppinline{Sampler},
-    \cppinline{Particle} and others. These classes use user defined callback
-    to perform application specific operations, such as updating particle
-    values and weights.
-  \item[Symmetric Multiprocessing (\smp)] This is the form of computing most
-    people use everyday, including multiprocessor workstations, multicore
-    desktops and laptops. Classes within this module make it possible to write
-    generic operations which manipulate a single particle that can be applied
-    either sequentially or in parallel through various parallel programming
-    models. A method defined through classes of this module can be used by
-    \cppinline{Sampler} as callback objects.
-  \item[Message Passing Interface] \mpi is the \emph{de facto} standard for
-    parallel programming on distributed memory architectures. This module
-    enables users to adapt implementations of algorithms written for the \smp
-    module such that the same sampler can be parallelized using \mpi. In
-    addition, when used with the \smp module, it allows easy implementation of
-    hybrid parallelization such as \mpi/\openmp.
-  \item[\opencl] This module is similar to the two above except it eases the
-    parallelization through \opencl, such as for the purpose of General
-    Purpose \gpu Programming (\gpgpu). \opencl is a framework for writing
-    programs that can be execute across heterogeneous platforms. \opencl
-    programs can run on either \cpu or \gpu.
-\end{description}
 To obtain and install the library, see detailed instructions in
 \cite{vsmcjss}, which also documents the third-party dependencies and compiler
 support. A \doxygen \cite{doxygen} generated reference manual can be found at
@@ -69,12 +196,51 @@ the common tasks performed by generic \smc samplers. Many features of the
 library are introduced in examples. Interested readers can see the tutorial
 \cite{vsmcjss} and the reference manual for details.
 
+The \vsmc library makes use of \cpp's template generic programming to
+implement general \smc algorithms. The library is formed by a few major
+modules. In the remaining of this chapter, unless stated otherwise, all public
+classes and functions of the library resides in the namespace
+\cppinline{vsmc}.
+
+\paragraph{Core}
+
+The highest level of abstraction of \smc samplers. Users interact with classes
+defined within this module to create and manipulate general \smc samplers.
+Classes in this module include \cppinline{Sampler}, \cppinline{Particle} and
+others. These classes use user defined callback to perform application
+specific operations, such as updating particle values and weights.
+
+\paragraph{Symmetric Multiprocessing (\smp)}
+
+This is the form of computing most people use everyday, including
+multiprocessor workstations, multicore desktops and laptops. Classes within
+this module make it possible to write generic operations which manipulate a
+single particle that can be applied either sequentially or in parallel through
+various parallel programming models. A method defined through classes of this
+module can be used by \cppinline{Sampler} as callback objects.
+
+\paragraph{Message Passing Interface}
+
+\mpi is the \emph{de facto} standard for parallel programming on distributed
+memory architectures. This module enables users to adapt implementations of
+algorithms written for the \smp module such that the same sampler can be
+parallelized using \mpi. In addition, when used with the \smp module, it
+allows easy implementation of hybrid parallelization such as \mpi/\openmp.
+
+\paragraph{\opencl}
+
+This module is similar to the two above except it eases the parallelization
+through \opencl, such as for the purpose of General Purpose \gpu Programming
+(\gpgpu). \opencl is a framework for writing programs that can be execute
+across heterogeneous platforms. \opencl programs can run on either \cpu or
+\gpu.
+
 \subsection{Core classes}
 \label{sub:Core classes}
 
 There are over two hundred classes, large and small, in the \vsmc library. It
 is beyond the scope of this chapter to document most of them. However, there
-are a few of them play central role in implementation of \smc algorithms. In
+are a few of them play central roles in implementation of \smc algorithms. In
 this section, we provide an overview of them. Many of them are feature rich.
 Instead of document their interfaces here, we will introduce useful features
 through examples later.
@@ -98,11 +264,11 @@ generic name \cppinline{T} to denote this value collection type.
 
 A \cppinline{Sampler<T>} object is used to execute various operations of an
 \smc algorithm. It is used to initialize the particles and update them. It is
-also used to perform resampling and importance sampling estimates of
-parameters. In the body of a program, this is the usually only class that the
-user need to interact with. In section~\ref{sub:Program structure}, we show
-how each step of a generic \smc algorithm is mapped to the operations provided
-by a \cppinline{Sampler<T>} object.
+also used to perform resampling and importance sampling approximation. In the
+body of a program, this is the usually only class that the user need to
+interact with. In section~\ref{sub:Program structure}, we show how each step
+of a generic \smc algorithm is mapped to the operations provided by a
+\cppinline{Sampler<T>} object.
 
 \paragraph{Particle}
 
@@ -120,10 +286,10 @@ object.
 
 \paragraph{Weights}
 
-As said, a weights are manipulated through a sub-object of
+As said, weights in a particle system are manipulated through a sub-object of
 \cppinline{Particle<T>}, \cppinline{WeightSet<T>}. In addition to common
-weights manipulations, such as setting the weights directly or use the
-incremental weights, it also provides ways to extract properties of the
+weights manipulations, such as setting the weights directly or using the
+incremental weights, it also provides ways to query properties of the
 weights. For example, it can calculate the \ess and \cess values.
 
 For most applications, the default \cppinline{WeightSet<T>} is sufficient.
@@ -134,21 +300,19 @@ metaprogramming. The details are documented in the reference manual.
 \paragraph{Monitor}
 
 Given a real-valued function $h$, the library can use \cppinline{Monitor<T>}
-objects to computes the importance sampling approximation of $\Exp[h(X)]$
+objects to compute the importance sampling approximation of $\Exp[h(X)]$
 automatically as the sampler progresses. The function value of $h$ is allowed
 to be a vector. And it is possible to use optimized linear algebra library to
-accelerate the computing in that case.
-
-There are also special support for path sampling, which requires essentially a
-simple importance sampling approximation and a numerical integration.
+accelerate the computing in that case. There are also special support for path
+sampling, which requires essentially a simple importance sampling
+approximation and a numerical integration.
 
 \subsection{Program structure}
 \label{sub:Program structure}
 
 Recall the \smc algorithms discussed in section~\ref{sec:Sequential Monte
   Carlo samplers}, regardless of specific applications or algorithm settings,
-from an implementation perspective, they can be dissembled into the following
-steps.
+in practice they can be dissembled into the following steps.
 \begin{enumerate}
   \item Initialize values $\{X^{(i)}\}_{i=1}^N$ and weights
     $\{W^{(i)}\}_{i=1}^N$.
@@ -187,7 +351,7 @@ estimates. In the \vsmc library, all these tasks are performed through the
 \cppfile{snippet/program_structure.cpp}
 We will explain each line of this program in detail. For now, it is sufficient
 to point out that the following objects used in this program are user defined
-callbacks that implement application specific operations.
+callback that implement application specific operations.
 \begin{description}
   \item[\cppinline{init_f}] Initialize the particle values.
     (section~\ref{sec:Initializing particles and parallelization})
@@ -204,8 +368,8 @@ callbacks that implement application specific operations.
     integrands, for example moments. (section~\ref{sec:Monitoring})
 \end{description}
 
-\section{The value collection, the particles and the sampler}
-\label{sec:The value collection, the particles and the sampler}
+\section{The value collection, the particle system and the sampler}
+\label{sec:The value collection, the particle system and the sampler}
 
 At the core of each implementation of \smc algorithms using the \vsmc library
 is the definition of the value collection type that abstracts
@@ -242,10 +406,9 @@ Many typical problems' value collections can be viewed as a matrix of certain
 type. For example, a simple particle filter whose state is a real-valued
 vector of length $M$ can be viewed as an $N$ by $M$ matrix of type
 \cppinline{double} where $N$ is the number of particles. A trans-dimensional
-(e.g., \cite{Jasra:2008bb}) problem can use an $N$ by $1$ matrix whose type is
+problem (e.g., \cite{Jasra:2008bb}) can use an $N$ by $1$ matrix whose type is
 a user defined class, say \cppinline{StateType}. For this kind of problems,
-\vsmc provide a class
-template
+a class template is provided by the library,
 \begin{cppcode}
 template <MatrixOrder Order, std::size_t Dim, typename StateType>
 class StateMatrix;
@@ -358,6 +521,21 @@ instead of the much more difficult to read expression,
 \begin{cppcode}
 sp.state(GMM<R>::ComponentNumber * 2 + j);
 \end{cppcode}
+It is trivial to see that the parameters are arranged as if in such a matrix,
+\begin{equation*}
+  \begin{pmatrix}
+    \theta_r^{(1)} \\ \vdots \\ \theta_r^{(N)}
+  \end{pmatrix} =
+  \begin{pmatrix}
+    \mu_1^{(1)},\dots,\mu_r^{(1)}, &
+    \lambda_1^{(1)},\dots,\lambda_r^{(1)}, &
+    \omega_1^{(1)},\dots,\omega_r^{(1)} \\
+    \vdots & \vdots & \vdots \\
+    \mu_1^{(N)},\dots,\mu_r^{(N)}, &
+    \lambda_1^{(N)},\dots,\lambda_r^{(N)}, &
+    \omega_1^{(N)},\dots,\omega_r^{(N)}
+  \end{pmatrix}
+\end{equation*}
 
 Third, the setter and getter member functions such as \cppinline{mu_scale}
 provide access to the proposal scales. In addition, the member function
@@ -481,15 +659,16 @@ possible resampling. They are often \mcmc type moves. Multiple
 sampler consists of a queue of \cppinline{move}'s and a queue of
 \cppinline{mcmc}'s.
 
-All these are implemented using user defined callbacks similar to the
+All these are implemented using user defined callback similar to the
 \cppinline{init_f} function in the last section, with a slight different
 signature,
 \cppfile{snippet/move_type.cpp}
 This is the same for both \cppinline{move}'s and \cppinline{mcmc}'s. The first
 argument is the iteration number, counting from zero for the initialization
-step. The second is \cppinline{sampler.particle()}.
+step. The second argument is passed by the sampler, which is
+\cppinline{sampler.particle()}.
 
-To add a \cppinline{move_f} into the queue of \cppinline{move}, call
+To add \cppinline{move_f} into the queue of \cppinline{move}'s, call
 \begin{cppcode}
 sampler.move(move_f, false);
 \end{cppcode}
@@ -536,10 +715,10 @@ particle.weight_set().mul_weight(weight.begin());
 particle.weight_set().set_log_weight(weight.begin());
 particle.weight_set().add_log_weight(weight.begin());
 \end{cppcode}
-The \cppinline{set_equal_weight} member function sets all weights to be equal.
-Similarly, the \cppinline{set_weight} and \cppinline{set_log_weight} member
-functions set the values of weights and logarithm weights, respectively. And
-the \cppinline{mul_weight} and \cppinline{add_log_weight} member functions
+The \cppinline{set_equal_weight} member function sets all weights to be equal
+i.e., $1/N$. The \cppinline{set_weight} and \cppinline{set_log_weight} member
+functions set the values of weights and logarithm weights, respectively. The
+\cppinline{mul_weight} and \cppinline{add_log_weight} member functions
 multiply the weights or add to the logarithm weights by the given values,
 respectively. All these member functions accept general input iterators as
 their arguments.
@@ -551,15 +730,15 @@ In this example, we show an implementation of the \mcmc moves in the \gmm
 example (section~\ref{sub:Gaussian mixture model}). We will only detail the
 implementation of random walk block on $\mu_{1:r}$. The others are similar.
 Recall that, we perform a Normal random walk on the mean parameters. The \mcmc
-algorithm's implementation can be summaries as the following steps,
+algorithm's implementation can be summarized as the following steps,
 \begin{enumerate}
   \item Calculate the value of the target density for the parameter values,
     say $f$.
   \item Propose new values according to the proposal distribution. In our
     implementation, this proposal step are carried in place, meaning that the
-    particle values are manipulated when new values are proposed.
-  \item Calculate the value of the target density proposed parameter values,
-    say $f'$.
+    particle values are updated when new values are proposed.
+  \item Calculate the value of the target density for the proposed parameter
+    values, say $f'$.
   \item Generate uniform random variate on the $[0,1]$ interval, say $u$,
   \item Accept the proposed values if $u < f'/f$. Otherwise, restore the old
     values.
@@ -718,7 +897,7 @@ use this pointer to access the record in the monitor named
 \cppinline{"moments"}. There are many ways to retrieve the importance sampling
 estimates from a monitor. The one we used here
 \begin{cppcode}
-res[i] = sampler_ptr_->monitor("moments").record(i);
+res[i] = sampler_ptr_->monitor("moments").record(j);
 \end{cppcode}
 return the importance sampling estimate of $\Exp[h_j(X)]$ for the latest
 generation of the particle system.
@@ -805,9 +984,8 @@ represents 245\% and 1960\% speedup compared to the \cpu, respectively.
   \label{fig:bench-ocl-perf}
 \end{figure}
 
-\subsection{Programming efforts comparison}
-\label{sub:Programming efforts comparison}
-
+\subsection{Performance and productivity}
+\label{sub:Performance and productivity}
 
 
 It is widely believed that \opencl programming is tedious and hard. However,
@@ -902,6 +1080,83 @@ There are two major programming models for general purpose \gpu programming
 (\gpgpu), Nvidia's \cuda framework and the \opencl \cite{opencl} standard. The
 \vsmc library provides direct support for the \opencl programming model.
 
+\subsection{Parallel patterns}
+\label{sub:Parallel patterns}
+
+In a more micro level, parallelism can be implemented with different patterns.
+The term \emph{pattern} in computer science, introduced and popularized by
+\cite{software:GoF}, is a way of codifying best practices for software
+engineering. We found patterns are more useful to statisticians for reasoning
+the parallel structure of a given algorithm. This section is not an exhaustive
+discussion of parallel patterns. Instead, we choose some of the most commonly
+seen in practice, in particular those relevant to Monte Carlo algorithms.
+
+\subsubsection{Map}
+\label{ssub:Map}
+
+This is perhaps the simplest form of parallelism. A function, called
+\emph{elemental function}, is replicated for each element of a data collection
+concurrently. The elemental function must have no side-effects in order for
+the map to be implementable in parallel while achieving deterministic results.
+In particular, it cannot modify global data that other instances of that
+function depend on.
+
+In \smc algorithm, the updating of particle values is clearly implementable
+using a map pattern. The operation of the kernel $K(x_{t-1},x_t)$ depends only
+on the history of the particle that it will be used to update, but not other
+particles at a given generation.
+
+\subsubsection{Fork-join}
+\label{ssub:Fork-join}
+
+This pattern lets control flows fork into multiple parallel flows that rejoin
+later. The major difference between fork-join and map is that fork-joint does
+not necessarily apply the same function on different data. Instead, usually
+different functions are applied to different or the same data. There are
+different programming models that implement this pattern. The \openmp
+\cppinline{parallel region} fork control into multiple threads that all
+execute the \emph{same} statements and use other constructs to determine which
+thread does what. The \cilk \cite{cilk} \cppinline{spawn} fork a new thread to
+execute the calling function on a new thread and it is later joined with the
+callee.
+
+The fork-join pattern are often used by programming models to implement other
+patterns and is widely used in practice itself. One example is numerical
+integrations, especially for adaptive schemes. Whenever a new segment of the
+integral interval is chosen, the program can fork a new thread to compute the
+results. And after all segments are computed, the program can join all threads
+and sum up the final result.
+
+\subsubsection{Reduction}
+\label{ssub:Reduction}
+
+This pattern uses an associative operator to combine every element in a
+collection into a single element. Given the associativity of the operator,
+many different orderings are possible and hence multiple threads can be used
+to parallelize the computation. This is most often used for parallelization of
+computations such as summations.
+
+For example, the computation of \ess, \cess, normalizing of weights, etc., are
+all parallelized using the reduction pattern within \vsmc.
+
+\subsubsection{Pipeline}
+\label{ssub:Pipeline}
+
+A pipeline connects tasks in a \emph{producer-consumer} relationship. A few
+computation units are active at the same time. The first one consume the data,
+and produce new data to be used by the second, and so on. As the data flows
+into the pipeline, each unit has its own work to do and thus computations are
+carried out in parallel while the data dependencies are correctly maintained.
+
+There are several applications of pipeline in Monte Carlo computing. For
+example, an \mcmc algorithm often need to compute various convergence
+statistics, say $h(X_{0:t})$. Often, this statistic can be written as
+$h(X_{0:t}) = h(X_t, h(X_{0:{t-1}}))$. Instead of compute it after all
+iterations, one can use one thread to update the \mcmc chain and another one
+to compute the statistics, using the pipeline pattern. In this case, the
+Markov kernel that update the states is the \emph{producer} and the thread
+that update the statistics is the \emph{consumer}.
+
 \subsection{Modern C++}
 \label{sub:Modern C++}
 
@@ -978,9 +1233,9 @@ parameter deduction here.
 \vsmc is a framework for constructing generic \smc samplers. It relies on the
 user to write callback functions to perform application specific operations,
 such as updating particles. In this section, we introduce the few forms of
-callbacks that are supported by the library. Collectively, they are also
-called \emph{callable objects}, meaning that they support the function calling
-syntax though they may not be functions.
+callback that are supported by the library. Collectively, they are also called
+\emph{callable objects}, meaning that they support the function calling syntax
+though they may not be functions.
 
 A callable object, say \cppinline{callable}, is similar to a function in the
 sense that it has a return type and a parameter list as its signature. It can
@@ -990,13 +1245,13 @@ callable( /* arguments */ );
 \end{cppcode}
 However, the object may or may not be a function. There are three ways to
 define a callable objects, function pointer, functor and \cppoo lambda
-expression. Function pointer is the main way of passing callbacks in C. The
+expression. Function pointer is the main way of passing callback in C. The
 other two are introduced later.
 
 The library also use type erasures, introduced later in this section, to
 enforce certain interfaces. The benefits of techniques introduced below
 increases the productivity and flexibility of the library compared to
-conventional techniques of passing callbacks through function pointer.
+conventional techniques of passing callback through function pointer.
 
 \paragraph{Functors}
 
