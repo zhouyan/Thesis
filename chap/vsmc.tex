@@ -15,6 +15,21 @@ those interested, appendix~\ref{sub:Modern C++} serve as a brief introduction
 to \cpp templates and callable objects, two features used extensively in the
 \vsmc library.
 
+Section~\ref{sec:vSMC Background} gives background on parallel computing and
+the state of softwares for Monte Carlo computing. Section~\ref{sec:The vSMC
+  library} provides an overview of the library and the structure of a program
+written with the library to implement a generic \smc sampler.
+Section~\ref{sec:The particle system} to~\ref{Monitoring} discusses the
+implementation the four main components of a generic \smc sampler: the
+particle system, initializing, updating and monitoring a sampler.
+Parallelization is not difficult with \vsmc. However, it could be an
+unfamiliar subject to some. Therefore, instead of a more technical discussion,
+we introduce the feature through an example in section~\ref{sec:Initializing}
+and demonstrated through examples in the other sections. In
+section~\ref{sec:vSMC Performance} we use a realistic example to show the
+performance of the library. In the same section, the productivity of the
+library, considering the performance gain, is also discussed.
+
 \section{Background}
 \label{sec:vSMC Background}
 
@@ -432,10 +447,9 @@ This is actually not a type defined by \vsmc, but a user defined class that
 abstract the collection of values $\{X^{(i)}\}_{i=1}^N$. The library allows
 much flexibility in the definition of this type. The important thing to note
 here is that this class need to at least abstract the whole collection of all
-values instead of a single particle. In section~\ref{sec:The value collection,
-  the particles and the sampler}, we introduce a readily usable implementation
-provided by the \vsmc library, on top of which users can build application
-specific classes.
+values instead of a single particle. In section~\ref{sec:The particle system},
+we introduce a readily usable implementation provided by the \vsmc library, on
+top of which users can build application specific classes.
 
 Most of core classes in the library are class templates with this value
 collection type as their template parameter. In the following, we use the
@@ -535,10 +549,10 @@ to point out that the following objects used in this program are user defined
 callback that implement application specific operations.
 \begin{description}
   \item[\cppinline{init_f}] Initialize the particle values.
-    (section~\ref{sec:Initializing particles and parallelization})
+    (section~\ref{sec:Initialization})
   \item[\cppinline{move_f}] Update the particles. For example, updating the
     weights. These updates are performed before the possible resampling.
-    (section~\ref{sec:Updating particles})
+    (section~\ref{sec:Updating})
   \item[\cppinline{mcmc_f1} and \cppinline{mcmc_f2}] Update the particles. For
     example, moving the particles with an \mcmc kernel. These updates are
     performed after the possible resampling. (section~\ref{sec:Updating
@@ -549,8 +563,8 @@ callback that implement application specific operations.
     integrands, for example moments. (section~\ref{sec:Monitoring})
 \end{description}
 
-\section{The value collection, the particle system and the sampler}
-\label{sec:The value collection, the particle system and the sampler}
+\section{The particle system}
+\label{sec:The particle system}
 
 At the core of each implementation of \smc algorithms using the \vsmc library
 is the definition of the value collection type that abstracts
@@ -735,8 +749,8 @@ know that these member functions will return the value of likelihood and prior
 densities for the current particle values when called, while the actual
 computation may or may not happen when the functions are called.
 
-\section{Initializing particles and parallelization}
-\label{sec:Initializing particles and parallelization}
+\section{Initialization}
+\label{sec:Initialization}
 
 The particles are initialized by a user defined callback. The callable object
 has the following signature,
@@ -847,8 +861,8 @@ running on single threaded sequential mode, on multicore processors with
 various parallel programming models or on a distributed memory computer with
 \mpi.
 
-\section{Updating particles}
-\label{sec:Updating particles}
+\section{Updating}
+\label{sec:Updating}
 
 The addition of methods that update the particles is more flexible than
 initialization. There are two kinds of updating methods. One is simply called
@@ -1103,8 +1117,8 @@ res[i] = sampler_ptr_->monitor("moments").record(j);
 return the importance sampling estimate of $\Exp[h_j(X)]$ for the latest
 generation of the particle system.
 
-\section{Performance of parallelization}
-\label{sec:Performance of parallelization}
+\section{Performance}
+\label{sec:vSMC Performance}
 
 One of the main motivation behind the creation of \vsmc is to ease the
 parallelization with different programming models. The same implementation can
