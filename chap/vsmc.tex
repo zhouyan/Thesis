@@ -180,6 +180,187 @@ new algorithms that are more suitable for today's and future computers.
 \subsection{Softwares for Monte Carlo computing}
 \label{sub:Softwares for Monte Carlo computing}
 
+Over the decades there are many softwares developed for the purpose of Monte
+Carlo computing, especially for more established algorithms such as \mcmc. It
+is impossible to give a complete review of even those most important ones
+here. Most of them can be characterized by a two aspects,
+\begin{itemize}
+  \item Application area
+  \item Software environments
+  \item Implementation level
+\end{itemize}
+Some softwares are designed with general application in mind. They can be used
+to solve a large array of problems. Some others target specific applications
+and some of them are designed to implement a particular model.
+
+There are the difference in software environments. Some are standalone
+software. They are often the easiest to use. Others depend on a larger
+software environment. For example, many numerical tools are developed using
+\matlab \cite{matlab}. In recent years, the \rlang programming language
+\cite{rlang} has gain substantial popularity among statisticians. These
+softwares often requires at least basic knowledge of the environment (e.g.,
+\matlab or \rlang) to use. There are also softwares developed for low level
+languages such as \cpp, distributed in the form of libraries. They may have
+an even steeper learning curve.
+
+\sidenote{I need to coin a better term than "implementation level"} By
+\emph{implementation level}, we mean how much of a given algorithm are
+implemented by the software and how much are left to be implemented by the
+user. This is closely related to the application area of the software. At the
+lowest level, some softwares used to solve a particular problem are
+implemented using some programming language such as \rlang or \cpp from ground
+up. Some of them provide frameworks on top of which the user only need to fill
+in some problem specific informations.
+
+In the following, we review a few more important development for Monte Carlo
+computing. Most of those that are relevant to the work in this thesis can be
+categorized by whether they solve \mcmc or \smc problems.
+
+\subsubsection{Softwares for \protect\mcmc computing}
+\label{ssub:Softwares for mcmc computing}
+
+The most noticeable of softwares for \mcmc algorithms is perhaps \bugs
+\cite{bugs, bugsbook}. It provides a easy to use environment for Bayesian
+modeling using the Gibbs sampler. The user need to specify the model using
+\bugs model specification language, which describe the model variables in a
+direct acyclic graph (\dag) and the data using a similar language. The
+software analyzes the model and choose \mcmc algorithms to do the sampling. It
+is a easy to use practical tool for Bayesian analysis. The output of \bugs are
+usually analyzed with \rlang, using packages such as \rcoda \cite{rcoda}.
+
+The limitation of \bugs is that the resulting algorithm may not be well tuned
+and it can take a long time to get reasonable results. In particular, it is
+very difficult for the user to provide insights of the algorithm design, such
+as the proposal scales of random walks. In addition, it also does not allow
+more flexible design of data structures which can lead to significant
+inefficiency for some applications.
+
+There also many packages for the \rlang environment that implement \mcmc
+algorithms. The \rmcmcpack \cite{rmcmcpack} package provides model specific
+\mcmc algorithms for a wide range of models commonly used in social and
+behavioral science. The \rmcmc \cite{rmcmc} package can be used for
+implementation Metropolis random walk for continuous time random vector. There
+are also many more application specific packages. For example, the \rlang
+project's task view on Bayesian
+inference\footnote{\url{http://cran.r-project.org/web/views/Bayesian.html}}
+list dozens of packages among which many of them implement \mcmc algorithms
+for specific models. These packages are often very useful in their application
+areas but with less generality.
+
+Another interesting development is \pymc \cite{pymc}. It is distributed as a
+module for the \python programming language. It is highly influenced by \bugs
+while providing more flexibility and better performance through \python. The
+\cppbugs \cite{cppbugs} is similar to \pymc but is a library for \cpp. It is
+possible to archive much better performance using \cppbugs compared to \bugs
+while with only a little more programming efforts. Both \pymc and \cppbugs
+give users access to a general programming language in the process of
+designing the algorithms. Much flexibility and performance are gained through
+this compared to \bugs. On the other hand, to use them to their full potential
+the users do need to have good knowledge of the programming languages.
+
+Overall, for \mcmc algorithms, it is often not very difficult to develop
+application specific software using a general purpose programming language
+such as \rlang or \cpp. And widely used software tends to solve a particular
+class of problems instead of provide a more general framework for
+implementation of algorithms. Bayesian inference is certainly one of the more
+important application area of \mcmc. And many softwares have been developed
+for this purpose, with \bugs being perhaps the most influential and relative
+more general in applications and other work such as the various \rlang
+packages that target specific models.
+
+\subsubsection{Softwares for \protect\smc computing}
+\label{ssub:Softwares for smc computing}
+
+Unlike \mcmc algorithms, even the simplest \smc algorithms can be difficult to
+implement in general purpose programming languages for many researchers. There
+is a need for softwares that help researchers to implement complex generic
+\smc algorithm.
+
+Many \smc algorithms are often more computational intense than typical \mcmc
+applications. This can be partially attributed to the fact that \smc
+algorithms are often used to simulate complex high dimensional distributions,
+for which \mcmc algorithms often perform poorly.  The application of interest
+for \smc algorithms requires highly efficient implementations.
+
+There are relatively less development of softwares for \smc algorithms. The
+\pflib \cite{pflib} toolbox for \matlab is an early development. It is
+restricted to the particle filter setting.
+
+More recently, the \smctc library \cite{smctc} was developed. It provide a
+framework for implementation of generic \smc algorithms in \cpp. It possible
+to implement many realistic algorithms using the library with relative ease.
+It also provides very good performance. The generic framework was built with
+\cpp template techniques. It allows a wide range of applications while
+requires some expertise in \cpp. These are two traits also shared by the \vsmc
+library.
+
+There are also a few \rlang packages that provides implementations of \smc
+algorithms. For example the \rsmc \cite{rsmc} package can be used to implement
+some generic \smc algorithms. However it is more a skeleton of \smc algorithms
+with much of the implementation details such as resampling needed to be
+provided by the user. Overall, \rlang packages for \smc algorithms are much
+less common than those for \mcmc algorithms.
+
+As \smc family algorithms gains more attentions in research areas, such as
+Bayesian inference, some application specific softwares are also developed.
+The \biips \cite{biips} package aims to provide users an interface similar to
+that of \bugs with \smc as the underlying algorithms for inference instead of
+\mcmc. It is built with \smctc among other softwares. It can be used as a
+drop-in replacement of \bugs in many applications.
+
+Another interesting development is the \libbi library \cite{libbi}. It is
+particularly suited for Bayesian state-space modeling. It provides a easy to
+use interface using the \perl programming language. One does not need to know
+much of the language to use \libbi's interface. However, proficiency in \perl
+allows much flexibility in the design of the algorithm. This is similar to the
+\pymc module for \mcmc algorithms. The library can also construct parallelized
+sampler for a wide range of hardware.
+
+\subsubsection{Parallelized Monte Carlo computing}
+\label{ssub:Parallelized Monte Carlo computing}
+
+Parallel computing can be used to accelerate Monte Carlo applications. However
+due to its very sequential natural, \mcmc algorithms has seen little
+development on this front. All softwares for \mcmc computing discussed before
+are built with sequential implementations.
+
+Driven by the need to simulate complex distributions efficiently and the
+desire to use parallel computing to solve larger problems, many algorithms
+that are particularly suitable for parallelization has been developed in the
+past decade. The \smc and related algorithms are clearly one of them. The
+\pmcmc algorithm can also be parallelized though less efficiently (e.g., see
+results in section~\ref{sub:Nonlinear ordinary differential equations}
+and~\ref{sub:Population mcmc}.) More recently the particle \mcmc algorithm
+\cite{Andrieu:2010gc} is also well suited for parallel computing.
+
+There is no lack of interest in using parallel computing for these algorithms.
+For example, \cite{Lee:2010fm} studied the implementation of \smc algorithms
+on massive-parallel hardware (e.g., \gpu). The results are encouraging.
+However, there are yet few softwares for the purpose of implementation of
+generic \smc algorithms in parallel computers. The \libbi library is a notable
+exception.
+
+There are also more fundamental work done in this area. One more important
+aspect is the generating random numbers in parallel. Conventional pseudo-\rng
+generate random numbers using an internal state, say $x_t$ and iterate it with
+a deterministic transformation, $x_{t+1} = f(x_t)$. A data dependency exists
+between $x_{t+1}$ and $x_t$, which prevent scalable parallelization. For
+example, algorithms in \cite{Lee:2010fm} used to generate random numbers has a
+cost greater than $O(N)$ where $N$ is the number of parallel computing units.
+One solution to this problem is using state-less \rng. Informally, given a
+collection of values $\{x_i\}_{i=1}^N$, the collection $\{y_i\}_{i=1}^N$ where
+$y_i = f(x_i)$, appears to be random. There are no dependencies among
+$\{x_i\}_{i=1}^N$. Therefore the collection $\{y_i\}_{i=1}^N$ can be generated
+in parallel efficiently. The work by \cite{Salmon:2011um} provides accessible,
+high performance state-less \rng. It is also used by the \vsmc library.
+
+We believe there is a need of softwares similar to \smctc, which provides a
+framework for implementation of generic \smc algorithms (in contrast to
+applicable for only a class of models) yet taken full advantage of today's
+parallel computers. The \vsmc library aims to fill this gap. It is less easy
+to use than softwares such as \libbi or \biips. But it is possible to use to
+obtain more flexibility in the design of the algorithm and better performance.
+
 \section{The vSMC library}
 \label{sec:The vSMC library}
 
@@ -646,6 +827,26 @@ implementation of \cppinline{init_f}. However, by replace
 anything else, the sampler will be using \openmp for parallelization during
 the initialization step.
 
+There are also other benefits of this implementation. First, if \openmp is not
+available in the user's \cpp environment (e.g., using the popular \clang
+\cite{clang} compiler), one can use the same implementation with other
+parallel programming models. For instance, to use \tbb instead of \openmp,
+only \cppinline{InitializeOMP} need to be changed to
+\cppinline{InitializeTBB}.
+
+Second, this implementation is also scalable. A few changes allows it to use
+\mpi for parallelization on distributed memory computers. All that need to be
+done is wrap the value collection type with the adapter class
+\cppinline{StateMPI},
+\begin{cppcode}
+typedef StateMPI<StateMatrix<RawMajor, K, double> > T
+\end{cppcode}
+
+In summary, with almost identical implementation, we can build programs
+running on single threaded sequential mode, on multicore processors with
+various parallel programming models or on a distributed memory computer with
+\mpi.
+
 \section{Updating particles}
 \label{sec:Updating particles}
 
@@ -987,16 +1188,66 @@ represents 245\% and 1960\% speedup compared to the \cpu, respectively.
 \subsection{Performance and productivity}
 \label{sub:Performance and productivity}
 
+Performance along is not enough for a software to be useful. The productivity,
+the efforts need to develop new algorithms, should also be taken into
+considerations. Due the low level natural of \cpp, it certain takes more
+efforts to develop an algorithm using \vsmc than, say \libbi or \biips.
+However, \smc does provide a some advantages. First, some application of \smc
+algorithms may not fit into the framework of those softwares. The framework of
+\smc is general enough for them to be implemented with relative ease.
 
-It is widely believed that \opencl programming is tedious and hard. However,
-\vsmc provides facilities to manage \opencl platforms and devices as well as
-common operations. Limited by the scope of this paper, the \opencl
-implementation (distributed with the \vsmc source) is not documented in this
-paper. Overall the \opencl implementation has about 800 lines including both
-host and device code. It is not an enormous increase in effort when compared
-to the 500 lines \smp implementation. Less than doubling the code base but
-gaining more than 15 times performance speedup, we consider the programming
-effort is relatively small.
+Second, one can choose various parallel programming models while using the
+same implementation, as we have seen in section~\ref{sub:Parallelized
+  implementation}. This can be particularly useful in a few scenarios,
+\begin{enumerate}
+  \item Many parallel programming models do not coexist in the same program
+    well. Some of them such as \tbb and \cilk has explicit support for
+    \openmp. Much less so can be said for others. Often, some other part of
+    the program may also be parallelized with a particular programming model
+    familiar to the user. In this case, using \vsmc one can often freely
+    choose the same one for the \smc algorithm's parallelization. See
+    \cite{vsmcjss} for all the programming models supported by the library.
+  \item Often an algorithm is first developed on a desktop or laptop with only
+    multicore processors. Later it may be deployed to larger computers to
+    process bigger data. With \vsmc it is possible to use the implementation
+    on a \smp system, with little modifications, for the larger computer. In
+    \cite{vsmcjss} there is a full fledged example showing the use \mpi.
+\end{enumerate}
+
+Overall, we found the productivity of \vsmc is at a similar level of \smctc.
+For example, the particle filter example in \cite{smctc} can be implemented in
+\vsmc using roughly the same number of lines of code. Consider that there is a
+significant performance gain through parallelization, as seen in
+section~\ref{sub:Using the SMP module}, we believe the effort of using a \cpp
+library is adequate.
+
+The library also support \opencl parallelization. The performance is
+impressive as seen in section~\ref{sub:Using the OpenCL module}. It is widely
+believed that \opencl programming is tedious and hard. Limited by the scope of
+this paper, the \opencl implementation (distributed with the \vsmc source) is
+not documented in this chapter. Overall the \opencl implementation has about
+800 lines including both host and device code. It is not an enormous increase
+in effort when compared to the 500 lines \smp implementation. Less than
+doubling the code base but gaining more than 15 times performance speedup, we
+consider the programming effort is relatively small. Moreover, the \gpu used
+in the examples is relatively lower end and outdated. With better hardware,
+the same implementation has the potential to gain hundreds of times
+performance speedup.
+
+In addition, the \opencl language is essentially a variant of the C
+programming language. For the intended users of \vsmc, those with some
+knowledge of \cpp, writing \opencl kernels (the part of the program that are
+executed on the device, such as \gpu{}s) is not a difficult task. What often
+makes \opencl programming difficult is the management of the devices. It
+involves the understanding an array of layers of the underlying hardware.
+There are examples\footnote{For example,
+  \url{https://developer.apple.com/library/mac/samplecode/OpenCL_FFT/Introduction/Intro.html}}
+where a major part of the program is irrelevant to the algorithm itself. This
+is not the case of using \vsmc. The library provides facilities to manage
+\opencl platforms and devices as well as common operations. The
+implementations of \smc algorithms using \opencl, compared to using the \smp
+module, only requires a marginal addition of efforts to manage the \opencl
+platform.
 
 \section{Appendix}
 \label{sec:vSMC Appendix}
