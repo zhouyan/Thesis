@@ -7,11 +7,11 @@ distributions. Only in very special situations, these can be resolved
 analytically. In most cases, these integrations are approximated using
 simulation techniques.
 
-\section{Classical Monte Carlo and importance sampling}
-\label{sec:Classical Monte Carlo and importance sampling}
+\section{Classical Monte Carlo}
+\label{sec:Classical Monte Carlo}
 
-In its simplest form, the classical Monte Carlo method approximate the
-expectation of a function $\varphi$ with respect to a distribution $\pi$,
+Classical Monte Carlo integration approximates the expectation of a function
+$\varphi$ with respect to a distribution $\pi$,
 \begin{equation}
   \Exp_{\pi}[\varphi(X)] = \int\varphi(x)\pi(x)\intd x
 \end{equation}
@@ -19,22 +19,83 @@ provided that the above expectation exists, by drawing \iid samples from
 $\pi$, say $\{X^{(i)}\}_{i=1}^N$, and approximating the expectation by the
 empirical average,
 \begin{equation}
-  \hat\varphi^N = \frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)}).
+  \hat\varphi^N = \frac{1}{N}\sum_{i=1}^N\varphi(x^{(i)}).
   \label{eq:vanilla mc}
 \end{equation}
-The estimator $\hat\varphi^N$ converges almost surely to
-$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$. Clearly this method can only be
-applied when drawing samples directly from the target distribution $\pi$ is
-possible, which is often not the case in the context Bayesian model
-comparison, where the target distributions are usually complex posterior
-distributions only known up to some normalizing constants. In addition, the
-use of samples from $\pi$ is in general not necessary optimal in the sense
-that the variance of the estimator is not minimized
-\cite[][sec.~3.3.2]{Robert:2004tn}.
+This method is sometime also called \emph{vanilla} Monte Carlo or \emph{naive}
+Monte Carlo.
 
-An improvement over the classical Monte Carlo, the \emph{importance sampling}
-method is based on the identity, termed \emph{importance fundamental
-  identity},
+The estimator $\hat\varphi^N$ converges almost surely to
+$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$ by the Strong Law of Large Numbers
+(\slln). The variance of the estimator,
+\begin{equation}
+  \var_{\pi}[\hat\varphi^N] =
+  \frac{1}{N} \int (\varphi(x) - \Exp_{\pi}[\varphi(X)])^2 \pi(x) \intd x
+\end{equation}
+can also estimated by
+\begin{equation}
+  \hat{V}^N = \widehat{\var_{\pi}[\hat\varphi^N]} =
+  \frac{1}{N^2} \sum_{i=1}^N (\varphi(x^{(i)}) - \hat\varphi^N)^2
+\end{equation}
+provided that $\varphi^2$ has a finite expectation under $\pi$. In addition,
+confidence bounds on the estimator can also be constructed, since the central
+limit theorem (\clt) ensures that,
+\begin{equation}
+  \lim_{N\to\infty} \sqrt{N} (\hat\varphi^N - \Exp_{\pi}(\varphi(X)))
+  \xrightarrow{D} \calN(0, \var_{\pi}[\varphi(X)]
+\end{equation}
+and thus for large $N$,
+\begin{equation}
+  \frac{\hat\varphi^N - \Exp_{\pi}[\varphi(X)]}{\sqrt{\hat{V}^N}}
+\end{equation}
+is approximately distributed as a $\calN(0, 1)$ random variable where
+$\calN(\mu,\sigma^2)$ denotes the Normal distribution with mean $\mu$ and
+variance $\sigma^2$ \cite[][sec.~3.2]{Robert:2004tn}.
+
+Clearly this method can only be applied when drawing samples directly from the
+target distribution $\pi$ is possible. There are a few ways to draw random
+variates from an arbitrary distribution. See \cite[][chap.~2]{Robert:2004tn}
+on this topic. In many cases, simulation from a distribution $\pi$ efficiently
+requires the evaluations of its density function point-wise, or finding some
+easy to simulation distribution that closely imitate $\pi$. In the context of
+Bayesian computation, the target distributions are usually complex posterior
+only known up to some normalizing constants. And thus point-wise evaluation is
+not possible. In addition, the high-dimensional aspects of many models makes
+it near impossible to find a distribution closely imitate the target.
+
+In the particular context of Bayesian model comparison, it is often difficult
+to use vanilla Monte Carlo integration. For example, consider the
+approximation of the marginal likelihood, which is required to evaluate the
+Bayes factor (section~\ref{sub:Bayes factor}),
+\begin{equation*}
+  p(\data|\calM_k) =
+  \int f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k) \intd \theta_k.
+\end{equation*}
+It might appears to be possible to express it as
+\begin{equation}
+  p(\data|\calM_k) = \Exp_{\pi}[f(\data|\theta_k,\calM_k)],
+  \label{eq:prior expectation}
+\end{equation}
+and use samples from $\pi(\theta_k|\calM_k)$, the prior distribution, to
+approximate the integration. However, such approaches often results in large
+variance since simulating from the prior distribution can results in a large
+proportions of samples having small likelihood. In other words, the likelihood
+function (and thus the posterior distribution) is often much more concentrated
+than the prior distribution. For instance, considering the \pet model with one
+component and a informative prior. Using 100,000 samples from the prior
+distribution, the empirical mean and standard deviation of the estimates from
+100 simulations is $-40.9$ and $2.1$, respectively. However when the dimension
+of the model is increased by using a two components, the estimates have a
+empirical mean and variance $-39.6$ and $12.6$, respectively, which is too
+large a variance for practice use of evaluating the Bayes factor. In general,
+the variance of a vanilla Monte Carlo estimator is influenced by both the
+function $\varphi$ and the distribution $\pi$.
+
+\section{Importance sampling}
+\label{sec:Importance sampling}
+
+The \emph{importance sampling} method is based on the identity, termed
+\emph{importance fundamental identity} by \cite{Robert:2004tn},
 \begin{equation}
   \Exp_{\pi}[\varphi(X)]
   = \int\varphi(x)\pi(x)\intd x
@@ -42,12 +103,15 @@ method is based on the identity, termed \emph{importance fundamental
   = \Exp_{\eta}\Square[Big]{\varphi(X)\frac{\pi(X)}{\eta(X)}},
 \end{equation}
 where $\eta$ is a distribution with respect to which $\pi$ is absolutely
-continuous. Thus given \iid samples $\{X^{(i)}\}_{i=1}^N$ from distribution
-$\eta$, the expectation $\Exp_{\pi}[\varphi(X)]$ can be approximated by the
-following importance sampling estimator,
+continuous. This distribution is often called the \emph{proposal} or
+\emph{instrumental} distribution. Thus given \iid samples
+$\{X^{(i)}\}_{i=1}^N$ from distribution $\eta$, the expectation
+$\Exp_{\pi}[\varphi(X)]$ can be approximated by the following importance
+sampling estimator,
 \begin{equation}
-  \hat\varphi_{\text{\textsc{is}}}^N
+  \hat\varphi_{\is}^N
   = \frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)})\frac{\pi(X^{(i)})}{\eta(X^{(i)})}.
+  \label{eq:is normalized}
 \end{equation}
 The above estimator also converges almost surely to $\Exp_{\pi}[\varphi(X)]$
 when $N\to\infty$. However its variance is not necessarily finite. In general
@@ -61,45 +125,52 @@ $\pi$. To access the above inequality, evaluating of a more complex
 integration than the original problem is required. Some rather restrictive
 sufficient conditions for finite variance estimator was mentioned in
 \cite{Geweke:1989tm}. It is sufficient to mention here that most conditions
-that guarantee the variance of $\hat\varphi_{\text{\textsc{is}}}$ being finite
+that guarantee the variance of $\hat\varphi_{\is}$ being finite
 or optimal requires knowledge of $\pi$ that is not available. And thus they
-are not of particular interest for practical interest. However, one practical
-guideline for choosing the proposal distribution will be seen soon.
+are not of particular interest for practical interest.
 
 In practice both $\pi$ and $\eta$ are often only known up to some normalizing
 constants, which can be approximated with the same samples. This leads to the
 estimator,
 \begin{equation}
-  \hat\varphi_{w\text{\textsc{is}}}^N
+  \hat\varphi_{w\is}^N
   = \frac{\sum_{i=1}^Nw^{(i)}\varphi(X^{(i)})}{\sum_{i=1}^Nw^{(i)}}
+  \label{eq:is unnormalized}
 \end{equation}
-where $w^{(i)} = \pi(X^{(i)})/\eta(X^{(i)})$, and is termed the
+where $w^{(i)} \propto \pi(X^{(i)})/\eta(X^{(i)})$, and is termed the
 \emph{weights}. This estimator also converges almost surely to
-$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$. Though this estimator has a small
-bias, the variance and mean square errors are improved in some situations when
-compared to the vanilla Monte Carlo methods as in equation~\eqref{eq:vanilla
-  mc}, see \cite{Casella:1998tj} for some examples. However, either the
-importance sampling or direct sampling is uniformly better than the other. The
-performance depends not only on the choice of the proposal distribution
-$\eta$, but also the function of interest $\varphi$, as shown in
-\cite{Casella:1998tj}. As suggested in \cite[][sec.~3.3.2]{Robert:2004tn}, to
-minimize the variance of the estimator, the distribution $\eta$ should be
-chosen such that $|\varphi(x)|\pi(x)/\eta(x)$ is almost constant with a finite
-variance. That is, it is preferable for the distribution $\eta$ to be
-proportional to $|\varphi|\pi$ and have heavier tails. In practice, $\eta$ is
-often chosen such that it is approximated the same shape as $\pi$ but with a
-heavier tail.
+$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$. This estimator has a small
+bias since it is the ratio of two unbiased estimator. However, even when the
+normalizing constants of $\pi$ and $\eta$ are both known, this estimator can
+be preferable to $\hat\varphi_{\is}$ due to its possible improvement in the
+squared mean of errors. In fact, \cite{Casella:1998tj} showed an example of
+using the Cauchy distribution as the proposal distribution for the evaluation
+of expectations under the Student-$t$ distribution, where for some
+functions, such as $\varphi(x) = |x|$, $\hat\varphi_{w\is}$ can
+outperform $\hat\varphi_{\is}$ considerably.
 
-The importance sampling technique is rarely used directly for estimating the
-marginal likelihood which is used to compute the Bayes factor for the purpose
-of Bayesian model comparison. Some techniques, such as the widely used
-harmonic mean estimator and its generalizations, are somehow related. However,
-they are mostly used with dependent samples from Markov chain Monte Carlo
-algorithms and are therefore introduced later in the next section. The
-importance sampling method however is fundamental to a more advanced family of
-Monte Carlo methods, sequential Monte Carlo (\smc) which will be reviewed
-later in its own chapter~\ref{cha:Sequential Monte Carlo for Bayesian Model
-  Comparison}.
+In general, similar to vanilla Monte Carlo, the performance of importance
+sampling depends not only on the choice of the proposal distribution $\eta$,
+but also the function of interest $\varphi$. As suggested in
+\cite[][sec.~3.3.2]{Robert:2004tn}, to minimize the variance of the estimator,
+the distribution $\eta$ should be chosen such that
+$|\varphi(x)|\pi(x)/\eta(x)$ is almost constant with a finite variance. That
+is, it is preferable for the distribution $\eta$ to be proportional to
+$|\varphi|\pi$ and have heavier tails. In practice, often the same samples are
+used to evaluate the expectations of different functions. And the proposal
+distribution is chosen such that $\eta$ is close to $\pi$ with a heavier tail.
+
+In Bayesian modeling, if we are interested in the evaluation of the marginal
+likelihood function for the purpose of model comparison, and use the
+expression~\ref{eq:prior expectation}, then the above guidelines require the
+knowledge of $f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)$, which is hardly
+available. If we are interested in evaluations of expectations of various
+functions under the posterior distributions, such as the posterior mean of
+parameters, and attempt to a distribution close to the posterior distribution
+as the proposal distribution, then we face the same difficulty.
+
+In the next chapter, we will see that, it is possible to construct efficient
+proposal distributions iteratively.
 
 \section{Markov chain Monte Carlo}
 \label{sec:Markov chain Monte Carlo}
@@ -116,29 +187,32 @@ $X_n$, the state of the Markov chain at step $n$ is distributed with $\pi$,
 then $X_{n+1}$, the next step is also distributed with $\pi$.
 
 The basic idea is that, given a Markov chain $(X^{(1)},\dots,X^{(i)},\dots)$,
-whose has a limiting distribution $\pi$ over a measurable space $(E,\calE)$,
-then with suitable conditions (outlined for each algorithm later), for a
-$\pi$-integrable function $\varphi \in L^1(\pi)$
+with a limiting distribution $\pi$, then with suitable conditions (outlined
+for each algorithm later), for a $\pi$-integrable function $\varphi$,
 \begin{equation}
   \lim_{N\to\infty}\frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)}) =
   \Exp_{\pi}[\varphi(X)]
   \label{eq:mcmc convergence}
 \end{equation}
-And therefore samples generated by this Markov transition can be used for
+And therefore samples generated by this Markov chain can be used for
 estimation of various quantities in a similar fashion as with vanilla Monte
-Carlo or importance sampling methods. The construction of such a
-$\pi$-invariant Markov kernel leads to development of various widely used
-\mcmc algorithms. In this section, some of the most important ones are
-reviewed. Before that, a compact review of the topic of discrete time Markov
-chain is provided.
+Carlo or importance sampling. This leads to the estimator,
+\begin{equation}
+  \hat\varphi_{\mcmc}^N = \frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)})
+  \label{eq:mcmc est}
+\end{equation}
+where $\{X^{(i)}\}_{i=1}^N$ are $N$ samples from the Markov chain.
+
+The construction of such a $\pi$-invariant Markov kernel leads to development
+of various widely used \mcmc algorithms. In this section, some of the most
+important ones are reviewed.
 
 \subsection{Discrete time Markov chain}
 \label{sub:Discrete time Markov chain}
 
 This section briefly reviews some notions of discrete time Markov chains. Due
 to its utility natural, it will be compact and only reviews results required
-by later sections. For more throughout treatment of discrete time Markov
-chains, the readers are referred to references therein.
+by later sections.
 
 A Markov chain can be defined in terms of \emph{transition kernels}. Consider
 a measurable space, say $(E,\calE)$, a transition kernel $K$ is a function defined
@@ -198,8 +272,7 @@ chain converges to its invariant (and thus its limiting) distribution.
 In what follows, we give a more formal yet compact treatment of the properties
 discussed above. Most results are stated without proofs. One can see, for
 example \cite[][chap.~6]{Robert:2004tn} for a treatment of the topic in more
-detail in the context of \mcmc algorithms or \cite{Meyn1993} for a more
-general treatment of the topic of Markov chain.
+detail in the context of \mcmc algorithms.
 
 \subsubsection{Irreducibility}
 
@@ -282,9 +355,9 @@ transition kernel $K$ if,
 \begin{equation}
   \pi(A) = \int K(x,A)\pi(\diff x)
 \end{equation}
-for all $A\in\calE$. When a invariant \emph{probability} measure exists, the
-chain is said to be \emph{positive}. A positive chain is always
-recurrent. Also the invariant measure is unique for a recurrent chain, up to a
+for all $A\in\calE$. When an invariant \emph{probability} measure exists, the
+chain is said to be \emph{positive}. A positive chain is always recurrent.
+Also the invariant measure is unique for a recurrent chain, up to a
 multiplicative factor. It is trivial to see that, for a invariant probability
 measure $\pi$ of a Markov chain $(X_n)$, if $X_0\sim\pi$, then $X_n\sim\pi$
 for all $n\ge1$. Thus this distribution is also often referred to as the
@@ -382,8 +455,8 @@ transition. At time $t$, given sample $x^t$,
     \begin{equation*}
       X^{t+1} =
       \begin{cases}
-        Y^t, &\text{with probability } \alpha(x^t,Y^t),\\
-        x^t  &\text{with probability } 1 - \alpha(x^t,Y^t).
+        Y^t, &\text{with probability } \alpha(x^t,y^t),\\
+        X^t  &\text{with probability } 1 - \alpha(x^t,y^t).
       \end{cases}
     \end{equation*}
     where
@@ -393,7 +466,33 @@ transition. At time $t$, given sample $x^t$,
     \end{equation}
 \end{enumerate}
 The probability $\alpha(x,y)$ is called the \emph{Metropolis-Hastings
-  acceptance probability}. The conditions for the Markov chain produced by
+  acceptance probability}. This is also formally presented in
+algorithm~\ref{alg:mh}
+
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE Draw $X^0\sim\mu$ where $\mu$ is the initial condition.
+  \STATE Set $t\leftarrow0$.
+  \REPEAT
+    \STATE Draw $Y^t\sim q(y|x^t)$.
+    \STATE Compute $\alpha = \min\Curly[bigg]{
+      \frac{\pi(y^t)}{\pi(x^t)}\frac{q(x^t|y^t)}{q(y^t|x^t)}, 1}$
+    \STATE Draw $U\sim\calU[0,1]$.
+    \IF{$U\le\alpha$}
+      \STATE Set $X^{t+1}\leftarrow Y^t$
+    \ELSE
+      \STATE Set $X^{t+1}\leftarrow X^t$
+    \ENDIF
+    \STATE Set $t\leftarrow t+1$.
+  \UNTIL{Sufficiently many samples have been produced.}
+  \bottomhrule
+\end{algorithmic}
+\caption{Metropolis-Hastings algorithm}
+\label{alg:mh}
+\end{algorithm}
+
+The conditions for the Markov chain produced by
 this algorithm having the limiting distribution $\pi$ are quite minimal
 \cite[][sec.~7.3.2]{Robert:2004tn}. Intuitively, the generated Markov chain is
 aperiodic since the algorithm allows events such as $\{X^{t+1} = X^t\}$. A
@@ -432,95 +531,180 @@ $\pi$.
 Though uniform ergodicity is a much desired property for a given algorithm,
 without proper optimizing, the performance of an independent proposal is often
 far from ideal in practice. The proposal $\eta$ shall be chosen such that it
-maximizes the average \emph{acceptance rate} $\alpha = \Exp[\alpha(x,y)]$,
+maximizes the average \emph{acceptance rate} $\bar\alpha = \Exp[\alpha(x,y)]$,
 \begin{equation}
-  \alpha
+  \bar\alpha
   = \Exp\Square[Big]{\min\Curly[Big]{\frac{\pi(Y)\eta(X)}{\pi(X)\eta(Y)},1}}
   = 2\Pr\Round[Big]{\frac{\pi(Y)}{\eta(Y)}\ge\frac{\pi(X)}{\eta(X)}},\quad
   \text{for } X\sim\pi,\ Y\sim g,
 \end{equation}
 provided that $\pi(X)/\eta(X)$ is absolutely continuous. This optimization is
-generic in the sense that it does take the function of interest $\varphi$ into
-considerations. In practice, $\eta$ shall be chosen to be close to $\pi$ as
-much as possible to maximize $\alpha$. The requirement for $\pi(x)/\eta(x)$ to
-be bounded also suggest that $\eta$ at least should not have a too thin tail
-compared to $\pi$. Ideally it should have a slightly heavier tail than $\pi$
-but not much less concentrated. In this aspect, the choice of $\eta$ is
-similar to the choice of importance sampling distribution.
+generic in the sense that it does not take the function of interest $\varphi$
+into considerations. In practice, $\eta$ shall be chosen to be close to $\pi$
+as much as possible to maximize $\alpha$. The requirement for $\pi(x)/\eta(x)$
+to be bounded also suggest that $\eta$ at least should not have a too thin
+tail compared to $\pi$. Ideally it should have a slightly heavier tail than
+$\pi$ but not much less concentrated. In this aspect, the choice of $\eta$ is
+similar to the choice of importance sampling distribution. And hence it
+inherits the same difficulties as outlined in section~\ref{sec:Importance
+  sampling}.
 
 \subsubsection{Random walks}
 \label{ssub:Random walks}
 
 The random walk Metropolis-Hastings algorithm, originally proposed in
-\cite{Metropolis:1953ex}, uses proposals that are symmetric, often in form
-$q(y|x) = q(\Abs{y - x})$. This leads to the acceptance probability,
+\cite{Metropolis:1953ex}, uses proposals that are symmetric, often in the form
+of $q(y|x) = q(\Abs{y - x})$. This leads to the acceptance probability,
 \begin{equation}
   \alpha(x,y) = \min\Curly[Big]{\frac{\pi(y)}{\pi(x)},1}.
 \end{equation}
-This algorithm does not satisfies conditions for a uniform ergodicity.
+This algorithm does not satisfies conditions for the uniform ergodicity.
 However it is geometric ergodic under certain conditions. In
 \cite{Mengersen:1996th}, a condition based on log-concavity of $\pi$ in the
 tails was proposed. That is $\log\pi(x_1) - \log\pi(x_2) \ge \alpha\Abs{x_1 -
   x_2}$ for some $\alpha > 0$ and some $x_0$ such that $x_0 < x_1 < x_2$ or
 $x_2 < x_1 < -x_0$.
 
-The random walks Metropolis-Hastings algorithm is perhaps the most widely used
+The random walk Metropolis-Hastings algorithm is perhaps the most widely used
 type of \mcmc algorithm in practice. It provides a generic working solution to
 many otherwise difficult problems. As a result, its optimizations have
 attracted considerable attention in researches. Intuitively the algorithm can
 easily produce chains that either move too fast or too slow. In particular of
 multimodal densities whose modes are separated by extreme small probability
-areas, these areas clearly limited the move of the random walks. If the chains
-move too fast, than it is very likely that most proposed values fall in small
-probability areas and the probability of jumping from one mode to another is
-arbitrarily small. This often leads to extreme small acceptance rates. On the
-other hand, if the chain moves too slow, it will take long time for the chain
-to explore the whole parameter space.
+areas, these areas clearly limited the move of the random walks. If the chain
+proposes bigger steps each time, than it is very likely that most proposed
+values fall in small probability areas and the probability of jumping from one
+mode to another is arbitrarily small. This often leads to extreme small
+acceptance rates. On the other hand, if the chain proposes smaller steps, it
+will take long time for the chain to explore the whole parameter space. In
+either case, if the scaling (such as the variance a Normal distribution or
+some other measure of dispersion of the proposal distribution) of the random
+walk is poorly designed, it can take arbitrarily long time for the chain to
+move outside the neighborhood of one local mode of the target distribution. It
+is often said that the sampler is \emph{trapped} in around a local mode.
 
-One of the more widely used type of proposals is the Normal distribution or
-its multivariate variant. In \cite{Roberts:2001ta}, it was established that
-when the dimension, say $d$, goes to infinity, and the multivariate Normal
-distribution is assume to have diagonal variance matrix $I_d\sigma_d^2$, the
-optimal scaling ($\sigma_d$) has a corresponding acceptance rate $0.234$.
-Similar results are extended for more general target distributions.
-Nonetheless, this ``optimal'' acceptance rate has been adopted widely in
-practice as rule of thumb for optimizing random walk algorithms. It often
-requires substantial efforts to tune an algorithm's proposal scales (such as
-the variance a Normal distribution or some other measure of dispersion of the
-proposal distribution) towards this optimal rate.
+For instance, consider the \pet model with one components and an informative
+prior. We use a Normal distribution as the proposal. Both figure~\ref{fig:pet
+  mh tuned} and~\ref{fig:pet mh untuned} show the trace of $(\phi_1,
+\theta_1)$ from three samplers, initialized with different values. Each
+sampler is iterated for 10,000 times. In the former, the proposal scales are
+well tuned and the later uses scales five times of the former. In
+figure~\ref{fig:pet mh tuned}, each sampler is able to find the high
+probability region quickly and explore it efficiently. In contrast, in
+figure~\ref{fig:pet mh untuned}, none of the samplers is able to find the high
+probability region and they are trapped around the initial values.
 
-Alternatively, many adaptive strategies have been developed for this family of
-algorithms see \cite{Andrieu:2008kh} for a recent review. The basic theme is
-that a family of proposal distributions, index by some parameter, say
-$\theta\in\Theta$, is considered. For example, $q(\cdot|x) = q(\cdot|x,
-\theta)$. And the value of the parameter is updated along with the state $X$,
-\begin{enumerate}
-  \item Sample initial values $\theta^{(0)}$ and $X^{(0)}$.
-  \item At iteration $i > 0$
-    \begin{enumerate}
-      \item Compute $\theta^{(i)} =
-        \theta^{(i)}(\theta^{(0)},X^{(0)},\dots,X^{(i-1)})$
-      \item Use the new proposal $q(\cdot|x^{(i-1)},\theta^{(i)})$ to sample
-        the $X^{(i)}$ and accept it with the Metropolis-Hastings acceptance
-        probability.
-    \end{enumerate}
-  \item Repeat step 2.
-\end{enumerate}
-It shall be noted that this scheme is not limited to random walks. There are
-many methods for the updating of the parameters. See \cite{Andrieu:2008kh} for
-some common practices.
+\begin{figure}
+  \includegraphics[width=\linewidth]{fig/PET_MH_Path.pdf}
+  \caption{Trace of $(\phi_1,\theta_1)$ from three random walk
+    Metropolis-Hastings algorithm for a \pet model with one components and
+    non-informative prior, using well tuned proposal scales. First few values
+    of each trace is not shown in the plots since they are far away from the
+    high probability region with an order of magnitude difference in values.}
+  \label{fig:pet mh tuned}
+\end{figure}
+
+\begin{figure}
+  \includegraphics[width=\linewidth]{fig/PET_MH_H_Path.pdf}
+  \caption{Trace of $(\phi_1,\theta_1)$ from three random walk
+    Metropolis-Hastings algorithm for a \pet model with one components and
+    non-informative prior, using proposal scales five times of those tuned}
+  \label{fig:pet mh untuned}
+\end{figure}
+
+\paragraph{Optimal proposal scales}
+
+As seen in the above example, find the optimal scales for a random walk
+algorithm can be particularly important for realistic applications. One way to
+measure the optimality of the random walk is based on the asymptotic behavior
+of an \emph{efficiency criterion} equal to the ratio of the variance of an
+estimator based on an \iid sample and the variance of the
+estimator~\ref{eq:mcmc est}. In \cite{Roberts:1997dg} it is recommended that
+the optimal proposal distribution shall produce chains with acceptance rate
+close to $0.5$ for models with dimension $1$ or $2$ and $0.25$ for models with
+higher dimensions. One of the more widely used type of proposals is the Normal
+distribution or its multivariate variant. In \cite{Roberts:2001ta}, it was
+further established that when the dimension, say $d$, goes to infinity, and
+the multivariate Normal distribution is assume to have diagonal variance
+matrix $I_d\sigma_d^2$, the optimal scaling ($\sigma_d$) has a corresponding
+acceptance rate $0.234$.
+
+\paragraph{Adaptive random walk}
+
+The ``optimal'' acceptance rate has been adopted widely in practice as a rule
+of thumb for optimizing random walk algorithms. However, it often requires
+substantial efforts to tune an algorithm's proposal scales towards this
+optimal rate. Alternatively, many adaptive strategies have been developed for
+this family of algorithms see \cite{Andrieu:2008kh} for a recent review. The
+basic theme is that a family of proposal distributions, index by some
+parameter, say $q(\cdot|x) = q(\cdot|x, \theta)$ with $\theta\in\Theta$, is
+considered. And the value of the parameter is updated along with the state
+$X$. This leads to algorithm~\ref{alg:adaptive rw}. It shall be noted that
+this scheme is not limited to random walks.
+
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE Draw $X^0\sim\mu$ where $\mu$ is the initial condition.
+  \STATE Set $\theta^0$ to an arbitrary valid value.
+  \STATE Set $t\leftarrow0$.
+  \REPEAT
+      \STATE Compute $\theta^t = \theta^t(\theta^0,X^0,\dots,X^{t-1})$
+      \STATE Draw $X^{t + 1}$ using the proposal $q(\cdot|x^t,\theta^t)$.
+      \STATE Set $t\leftarrow t+1$.
+  \UNTIL{The accept rate of the last $K$ iterations are close to $0.234$.}
+  \STATE Set $\theta\leftarrow\theta^t$.
+  \STATE Perform Algorithm~\ref{alg:mh} with proposal $q(\cdot|x) =
+  q(\cdot|x,\theta)$.
+  \bottomhrule
+\end{algorithmic}
+\caption{Adaptive random walk Metropolis-Hastings algorithm}
+\label{alg:adaptive rw}
+\end{algorithm}
+
+There are many methods for the updating of the parameters. See
+\cite{Andrieu:2008kh} for some common algorithms. One of the more widely used
+is the based on the Normal random walk. In \cite{Haario:1999dh,Haario:2001gu},
+it is proposed to use the past samples to approximate the optimal covariance
+matrix of the multivariate Normal proposal, $(2.38^2/d)\Sigma_{\pi}$
+\cite{Gelman1995vx}, where $d$ is the dimension of the target distribution and
+$\Sigma_{\pi}$ is the true covariance matrix of the parameters under the
+target distribution $\pi$. The algorithm first initialize $\mu^0$, a
+$d$-vector and $\Sigma^0$, a covariance matrix. At each time $t$, they are
+updated with,
+\begin{align}
+  \mu^{t+1} &= \mu^t + \gamma^{t+1} (X^{t+1} - \mu^t) \\
+  \Sigma^{t+1} &= \Sigma^t + \gamma^{t+1}((X^{t+1} - \mu^t)(X^{t+1} - \mu^t)^T
+  - \Sigma^t)
+\end{align}
+where the $\{\gamma^t\}_{t>0}$ is a sequence of small numbers, which are
+formally arbitrary but could influence the performance. In practice it is
+common to set this sequence to a constant value $\gamma$. This algorithm has
+been studied by \cite{Andrieu:2006tw} and others.
 
 One obvious problem with such adaptive scheme is that the resulting chains are
 no longer Markovian. It is common practice to adapt the algorithm up to some
-point $t$, and stop the adaptation and use parameter $\theta^{(t)}$ for all
-iterations onwards. The first part of the generated chain is called the
-\emph{burn-in period} and is usually discard afterwards and estimations will
-be based on iterations after the burn-in period. There are more advanced
-techniques where the adaptive scheme attain a vanishing adaptation property.
-Intuitively, after a long enough period, the adaptive algorithm will only
-change the parameter $\theta$ only slightly and eventually it becomes stable.
-These algorithms requires more careful designs to assure the convergence of
-the estimator such as \eqref{eq:mcmc convergence}.
+point $t$, and stop the adaptation and use parameter $\theta^t$ for all
+iterations onwards, as seen in algorithm~\ref{alg:adaptive rw}. The first part
+of the generated chain is called the \emph{burn-in period} and is usually
+discard afterwards and estimations will be based on iterations after the
+burn-in period. There are more advanced techniques where the adaptive scheme
+attain a vanishing adaptation property. Intuitively, after a long enough
+period, the adaptive algorithm will only change the parameter $\theta$ only
+slightly and eventually it becomes stable. These algorithms requires more
+careful designs to assure the convergence of the estimator such as
+\eqref{eq:mcmc est}.
+
+Adaptive scheme is often necessary for realistic applications. For example,
+consider the \pet model, as shown in this section, the scaling of the Normal
+random walk influence the performance greatly. However, in a single \pet scan,
+there are a quarter million data sets, each results in a different posterior
+distribution. Manual tuning for each of them is a difficult task. When the
+random walk algorithm is applied for the real data, we used the adaptive
+Normal random walk for the parameters $(\phi_{1:r},\theta_{1:r})$. Using
+$10,000$ iterations as the burn-in period, we were able to obtain satisfactory
+accept rate (in the range of $0.2$ to $0.4$) for the majority of the vast data
+sets.
 
 \subsection{Gibbs sampling}
 \label{sub:Gibbs sampling}
@@ -683,6 +867,9 @@ still the main issue that limits its use in practice. We are going to look for
 alternative ways of doing Bayesian computation and it is proposed in the next
 chapter.
 
+\subsection{Perfect sampling}
+\label{sub:Perfect sampling}
+
 \subsection{Population \protect\mcmc}
 \label{sub:Population mcmc}
 
@@ -776,8 +963,8 @@ exchanged at each iteration, it was established in special cases that an
 optimal placement of the distributions shall have an global acceptance rate
 $0.234$.
 
-\section{Bayesian computation with Markov chain Monte Carlo}
-\label{sec:Bayesian computation with Markov chain Monte Carlo}
+\subsection{Application to Bayesian model comparison}
+\label{sub:MCMC Application to Bayesian model comparison}
 
 It is clearly that \rjmcmc can be used directly for the purpose of Bayesian
 model comparison, as it generates samples from the full posterior with the
@@ -802,7 +989,7 @@ distribution $\pi(\theta|\data) \propto f(\data|\theta) \pi(\theta)$
 available, say $\{\theta^{(i)}\}_{i=1}^N$, an estimator of $p(\data)$ can be
 obtained by the harmonic mean \cite{Newton:1994wm},
 \begin{equation}
-  \widehat{p(\data)}_{\text{\textsc{hm}}}^N =
+  \widehat{p(\data)}_{\hm}^N =
   \Round[Big]{\frac{1}{N}\sum_{i=1}^N\frac{1}{f(\data|\theta^{(i)})}}^{-1}
 \end{equation}
 Unfortunately this estimator can suffer instability problem when samples with
@@ -810,7 +997,7 @@ small likelihoods are generated. In fact this estimator does not always has a
 finite variance and therefore in general does not satisfy a Central Limit
 Theorem. An improvement seen in \cite{Kass:1995vb} is,
 \begin{equation}
-  \widehat{p(\data)}_{\text{\textsc{ghm}}}^N = \Round[Big]{
+  \widehat{p(\data)}_{\ghm}^N = \Round[Big]{
     \frac{1}{N}\sum_{i=1}^N
     \frac{\gamma(\theta^{(i)})}{f(\data|\theta^{(i)})\pi(\theta^{(i)})}}^{-1},
 \end{equation}
@@ -832,17 +1019,16 @@ with moments approximated from the samples as a natural choice of $\gamma$. In
 addition, the variance of the estimator can also be estimated for
 $1/\widehat{p(\data)}$ from the posterior samples through,
 \begin{equation}
-  \var\Square[Big]{\frac{1}{\widehat{p(\data)}_{\text{\textsc{ghm}}}^N}} =
+  \var\Square[Big]{\frac{1}{\widehat{p(\data)}_{\ghm}^N}} =
   \frac{1}{N^2}\sum_{i=1}^N \Round[Big]{
     \frac{\gamma(\theta^{(i)})}{f(\data|\theta^{(i)})\pi(\theta^{(i)})}
-    - \frac{1}{\widehat{p(\data)}_{\text{\textsc{ghm}}}^N}}^2.
+    - \frac{1}{\widehat{p(\data)}_{\ghm}^N}}^2.
 \end{equation}
 The above equation provides a way of monitoring the convergence of the
 estimator. Though more stable than the harmonic mean estimator
-$\widehat{p(\data)}_{\text{\textsc{hm}}}$, this generalized estimator still
-requires considerable care in the implementation, especially the choice of the
-density $\gamma$ to ensure good performance and indeed a finite variance
-estimator.
+$\widehat{p(\data)}_{\hm}$, this generalized estimator still requires
+considerable care in the implementation, especially the choice of the density
+$\gamma$ to ensure good performance and indeed a finite variance estimator.
 
 The method described above can be used for most \mcmc algorithms, such as
 Metropolis-Hastings algorithm, Gibbs sampler, population \mcmc (by only using
@@ -895,3 +1081,7 @@ rule.
 
 The use of path sampling for estimating of Bayes factor will be revisited in
 chapter~\ref{cha:Sequential Monte Carlo for Bayesian Model Comparison}.
+
+\section{Discussion}
+\label{sec:Monte Carlo Discussion}
+

@@ -18,3 +18,4 @@ pieces/*.pdf
 chap/*.pdf
 
 .minted-thesis
+.minted-outline

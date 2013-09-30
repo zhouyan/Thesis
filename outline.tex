@@ -1,9 +1,10 @@
-\documentclass[11pt, bib, fontset = Minion]{marticle}
+\documentclass[11pt, fontset=Minion, showoverfull, toclevel=2,
+bib, biblatexstyle=numeric, mintcode, minted=cache]{marticle}
 \addbibresource{thesis.bib}
 
 \title{Sequential Monte Carlo for Bayesian Model Comparison}
 \author{Yan Zhou}
-\date{Estimated submission date: Sepetember 2013}
+\date{Estimated submission date: October 2013}
 \input{macros}
 
 \def\finish#1{(Estimated completion date: #1 2013)}
@@ -12,7 +13,7 @@
 
 \maketitle
 
-\section{Introduction \finish{September}}
+\section{Introduction \finish{October}}
 
 Model comparison for the purpose of selection, averaging and validation is a
 problem found throughout statistics and related areas. It has been studies
@@ -34,9 +35,9 @@ such approaches were previously difficult due to computational complexity.
 Further, we develop novel sequential Monte Carlo techniques for the purpose of
 Bayesian model comparison.
 
-\section{Bayesian Model comparison \finish{April}}
+\section{Model selection (Finished)}
 
-In this chapter various model comparison techniques were reviewed. First the
+In this chapter various model selection techniques were reviewed. First the
 approaches based on information criteria, such as \aic and \bic are reviewed
 briefly. Though their limitations are well known, they are still widely used
 in many areas due to its computational simplicity. It is followed by a review
@@ -51,7 +52,7 @@ reviewed in this section.
 
 \subsection{Bayesian model comparison}
 
-\section{Monte Carlo methods \finish{June}}
+\section{Monte Carlo methods (Finished)}
 
 In this chapter, an extensive literature review of Monte Carlo methods is
 provided.
@@ -74,6 +75,8 @@ It is followed by a review of the sequential Monte Carlo literature. Some
 related methods, including those combining both \smc and \mcmc are also
 reviewed in this section.
 
+\subsection{Classical Monte Carlo}
+
 \subsection{Importance sampling}
 
 \subsection{Markov chain Monte Carlo}
@@ -88,41 +91,7 @@ reviewed in this section.
 
 \subsubsection{Population \mcmc}
 
-\subsection{Sequential Monte Carlo}
-
-\subsubsection{Sequential importance sampling and resampling}
-
-\subsubsection{\smc sampler}
-
-\subsubsection{Related methods}
-
-\section{Bayesian model comparison for Positron Emission Tomography
-  compartmental model \finish{May}}
-
-Positron Emission Tomography (\pet) is widely used medical imaging technique
-in practice and research. It is often used for study human brains \emph{in
-  vivo}. \pet is usually modeled by a linear ordinary equation system, the
-compartmental model. Due to some computational challenges, documented later in
-this chapter, information criteria such as \aic has been the universal model
-comparison approach in this area.
-
-In this chapter, Bayesian approach to this problem is developed. In addition,
-this problem also serves as a ``running example'', such that various Monte
-Carlo methods will be applied for this problem to illustrate the performance
-improvement provided by the Monte Carlo techniques developed in the current
-work.
-
-In the end of this chapter, some further issues are discussed, and motivate
-the work of the next chapter, where this problem is revisited with newly
-developed sequential Monte Carlo techniques.
-
-An earlier version of results of this work was published as \citet{Zhou2013}
-
-\subsection{A Bayesian approach}
-
-\subsection{Further issues}
-
-\section{Sequential Monte Carlo for Bayesian model comparison \finish{July}}
+\section{Sequential Monte Carlo for Bayesian model comparison (Finished)}
 
 Sequential Monte Carlo methods are a family of algorithms that combines
 importance sampling and resampling to allows one to obtains samples from
@@ -152,10 +121,10 @@ in the end of this chapter.
 
 \subsection{Extensions}
 
-\subsection{Relation with other methods}
+\subsection{Examples}
 
 \section{vSMC: A C++ library for parallel implementation of \smc and
-  related algorithms \finish{July}}
+  related algorithms (Finished)}
 
 A C++ library was developed along with the research. These development
 provided tools for implementing the illustrative examples in the next chapter.
@@ -164,27 +133,7 @@ framework is introduced. It will be shown how general and some more
 specialized \smc samplers as well as some related algorithms can be
 implemented within this framework with little efforts.
 
-\section{Applications \finish{August}}
-
-A few applications of the developed methods are detailed in this chapter. They
-include the classical mixture models as well as two realistic applications.
-Performance of the proposed methods are compared to other state-of-the-art
-algorithms. The \pet compartmental models are also revisited in this chapter,
-with a comparison of performance to the earlier development.
-
-\subsection{Gaussian mixture model}
-
-\subsection{Nonlinear ordinary differential systems}
-
-\subsection{\pet compartmental model revisited}
-
-\section{Conclusions \finish{September}}
-
-\subsection{Contributions}
-
-\subsection{Future research}
-
-\subsection{Summary}
+\section{Conclusions \finish{October}}
 
 \printbibliography[heading=reference]
 

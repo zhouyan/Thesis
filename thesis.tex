@@ -1,9 +1,9 @@
 \documentclass[11pt, fontset=Minion, showoverfull, toclevel=2,
-bib, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
+bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 \input{macros}
 \addbibresource{thesis.bib}
 \addbibresource{extra.bib}
-\title{Bayesian Model Comparison \\with Sequential Monte Carlo}
+\title{Bayesian Model Comparison \\via Sequential Monte Carlo}
 \author{Yan Zhou}
 \date{\today}
 
@@ -24,6 +24,6 @@ bib, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 \include{chap/conclusions}
 
 \backmatter
-\printbibliography
+\printbibliography[heading=reference]
 
 \end{document}

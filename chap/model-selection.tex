@@ -440,12 +440,11 @@ where
 \begin{align}
   p(\data) &= \sum_{k\in\calK}p(\data|\calM_k)\pi(\calM_k) \\
   p(\data|\calM_k) &=
-  \int f(\data,\theta_k|\calM_k)\pi(\theta_k|\calM_k)\intd\theta_k
+  \int f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\intd\theta_k
   \label{eq:marginal likelihood}
 \end{align}
-This is
-sometimes also termed the \emph{full posterior}. The within model posterior
-distribution of the parameter is,
+This is sometimes also termed the \emph{full posterior}. The within model
+posterior distribution of the parameter is,
 \begin{equation}
   \pi(\theta_k|\data,\calM_k) =
   \frac{f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)}{p(\data|\calM_k)}
