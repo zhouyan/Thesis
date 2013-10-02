@@ -7,7 +7,7 @@ bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 \author{Yan Zhou}
 \date{\today}
 
-% \includeonly{chap/monte-carlo}
+\includeonly{chap/monte-carlo}
 
 \begin{document}
 
@@ -25,5 +25,9 @@ bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 
 \backmatter
 \printbibliography[heading=reference]
+
+\mainmatter
+\appendix
+\include{chap/appendix-vsmc}
 
 \end{document}

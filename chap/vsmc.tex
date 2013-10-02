@@ -11,15 +11,15 @@ implementing \smc algorithms on both sequential and parallel hardware.
 The library makes use of some modern \cpp techniques. One shall not need to be
 expert on all of them to use the library. Most of the examples in this chapter
 shall be self-explanatory to readers with some basic knowledge of \cpp. For
-those interested, appendix~\ref{sub:Modern C++} serve as a brief introduction
-to \cpp templates and callable objects, two features used extensively in the
-\vsmc library.
+those interested, appendix~\appref{sec:Modern C++} serve as a brief
+introduction to \cpp templates and callable objects, two features used
+extensively in the \vsmc library.
 
 Section~\ref{sec:vSMC Background} gives background on parallel computing and
 the state of softwares for Monte Carlo computing. Section~\ref{sec:The vSMC
   library} provides an overview of the library and the structure of a program
 written with the library to implement a generic \smc sampler.
-Section~\ref{sec:The particle system} to~\ref{Monitoring} discusses the
+Section~\ref{sec:The particle system} to~\ref{sec:Monitoring} discusses the
 implementation the four main components of a generic \smc sampler: the
 particle system, initializing, updating and monitoring a sampler.
 Parallelization is not difficult with \vsmc. However, it could be an
@@ -44,7 +44,7 @@ of high performance computing. In recent years, it has also become the
 dominant paradigm for desktop computing in the form of multicore processors.
 However, many of today's popular statistical softwares are written with
 serialization as an assumption, meaning that they do not easily take advantage
-of contemporary computer architectures. (see appendix~\ref{sub:Classes of
+of contemporary computer architectures. (see appendix~\appref{sec:Classes of
   parallel computers} for a discussion of the commonly used parallel
 computers.)
 
@@ -77,8 +77,8 @@ the computing time can be reduced by $k$-fold through parallelism. In the
 remaining of this chapter, we focus on data parallelism.
 
 For specific problems, there are various design patterns to parallelize the
-computation. Interested readers can see appendix~\ref{sub:Parallel patterns}
-for a discussion on this topic.
+computation. Interested readers can see appendix~\appref{sec:Parallel
+  patterns} for a discussion on this topic.
 
 \subsubsection{Importance of parallel computing}
 \label{ssub:Importance of parallel computing}
@@ -343,7 +343,7 @@ Driven by the need to simulate complex distributions efficiently and the
 desire to use parallel computing to solve larger problems, many algorithms
 that are particularly suitable for parallelization has been developed in the
 past decade. The \smc and related algorithms are clearly one of them. The
-\pmcmc (see section~\ref{sub:Population mcmc}) algorithm can also be
+population \mcmc (see section~\ref{sub:Population mcmc}) algorithm can also be
 parallelized though less efficiently. For example, see results in
 section~\ref{sub:Nonlinear ordinary differential equations}
 and~\ref{sub:Positron Emission Tomography compartmental model}. More recently
@@ -551,14 +551,13 @@ to point out that the following objects used in this program are user defined
 callback that implement application specific operations.
 \begin{description}
   \item[\cppinline{init_f}] Initialize the particle values.
-    (section~\ref{sec:Initialization})
+    (section~\ref{sec:Initializing})
   \item[\cppinline{move_f}] Update the particles. For example, updating the
     weights. These updates are performed before the possible resampling.
     (section~\ref{sec:Updating})
   \item[\cppinline{mcmc_f1} and \cppinline{mcmc_f2}] Update the particles. For
     example, moving the particles with an \mcmc kernel. These updates are
-    performed after the possible resampling. (section~\ref{sec:Updating
-      particles})
+    performed after the possible resampling. (section~\ref{sec:Updating})
   \item[\cppinline{path_eval}] Evaluate the value of path sampling integrands,
     $\diff\log q_{\alpha}(X)/\diff\alpha$. (section~\ref{sec:Monitoring})
   \item[\cppinline{moments_eval}] Evaluate importance sampling estimate
@@ -751,8 +750,8 @@ know that these member functions will return the value of likelihood and prior
 densities for the current particle values when called, while the actual
 computation may or may not happen when the functions are called.
 
-\section{Initialization}
-\label{sec:Initialization}
+\section{Initializing}
+\label{sec:Initializing}
 
 The particles are initialized by a user defined callback. The callable object
 has the following signature,
@@ -1265,356 +1264,6 @@ implementations of \smc algorithms using \opencl, compared to using the \smp
 module, only requires a marginal addition of efforts to manage the \opencl
 platform.
 
-\section{Appendix}
-\label{sec:vSMC Appendix}
+\section{Discussion}
+\label{sec:vSMC Discussion}
 
-\subsection{Classes of parallel computers}
-\label{sub:Classes of parallel computers}
-
-There are a few types of parallel computers. Here we introduce the four types
-of hardware parallelism that are most commonly seen. Parallel computers can be
-nested. In a multicore \cpu, each core can perform instruction level
-parallelism. On the other hand, a distributed system can be formed by multiple
-multicore \cpu{}s.
-
-\subsubsection{Instruction level}
-\label{ssub:Instruction level}
-
-Modern \cpu{}s all implement the so called \simd instructions, short for
-\emph{single instruction, multiple data}. The \cpu can execute a single
-instruction on different data in a single cycle. However, unlike the higher
-level parallelism discussed later, \simd often has strict requirement on the
-arrangement of the data. In addition, the implementation often requires using
-low level assembly language or intrinsics functions.
-
-Though \vsmc does not directly implement this level of parallelism, it can be
-used by the user nonetheless. In addition, many operations within \vsmc can be
-performed using libraries that are implemented with \simd parallelization,
-such as \mkl. Also note that, most modern \cpp compilers perform \simd
-optimizations on simple loop and some of them, such as \clang \cite{clang}
-performs \simd optimizations for non-loop structures. This kind of
-optimization is also called \emph{vectorization}.
-
-\subsubsection{Multicore processors and symmetric multiprocessing}
-\label{ssub:Multicore processors and symmetric multiprocessing}
-
-In the late 1990s, computer \cpu{}s are advanced by increasing the clock
-speed. However, this strategy soon hit some bottlenecks, mainly the control of
-heat and power. The industry started to develop multicore processors. Each
-\cpu has several cores, each running at a modest clock rate. By executing
-different threads on different cores, the \cpu can process the same amount of
-work with less time without increasing the clock rate.
-
-When a computer has multiple \cpu{}s and each of them has the same speed to
-access the memory, the system is often called \emph{symmetric multiprocessing}
-(\smp). Most higher end workstations are \smp systems. The programming tools
-are usually the same for \smp and multicore processors.
-
-The \vsmc library support various \smp programming models. In addition, \vsmc
-allows the same user implementation source code to be compiled into different
-parallel samplers using different programming models.
-
-\subsubsection{Distributed computing}
-\label{ssub:Distributed computing}
-
-Distributed computing usually refers to the form of computing where both
-memory and computing processors are spread among computing nodes. It can take
-different forms, such as grids and clusters. The \emph{de facto} programming
-model for distributed computing is \mpi. This is also supported by \vsmc. In
-addition, the library also allows easy integration of \mpi and various \smp
-programming models.
-
-\subsubsection{Massive parallel computing}
-\label{ssub:Massive parallel computing}
-
-In recent years, there is a new trend of using specialized massive parallel
-devices, such as \gpu{}s for scientific computing. Modern \gpu{}s often have
-hundreds or thousands co-processors. The main difference between \gpu and \cpu
-is that, \cpu has more logic control units, and thus is more suited for
-general programs. In contrast, \gpu are better at applying the same arithmetic
-operations on a collection of data. It performs the best if each computing
-unit are executing \emph{exactly the same} instructions. In addition, it is
-often much more efficient if there are a large amount data to be processed.
-Another significant feature of these devices is that they provide much higher
-\emph{local} memory bandwidth and can use various technologies to reduce local
-data latency than traditional \cpu.
-
-Massive parallel computing is extremely suitable for the \smc algorithms,
-which can have a large number of particles, while each of then need to be
-updated using the same \mcmc kernel.
-
-There are two major programming models for general purpose \gpu programming
-(\gpgpu), Nvidia's \cuda framework and the \opencl \cite{opencl} standard. The
-\vsmc library provides direct support for the \opencl programming model.
-
-\subsection{Parallel patterns}
-\label{sub:Parallel patterns}
-
-In a more micro level, parallelism can be implemented with different patterns.
-The term \emph{pattern} in computer science, introduced and popularized by
-\cite{software:GoF}, is a way of codifying best practices for software
-engineering. We found patterns are more useful to statisticians for reasoning
-the parallel structure of a given algorithm. This section is not an exhaustive
-discussion of parallel patterns. Instead, we choose some of the most commonly
-seen in practice, in particular those relevant to Monte Carlo algorithms.
-
-\subsubsection{Map}
-\label{ssub:Map}
-
-This is perhaps the simplest form of parallelism. A function, called
-\emph{elemental function}, is replicated for each element of a data collection
-concurrently. The elemental function must have no side-effects in order for
-the map to be implementable in parallel while achieving deterministic results.
-In particular, it cannot modify global data that other instances of that
-function depend on.
-
-In \smc algorithm, the updating of particle values is clearly implementable
-using a map pattern. The operation of the kernel $K(x_{t-1},x_t)$ depends only
-on the history of the particle that it will be used to update, but not other
-particles at a given generation.
-
-\subsubsection{Fork-join}
-\label{ssub:Fork-join}
-
-This pattern lets control flows fork into multiple parallel flows that rejoin
-later. The major difference between fork-join and map is that fork-joint does
-not necessarily apply the same function on different data. Instead, usually
-different functions are applied to different or the same data. There are
-different programming models that implement this pattern. The \openmp
-\cppinline{parallel region} fork control into multiple threads that all
-execute the \emph{same} statements and use other constructs to determine which
-thread does what. The \cilk \cite{cilk} \cppinline{spawn} fork a new thread to
-execute the calling function on a new thread and it is later joined with the
-callee.
-
-The fork-join pattern are often used by programming models to implement other
-patterns and is widely used in practice itself. One example is numerical
-integrations, especially for adaptive schemes. Whenever a new segment of the
-integral interval is chosen, the program can fork a new thread to compute the
-results. And after all segments are computed, the program can join all threads
-and sum up the final result.
-
-\subsubsection{Reduction}
-\label{ssub:Reduction}
-
-This pattern uses an associative operator to combine every element in a
-collection into a single element. Given the associativity of the operator,
-many different orderings are possible and hence multiple threads can be used
-to parallelize the computation. This is most often used for parallelization of
-computations such as summations.
-
-For example, the computation of \ess, \cess, normalizing of weights, etc., are
-all parallelized using the reduction pattern within \vsmc.
-
-\subsubsection{Pipeline}
-\label{ssub:Pipeline}
-
-A pipeline connects tasks in a \emph{producer-consumer} relationship. A few
-computation units are active at the same time. The first one consume the data,
-and produce new data to be used by the second, and so on. As the data flows
-into the pipeline, each unit has its own work to do and thus computations are
-carried out in parallel while the data dependencies are correctly maintained.
-
-There are several applications of pipeline in Monte Carlo computing. For
-example, an \mcmc algorithm often need to compute various convergence
-statistics, say $h(X_{0:t})$. Often, this statistic can be written as
-$h(X_{0:t}) = h(X_t, h(X_{0:{t-1}}))$. Instead of compute it after all
-iterations, one can use one thread to update the \mcmc chain and another one
-to compute the statistics, using the pipeline pattern. In this case, the
-Markov kernel that update the states is the \emph{producer} and the thread
-that update the statistics is the \emph{consumer}.
-
-\subsection{Modern C++}
-\label{sub:Modern C++}
-
-The \cpp programming language \cite{cpp03} was first created to support
-object-oriented programming (\oop) on top of the C programming language
-\cite{evolutioncpp}.  The features, such as templates, come to the language
-fairly late. However, it was found that the \cpp template feature provides a
-complete sub-language \cite{cpptemplateturing}. This leads to various new
-metaprogramming techniques. Many of them are documented in \cite{moderncpp}
-and characterize the modern usage of \cpp. In this section, we introduce two
-of these techniques. They are widely used inside the \vsmc library and the
-contents here shall ease the reading of the following sections for those less
-familiar with them. However, we assume the reader has at least some working
-knowledge of \cpp, including concepts such as \oop.
-
-\subsubsection{Templates}
-\label{ssub:Templates}
-
-\cpp is a static strong type language. It requires the user to declare
-variables, functions, and most other kinds of entities using specific types.
-However, a lot of code looks the same for different types, especially for
-implementation of algorithms. The \cpp template technique allows one to write
-generic code to solve a class of problems, while the involved types can be
-seamlessly replaced at compile time.
-
-Templates are useful for a few reasons. It reduces duplication of the same
-code for multiple types. Though conventional \oop also supports polymorphism
-behaviors, they rely on runtime decisions. In contrast, templates rely on
-compile time decisions and are more type safe. Templates emphasize that the
-same operation can be applied to many types. It allows unlimited extension of
-existing functionality. It is possible to have any combination of the allowed
-operations on a certain type and the allowed types of a certain operations.
-More specifically, given a collection of operations and a collection of types,
-each operation may support any subset of the types and each type can support
-any subset of the operations. Such combinatorial behavior is difficult to
-implement using conventional \oop, where a collection of types have a common
-interface that provides a fixed set of operations.
-
-There are two main types of templates in \cpp, function template and class
-template.
-
-\paragraph{Function template}
-
-The following lines define a simple function template,
-\cppfile{snippet/function_template_def.cpp}
-This template definition specifies a \emph{family} of functions that returns
-the maximum of two values, which are passed as function parameters
-\cppinline{a} and \cppinline{b}. The type of these parameters is left open as
-\emph{template parameter} \cppinline{T}.
-
-In this template definition, the assumption about \cppinline{T} is that the
-operator \cppinline{<} is properly defined. It does not matter whether
-\cppinline{T} is a fundamental type or a class type with this operator defined
-by the user. The actual types are deduced at compile time when the function
-template is used.
-
-\paragraph{Class template}
-
-Class template is similar to function template, yet somehow simpler. A class
-template define a family of classes. For example,
-\cppfile{snippet/class_template_def.cpp}
-defines a \cppinline{Stack} class template. For simplicity, some edge cases
-and exceptional situations such as calling \cppinline{top} on an empty
-\cppinline{Stack} is not handled here. This class template can be used as the
-following,
-\cppfile{snippet/class_template_usage.cpp}
-As we can see, to use a class template, one \emph{explicitly} supply the type
-of the template parameter. Unlike function template, there is no template
-parameter deduction here.
-
-\subsubsection{Callable objects}
-\label{ssub:Callable objects}
-
-\vsmc is a framework for constructing generic \smc samplers. It relies on the
-user to write callback functions to perform application specific operations,
-such as updating particles. In this section, we introduce the few forms of
-callback that are supported by the library. Collectively, they are also called
-\emph{callable objects}, meaning that they support the function calling syntax
-though they may not be functions.
-
-A callable object, say \cppinline{callable}, is similar to a function in the
-sense that it has a return type and a parameter list as its signature. It can
-be used with the syntax,
-\begin{cppcode}
-callable( /* arguments */ );
-\end{cppcode}
-However, the object may or may not be a function. There are three ways to
-define a callable objects, function pointer, functor and \cppoo lambda
-expression. Function pointer is the main way of passing callback in C. The
-other two are introduced later.
-
-The library also use type erasures, introduced later in this section, to
-enforce certain interfaces. The benefits of techniques introduced below
-increases the productivity and flexibility of the library compared to
-conventional techniques of passing callback through function pointer.
-
-\paragraph{Functors}
-
-Consider the simple problem, sort a vector $\{x_i\}_{i=1}^N$ according to the
-values $y_i = f(x_i)$. We may define a function template to solve this
-problem,
-\cppfile{snippet/sort_f.cpp}
-The function template \cppinline{sort_f} expects input and output as pointers.
-In addition, it expects a callable object \cppinline{f}, which accepts a
-variable of type \cppinline{double} as its input and return a number that can
-be assigned to a variable of type \cppinline{double}.
-
-One way to define such a callable object is to use \emph{functor}, a class
-type with \cppinline{operator()} properly defined. For example,
-\begin{cppcode}
-struct F
-{
-    double operator() (double x) const { return x * x; }
-};
-sort_f(input, output, F());
-\end{cppcode}
-Here we created this object in the function call of \cppinline{sort_f}. It can
-also be used as,
-\begin{cppcode}
-F f;
-double y = f(3); // y <- 9
-\end{cppcode}
-
-\paragraph{Lambda expressions}
-
-Another way, introduced in \cppoo, is a new feature called \emph{lambda
-  expression}. It is also called \emph{local function} or \emph{closure} in
-other programming languages. It allows us to define callable object \emph{on
-  site}. Here is an example,
-\begin{cppcode}
-sort_f(input, output, [] (double x) { return x * x; });
-\end{cppcode}
-The full declaration of a lambda expression is as the following,
-\begin{cppcode}
-[ /* capture */ ] ( /* parameters */ ) /* mutable */
-/* exception specification */
-/* attribute specification */
--> /* return type */ { /* body * };
-\end{cppcode}
-The \cppinline{/* mutable */} part can be either empty or the keyword
-\cppinline{mutable}, which allows the body to modify captured parameters
-(explained soon). The exception specification is similar to a normal function
-and the attribute specification is a new feature for all functions in \cppoo,
-that specifies things like parameter passing conventions among other things,
-which we will not go into details. The part \cppinline{-> /* return type */}
-specifies the return type of the lambda expression. If omitted, it is deduced
-from the body. And if the body does contain any \cppinline{return} statement,
-it is deduced to be \cppinline{void}. If the expression takes no arguments,
-the parameter list can also be omitted.
-
-The \cppinline{/* capture */} specifies which symbols visible at the scope of
-the definition of the lambda expression will be visible inside the body. There
-are a few forms,
-\begin{description}
-  \item[\cppinline{[a, &b]}] captures \cppinline{a} by value and \cppinline{b}
-    by reference.
-  \item[\cppinline{[this]}] captures the \cppinline{this} pointer by value.
-  \item[\cppinline{[=]}] captures all automatic variables \emph{used} in the
-    body by value.
-  \item[\cppinline{[&]}] captures all automatic variables \emph{used} in the
-    body by reference.
-  \item[\cppinline{[]}] captures nothing.
-\end{description}
-
-\paragraph{Type erasures}
-
-In the example above, the function template \cppinline{sort_f} does not
-actually enforce the signature of the function or functor, in contrast to the
-definition of it that takes a function pointer as an argument. For example,
-the following is perfect valid \cpp,
-\begin{cppcode}
-int h (int x) { return x * x };
-sort_f(input, output, &h);
-\end{cppcode}
-while it may not be what one wants. The use of \cppinline{h} with
-\cppinline{sort_f} is perhaps an typo. The type erasure in \cppoo{},
-\cppinline{std::function}, provides a solution to this problem. A \emph{type
-  erasure} can convert various types of objects into a single type. Below is a
-basic usage of \cppinline{std::function},
-\begin{cppcode}
-#include <functional> // the header that defines std::function
-
-std::function<double (double)> f;
-F f_obj;
-f = f_obj;  // Correct
-f = &h;     // ERROR: h does not has the required signature.
-\end{cppcode}
-Now we can redefine the function \cppinline{sort_f} as,
-\cppfile{snippet/sort_f_erasure.cpp}
-The \vsmc library makes extensive use of the type erasure to enforce certain
-callback interfaces. When \cppoo features are not available, the \boost
-library provides the same functionality through \cppinline{boost::function}.
-See \cite{vsmcjss} for details of how \vsmc choose between \cppoo and \boost
-libraries.
