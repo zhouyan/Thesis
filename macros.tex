@@ -1,5 +1,5 @@
 \UseAbbr[\iid][]{i.i.d.}
-\UseAbbr[\kl][]{Kullback-Leibler divergence}
+\UseAbbr[\kld][]{Kullback-Leibler divergence}
 \UseAbbr[\sd]{s.d.}
 \UseAbbr{aic}
 \UseAbbr{ais}
@@ -11,6 +11,7 @@
 \UseAbbr{cmos}
 \UseAbbr{cpu}
 \UseAbbr{cuda}
+\UseAbbr{cv}
 \UseAbbr{dag}
 \UseAbbr{dic}
 \UseAbbr{ds}
@@ -28,6 +29,7 @@
 \UseAbbr{is}
 \UseAbbr{ieee}
 \UseAbbr{jags}
+\UseAbbr{kl}
 \UseAbbr{mala}
 \UseAbbr{mcmc}
 \UseAbbr{mdl}
@@ -43,6 +45,7 @@
 \UseAbbr{pdf}
 \UseAbbr{pet}
 \UseAbbr{pmcmc}
+\UseAbbr{press}
 \UseAbbr{ps}
 \UseAbbr{rjmcmc}
 \UseAbbr{rng}
@@ -53,6 +56,8 @@
 \UseAbbr{tic}
 \UseAbbr{unix}
 \UseAbbr{wis}
+
+\def\aicc{\ifmmode\aic_c\else\aic{}$_c$\xspace\fi}
 
 \UseAbbr[\aocl][\sffamily]{AMD APP OpenCL}
 \UseAbbr[\armadillo][\sffamily]{Armadillo}
@@ -133,10 +138,8 @@
 \newcolumntype{R}{>{\raggedleft\arraybackslash}X}
 
 \def\STATESKIP{\hskip.68cm}
-
 \def\data{\mathbfit{y}}
 \newcommand{\smc}[1][]{\textsc{smc}#1\xspace}
 
-\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\sffamily Red}\fi}
-\def\SubBest{\ifmmode\color{MGreen}\else\textcolor{MGreen}{\sffamily
-    Green}\fi}
+\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\textsf{Red}}\fi}
+\def\SubBest{\ifmmode\color{MGreen}\else\textcolor{MGreen}{\textsf{Green}}\fi}
