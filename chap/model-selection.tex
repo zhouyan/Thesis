@@ -15,7 +15,7 @@ theoretic approaches. The most important one of them is the Akaike's
 information criteria (\aic; \cite{Akaike:1973uc,Akaike:1974ih}). A few other
 closely related methods are also reviewed in this section.
 Section~\ref{sec:Minimum description length} review the minimum description
-length (\mdl) method. And the last, section~\ref{sec:Bayesian model
+length (\mdl) method. And the last, Section~\ref{sec:Bayesian model
   comparison} reviews the Bayesian approach to model comparison.
 
 \section{Information theoretic approach}
@@ -129,13 +129,13 @@ expansion of $\Exp_g[\ell_n(\hat\theta)/n - \bar{D}_{\kl}(g,f)]$. The
 assumption about the parametric model $g$ is quite minimal. The accuracy is of
 order $o(n)$. Given more informations about the structure of the models, more
 accurate estimator can be derived by using a second order expansion. See
-section~\ref{sub:A second order aic}
+Section~\ref{sub:A second order aic}
 
 Second, more importantly, \aic assumes that the candidate models are close
 enough to the true model. When there is significant misspecification of the
 models, the results from using the \aic method can be misleading. Estimate of
 the \kld that are more model robust can be derived. See
-section~\ref{sub:Takeuchi's information criterion}.
+Section~\ref{sub:Takeuchi's information criterion}.
 
 Third, though earlier we assumed \iid sample, which leads to the
 convergence~\ref{eq:ml convergence} as a motivation of using \mle for the
@@ -337,7 +337,7 @@ An alternative for linear regression models was proposed in
 \cite{Allen:1974vx}. The squared difference between the observation and the
 predictor is used as the risk estimator. Given a model $y_i = \beta^T x_i +
 \varepsilon_i$, and let $\hat{y}_i$ be the prediction of $y_i$ obtained with
-the model fitted with all but the $i$th observations. Using the left-one-out
+the model fitted with all but the $i$\xth observations. Using the left-one-out
 procedure, this leads to the \press statistic,
 \begin{equation}
   \press = \sum_{i=1}^n(y_i - \hat{y}_i)^2
@@ -409,8 +409,8 @@ Bayesian literatures).
 
 In the remaining of this section, we first introduce the formalization of the
 model choice problem within the Bayesian framework. In particular how it leads
-to the important Bayes factor, section~\ref{sub:Bayes factor}. It is followed
-by the discussion on the calculation of this quantity. In section~\ref{sub:The
+to the important Bayes factor, Section~\ref{sub:Bayes factor}. It is followed
+by the discussion on the calculation of this quantity. In Section~\ref{sub:The
   choice of priors} we discuss the construction of prior and its particular
 relevance to model comparison.
 
@@ -448,7 +448,8 @@ posterior distribution of the parameter is,
   \label{eq:within posterior}
 \end{equation}
 The term $p(\data|\calM_k)$ is called the \emph{marginal likelihood} or the
-\emph{evidence} of the model.
+\emph{evidence} of the model. Note that the marginal likelihood is also the
+normalizing constant of the posterior $p(\theta_k|\data,\calM_k)$.
 
 From equation~\eqref{eq:full posterior}, it is clear that the posterior model
 probability $\pi(\calM_k|\data)$ is a marginal of the full posterior,
@@ -570,17 +571,17 @@ likelihood, as long as the model set $\calM$ is finite.
 
 The Bayes factor, $B_{1,2}$ can be interpreted as the evidence provided by the
 data in favor model $\calM_{k_1}$ against model $\calM_{k_2}$. The marginal
-likelihood $p(\data|\calM_k)$ is therefore also called the \emph{evidence}
-supporting model $\calM_k$. In \cite{Jeffreys:1961ua}, it is suggested that
-the Bayes factor can be interpreted in a $\log_{10}$ scale. His
-interpretations are reproduced in table~\ref{tab:bayes factor log10 scale}. It
-shall be noted that the interpretation of the Bayes factor can be application
-dependent. The Jeffreys' interpretation, and a similar scale based on the
-$2\log B_{12}$, which is on the same scale as the likelihood ratio test, shown
-in \cite{Kass:1995vb} are only general guidelines. Other interpretations can
-be more suitable for specific applications. For example, \cite{Kass:1995vb}
-mentioned that for forensic evidence to be conclusive in a criminal trial, the
-posterior odds of guilt against innocence need to be at least $1000$.
+likelihood $p(\data|\calM_k)$ is also called the evidence supporting model
+$\calM_k$. In \cite{Jeffreys:1961ua}, it is suggested that the Bayes factor
+can be interpreted in a $\log_{10}$ scale. His interpretations are reproduced
+in Table~\ref{tab:bayes factor log10 scale}. It shall be noted that the
+interpretation of the Bayes factor can be application dependent. The Jeffreys'
+interpretation, and a similar scale based on the $2\log B_{12}$, which is on
+the same scale as the likelihood ratio test, shown in \cite{Kass:1995vb} are
+only general guidelines. Other interpretations can be more suitable for
+specific applications. For example, \cite{Kass:1995vb} mentioned that for
+forensic evidence to be conclusive in a criminal trial, the posterior odds of
+guilt against innocence need to be at least $1000$.
 
 A final remark of the Bayes factor is that, though obviously it can only be
 used when the set of candidate models is finite, it is not necessarily
@@ -634,7 +635,7 @@ priors, to which Bayes factors can be very sensitive, are hard to specify.
 Though \bic is not an estimator of \kld, in \cite{Sin:1996vs} it was shown
 that asymptotically \bic is able to choose the simplest model that minimizing
 the expected \kld between the true model and the candidate model. In contrast
-to \aic (see discussions in section~\ref{sub:Akaike's information criteria}),
+to \aic (see discussions in Section~\ref{sub:Akaike's information criteria}),
 \bic is less subject to overfitting. On the other hand, it may not be as
 efficient as \aic for some applications. For example, in \cite{Lee:2001tm} it
 was shown that for autoregressive process and some other time series
@@ -643,9 +644,9 @@ model that minimize the prediction error. In
 \cite[][sec.~4.7]{Claeskens:2008tq}, it was also shown that \bic is not
 efficient for regression variable selection.
 
-In table~\ref{tab:pet bic} the results of using \bic for model the \pet
+In Table~\ref{tab:pet bic} the results of using \bic for model the \pet
 compartmental models is shown. Compared to the use of \aicc
-(table~\ref{tab:pet aicc}), the results are quite similar though \bic does
+(Table~\ref{tab:pet aicc}), the results are quite similar though \bic does
 tend to select lower order models slightly more frequently. Intuitively, \bic
 penalize complex models more than \aic for $n\ge\EE^2\approx7.4$ (and thus the
 penalize term $k\log(n) > 2k$).
@@ -696,7 +697,7 @@ preference, which is not necessarily rational. The priors need to be
 considered carefully on a per problem basis. It is often too difficult to
 elicit a precise distribution from prior information. Therefore it is
 necessary to make at least partially arbitrary choice of the prior
-distribution \cite[][chap.~3]{Robert:2007tc}\cite{Kass:1995vb}.  Nonetheless
+distribution \cite[][chap.~3]{Robert:2007tc}\cite{Kass:1995vb}. Nonetheless
 there are a few classes of prior distributions frequently used in the Bayesian
 modeling.
 
@@ -729,53 +730,211 @@ results significantly. For example, see \cite{OHagan:1990vx} and
 \cite{Fan:1992vx} for analysis of the use Student $t$ distribution as the
 prior of location parameters such as the mean of a Normal distribution.
 
-\paragraph{Jeffrey's priors}
+\paragraph{Jeffreys priors}
 
-Jeffrey's priors \cite{Jeffreys:1946jf} has the form,
+Jeffreys priors \cite{Jeffreys:1946jf} has the form,
 \begin{equation}
-  \pi(\theta_k|\calM_k)\propto\sqrt{I(\theta_k)}
+  \pi(\theta_k|\calM_k)\propto\sqrt{\Abs{I(\theta_k)}}
 \end{equation}
 where
-\begin{equation}
-  I(\theta_k) = \int p(\data|\theta_k,\calM_k)\Round[Big]{
-    -\frac{\partial^2}{\partial\theta_k^2}\log p(\data|\theta_k,\calM_k)}
-  \intd\data,
-\end{equation}
-is the \emph{Fisher's information}. The basic idea behind Jeffrey's priors is
+\begin{align}
+  I(\theta_k)
+  &= -\Exp\Square[bigg]{\frac{\partial^2\log p(\data|\theta_k,\calM_k)}
+    {\partial\theta_k\partial\theta_k^T}} \notag\\
+  &= -\int p(\data|\theta_k,\calM_k)
+  \frac{\partial^2\log p (\data|\theta_k,\calM_k)}
+  {\partial\theta_k\partial\theta_k^T}\intd\data,
+\end{align}
+is the \emph{Fisher's information}. The basic idea behind Jeffreys priors is
 that the prior shall contain no more information than the observed data do.
-Though intuitive, Jeffrey's priors derived for many models may be problematic.
-It is often the case that the derived Jeffrey's prior can be improper, which
-makes the Bayesian model choice problem difficult to formalize as there is no
-unique scale for improper priors. See also the discussion in
-\cite{Kass:1995vb}.
+The Fisher information is widely accepted as an indicator of the amount of
+information brought by the model about the parameter $\theta_k$ given the data
+\cite{Fisher:1956vx}. Therefore, intuitively values of $\theta_k$ for which
+$I(\theta_k)$ is large is more likely the those $I(\theta_k)$ is small.
+
+However, Jeffreys priors derived for many models may be problematic. It is
+often the case that the derived Jeffreys prior can be improper. For example,
+the Jeffreys prior for the mean parameter of Normal likelihood is uniform on
+the real line. This can create technical difficulties if the improper priors
+also lead to improper posteriors since the marginal likelihood, as the
+normalizing constant of the posterior cannot be computed. This makes the
+Bayesian model choice problem difficult to formalize. See also the discussion
+in \cite{Kass:1995vb}. However, improper priors can also lead proper
+posterior, for example see \cite[][sec.~2.9]{Gelman:2003vx},
+\cite[][sec.~1.5]{Robert:2007tc}, \cite{Kass:1995vb} and references therein
+for successful applications using improper priors. In general, for more
+complex models using a proper priors is recommended since it might be easier
+to verify that the posterior is also proper. In the situation where the
+derived Jeffreys prior is improper, it is possible to use some proper
+distribution to approximate it. For example, a Gamma distribution can be used
+to arbitrarily closely approximate $\pi(x)\propto1/x$, which is often seen as
+the Jeffreys prior for scale parameters, such as as the precision parameter
+of the Normal distribution.
 
 \paragraph{Reference priors}
 
 Another class of non-informative priors is called \emph{reference priors}
 introduced in \cite{Bernardo:1979uq}. Reference priors aims to derive priors
 such that the distance between the posterior and prior is maximized, usually
-measured in terms of \kl \cite{Kullback:1951va}. In some sense, a reference
+measured in terms of \kld \cite{Kullback:1951va}. In some sense, a reference
 prior is the least informative prior. See \cite{Berger:1989vj, Berger:1992kf,
   Berger:1992wo} and \cite[][sec.~5.4]{Bernardo:1994vd} for more information
 on this class of priors.
 
+Another way of deriving the reference prior is to partition the parameter
+vector $\theta_k = (\theta_k^{(1)},\theta_k^{(2)})$ where $\theta_k^{(1)}$ is
+the parameter of interest and $\theta_k^{(2)}$ is the nuisance parameter.
+First $\pi(\theta_k^{(2)}|\theta_k^{(1)},\calM_k)$ is defined as the Jeffreys
+prior associated with $p(\data|\theta_k,\calM_k)$ when $\theta_k^{(1)}$ is
+fixed. Then define the marginal
+\begin{equation}
+  \tilde{p}(\data|\theta_k^{(1)},\calM_k) =
+  \int p(\data|\theta_k,\calM_k)\pi(\theta_k^{(2)}|\theta_k^{(1)},\calM_k)
+  \intd \theta_k^{(2)},
+\end{equation}
+and compute the Jeffreys prior $\pi(\theta_k^{(1)}|\calM_k)$ associated with
+$\tilde{p}(\data|\theta_k^{(1)},\calM_k)$. By using the Jeffreys prior, given
+fixed parameter of interest, the effects of the nuisance parameter is
+eliminated. Note that the above integration may not be defined.
+
+\paragraph{Using non-informative priors for \pet compartmental models}
+
 In \cite{Zhou2013} the results of using non-informative priors for the
 Bayesian analysis of the \pet compartmental models were obtained. An
-approximation to the Jeffrey's prior was used for the precision parameter of
+approximation to the Jeffreys prior was used for the precision parameter of
 the Normal distributed error. And uniform distributions are used for the rate
 constants. The interval of the uniform distributions are the same as
 considered feasible in the optimization procedures such as the \nls estimator.
-The results of model selection is shown in table~\ref{tab:pet vague}. Compared
-to the results of using \aicc and \bic (tables~\ref{tab:pet aicc} and~\ref{pet
-  bic}), it is a vast improvement. For data with low level of noise there is a
-high frequency of selecting the true model. For more noisy data, it is
-expected the second and third compartments are difficult to identify. However,
-the results are much more satisfactory than those of \aicc and \bic.
+The results of model selection is shown in Table~\ref{tab:pet vague}. Compared
+to the results of using \aicc and \bic (Tables~\ref{tab:pet aicc}
+and~\ref{tab:pet bic}), it is a vast improvement. For data with low level of
+noise there is a high frequency of selecting the true model. For more noisy
+data, it is expected the second and third compartments are difficult to
+identify. However, the results are much more satisfactory than those of \aicc
+and \bic.
 
 \input{tab/pet-vague}
 
 \subsubsection{Informative priors}
 \label{ssub:Informative priors}
+
+When the parameters bear real world meaning, it may be possible to construct
+informative priors. For some applications, the approach to calibrate an
+informative prior requires the substantial expertise and use some model
+specific informations. There are also some general methods.
+
+When the parameter space is finite, it might be possible to obtain subjective
+evaluation of the probabilities of the different values of the parameter. When
+the space is uncountable, the problem is obviously more complicated. One
+simple approach is to to partition the parameter space and determine the
+probabilities of the parameter falling into each of the partition
+\cite[][sec.~3.2.2]{Robert:2007tc}.
+
+A more systematic approach is the \emph{maximum entropy priors}
+\cite{Jaynes:1989vx}. Assume that some characteristics of the parameter
+$\theta_k$ is known in the form of prior expectations,
+\begin{equation}
+  \Exp_{\pi}[h_i(\theta_k)|\calM_k] = \gamma_i, \qquad\text{for } i =
+  1,\dots,K
+  \label{eq:exp constraints}
+\end{equation}
+where the expectation is with respect to the prior distribution
+$\pi(\theta_k|\calM_k)$. In finite setting, define
+\begin{equation}
+  \calE(\pi) = -\sum_{\theta_k\in\Theta_k}
+  \pi(\theta_k|\calM_k)\log \pi (\theta_k|\calM_k)
+\end{equation}
+where $\Theta_k$ is the parameter space. And the maximum entropy prior is the
+$\pi$ that maximizes $\calE$ under the constraints of equations~\ref{eq:exp
+  constraints}.
+
+This can be extended to continuous case bey introducing a reference
+distribution, say $\pi_0(\theta_k)$. And define the entropy as the negative
+\kld between $\pi_0(\theta_k)$ and $\pi(\theta_k|\calM_k)$,
+\begin{equation}
+  \calE(\pi) = -\int \pi_0(\theta_k)\log\Round[bigg]{
+    \frac{\pi_0(\theta_k)}{\pi(\theta_k|\calM_k)}}\intd\theta_k
+\end{equation}
+The reference distribution $\pi_0$ can be chosen as one of the non-informative
+prior discussed earlier. Such choice is justified in
+\cite[][chap.~9]{Robert:2007tc}.
+
+The maximum entropy prior in essence select a prior that preserve the prior
+information about the expectations of $\{h_i(\theta_k)\}_{i=1}^K$ while make
+it as close to the non-informative prior as possible. Therefore prior
+knowledges are presented in the prior and ignorance are also preserved.
+
+\paragraph{Using informative priors for \pet compartmental models}
+
+Here we give an example of constructing a biologically informed prior for the
+\pet compartmental models. It is based on both prior knowledges of the
+underlying biochemical process and mathematical properties of the models.
+
+In \cite{Anderson:1983wk} some useful results about compartmental models in
+general was provided. Recall the parameterizations in~\ref{sec:Positron
+  emission tomography compartmental model}. Let $\gamma_{0j}$ denote the rate
+constant of the outflow from the $j$\xth compartment into the environment.
+Without loss of generality, assume that the parameters $\theta_i$ are ordered,
+$\theta_1 \le \dots \le \theta_m$. Then,
+\begin{enumerate}
+  \item $0 \le \theta_i \le 2\max_j|A_{jj}|$ for all $i$.
+  \item $\min_j\gamma_{0j} \le \theta_1 \le \max_j\gamma_{0j}$.
+  \item when there is only one outflow into the environment, say the rate
+    constant of this outflow is $k_2$, as in the plasma input model, then $0
+    \le \theta_1 \le k_2$.
+\end{enumerate}
+In addition, $\sum_{i=1}^m \phi_i = K_1$, where $K_1$ is the rate constant of
+input from the plasma into the tissues \cite{Gunn:2001cx}. Therefore $\phi_i <
+K_1$ for $i = 1, \dots, m$. Given this information, more informative prior
+distributions can be constructed. For simplicity, we restrict discussion to
+imposing upper and lower bounds on the possible values of the parameters. As
+we subsequently find that inference is not overly sensitive to the prior
+specification we do not pursue more complicated approaches.
+
+To demonstrate the idea, an informative prior distributions for a three
+tissue compartments model is constructed. First note that the transition
+matrix $A$ is,
+\begin{equation}
+  A = \begin{bmatrix}
+    - k_2 - k_3 - k_5 & k_4  & k_6 \\
+    k_3               & -k_4 & 0   \\
+    k_5               & 0    & -k_6
+  \end{bmatrix}.
+\end{equation}
+It is believed that all the rate constants take values in the range $[5
+\times 10^{-4}, 10^{-2}]$. Without loss of generality, we impose the
+identifiability constraint $\theta_1 \leq \theta_2 \leq \theta_3$, then,
+\begin{gather}
+  0 < \theta_1 \le k_2 \le 10^{-2} \\
+  \theta_1 \leq \theta_2 \leq \theta_3 \leq \max\{2(k_2 + k_3 + k_5), 2k_4,
+  2k_6\} \le 6 \times 10^{-2}
+\end{gather}
+
+Under the imposed ordering, as $\theta_1$ is the smallest exponent, the term
+$\phi_1e^{-\theta_1 t}$ decays more slowly than any other term in the
+expansion. Consequently, $\phi_1/\theta_1$ is likely to make a relatively
+large contribution to $V_D = \sum_{i=1}^m \phi_i/\theta_i$. In fact, as $A$
+has only negative real eigenvalues, $\theta_1$ is the spectral radius of $A$.
+It is not well known how large the ratio $(\phi_1/\theta_1)/V_D$ will be.
+However, it is easy to conduct a numerical study here, given the small number
+of parameters. It is found that among all possible combination of $k$s,
+$\phi_1/ \theta_1 \ge 0.5 V_D$. If the combinations of $k$'s are restricted to
+those without excessively large differences between them, i.e., cases in
+which, say, $k_5 \gg k_6$ are not considered, then $\phi_1/\theta_1 \ge 0.7
+V_D$. The reason for not considering these cases is that such irreversible
+(trapped) models yield infinite $V_D$ estimates and it is generally known in
+advance that the tracer employed will exhibit reversible dynamics.
+
+With these informations we can then construct informative priors for the
+parameters of interest. More technical details can be found in
+\cite{Zhou2013}. In particular, truncated Normal distributions are used as the
+priors for the parameters given all the upper and lower bounds.
+Table~\ref{tab:pet informative} shows the model selection results when using
+these informative priors. It can be seen that, especially for data with higher
+noise level, the results are considerably improved compared to using vague
+priors (Table~\ref{tab:pet vague}).
+
+\input{tab/pet-informative}
 
 \subsubsection{Sensitivity analysis}
 \label{ssub:Sensitivity analysis}
