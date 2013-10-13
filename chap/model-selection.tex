@@ -371,6 +371,9 @@ equal to $n$ when use a $k$-fold procedure.
 \section{Minimum description length}
 \label{sec:Minimum description length}
 
+The minimum description length (\mdl) principle is a relative new method for
+model selection.
+
 \section{Bayesian model comparison}
 \label{sec:Bayesian model comparison}
 
@@ -941,10 +944,10 @@ priors (Table~\ref{tab:pet vague}).
 
 Though intuitively the influence of priors can be eliminated given enough
 data. In the particular problem of Bayesian model comparison and selection, it
-shall be noted that Bayesian model comparison is more sensitive to the choice
-of prior than point or interval estimations in the sense that more data are
-need to eliminate the influence of priors when it comes to the value of Bayes
-factor than a posterior interval or point estimation
+shall be noted that Bayesian model comparison can be more sensitive to the
+choice of prior than point or interval estimations in the sense that more data
+are need to eliminate the influence of priors when it comes to the value of
+Bayes factor than a posterior interval or point estimation
 \cite{Kass:1993vy,Kass:1995vb}.
 
 It is also important to evaluate the Bayes factor over a range of possible
@@ -960,3 +963,47 @@ the sensitivity problem \cite{Berger:1987iq}.
 
 \section{Discussion}
 \label{sec:Model Selection Discussion}
+
+We have reviewed a few model selection methods in this chapter. The
+information-theoretic approach is well understood and has been practiced with
+a long history. The Bayesian approach has gain substantial interests in the
+last three decades. The computation of the integrations required by Bayesian
+model comparison will be reviewed in the next chapter.
+
+The Bayesian approach can be appealing in at least two situations. First, when
+there are substantial prior knowledge about the underlying data generating
+mechanisms. The Bayesian framework provides a way to incorporate these
+information to lead to rational decisions. Even when no or little prior
+knowledges are available, Bayesian approach can be useful when the underlying
+assumptions about the models or data that lead to the asymptotic results
+regarding the various information criteria are not met, as Bayesian model
+selection imposes little assumptions on the form the models. For example,
+through the running example of this thesis, \pet compartmental model, we have
+found that the Bayesian model selection even with vague priors can provide
+significant improvement over methods such as \aicc or \bic which are only
+approximation to the Bayesian method. The results can be further improved via
+using informative priors.
+
+Despite all the advantages, using Bayesian model comparison also requires
+considerably higher computational cost since many high dimension integrations
+are required. As we will see later, many widely used techniques may fail to
+evaluate these integrations accurately. The work of this thesis aim to provide
+an new framework within which the computational difficulty is further lowered
+than current practice.
+
+This review is far from exhaustive. We have restricted ourselves to methods
+that have minimal assumptions about the form the models. For particular
+models, many other methods have been developed. For example, in regression
+analysis, the Mallow's $C_p$ is a popular model selection criterion. For model
+information on information-theoretic approaches we refer to
+\cite{Burnham:2002wc,Claeskens:2008tq}.
+
+The review of Bayesian model selection in this chapter gives context for the
+chapters follows. In Chapter~\ref{cha:Monte Carlo Methods} some algorithms for
+evaluating the Bayes factor and posterior model probabilities are reviewed and
+in Chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation} novel
+algorithms are developed. Limited by the scope, there are many important
+topics within the Bayesian framework were not discussed. We refer to
+\cite{Bernardo:1994vd,Robert:2007tc} for more systematic treatments. In
+particular, \cite{Bernardo:1994vd} also have comprehensive bibliography on
+many of the topics related to Bayesian statistics.
