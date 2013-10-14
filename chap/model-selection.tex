@@ -13,10 +13,9 @@ limited to a particular class of models.
 Section~\ref{sec:Information theoretic approach} reviews a few information
 theoretic approaches. The most important one of them is the Akaike's
 information criteria (\aic; \cite{Akaike:1973uc,Akaike:1974ih}). A few other
-closely related methods are also reviewed in this section.
-Section~\ref{sec:Minimum description length} review the minimum description
-length (\mdl) method. And the last, Section~\ref{sec:Bayesian model
-  comparison} reviews the Bayesian approach to model comparison.
+closely related methods are also reviewed in this section. And the last,
+Section~\ref{sec:Bayesian model comparison} reviews the Bayesian approach to
+model comparison.
 
 \section{Information theoretic approach}
 \label{sec:Information theoretic approach}
@@ -147,15 +146,15 @@ methods. However, \aic does assume that the model distribution
 is well behaved in the sense that the estimator used to evaluate the criterion
 is indeed close to the minimizer of \kld.
 
-The last but not least, \aic has the tendency of overfitting in the sense that
-when there is a best model with the minimum expected \kld, \aic is likely to
-choose the model with more parameters. Intuitively, the log-likelihood
-function increases linearly as the sample size increases while the penalize
-term $2K$ is not affected. Therefore, the \aic strategy is going to select
-more complex models when more data becomes available. This is formally shown
-in \cite{Sin:1996vs}. When there are more than one model that minimizes the
-\kld to the true data density, \aic does not necessarily choose the simplest
-model.
+The last but not least, \aic has the tendency of selecting more complex in the
+sense that model that when there is a best model with the minimum expected
+\kld, \aic is likely to choose the model with more parameters. Intuitively,
+the log-likelihood function increases linearly as the sample size increases
+while the penalize term $2K$ is not affected. Therefore, the \aic strategy is
+going to select more complex models when more data becomes available. This is
+formally shown in \cite{Sin:1996vs}. When there are more than one model that
+minimizes the \kld to the true data density, \aic does not necessarily choose
+the simplest model.
 
 \subsection{A second order \protect\aic}
 \label{sub:A second order aic}
@@ -367,12 +366,6 @@ depend on the asymptotic behavior of $n_t/n$ where $n_t$ is the size of the
 training set. For instance, \cite{Shao:1997vx} showed that for linear model
 selection, cross-validation is more efficient when $n_t$ is asymptotically
 equal to $n$ when use a $k$-fold procedure.
-
-\section{Minimum description length}
-\label{sec:Minimum description length}
-
-The minimum description length (\mdl) principle is a relative new method for
-model selection.
 
 \section{Bayesian model comparison}
 \label{sec:Bayesian model comparison}
@@ -997,6 +990,17 @@ models, many other methods have been developed. For example, in regression
 analysis, the Mallow's $C_p$ is a popular model selection criterion. For model
 information on information-theoretic approaches we refer to
 \cite{Burnham:2002wc,Claeskens:2008tq}.
+
+One generic approach to model selection that is not reviewed in this chapter
+but worth mention is the minimum description length (\mdl) method. It is
+somehow different from the methods reviewed so far. It selects the model with
+the least complexity which is measured as the length of using a programming
+language to describe the data given the model and the model itself. The
+description length of data given the model can be measured with $-\log
+p(\data|\calM_k)$ while the description length of the model can be more
+problematic since there is no universally agreed good form of this length. We
+refer to \cite{Grunwald:2005vx} for more information on this approach to model
+selection and its modern refinements.
 
 The review of Bayesian model selection in this chapter gives context for the
 chapters follows. In Chapter~\ref{cha:Monte Carlo Methods} some algorithms for
