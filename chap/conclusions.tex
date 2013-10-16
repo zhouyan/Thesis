@@ -1,11 +1,56 @@
 \chapter{Conclusions}
 \label{cha:Conclusions}
 
+This thesis is concerned with the use \smc for the purpose of Bayesian model
+comparison. A generic framework was developed. Practical implementation tools
+for generic \smc algorithms are also presented.
+
 \section{Contributions}
 \label{sec:Contributions}
+
+In Chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation}, the
+algorithms presented can accurately approximate the Bayes factor with little
+or no human tuning for many applications of interest. Some theoretical results
+of the use of path sampling estimator within this framework was developed as
+extension to the results of the standard estimator. A novel adaptive algorithm
+for specification of the placement of distributions in the \smc[2] algorithm
+is introduced. It provides better (and more sensible) results than using the
+\ess as a criterion of how to introduce a new distribution. This method can be
+extended to other algorithms such as \smc[3] straightforwardly. The
+performance of the presented algorithms is studied in detail through various
+empirical experiments.
+
+Chapter~\ref{cha:vSMC: A C++ Library for Parallel SMC}, a \cpp library was
+developed. It provides a tool for the implementation of generic \smc
+algorithms. Compared to some established softwares, it has either a higher
+level of flexibility in the sense of enabling the implementation of general
+algorithms instead of particular models; or higher performance through the use
+of parallel computing.
 
 \section{Further directions}
 \label{sec:Further directions}
 
-\section{Summary}
-\label{sec:Summary}
+\draftnote{Note sure if ``model expansion'', where a model is expanded to
+  include more parameters and the expansion is stopped when it is determined
+  through model comparison that further complexity is not worthy, is a
+  standard term understood by many.}
+
+Though many convincing results have been shown in Chapter~\ref{cha:Sequential
+  Monte Carlo for Bayesian Computation}, theoretical development is also
+needed. In particular, the better performance of \cess based adaptive scheme
+has only been shown empirically. It might be of interest to establish if it is
+better in some sense when compared to some commonly used deterministic
+scheme and under what conditions. Some algorithms have potential applications
+in scenarios different than those shown in this thesis. For example, the
+\smc[3] algorithm may be used for Bayesian model expansion. It may be of
+interest to see if the approach presented in this thesis has any significant
+advantage when compared to alternatives in terms of accuracy and computational
+efficiency.
+
+The work presented in Chapter~\ref{cha:vSMC: A C++ Library for Parallel SMC}
+can be useful for many researchers. However, it still requires considerable
+expertise in \cpp. It is of interest to provide a easier to use interface on
+top of the library. Some popular parallel programming models are not included
+in this library, such as \cuda \cite{cuda}. Further work are need to include
+them in the presented framework so the library can be more useful to those are
+familiar with them.

@@ -1,9 +1,6 @@
 \chapter{Monte Carlo Methods}
 \label{cha:Monte Carlo Methods}
 
-\sidenote{This chapter still need some polish. Some phrasings are quite
-  questionable (e.g., I found I use "in practice" far too often)}
-
 As shown in the last chapter, Bayesian model comparison usually involves
 computations of some integrations with respect to complex posterior
 distributions. Only in very special situations, these can be resolved
@@ -12,11 +9,11 @@ simulation techniques. In this chapter, we review some of the widely used
 Monte Carlo methods with an emphasize on their applications to Bayesian
 computation.
 
-In section~\ref{sec:Classical Monte Carlo} we introduce the basic idea of
+In Section~\ref{sec:Classical Monte Carlo} we introduce the basic idea of
 Monte Carlo integration. Section~\ref{sec:Importance sampling} discusses the
 importance sampling technique. Section~\ref{sec:Markov chain Monte Carlo}
 reviews a class of important Monte Carlo algorithms, Markov chain Monte Carlo.
-This chapter is concluded by section~\ref{sec:Monte Carlo Discussion}, a
+This chapter is concluded by Section~\ref{sec:Monte Carlo Discussion}, a
 discussion on the reviewed algorithms, their application in Bayesian modeling
 and some other development in this area that is not reviewed in detail.
 
@@ -32,28 +29,33 @@ provided that the above expectation exists, by drawing \iid samples from
 $\pi$, say $\{X^{(i)}\}_{i=1}^N$, and approximating the expectation by the
 empirical average,
 \begin{equation}
-  \hat\varphi^N = \frac{1}{N}\sum_{i=1}^N\varphi(x^{(i)}).
+  \hat\varphi_{\mc}^N = \frac{1}{N}\sum_{i=1}^N\varphi(x^{(i)}).
   \label{eq:vanilla mc}
 \end{equation}
 This method is sometime also called \emph{vanilla} Monte Carlo or \emph{na\"\i
-  ve} Monte Carlo. The estimator $\hat\varphi^N$ converges almost surely to
-$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$ by the Strong Law of Large Numbers
-(\slln).
+  ve} Monte Carlo. The estimator $\hat\varphi_{\mc}^N$ converges almost surely
+to $\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$ by the Strong Law of Large
+Numbers (\slln).
 
 Clearly this method can only be applied when drawing samples directly from the
 target distribution $\pi$ is possible. There are a few ways to draw random
 variates from a reasonably well behaved distribution. See
 \cite[][chap.~2]{Robert:2004tn} on this topic. In many cases, simulation from
 a distribution $\pi$ efficiently requires the evaluations of its density
-function point-wise, or finding some easy to simulation distribution that
+function point-wise, or finding some easy to simulate distribution that
 closely imitate $\pi$. In the context of Bayesian computation, the target
 distributions are usually complex posterior only known up to some normalizing
 constants. And thus point-wise evaluation is not possible. In addition, the
 high-dimensional aspects of many models makes it near impossible to find a
-distribution closely imitate the target. More importantly, the accuracy of the
-estimator $\hat\varphi^N$ depends heavily on the function $\varphi$. For
-example, consider the approximation of the marginal likelihood
-(section~\ref{sub:Bayes factor}),
+distribution closely imitate the target. In addition, even when it is
+possible, the accuracy of the estimator $\hat\varphi_{\mc}^N$ depends heavily
+on the function $\varphi$.
+
+\draftnote{Add a little more details and references on how to use vanilla \mc
+  for estimating marginal likelihood.}
+
+For example, consider the approximation of the marginal likelihood (see
+Section~\ref{sub:Bayes factor}),
 \begin{equation*}
   p(\data|\calM_k) =
   \int f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k) \intd \theta_k
@@ -64,17 +66,34 @@ or equivalently,
   \label{eq:prior expectation}
 \end{equation*}
 It is possible to use samples from $\pi(\theta_k|\calM_k)$, the prior
-distribution, to approximate the integration. However, this approach often
-results in large variances. The likelihood function (and thus the posterior
-distribution) is often much more concentrated than the prior distribution. And
-there may be a large proportions of samples with small likelihood values and a
-few with high values. For instance, considering the \pet model with one
-component and an informative prior. Using 100,000 samples from the prior
-distribution, the empirical mean and standard deviation of the estimates from
-100 simulations is $-40.9$ and $2.1$, respectively. However when the dimension
-of the model is increased by using a model with two components, the estimates
-have a empirical mean and variance $-39.6$ and $12.6$, respectively, which is
-too large a variance for practice use of evaluating the Bayes factor.
+distribution, to approximate the integration. For simplicity, in this and the
+next section we drop the dependency on the model $\calM_k$ and simply write
+$p(\data) = \int f(\data|\theta)\pi(\theta)\intd\theta$. With samples
+generated from $\pi(\theta)$, say $\{\theta^{(i)}\}_{i=1}^N$, we can
+approximate $p(\data)$ by,
+\begin{equation}
+  \widehat{p(\data)}_{\mc}^N = \frac{1}{N}\sum_{i=1}^N f(\data|\theta^{(i)}).
+\end{equation}
+This estimator was studied in \cite{McCulloch:1991vx} and mentioned in
+\cite{Kass:1995vb}. However, this approach often results in large variances.
+The likelihood function (and thus the posterior distribution) is often much
+more concentrated than the prior distribution. And there may be a large
+proportions of samples with small likelihood values and a few with high
+values. For instance, considering the \pet model with one component and an
+informative prior (Section~\ref{sub:The choice of priors}). Using 100,000
+samples from the prior distribution, the empirical mean and standard deviation
+of the estimates from 100 simulations is $-40.9$ and $2.1$, respectively.
+However when the dimension of the model is increased by using a model with two
+components, the estimates have a empirical mean and variance $-39.6$ and
+$12.6$, respectively, which is too large a variance for practical use of
+evaluating the Bayes factor. Similar problems were also shown in
+\cite{McCulloch:1991vx}.
+
+For some situations, the accuracy can be improved through importance sampling
+(see the next section). However, modern Monte Carlo algorithms are capable of
+simulating directly from the posterior $p(\theta|\data)$ and provide better
+estimates based on those samples. We will see them later in
+Section~\ref{sec:Markov chain Monte Carlo}.
 
 \section{Importance sampling}
 \label{sec:Importance sampling}
@@ -85,7 +104,7 @@ following identity,
   \Exp_{\pi}[\varphi(X)]
   = \int\varphi(x)\pi(x)\intd x
   = \int\varphi(x)\frac{\pi(x)}{\eta(x)}\eta(x)\intd x
-  = \Exp_{\eta}\Square[Big]{\varphi(X)\frac{\pi(X)}{\eta(X)}},
+  = \Exp_{\eta}\Square[bigg]{\varphi(X)\frac{\pi(X)}{\eta(X)}},
   \label{eq:impotance fundamental}
 \end{equation}
 where $\eta$ is a distribution with respect to which $\pi$ is absolutely
@@ -111,8 +130,7 @@ original problem is required. In \cite{Geweke:1989tm}, two types of sufficient
 conditions were mentioned. One is that $\pi/\eta$ is upper bounded and
 $\var_{\pi}[\varphi(X)]$ is finite. Another is that the support is compact,
 $\pi$ is upper bounded and $\eta$ is lower bounded by $\varepsilon > 0$. The
-later is rather restrictive, in particular the upper bound condition on the
-target distribution.
+later is rather restrictive.
 
 Both $\pi$ and $\eta$ are often only known up to some normalizing constants,
 which can be approximated with the same samples. This leads to the estimator,
@@ -121,17 +139,17 @@ which can be approximated with the same samples. This leads to the estimator,
   = \frac{\sum_{i=1}^Nw^{(i)}\varphi(X^{(i)})}{\sum_{i=1}^Nw^{(i)}}
   \label{eq:is unnormalized}
 \end{equation}
-where $w^{(i)} \propto \pi(X^{(i)})/\eta(X^{(i)})$, and is termed the
+where $w^{(i)} \propto \pi(X^{(i)})/\eta(X^{(i)})$, and are termed the
 \emph{weights}. This estimator also converges almost surely to
-$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$. This estimator has a small
-bias since it is the ratio of two unbiased estimator. However, even when the
-normalizing constants of $\pi$ and $\eta$ are both known, this estimator can
-be preferable to $\hat\varphi_{\is}$ due to its possible improvement in the
-squared mean of errors. In fact, \cite{Casella:1998tj} showed an example of
-using the Cauchy distribution as the proposal distribution for the evaluation
-of expectations under the Student-$t$ distribution, where for some
-functions, such as $\varphi(x) = |x|$, $\hat\varphi_{\wis}$ can
-outperform $\hat\varphi_{\is}$ considerably.
+$\Exp_{\pi}[\varphi(X)]$ when $N\to\infty$. This estimator has a bias since it
+is the ratio of two unbiased estimator. However, even when the normalizing
+constants of $\pi$ and $\eta$ are both known, this estimator can be preferable
+to $\hat\varphi_{\is}$ due to its possible improvement in the squared mean of
+errors. In fact, \cite{Casella:1998tj} showed an example of using the Cauchy
+distribution as the proposal distribution for the evaluation of expectations
+under the Student-$t$ distribution, where for some functions, such as
+$\varphi(x) = |x|$, $\hat\varphi_{\wis}$ can outperform $\hat\varphi_{\is}$
+considerably.
 
 In general, the performance of importance sampling depends not only on the
 choice of the proposal distribution $\eta$, but also the function of interest
@@ -139,9 +157,9 @@ $\varphi$. As suggested in \cite[][sec.~3.3.2]{Robert:2004tn}, to minimize the
 variance of the estimator, the distribution $\eta$ should be chosen such that
 $|\varphi(x)|\pi(x)/\eta(x)$ is almost constant with a finite variance. That
 is, it is preferable for the distribution $\eta$ to be proportional to
-$|\varphi|\pi$ and has heavier tails. Though heavier tails does not
-necessarily lead to the sufficient conditions as those mentioned in
-\cite{Geweke:1989tm}, thinner tails is more likely to result in infinite
+$|\varphi|\pi$ and to have heavier tails. Though heavier tails do not
+necessarily lead to the sufficient conditions such as those mentioned in
+\cite{Geweke:1989tm}, thinner tails are more likely to result in infinite
 variances as extreme large weights are more likely to occur in this situation.
 Often the same samples are used to evaluate the expectations of different
 functions. And the proposal distribution is chosen such that $\eta$ is close
@@ -221,7 +239,7 @@ continuous case, we also call the corresponding conditional density
 A (discrete time) Markov chain, denoted by $(X_n)$ is a sequence of random
 variables $X_0,X_1,\dots,X_n,\dots$ such that conditional on
 $x_{n-1},\dots,x_0$, $X_n$ has the same distribution as it has conditional on
-$X_{n-1}$. Clearly a transition kernel $K(x_{n-1},\diff x_n)$ is such a
+$x_{n-1}$. Clearly a transition kernel $K(x_{n-1},\diff x_n)$ is such a
 conditional distribution. In the context of \mcmc, we are mostly concerned
 with \emph{time homogeneous} Markov chains. A Markov chain $(X_n)$ is said to
 be time homogeneous if for every $t_0\le t_1\le\dots\le t_k$, the distribution
@@ -230,9 +248,14 @@ $(X_{t_1-t_0},\dots,X_{t_k-t_0})$ conditional on $x_0$. In other words, given
 the initial state $x_0$ or its distribution, the Markov chain is determined
 solely by its transition kernel.
 
-Another way to define a Markov chain, or its defining property is the
-\emph{(weak) Markov property}: For every initial distribution of $X_0$, $\mu$,
-and every $(n+1)$ sample $(X_0,\dots,X_n)$,
+\draftnote{Make it clear that the weak Markov property shown here is the
+  special case for time homogeneous chains. And I think it is fine not to
+  include more general results since we already said that we are most
+  concerned with these}
+
+Another way to define a time homogeneous Markov chain, or its defining
+property is the (\emph{weak}) \emph{Markov property}: For every initial
+distribution of $X_0$, $\mu$, and every $(n+1)$ sample $(X_0,\dots,X_n)$,
 \begin{equation}
   \Exp_{\mu}[\varphi(X_{n+1},X_{n+2},\dots)|x_0,\dots,x_n] =
   \Exp_{x_n}[\varphi(X_1,X_2,\dots)],
@@ -241,27 +264,36 @@ where $\Exp_{\mu}$ denotes the expectation with respect to $P_{\mu} = \mu
 K^n$, $K^n = K\vysmwhtcircle K^{n-1}$ and $\varphi$ is a $P_{\mu}$-integrable
 function.
 
+\draftnote{Fix the description of aperiodicity. Make it clear that the
+  description was only an intuition of a sufficient but not necessary
+  condition, which is the same way we will use to reason that
+  Metropolis-Hastings and others are aperiodic.}
+
 We will be mostly concerned with the sensitivity of the Markov chain with
 respect to the initial value $X_0$ or its distribution and the existence and
 the speed at which the Markov chain converges to its limiting distribution. A
 few properties of a given Markov chain are discussed below. In short,
 \emph{irreducibility} states that all states communicate. The Markov chain can
 reach any state $y\in E$ starting from any other state $x\in E$. A stronger
-version says that the chain can travel any distance in one step. A somewhat
-opposite property is \emph{aperiodic}, which in essence says that a Markov
-chain can stay in the neighborhood for an arbitrary number of instances. Or it
-does not need to go through a cycle to reach back into the neighborhood of the
-current state. These two properties guarantee a Markov chain to explore a
-space freely. A third property we will discuss is \emph{recurrence}, which
-states that the Markov chain can visit any state for infinite times. In other
-words, the Markov chain can explore a space throughout starting from almost
-anywhere. A stronger version, \emph{Harris recurrence}, allows the chain to
-start from \emph{everywhere}. A property fundamental to \mcmc algorithms is
-the existence of \emph{invariant} distribution, which states that the Markov
-chain can be stable under suitable conditions and converge to a desired
-distribution. A sufficient condition for the existence of invariant
-distribution, \emph{detailed balance}, is perhaps the most useful tool in
-practice to check the validity of a given algorithm. Last, we will discuss the
+version says that the chain can travel any distance in one step. Another
+property is \emph{aperiodic}, which says that for a chain leaving a group of
+states it does not need to take $k$ or a multiple of $k$ steps to return to it
+with $k>1$. Informally, a sufficient but not necessary condition for an
+irreducible chain to be aperiodic is that the chain can stay in a neighborhood
+of a state (or at the state in the discrete case) for an arbitrary number of
+instances without being forced to leave it. Or it does not need to go through
+a cycle to reach back into the neighborhood of the current state. These two
+properties guarantee a Markov chain to explore a space freely. A third
+property we will discuss is \emph{recurrence}, which states that the Markov
+chain can visit any state for infinite times. In other words, the Markov chain
+can explore a space throughout starting from almost anywhere. A stronger
+version, \emph{Harris recurrence}, allows the chain to start from
+\emph{everywhere}. A property fundamental to \mcmc algorithms is the existence
+of \emph{invariant} distribution, which states that the Markov chain can be
+stable under suitable conditions and converge to a desired distribution. A
+sufficient condition for the existence of invariant distribution,
+\emph{detailed balance}, is perhaps the most useful tool in practice to check
+the validity of a given algorithm.  Last, we will discuss the
 \emph{ergodicity} of Markov chains, which measures the speed at which a Markov
 chain converges to its invariant (and thus its limiting) distribution.
 
@@ -275,35 +307,35 @@ detail in the context of \mcmc algorithms.
 
 A Markov chain $(X_n)$ with transition kernel $K$ on $(E,\calE)$ is said to be
 $\psi$-\emph{irreducible}, for a given measure $\psi$, if for every
-$A\in\calE$ with $\psi(A)>0$, there exists $n$ such that $K^n(x,A)>0$ for all
-$x\in E$. This chain is said to be \emph{strongly} $\psi$-\emph{irreducible}
-if $n=1$ for all measurable $A\in\calE$.
+$A\in\calE$ such that $\psi(A)>0$, there exists $n$ such that $K^n(x,A)>0$ for
+all $x\in E$. This chain is said to be \emph{strongly}
+$\psi$-\emph{irreducible} if $n=1$ for every $A\in\calE$ such that
+$\psi(A)>0$.
 
 An equivalent way of saying irreducibility is that for $x\in E$, $A\in\calE$,
 $P_x(\tau_A\le\infty) > 0$, where $\tau_A = \inf\{n\ge1;X_n\in A\}$ is the
-first value of $n$ that the chain enters the set $A$, namely the
-\emph{stopping time} at $A$ and $P_x$ denote the probability conditional on
-initial state $x$. In other words, the probability of reach the set $A$ in
-finite steps is positive.
+first value of $n$ that the chain enters the set $A$, namely the \emph{first
+  hitting time} at $A$ and $P_x$ denote the probability conditional on the
+initial state $x$. In other words, the probability of reach any the set $A$ in
+finite many steps is positive.
 
-Two related concepts are \emph{atom} and \emph{small set}. A Markov chain
-$(X_n)$ is said to have an \emph{atom} $\alpha\in\calE$  if there exits an
-associated nonzero measure $\eta$ such that, $K(x,A) = \eta(A)$ for all
-$x\in\alpha$ and $A\in\calE$. A set $C$ is said to be \emph{small} if there
-exits $m\in\Natural$ and a nonzero measure $\eta_m$ such that
+\draftnote{Make it clear that we introduce atom and small set here because we
+  need them to formally define aperiodicity and ergodicity later}
+
+Two related concepts, \emph{atom} and \emph{small set}, are useful for
+formally defining aperiodicity and ergodicity later. A Markov chain $(X_n)$ is
+said to have an \emph{atom} $\alpha\in\calE$ if there exists an associated
+nonzero measure $\eta$ such that, $K(x,A) = \eta(A)$ for all $x\in\alpha$ and
+$A\in\calE$. A set $C$ is said to be \emph{small} if there exists
+$m\in\Natural$ and a nonzero measure $\eta_m$ such that
 $K^m(x,A)\ge\eta_m(A)$, for all $x\in C$ and $A\in\calE$.
-
-A result that relates small set and irreducibility is that, for a
-$\psi$-irreducible chain $(X_n)$, and for all $A\in\calE$ such that
-$\pi(A)>0$, there exists $m\in\Natural$ and a small set $C\subset A$ such that
-the associated measure $\eta_m$ satisfies $\eta_m(C) > 0$.
 
 \subsubsection{Cycles and Aperiodicity}
 \label{ssub:Cycles and Aperiodicity}
 
 A $\psi$-irreducible chain $(X_n)$ has a \emph{cycle of length} $d$ if there
-exits a small set $C$, an integer $M$, and a probability distribution $\eta_M$
-such that $d$ is the greatest common denominator of
+exists a small set $C$, an integer $M$, and a probability distribution
+$\eta_M$ such that $d$ is the greatest common denominator of
 \begin{equation*}
   \{m\ge1;\text{ There exists }\varepsilon_m > 0\text{ such that }C\text{ is
     small for }\eta_m\ge\varepsilon_m\eta_M\}.
@@ -333,44 +365,45 @@ $\psi(A)>0$, $A$ is recurrent.
 
 A sufficient condition for a $\psi$-irreducible chain to be recurrent is that
 there exists a small set $C$ with $\psi(C)>0$ such that $P_x(\tau_C<\infty) =
-1$ for all $x\in C$ where $\tau_C$ is the stopping time at $C$.
+1$ for all $x\in C$ where $\tau_C$ is the first hitting time at $C$.
 
 A stronger property is called the \emph{Harris recurrence}. A set $A\in\calE$
 is said to be Harris recurrent if for all $x\in A$, $P_x(N_A = \infty) = 1$.
-The $\psi$-irreducible Markov chain is said to be recurrent if for all
+The $\psi$-irreducible Markov chain is said to be Harris recurrent if for all
 $A\in\calE$ such that $\psi(A)>0$, $A$ is Harris recurrent.
 
 Informally, Harris recurrence says that starting from \emph{everywhere} in the
 space $E$, every part of the space will be visited for infinite instances with
 probability one. This is important for \mcmc algorithms in the sense that
 Harris recurrence guarantees unique limiting distribution (up to a
-multiplicative factor). Indeed, it will later be noted that most algorithms
-are Harris recurrent.
+multiplicative factor).
 
 \subsubsection{Invariant measure}
 \label{ssub:Invariant measure}
+
+\draftnote{Add the missing irreducibility condition for positivity}
 
 A $\sigma$-finite measure $\pi$ is \emph{invariant} for a Markov chain with
 transition kernel $K$ if,
 \begin{equation}
   \pi(A) = \int K(x,A)\pi(\diff x)
 \end{equation}
-for all $A\in\calE$. When an invariant \emph{probability} measure exists, the
-chain is said to be \emph{positive}. A positive chain is always recurrent.
-Also the invariant measure is unique for a recurrent chain, up to a
-multiplicative factor. It is trivial to see that, for a invariant probability
-measure $\pi$ of a Markov chain $(X_n)$, if $X_0\sim\pi$, then $X_n\sim\pi$
-for all $n\ge1$. Thus this distribution is also often referred to as the
-\emph{stationary} measure.
+for all $A\in\calE$. When an invariant \emph{probability} measure exists for a
+$\psi$-irreducibility chain, the chain is said to be \emph{positive}. A
+positive chain is always recurrent.  Also the invariant measure is unique for
+a recurrent chain, up to a multiplicative factor. It is trivial to see that,
+for a invariant probability measure $\pi$ of a Markov chain $(X_n)$, if
+$X_0\sim\pi$, then $X_n\sim\pi$ for all $n\ge1$. Thus this distribution is
+also often referred to as the \emph{stationary} measure.
 
 A related concept is the \emph{reversibility}. A stationary Markov chain
 $(X_n)$ is said to be \emph{reversible} if the distribution of $X_{n+1}$
-conditional on $X_n = x$ is the same as the distribution of $X_{n+2}$
-conditional on $X_{n+1} = x$. Intuitively, this says that the direction of
-time is irrelevant. The chain has the same stationary if it travels backward
-in time. A sufficient condition for a Markov chain to have an invariant
-probability distribution $\pi$ and be reversible is the existence of the
-\emph{detailed balance} condition,
+conditional on $X_n = x$ is the same as the distribution of $X_n$ conditional
+on $X_{n+1} = x$. Intuitively, this says that the direction of time is
+irrelevant. The chain has the same stationary if it travels backward in time.
+A sufficient condition for a Markov chain to have an invariant probability
+distribution $\pi$ and be reversible is the existence of the \emph{detailed
+  balance} condition,
 \begin{equation}
   \pi(x)K(x,y) = \pi(y)K(y,x).
 \end{equation}
@@ -387,15 +420,17 @@ independence of initial condition $\mu$ of its limiting behavior when
 $n\to\infty$. In the following we establish that the invariant distribution
 $\pi$ is such a limiting distribution.
 
+% TODO check the definition of K(\alpha,\alpha)
 For a Harris recurrent and positive Markov chain $(X_n)$ with transition
 kernel $K$ and invariant distribution $\pi$, an atom $\alpha$ is
 \emph{ergodic} if
 \begin{equation}
-  \lim_{n\to\infty}\Abs{K^n(\alpha,\alpha) - \pi(\alpha)} = 0.
+  \lim_{n\to\infty}\Abs{K^n(\alpha,\alpha) - \pi(\alpha)} = 0,
 \end{equation}
-For more general situations, the convergence is established through the
-\emph{total variance norm}, defined for two measure $\mu_1$ and $\mu_2$ on the
-space $(E,\calE)$,
+where $K(\alpha,\alpha) = \int_{\alpha}K(x,\alpha)\pi(\diff\alpha)$ and $K^n =
+K\vysmwhtcircle K^{n-1}$. For more general situations, the convergence is
+established through the \emph{total variance norm}, defined for two measure
+$\mu_1$ and $\mu_2$ on the space $(E,\calE)$,
 \begin{equation}
   \Norm{\mu_1-\mu_2}_{TV} = \sup_{A\in\calE}\Abs{\mu_1(A) - \mu_2(A)}.
 \end{equation}
@@ -404,7 +439,7 @@ Two important results are that, if a Markov chain $(X_n)$ is Harris recurrent,
 positive and aperiodic, with transition kernel $K$ and invariant distribution
 $\pi$, then
 \begin{equation}
-  \lim_{n\to\infty}\Norm[Big]{
+  \lim_{n\to\infty}\Norm[bigg]{
     \int K^n(x,\cdot)\mu(\diff x) - \pi}_{TV} = 0
 \end{equation}
 for every initial distribution $\mu$. And this total variance norm decreases
@@ -415,7 +450,7 @@ results also implies that, for bounded function $\varphi$,
   \lim_{n\to\infty}\Abs{\Exp_{\mu}[\varphi(X_n)] - \Exp_{\pi}[\varphi(X)]}
   = 0,
 \end{equation}
-where the first expectation is with respect to $\mu$, the initial
+where the first expectation is with respect to $P_{\mu}^n$, the initial
 distribution of $X_0$ and the second is for a random variable distributed with
 $\pi$. This result establishes the validity of using dependent samples from
 \mcmc algorithms for the approximation of integration with respect to $\pi$.
@@ -427,7 +462,7 @@ ergodicity.
 
 A Markov chain $(X_n)$ with transition kernel $K$ on $(E,\calE)$ and invariant
 distribution $\pi$, is said to be \emph{geometrically ergodic}, if there
-exists $r > 1$ such that
+exists $r > 1$ such that for all $x\in E$,
 \begin{equation}
   \sum_{n=1}^{\infty} r^n\Norm{K^n(x,\cdot)-\pi}_{TV} <\infty.
 \end{equation}
@@ -439,9 +474,16 @@ where $M(x) = \sum_{n=1}^{\infty} r^n\Norm{K^n(x,\cdot)-\pi}_{TV}$. In other
 words, the chain converges at least at a speed of a geometric sequence. We
 emphasize that $M(x)$ is a function of the initial value $x$.
 
-A stronger form of convergence, \emph{uniform} ergodicity requires the rate of
-convergence $r$ be the same for all $x\in E$. That is, the above convergence
-holds for a constant $M$ independent of the initial value $x$.
+\draftnote{Fix the description of uniform ergodicity. Originally there was a
+  typo saying $r$ is the same for all $x$, which is clearly untrue. I
+  intended to say $r^{-n}M(x)$, but it seems unusual to call it the
+  convergence rate. So I settle with just say the convergence speed is the
+  same.}
+
+A stronger form of convergence, \emph{uniform} ergodicity requires that the
+convergence speed is the same for all $x\in E$, or in other words $M(x)$ is
+bounded. That is, the above convergence holds for a constant $M = \sup_x
+M(x)$.
 
 \subsection{Metropolis-Hastings algorithms}
 \label{sub:Metropolis-Hastings algorithms}
@@ -464,7 +506,7 @@ where
   \min\Curly[bigg]{\frac{\pi(y)}{\pi(x)}\frac{q(x|y)}{q(y|x)},1}.
 \end{equation}
 The probability $\alpha(x,y)$ is called the \emph{Metropolis-Hastings
-  acceptance probability}. This is leads to algorithm~\ref{alg:mh}.
+  acceptance probability}. This is leads to Algorithm~\ref{alg:mh}.
 
 \begin{algorithm}
 \begin{algorithmic}
@@ -497,13 +539,13 @@ sufficient condition for irreducibility is that the conditional density
 $q(\cdot|x)$ is positive. In other words, it allows that every set of $\calE$
 with a positive Lebesgue measure to be reached in a single step. It can be
 proved that with these two conditions, the convergence in
-equation~\eqref{eq:mcmc convergence} holds \cite[][Theorem~7.4 and
+Equation~\eqref{eq:mcmc convergence} holds \cite[][Theorem~7.4 and
 Corollary~7.5]{Robert:2004tn}.
 
 The Metropolis-Hastings algorithm is important not only because itself has
 found many applications, but also because it is the foundation of many other
 algorithms. For example the reversible jump \mcmc and population \mcmc
-algorithms, reviewed later in section~\ref{sub:Reversible jump mcmc}
+algorithms, reviewed later in Section~\ref{sub:Reversible jump mcmc}
 and~\ref{sub:Population mcmc}, can both be viewed as extensions of this
 algorithm.
 
@@ -522,29 +564,40 @@ probability becomes,
   \alpha(x,y) = \min\Curly[bigg]{\frac{\pi(y)\eta(x)}{\pi(x)\eta(y)},1}.
 \end{equation}
 The resulting Markov chain is uniformly ergodic if the target $\pi$ is bounded
-by the proposal $\eta$ up to a multiplier. In other words, there exits a
+by the proposal $\eta$ up to a multiplier. In other words, there exists a
 constant $M$ such that $\pi(x)\le M\eta(x)$ for all $x$ in the support of
 $\pi$.
+
+\draftnote{I am not quite sure about the comment here. Unless I am mistaken,
+  the expectation of the accept rate is taken with respect to $X\sim\pi$
+  (given a stationary chain) and $Y\sim\eta$, as written in the originally
+  equation. I added some text surrounding the equation and mention that
+  $\bar\alpha$ measures how often it is accepted in the long run. Hope it is
+  clear now.}
 
 Though uniform ergodicity is a much desired property for a given algorithm,
 without proper optimizing, the performance of an independent proposal is often
 far from ideal. The proposal $\eta$ shall be chosen such that it maximizes the
-average \emph{acceptance rate} $\bar\alpha = \Exp[\alpha(x,y)]$,
+\emph{average acceptance rate} $\bar\alpha = \Exp[\alpha(x,y)]$. Given a
+stationary chain and thus the state $X\sim\pi$, and a proposal $Y\sim\eta$, it
+is defined as,
 \begin{equation}
   \bar\alpha
-  = \Exp\Square[Big]{\min\Curly[bigg]{\frac{\pi(Y)\eta(X)}{\pi(X)\eta(Y)},1}}
-  = 2\Pr\Round[Big]{\frac{\pi(Y)}{\eta(Y)}\ge\frac{\pi(X)}{\eta(X)}},\quad
-  \text{for } X\sim\pi,\ Y\sim g,
+  = \Exp\Square[bigg]{\min\Curly[bigg]{\frac{\pi(Y)\eta(X)}{\pi(X)\eta(Y)},1}}
+  = 2\Pr\Round[bigg]{\frac{\pi(Y)}{\eta(Y)}\ge\frac{\pi(X)}{\eta(X)}},
 \end{equation}
-provided that $\pi(X)/\eta(X)$ is absolutely continuous. This optimization is
-generic in the sense that the function of interest $\varphi$ is not involved.
-In practice, $\eta$ shall be chosen to be close to $\pi$ as much as possible
-to maximize $\alpha$. The requirement for $\pi(x)/\eta(x)$ to be bounded also
-suggest that $\eta$ at least should not have a too thin tail compared to
-$\pi$. Ideally it should have a slightly heavier tail than $\pi$ but not much
-less concentrated. In this aspect, the choice of $\eta$ is similar to the
-choice of importance sampling distribution. And hence it inherits the same
-difficulties as outlined in section~\ref{sec:Importance sampling}.
+provided that $\pi(X)/\eta(X)$ is absolutely continuous and the expectation is
+taken with respect to $f(x,y) = \pi(x)\eta(y)$. In other words, $\bar\alpha$
+measures the how often a new proposal is accepted in the long run of the
+algorithm. This optimization is generic in the sense that the function of
+interest $\varphi$ is not involved.  In practice, $\eta$ shall be chosen to be
+close to $\pi$ as much as possible to maximize $\alpha$. The requirement for
+$\pi(x)/\eta(x)$ to be bounded also suggest that $\eta$ at least should not
+have a too thin tail compared to $\pi$. Ideally it should have a slightly
+heavier tail than $\pi$ but not much less concentrated. In this aspect, the
+choice of $\eta$ is similar to the choice of importance sampling distribution.
+And hence it inherits the same difficulties as outlined in
+Section~\ref{sec:Importance sampling}.
 
 \subsubsection{Random walks}
 \label{ssub:Random walks}
@@ -582,16 +635,30 @@ long time for the chain to move outside the neighborhood of one local mode of
 the target distribution. In this situation, the sampler is said to be in a
 \emph{trapping state}.
 
-For instance, consider the \pet model with one components and an informative
-prior. We use a Normal distribution as the proposal. Both figure~\ref{fig:pet
-  mh tuned} and~\ref{fig:pet mh untuned} show the trace of $(\phi_1,
-\theta_1)$ from three samplers, initialized with different values. Each
-sampler is iterated for 10,000 times. In the former, the proposal scales are
-well tuned and the later uses scales five times of the former. In
-figure~\ref{fig:pet mh tuned}, each sampler is able to find the high
-probability region quickly and explore it efficiently. In contrast, in
-figure~\ref{fig:pet mh untuned}, none of the samplers is able to find the high
-probability region and they are trapped around the initial values.
+For instance, consider the \pet model with one components and an
+non-informative prior (see Section~\ref{sub:The choice of priors}) for the
+simulated data. We construct a random walk algorithm with three blocks. Recall
+the parameterization in Section~\ref{sec:Positron emission tomography
+  compartmental model},
+\begin{enumerate}
+  \item Update $\phi_{1:r}$ with multivariate Normal random walk proposal.
+  \item Update $\theta_{1:r}$ with multivariate Normal random walk proposal
+  \item Update $\lambda$ with a normal random walk proposal on the log scale,
+    i.e., on $\log\lambda$.
+\end{enumerate}
+Both Figure~\ref{fig:pet mh tuned} and~\ref{fig:pet mh untuned} show the trace
+of $(\phi_1, \theta_1)$ from three samplers, initialized with different
+values. Each sampler is iterated for 10,000 times. In the former, the proposal
+scales (the covariance matrices of the multivariate Normal distributions,
+which are diagonal in this case) are well tuned and the later uses scales five
+times of the former. In Figure~\ref{fig:pet mh tuned}, each sampler is able to
+find the high probability region quickly and explore it efficiently. In
+contrast, in Figure~\ref{fig:pet mh untuned}, none of the samplers is able to
+find the high probability region and they are trapped around the initial
+values.
+
+\draftnote{Add a minimal description on the algorithm. The model and the prior
+  are introduced earlier}
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MH_Path.pdf}
@@ -612,6 +679,8 @@ probability region and they are trapped around the initial values.
 \end{figure}
 
 \paragraph{Optimal proposal scales}
+
+\draftnote{Still to find some more recent general results as references}
 
 As seen in the above example, finding the optimal scales for a random walk
 algorithm can be particularly important for realistic applications. One way to
@@ -639,7 +708,7 @@ optimality. Alternatively, many adaptive strategies have been developed. See
 \cite{Andrieu:2008kh} for a recent review. The basic theme is that a family of
 proposal distributions, index by some parameter, say $q(\cdot|x) = q(\cdot|x,
 \theta)$ with $\theta\in\Theta$, is considered. And the value of the parameter
-is updated along with the state $X$. This leads to algorithm~\ref{alg:adaptive
+is updated along with the state $X$. This leads to Algorithm~\ref{alg:adaptive
   rw}.
 
 \begin{algorithm}
@@ -676,19 +745,26 @@ time $t$, they are updated with,
   - \Sigma^t)
 \end{align}
 where the $\{\gamma^t\}_{t>0}$ is a sequence of small numbers, which are
-formally arbitrary but could influence the performance. In practice it is
-common to set this sequence to a constant value $\gamma$. This algorithm has
-been studied by \cite{Andrieu:2006tw} and others.
+formally arbitrary but could influence the performance. As noted by
+\cite{Andrieu:2008kh} though it is possible to set the sequence to a constant
+$\gamma$. It is more common to set it to a deterministic decreasing sequence
+such that $\sum_{t\ge1}\gamma^t = \infty$ and
+$\sum_{t\ge1}(\gamma^t)^2<\infty$ to allow the effect of adaptation become
+smaller and smaller as the algorithm progresses. This algorithm has also been
+studied by \cite{Andrieu:2006tw} and others.
 
 One obvious problem with such adaptive scheme is that the resulting chains are
-no longer Markovian. It is common practice to adapt the algorithm up to some
-point $t$, and stop the adaptation and use parameter $\theta^t$ for all
-iterations onwards, as seen in algorithm~\ref{alg:adaptive rw}. The first part
-of the generated chain is called the \emph{burn-in period} and is usually
-discard afterwards and estimations will be based on iterations after the
-burn-in period. There are more advanced techniques where the adaptive scheme
-attain a vanishing adaptation property. Intuitively, after a long enough
-period, the adaptive algorithm will only change the parameter $\theta$
+no longer Markovian. And the limiting distribution of $X_n$, if it exists, may
+no longer be $\pi$ as shown by examples in \cite{Andrieu:2008kh}. It is common
+practice to adapt the algorithm up to some point $t$, and stop the adaptation
+and use parameter $\theta^t$ for all iterations onwards, as seen in
+Algorithm~\ref{alg:adaptive rw}. The first part of the generated chain is
+called the \emph{burn-in period} and is usually discard afterwards and
+estimations will be based on iterations after the burn-in period. Some rules
+for when to stop adaptation was discussed in \cite{Andrieu:2008kh} and
+references therein. There are more advanced techniques where the adaptive
+scheme attain a vanishing adaptation property. Intuitively, after a long
+enough period, the adaptive algorithm will only change the parameter $\theta$
 slightly and eventually it becomes stable. These algorithms requires more
 careful designs to assure convergence.
 
@@ -699,7 +775,7 @@ are a quarter million data sets, each results in a different posterior
 distribution. Manual tuning for each of them is a difficult task. When the
 random walk algorithm is applied for the real data, we used the adaptive
 Normal random walk for the parameters $(\phi_{1:r},\theta_{1:r})$. Using
-$10,000$ iterations as the burn-in period, we were able to obtain satisfactory
+10,000 iterations as the burn-in period, we were able to obtain satisfactory
 accept rate (in the range of $0.2$ to $0.4$) for the majority of the vast data
 sets.
 
@@ -731,7 +807,7 @@ from
   \pi_i(x_i|x_1^{t+1},\dots,x_{i-1}^{t+1},x_{i+1}^t,\dots,x_p^t).
 \end{equation}
 The densities $\pi_1,\dots,\pi_p$ are called the \emph{full conditionals}.
-This leads to algorithm~\ref{alg:gibbs}. See \cite[][chap.~8
+This leads to Algorithm~\ref{alg:gibbs}. See \cite[][chap.~8
 and~9]{Robert:2004tn} for a full theoretical treatment of Gibbs sampling.
 
 \begin{algorithm}
@@ -756,13 +832,10 @@ The Markov chain produced by a Gibbs sampler is irreducible if $\pi$ satisfies
 the so-called \emph{positive condition}: all $\pi_i$ are positive implies that
 $\pi$ is also positive \cite[][Theorem~10.8]{Robert:2004tn}. An easier to
 verify condition for Harris recurrent is that the transition kernel associated
-with algorithm~\ref{alg:gibbs} is absolutely continuous with respect to $\pi$
+with Algorithm~\ref{alg:gibbs} is absolutely continuous with respect to $\pi$
 \cite{Tierney:1994uk}. Some simpler conditions can be found in
 \cite{Hobert:1997vx}. Stronger convergence results such as geometrically
 ergodicity are more difficult to be established for Gibbs sampler in general.
-
-\sidenote{I saw some discussions on geometrically ergodicity for 2-component
-  Gibbs sampler but no general results}
 
 Intuitively, the decomposition of the joint density gives a particular
 coordinate system with each step only explore one of the coordinates. It may
@@ -820,7 +893,7 @@ Another way of doing Gibbs sampling is to use a \emph{random scan}
 \cite{Liu1995Gibbs}, where at each time $t$, a sequence of integers
 $(k_1,\dots,k_p)$ is generated, usually uniformly across all permutations of
 $(1,\dots,p)$, and the components are updated in the order of
-$(X_{k_1},\dots,X_{k_p})$. This leads to algorithm~\ref{alg:gibbs random}, the
+$(X_{k_1},\dots,X_{k_p})$. This leads to Algorithm~\ref{alg:gibbs random}, the
 random scan Gibbs sampler. The resulting Markov chain is reversible
 \cite{Liu1995Gibbs}. This property can be useful when applying the \clt
 \cite[][sec.~10.1.2]{Robert:2004tn}.
@@ -877,7 +950,7 @@ dimension of the parameter space is not fixed. In the context of Bayesian
 model selection, it can used for inference of the full posterior
 $\pi(\theta_k,\calM_k|\data)$, which is defined on the space $\Theta =
 \bigcup_{k\in\calK}\{\calM_k\}\times\Theta_k$. Situations where this can be
-reduced to the estimation of the Bayes factor (section~\ref{sub:Bayes
+reduced to the estimation of the Bayes factor (Section~\ref{sub:Bayes
   factor}), techniques reviewed so far in this chapter can be used. However,
 when $\calK$ is (infinite) countable, or for other reasons, direct inference
 on the full posterior distribution is desired, \rjmcmc is the most widely used
@@ -918,7 +991,7 @@ $u$ and its density $q(u)$. The acceptance probability becomes
     \frac{\pi(M_{k'})\pi(\theta_{k'}|M_{k'})p(\data|\theta_{k'},M_{k'})}
     {\pi(\calM_k)\pi(\theta_k|\calM_k)p(\data|\theta_k,\calM_k)}
     \frac{r_m(\theta_{k'})}{r_m(\theta_k)}
-    \frac{1}{q(u)}\Abs[Big]{\frac{\partial\theta_{k'}}{\partial(\theta_k,u)}}
+    \frac{1}{q(u)}\Abs[bigg]{\frac{\partial\theta_{k'}}{\partial(\theta_k,u)}}
   },
 \end{equation}
 where the last term is the determinant of the Jacobian of the transformation.
@@ -941,11 +1014,18 @@ within model simulations, may no longer be intuitive in the variable dimension
 model settings. For instance, when a cross-model occurs, the previous state of
 the parameters, which may be in a high probability region of the model in the
 last iteration, when transformed might be in a low probability region of the
-model of the current iteration. In addition, \rjmcmc does not characterize
-models with low posterior probabilities well. In some cases it will be
-difficult to determine whether the low acceptance rates of between model moves
-results from actual characteristics of the posterior or from a poorly adapted
-proposal kernel.
+model of the current iteration. In addition, \rjmcmc does not characterize all
+models well as some may be visited by the chain only rarely. This may not be a
+problem when the model is indeed of low posterior probability and there are
+little interest in such models. However, in some cases it will be difficult to
+determine whether the low acceptance rates of between model moves results from
+actual characteristics of the posterior or from a poorly adapted proposal
+kernel.
+
+\draftnote{Make it clear \rjmcmc does not characterizing small probability
+  model well is not necessarily a problem. It is the fact that we cannot be
+  sure that the low acceptance rate is a resulting of poor proposal or small
+  probability a problem.}
 
 Some discussion of the optimization of the cross-model moves can be found in
 \cite{Green:2009tr}. Also the adaptive scheme for the Metropolis-Hastings
@@ -962,7 +1042,7 @@ increased computation cost.
 
 Population-based methods have been considered in recent researches. An entire
 family of such algorithms, sequential Monte Carlo, is considered in
-chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation}. Another
+Chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation}. Another
 algorithm, population \mcmc, which has seen applications in the area of
 Bayesian model comparison, is reviewed in this section.
 
@@ -978,7 +1058,7 @@ Different choices of the sequence is possible. One commonly used in practice
 is called tempering. For a target $\pi$, a sequence $\{\pi_t\}_{t=0}^T$ is
 constructed such that,
 \begin{equation}
-  \pi_t(x) = [\pi(x)]^{\alpha(t/T)}
+  \pi_t(x) \propto [\pi(x)]^{\alpha(t/T)}
 \end{equation}
 where the mapping $\alpha:[0,1]\to[0,1]$ is monotonically increasing such that
 $\alpha(1) = 1$. Other similar schemes can be constructed. For example, in the
@@ -991,7 +1071,8 @@ sequence
 \end{equation}
 where the monotonically increasing mapping $\alpha$ is such that $\alpha(0) =
 0$ and $\alpha(1) = 1$. Therefore the sequence moves smoothly from the prior,
-which can usually be sampled easily, into the posterior.
+which can usually be sampled easily, into the posterior, provided that the
+prior is proper.
 
 More precisely, the algorithm targets the distribution $\prod_{t=0}^T\pi_t$.
 After initialization $T$ Markov chains for each of the marginals
@@ -1002,7 +1083,7 @@ Metropolis-Hastings algorithm or a Gibbs sampler. One can select one chain
 at random in each iteration to mutate or advance all chains in parallel. The
 other type of move is \emph{global}. The purpose is to allow fast mixing
 chains to transfer information into slower mixing chains. This leads
-algorithm~\ref{alg:pmcmc}. There are several approaches of the global move
+Algorithm~\ref{alg:pmcmc}. There are several approaches of the global move
 \cite{Jasra:2007in}. Two more widely used are the following.
 
 \begin{algorithm}
@@ -1015,13 +1096,13 @@ algorithm~\ref{alg:pmcmc}. There are several approaches of the global move
   \REPEAT
     \STATE Draw $k_1$ from a uniform distribution on $(0,\dots,T-1)$. Set
     $k_2\leftarrow k_1 + 1$.
-    \STATE Draw $Y_{k_1}^t\sim q_{k_1}(y_{k_1}^t|x_{k_2})^t$ and
-    $Y_{k_2}^t\sim q_{k_2}(y_{k_2}^t|x_{k_1})^t$.
+    \STATE Draw $Y_{k_1}^t\sim q_{k_1}(y_{k_1}^t|x_{k_2}^t)$ and
+    $Y_{k_2}^t\sim q_{k_2}(y_{k_2}^t|x_{k_1}^t)$
     \STATE Compute $\alpha = \min\Curly[bigg]{
       \frac{\pi_{k_1}(y_{k_1}^t)\pi_{k_2}(y_{k_2}^t)
-        q_{k_1}(x_{k_2}|y_{k_1})q_{k_2}(x_{k_1}|y_{k_2})}
+        q_{k_1}(x_{k_2}^t|y_{k_1}^t)q_{k_2}(x_{k_1}^t|y_{k_2}^t)}
       {\pi_{k_1}(x_{k_1}^t)\pi_{k_2}(x_{k_2}^t)
-        q_{k_1}(y_{k_1}|x_{k_2})q_{k_2}(y_{k_2}|x_{k_1})}, 1}$
+        q_{k_1}(y_{k_1}^t|x_{k_2}^t)q_{k_2}^t(y_{k_2}^t|x_{k_1}^t)}, 1}$
     \STATE Draw $U\sim\calU[0,1]$.
     \IF{$U\le\alpha$}
       \STATE Set $X_{k_1}^{t+1}\leftarrow Y_{k_1}^t$, $X_{k_2}^{t+1}\leftarrow
@@ -1058,7 +1139,7 @@ adjacent to each other in the sense that one is chosen randomly and the other
 is selected to be the one most close to it. For example, in the tempering
 scheme, usually a chain $t\in{0,1,\dots,T-1}$ is chosen randomly and it is
 proposed to be exchanged with chain $t+1$. The delayed rejection approach in
-\cite{Green:2001tk} (see section~\ref{sub:Reversible jump mcmc}) can also be
+\cite{Green:2001tk} (see Section~\ref{sub:Reversible jump mcmc}) can also be
 used in the exchange moves. Thus two chains in some sense that are very
 different can also be chosen. In either case, the key is that the chains
 chosen to be exchanged are chosen uniformly over all chains.
@@ -1072,7 +1153,7 @@ proposed to be exchanged. Suppose the state $X$ can be partitioned into $X =
 (X_1,\dots,X_p)$ in the same way for each chain. Then a random position, say
 $l$ is chosen and the position $l$ of $X_1$ is proposed to be exchanged with
 its counter-part in $X_2$. The acceptance probability is the same as
-equation~\eqref{eq:exchange accept} with suitable notation changes. In
+Equation~\eqref{eq:exchange accept} with suitable notation changes. In
 \cite{Jasra:2007in} it was found that this can be more efficient than the
 exchange move.
 
@@ -1116,7 +1197,7 @@ algorithm proceeds in the same way to find $\alpha_t$ for $t>1$.
 \label{sub:Convergence diagnostic}
 
 One important issue of \mcmc algorithms is its speed of convergence. It is
-well understood yet sometime over sighted in practice. In the previous
+well understood yet sometime over looked in practice. In the previous
 sections we demonstrated for many of the algorithms, under fairly general
 conditions, the chains produced are ergodic, or even geometrically ergodic
 (random walk). In some cases the chain can be uniformly ergodic (independent
@@ -1128,7 +1209,7 @@ Convergence of an \mcmc algorithm is assessed with monitoring certain
 statistic of samples. This process is also called \emph{diagnosing
   convergence}. There are two types of convergence
 \cite[][chap.~12]{Robert:2004tn} widely used in practice. As we will see
-later, a convergence diagnose can at best determine that a chain has not
+later, a convergence diagnostic can at best determine that a chain has not
 converged yet. One cannot be certain that a chain does converge.
 
 \subsubsection{Convergence to the stationary distribution}
@@ -1139,7 +1220,7 @@ to be used to approximate simulation from target distribution $\pi$, is that
 the chain converges to this stationary distribution. However, $\pi$ is only
 the limiting distribution and the stationarity is at best achieved
 asymptotically. Nonetheless, one possible assessment of such convergence is to
-obtain bounds on the total variance norm,
+obtain bounds on the total variation norm,
 \begin{equation*}
   \Norm{K^n(x,\cdot)-\pi}_{TV}
 \end{equation*}
@@ -1163,7 +1244,7 @@ algorithm. Figure~\ref{fig:pet diag} shows the trace and histogram plots of
 parameter $\theta_1$. It appears to show that the \mcmc chain has converged
 well. However, from the properties of the model, it is known that this
 parameter has at least three local modes. In fact, this sampler has been
-trapped into one local mode. In figure~\ref{fig:pet diag c} the trace and
+trapped into one local mode. In Figure~\ref{fig:pet diag c} the trace and
 histogram plots of the same sampler but with better calibrated proposal
 scales are shown.
 
@@ -1207,7 +1288,7 @@ function $\varphi$, define the following ratio,
   {\var[\varphi(X^{(1)},\dots,X^{(N)}]}
 \end{equation}
 A value of $R_T$ between $0.9$ and $1.1$ is recommended. For example,
-figure~\ref{fig:pet diag ratio} shows the ratios of the variance of $V_D$
+Figure~\ref{fig:pet diag ratio} shows the ratios of the variance of $V_D$
 estimated using final 10,000 samples to that of all 100,000 post burn-in
 samples, for a real \pet scan data set. For the majority of data sets, the
 ratios fall in the desired interval.
@@ -1223,6 +1304,9 @@ ratios fall in the desired interval.
 \subsubsection{Convergence of averages}
 \label{ssub:Convergence of averages}
 
+\draftnote{Add one sentence saying that these diagnostics are appealing
+  because they directly measure the stability of the estimator of interest}
+
 In \cite{Yu:1998fn} it was proposed to use the cumulative sums and plot the
 partial differences,
 \begin{equation}
@@ -1230,15 +1314,16 @@ partial differences,
 \end{equation}
 where
 \begin{equation}
-  S^N = \frac{1}{N}\sum_{i=1}^T \varphi(X^{(i)})
+  S^N = \frac{1}{N}\sum_{i=1}^N \varphi(X^{(i)})
 \end{equation}
 is the final average. A simple variant of this message is to plot the average
-of the first $t$ samples $S_t$. For instance, figure~\ref{fig:pet vd mean}
-shows the posterior mean estimate of $V_D$ for a \pet model with three
-components. The posterior mean from five samplers initialized with different
-values converge to the same value and stabilized. This approach is appealing
-in that it directly assess the accuracy of the quantities of interest
-(estimation of $V_D$ in this case).
+of the first $t$ samples $S_t$. The use of these quantities can be appealing
+because they directly measure the stability of the estimator of interest. For
+instance, Figure~\ref{fig:pet vd mean} shows the posterior mean estimate of
+$V_D$ for a \pet model with three components. The posterior mean from five
+samplers initialized with different values converge to the same value and
+stabilized. This approach is appealing in that it directly assess the accuracy
+of the quantities of interest (estimation of $V_D$ in this case).
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_VD}
@@ -1249,33 +1334,52 @@ in that it directly assess the accuracy of the quantities of interest
 
 A more robust approach was proposed in \cite{Robert:1995ge}. The idea is to
 use several convergent estimators based on the same samples. The chain is
-stopped until all estimators agree with each other. One obvious estimator is
-the empirical average. Another one is the importance sampling estimator. In
-the particular case of Gibbs sampler, the distribution,
+stopped until all estimators are close to each other in the sense that the
+differences are smaller than a preset tolerance value. One obvious estimator
+is the empirical average. Another one is the importance sampling estimator,
+\begin{equation}
+  \varphi_{\mcmc-\is}^N = \sum_{i=1}^N
+  \varphi(Y^{(i)})\frac{\pi(Y^{(i)})}{\eta(Y^{(i)})}
+\end{equation}
+where $\{Y^{(i)}\}_{i=1}^N$ are samples from $\eta$, the proposal distribution.
+The variant of this estimator can be used when the normalizing constants of
+either $\pi$ or $\eta$ are unknown (see Section~\ref{sec:Importance
+  sampling}).  In the particular case of Gibbs sampler, the distribution,
 \begin{equation}
   \eta(x) \propto \prod_{i=1}^p \pi_i(x_i|x_{1:i-1},x_{i+1:p})
 \end{equation}
-is a natural choice to be used as the proposal distribution in the importance
-sampling estimator. For a generic Metropolis-Hastings algorithm, the samples
-simulated from the proposal distributions (both those accepted and rejected)
-can be recycled to calculate the importance sampling estimate. This lead to,
+is a natural choice to be used as the proposal distribution and samples from
+the algorithm can be used. For a generic Metropolis-Hastings algorithm, the
+samples simulated from the proposal distributions (both those accepted and
+rejected) can be recycled to calculate the importance sampling estimate. This
+lead to,
 \begin{equation}
-  S_{\is}^N = \sum_{t=1}^N \varphi(Y^t) \frac{\pi(Y^t)}{q(Y^t|X^t)}
+  \varphi_{\mh-\is}^N = \sum_{i=1}^N
+  \varphi(Y^{(i)})\frac{\pi(Y^{(i)})}{q(Y^{(i)}|X^{(i)})}
   \label{eq:sn is}
 \end{equation}
-This approach is more robust to trapping state than the simple plots of
-averages. For example, consider a random walk Metropolis-Hastings algorithm in
-trapping state due to too small proposal scales. It is expected that $S^N$
-could appear to be stable. However, $S_{\is}^N$ may be much less stable and
-have very different estimates. Those rejected proposed values that move into
-other local mode (and hence modest or high target density value), has small
-proposal density value. This could lead to extreme large weight in
-equation~\ref{eq:sn is} and large variance of the estimate.
+or its variant when the normalizing constants of either $\pi$ or $q$ are
+unknown. This approach is more robust to trapping state than the simple plots
+of averages.
+
+\draftnote{Not sure that the scenarios described here about independent MH is
+  plausible}
+
+For example, consider an independent Metropolis-Hastings algorithm with
+proposal $\eta$ have only one high probability region $A$ while the target
+$\pi$ has two high probability region $A$ and $B$ such that
+$\pi(A)\approx\pi(B)$. The chain is likely to be trapped in $A$ and $S^N$
+might appear to be stable. However, $\varphi_{\mh-\is}^N$ is much less stable
+since those values occasionally proposed within $B$, though very likely to be
+accepted, they also have extreme large value of the weight
+$\pi(Y^{(i)})/\eta(Y^{(i)})$. This leads to large variance of the importance
+sampling estimator. In this case, $\varphi_{\mh-\is}^N$ is stable when values
+of high target density values are also proposed frequently.
 
 \subsection{Application to Bayesian model comparison}
 \label{sub:MCMC Application to Bayesian model comparison}
 
-It is clearly that \rjmcmc can be used directly for the purpose of Bayesian
+It is clear that \rjmcmc can be used directly for the purpose of Bayesian
 model comparison, as it generates samples from the full posterior with the
 model posterior distribution as a marginal.
 
@@ -1303,14 +1407,14 @@ available, say $\{\theta^{(i)}\}_{i=1}^N$, an estimator of $p(\data)$ can be
 obtained by the harmonic mean \cite{Newton:1994wm},
 \begin{equation}
   \widehat{p(\data)}_{\hm}^N =
-  \Round[Big]{\frac{1}{N}\sum_{i=1}^N\frac{1}{f(\data|\theta^{(i)})}}^{-1}
+  \Round[bigg]{\frac{1}{N}\sum_{i=1}^N\frac{1}{f(\data|\theta^{(i)})}}^{-1}
 \end{equation}
 Unfortunately this estimator can suffer instability problem when samples with
 small likelihoods are generated. In fact this estimator does not always has a
 finite variance and therefore in general does not satisfy a \clt. An
 improvement seen in \cite{Kass:1995vb} is,
 \begin{equation}
-  \widehat{p(\data)}_{\ghm}^N = \Round[Big]{
+  \widehat{p(\data)}_{\ghm}^N = \Round[bigg]{
     \frac{1}{N}\sum_{i=1}^N
     \frac{\gamma(\theta^{(i)})}{f(\data|\theta^{(i)})\pi(\theta^{(i)})}}^{-1},
 \end{equation}
@@ -1332,8 +1436,8 @@ with moments approximated from the samples as a natural choice of $\gamma$ was
 suggested. In addition, the variance of the estimator can also be estimated
 for $1/\widehat{p(\data)}$ from the posterior samples through,
 \begin{equation}
-  \var\Square[Big]{\frac{1}{\widehat{p(\data)}_{\ghm}^N}} =
-  \frac{1}{N^2}\sum_{i=1}^N \Round[Big]{
+  \var\Square[bigg]{\frac{1}{\widehat{p(\data)}_{\ghm}^N}} =
+  \frac{1}{N^2}\sum_{i=1}^N \Round[bigg]{
     \frac{\gamma(\theta^{(i)})}{f(\data|\theta^{(i)})\pi(\theta^{(i)})}
     - \frac{1}{\widehat{p(\data)}_{\ghm}^N}}^2.
 \end{equation}
@@ -1353,29 +1457,40 @@ Now, with the Bayesian modeling in the last chapter for the \pet model and the
 computational techniques reviewed in this chapter, we can present the Bayesian
 model comparison results for this example. For a \pet model with $r$ component
 and a Student $t$ distributed error structure and informative prior, we
-construct a random Metropolis-Hastings algorithm with four blocks,
+construct a random Metropolis-Hastings algorithm with four blocks. Again,
+recall the parameterization in Section~\ref{sec:Positron emission tomography
+  compartmental model},
 \begin{enumerate}
-  \item Update $\phi_{1:r}$ with a Normal random walk.
-  \item Update $\theta_{1:r}$ with a Normal random walk.
-  \item Update $\tau$ with a Normal random walk on the logarithm scale.
-  \item Update $\nu$ with a Normal random walk on the logarithm scale.
+  \item Update $\phi_{1:r}$ with a multivariate Normal random walk proposal.
+  \item Update $\theta_{1:r}$ with a multivariate Normal random walk proposal.
+  \item Update $\tau$ with a Normal random walk proposal on the logarithm
+    scale, i.e., on $\log\tau$.
+  \item Update $\nu$ with a Normal random walk proposal on the logarithm
+    scale, i.e., on $\log\nu$.
 \end{enumerate}
 There is a 100,000 iterations burn-in period and 10,000 iterations are used
 for estimation. The generalized harmonic mean estimator $\hat\varphi_{\ghm}^N$
 is used to compute the Bayes factor. The model selection results, along with
 that from \aic and \bic methods for the purpose of comparison, are shown in
-figure~\ref{fig:pet mo}. It can be seen that the Bayesian model selection
+Figure~\ref{fig:pet mo}. It can be seen that the Bayesian model selection
 results shows more plausible structure than the information criteria.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MO}
-  \caption{Model selection results for \pet model using real data set.}
+  \caption{Model selection results for \pet model using real data set. From
+    top to bottom: Model order selected by \aicc (see Section~\ref{sub:A
+      second order aic}); Model order selected by \bic (see
+    Section~\ref{sub:Bayes factor}); Model order selected by using Bayesian
+    model comparison with marginal likelihood approximated by generalized
+    harmonic mean estimator; The posterior model probability
+    $\pi(\calM_k|\data)$ (see Section~\ref{sub:The model choice problem}) with
+    uniform prior model probability $\pi(\calM_k)$.}
   \label{fig:pet mo}
 \end{figure}
 
 The convergence results for this simulation was already shown in
-figure~\ref{fig:pet diag ratio}. It shall be noted that, though as shown in
-figure~\ref{fig:pet vd mean}, accurate estimation of the parameter $V_D$ does
+Figure~\ref{fig:pet diag ratio}. It shall be noted that, though as shown in
+Figure~\ref{fig:pet vd mean}, accurate estimation of the parameter $V_D$ does
 not really need this many iterations. However, accurate estimation of the
 marginal likelihood requires considerably more samples.
 
@@ -1405,9 +1520,27 @@ and given $\theta^*$, we have the estimator,
   {\pi(\theta_1^*|\data)
     \prod_{i=2}^p\pi(\theta_i^*|\data,\theta_{1:i-1}^*)}.
 \end{equation}
-The value of $\pi(\theta_1^*|\data)$ can be approximated with output from
-Gibbs sampler. The term $\pi(\theta_i^*|\data,\theta_{1:i-1}^*)$ can be
-approximated based on the identity,
+The value of $\pi(\theta_1^*|\data)$, the marginal ordinate of
+$\pi(\theta|\data)$ can be approximated with output from Gibbs sampler, for
+example,
+\begin{equation}
+  \hat\pi^N(\theta_1^*|\data)
+  = \frac{1}{N}\sum_{i=1}^N \pi(\theta_1^*|\data,\theta_{2:p}^{(i)})
+  \label{eq:est gibbs first}
+\end{equation}
+since
+\begin{align*}
+  \pi(\theta_1^*|\data)
+  &= \int\pi(\theta_1^*, \theta_{2:p}|\data)\intd\theta_{2:p} \\
+  &= \int\pi(\theta_1^*|\data,\theta_{2:p})
+  \pi(\theta_{2:p}|\data)\intd\theta_{2:p} \\
+  &= \Exp[\pi(\theta^*|\data,\theta_{2:p})|\data]
+\end{align*}
+where the expectation is taken with respect to the marginal distribution of
+$\theta_{2:p}$ conditional on the data.
+
+The term $\pi(\theta_i^*|\data,\theta_{1:i-1}^*)$ can be approximated based on
+the identity,
 \begin{align}
   \pi(\theta_i^*|\data,\theta_{1:i-1}^*)
   &= \int \pi(\theta_i^*,\theta_{i+1:p}|\data,\theta_{1:i-1}^*)
@@ -1416,10 +1549,10 @@ approximated based on the identity,
   \pi(\theta_{i+1:p}|\data,\theta_{1:i-1}^*) \intd\theta_{i+1:p}
 \end{align}
 and using a Gibbs sampler operate on $\theta_{i:p}$ with
-$\pi(\theta_{i:p}|\data,\theta_{1:i-1}^*)$ as the target distribution. This is
-possible because of the full conditionals required to construct the Gibbs
-sampler are available, otherwise the Gibbs sampler on $\theta$ cannot be
-constructed.
+$\pi(\theta_{i:p}|\data,\theta_{1:i-1}^*)$ as the target distribution and an
+estimator similar to Equation~\eqref{eq:est gibbs first}. This is possible
+because of the full conditionals required to construct the Gibbs sampler are
+available, otherwise the Gibbs sampler on $\theta$ cannot be constructed.
 
 In addition to the usual requirement of a Gibbs sampler, that all the full
 conditionals can be sampled from, this method also requires that all these
@@ -1445,14 +1578,14 @@ $\alpha$ which defines a family of distributions, $\{\pi_{\alpha} =
 one, one can estimate the logarithm of the ration of their normalizing
 constants via a simple integral relationship,
 \begin{equation}
-  \log\Round[Big]{\frac{Z_1}{Z_0}} = \int_0^1\Exp_{\pi_{\alpha}}
-  \Square[Big]{\frac{\diff\log\gamma_{\alpha}(\cdot)}{\diff\alpha}}
+  \log\Round[bigg]{\frac{Z_1}{Z_0}} = \int_0^1\Exp_{\pi_{\alpha}}
+  \Square[bigg]{\frac{\diff\log\gamma_{\alpha}(\cdot)}{\diff\alpha}}
   \intd\alpha.
   \label{eq:path integral}
 \end{equation}
 
 There are various ways of constructing such a family of distributions, for
-example, the sequence of distributions in equation~\eqref{eq:power post},
+example, the sequence of distributions in Equation~\eqref{eq:power post},
 $\alpha = \alpha(t/T)$. The population \mcmc provides samples that can be used
 to approximate this path sampling estimator. Given samples
 $\{X_0^{(i)},\dots,X_T^{(i)}\}_{i=1}^N$ from $N$ iterations of a population
@@ -1486,7 +1619,7 @@ However, the global move has an acceptance rate about $0.85$, which implies
 that the sampler is not mixing well.
 
 The use of path sampling for estimating of Bayes factor will be revisited in
-chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation} for
+Chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation} for
 sequential Monte Carlo. More results for the \pet model and other examples can
 also be found in the same chapter.
 
@@ -1523,11 +1656,13 @@ sampling estimator. There is a trade-off between convergence speed and
 accuracy of the estimator in term of its bias.
 
 It shall be noted that, the application of Monte Carlo methods is not limited
-to integrations. They have also found application in areas such as
+to integration. They have also found application in areas such as
 optimization (see \cite[][chap.~5]{Robert:2004tn} and references therein). In
 addition, Monte Carlo integration is also not limited to the Bayesian
-paradigm. For example, methods such as bootstrap may involve the integration
-of the empirical cumulative distribution function (\cdf).
+paradigm. For instance, Monte Carlo integration can be used for hypothesis
+tests when various asymptotic assumptions, such as normality, are not
+suitable. For examples, see \cite[][sec.~3.2]{Robert:2004tn} and references
+therein.
 
 There are many other Monte Carlo algorithms not reviewed in this chapter.
 Notable examples are slice sampling and perfect sampling (see \cite[][chap.~8
@@ -1535,8 +1670,9 @@ and~13]{Robert:2004tn}). Another class of algorithms, sequential Monte Carlo
 (\smc) operate by iteratively construct efficient importance sampling. A
 recent develop, particle \mcmc \cite{Andrieu:2010gc} combines the strength of
 \mcmc and \smc by using \smc samplers as proposal in Metropolis-Hastings
-algorithms. This chapter is far from a complete review of the topic on Monte
-Carlo methods. The algorithms reviewed are widely used for the purpose of of
-Bayesian modeling. They have become standard tools of statisticians for
-Bayesian computation. In the next chapter, we will study the use of \smc for
-this purpose in detail. Some novel algorithms will be introduced.
+algorithms or Gibbs sampling. This chapter is far from a complete review of
+the topic on Monte Carlo methods. The algorithms reviewed are widely used for
+the purpose of of Bayesian modeling. They have become standard tools of
+statisticians for Bayesian computation. In the next chapter, we will study the
+use of \smc for this purpose in detail. Some novel algorithms will be
+introduced.

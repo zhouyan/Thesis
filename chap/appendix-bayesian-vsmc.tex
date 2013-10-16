@@ -1,0 +1,351 @@
+\chapter{Sequential Monte Carlo for Bayesian Computation}
+\label{cha:Sequential Monte Carlo for Bayesian Computation}
+
+\section{Conditional effective sample size}
+\label{app:Conditional effective sample size}
+
+The exact \ess of an importance sample of size $N$ with proposal $\pi_{t-1}$
+and target $\pi_t$ of \cite{Kong:1994ul} is defined as:
+\begin{equation}
+  \text{Exact \ess} =
+  \frac{N}{1 + \var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})}
+  \label{eq:essdefinition}
+\end{equation}
+which is widely approximated by the empirical equivalent,replacing
+$1+\var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})$ with the empirical mean squared
+normalized importance weights.
+
+In the context of adaptive specification of an SMC tempering schedule, we are
+interested in the discrepancy between adjacent distributions, $\pi_{t-1}$ and
+$\pi_t$, and so the \ess defined in Equation \ref{eq:essdefinition} is a
+natural quantity to consider.
+
+However, the \ess as used in the recent SMC literature is invariably computed
+using the empirical mean squared normalized importance weights of the current
+population. If these importance weights have been accumulated over several
+iterations, then they coincide with an \ess based on the excursion since the
+last resampling epoch. The \cess proposed in this paper instead uses a
+weighted sample from $\pi_{t-1}$ to approximate exactly the quantity described
+by Equation \ref{eq:essdefinition}; the different name is used to distinguish
+this quantity from that usually termed the \ess in the SMC literature.
+
+The approximation leading to the \cess, given weighted sample
+$\{W_{t-1}^i,X_{t-1}^i\}_{i=1}^N$ and unnormalized incremental weights
+$w_{t}^j \propto \frac{d\pi_t}{d\pi_{t-1}}(X_{t-1}^i)$ is simply:
+\begin{align*}
+\text{Exact \ess} = \frac{N}{1 + \var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})}
+\approx& \frac{N}{\sum_{i=1}^N W_{t-1}^i
+  (\frac{d\pi_t}{d\pi_{t-1}}(X_{t-1}^i))^2}\\
+\approx& \frac{N}{\sum_{i=1}^N W_{t-1}^i
+  (\frac{w_t^i}{\sum_{j=1}^N W_{t-1}^j w_t^j})^2} =: \cess,
+\end{align*}
+with the first approximation replacing the expectation under $\pi_{t-1}$ with
+its weighted sample average and the second replacing the normalizing constant
+of the weighting function with its empirical analogue.
+
+\section{Proof of proposition 1}
+\label{sec:Proof of proposition 1}
+
+We begin by making some identifications which allow the connection between the
+\smc sampler algorithm presented above and Feynman-Kac formula to be made
+explicit as the proof relies on approaches pioneered in
+\cite{DelMoral:2004ux}. Throughout this appendix we write $\eta K(\cdot) =
+\int \eta(dx) K(x,\cdot)$ for any compatible measure $\eta$ and Markov kernel
+$K$ and $\eta(\varphi) = \int \eta(dx) \varphi(x)$ for any $\eta$-integrable
+function $\varphi$.
+
+A Feynman-Kac formula describes the law of a Markov chain on
+$\{(E_t,\mathcal{E}_t)\}_{t\geq 0}$ (with initial distribution
+$\hat\eta_0$ and transitions $M_t$) evolving in the presence of a
+(time-varying) potential (described by $G_t$) such that the marginal law of
+the $t^\text{th}$ coordinate is:
+\begin{equation*}
+  \hat\eta_t(A) = \frac
+  {
+    \int_{E_1 \times \ldots \times E_{t-1} \times A}
+    \hat\eta_0(d\tilde{x}_0)
+    \prod_{i=1}^t M_{i}(\tilde{x}_{i-1},d\tilde{x}_i)
+    G(\tilde{x}_i)
+  }{
+    \int_{E_1 \times \ldots \times E_{t}}
+    \hat\eta_0(d\tilde{x}^\prime_0)
+    \prod_{i=1}^t M_{i}(\tilde{x}^\prime_{i-1},d\tilde{x}^\prime_i)
+    G(\tilde{x}^\prime_i)
+  }
+\end{equation*}
+for any measurable set $A$.
+
+It is convenient to define the operator $\hat\Phi_t(\eta)(\diff
+\tilde{x}_t) = G_t(\tilde{x}_t)\eta M_t(\diff \tilde{x}_t)/\eta
+M_t(G_t)$ which allows us to write, recursively, $\hat\eta_t =
+\hat\Phi_t(\hat\eta_{t-1})$ and to define the intermediate
+distributions $\eta_t = \hat\eta_{t-1}M_t$ such that $\hat\eta_t(\diff
+\tilde{x}_t) = G_t(\tilde{x}_t) \eta_t(d\tilde{x}_t) /
+\eta_t(G_t)$.
+
+If $\mathcal{X}$ denotes the space upon which an \smc sampler with \mcmc
+proposal $K_t$ at time $t$ and sequence of target distributions $\pi_t$
+operates, then we obtain $\pi_t$ as the final coordinate marginal of the
+Feynman-Kac distribution at time $t$ if we identify $E_t = \mathcal{X}^t$,
+$M_{t}(\tilde{x}_{t-1},d\tilde{x}_t) =
+\delta_{\tilde{x}_{t-1}}(d\tilde{x}_{t,1:t-1})
+K_t(\tilde{x}_{t,t-1},d\tilde{x}_t)$ and $G_t(\tilde{x}_t) =
+\pi_{t}(\tilde{x}_{t,t-1}) / \pi_{t-1}(\tilde{x}_{t,t-1})$.
+
+To provide symmetry between the simulation system and the ideal system which
+it targets, it is convenient to let $\tilde{X}_t^i$ denote the extended
+sample corresponding to $X_t^i$ at iteration $t$ together with the full
+collection of values which its ancestors took during previous iterations
+(i.e., $\tilde{X}_t^i$ corresponds to the particle system obtained by
+sampling according to $M_t$ above rather than $K_t$ at each iteration). It is
+then convenient to write the particle approximation at time $t$ as
+\begin{equation*}
+  \hat\eta_t^N(d\tilde{x}_t) = \sum_{i=1}^N
+  \frac{G_t(\tilde{X}_t^i)}{\sum_{j=1}^N G_t(\tilde{X}_t^j)}
+  \delta_{\tilde{X}_t^i}(d\tilde{x}_t).
+\end{equation*}
+We refer the reader to
+\cite{DelMoral:2004ux} for further details of the connection between such
+particle systems and the Feynman-Kac formula.
+
+In order to proceed, we prove the following more general result to which
+Proposition~\ref{prop:path_clt} is a direct corollary.
+
+\begin{proposition}\label{prop:gen_clt}
+  Under the regularity conditions given in \cite[section 9.4, pp.
+  300--306]{DelMoral:2004ux}, a weighted sum of integrals obtained from
+  successive generations of the particle approximation of a Feynman-Kac flow
+  $\{\hat\eta_t\}_{t=0}^T$, with the application of multinomial resampling
+  at every iteration, obeys a central limit theorem in the following sense,
+  for a collection of finite weights $\beta_t\in\Real$ and bounded measurable
+  functions $\xi_t:E_t \to\Real$ (where, in the historical process case
+  described above it is required that $\xi_t(\tilde{x}_t) =
+  \xi_t(\tilde{x}_{t,t})$):
+  \begin{equation}
+    \lim_{N\to\infty}\sqrt{N}
+    \sum_{t=0}^T\beta_t(\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t))
+    \xrightarrow{D}\calN(0,V_T(\xi_{0:T}))
+  \end{equation}
+  where $V_t$, $0\le t \le T$ is defined by the following recursion:
+  \begin{align}
+    V_0(\xi_0) =& \beta_0 \int \hat\eta_0(x_0)(\xi_0(x_0) -
+    \eta_0(\xi_0))^2 dx_0\notag\\
+    V_t(\xi_{0:t}) =& V_{t-1}\biggl(\xi_{0:t-2}, \xi_{t-1}
+    + \frac{\beta_t}{\beta_{t-1}}
+    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}\biggr)
+    + \beta_t^2\hat\eta_t\left(\frac{G_t(\cdot) (\xi_t(\cdot)-\hat\eta_t(\xi_t))^2}{\hat\eta_t(G_t)}\right).
+  \end{align}
+\end{proposition}
+
+The strategy of the proof is to decompose the error as that propagated forward
+from previous times and that due to sampling at the current time, just as in
+\cite{DelMoral:2004ux}. First note that the term
+$\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t)$ can be rewritten as
+\begin{equation}
+  \hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t) =
+  \hat\eta_t^N(\xi_t) - \hat\Phi_t(\hat\eta_{t-1}^N)(\xi_t) +
+  \hat\Phi_t(\hat\eta_{t-1}^N)(\xi_t) - \hat\eta_t(\xi_t)
+\end{equation}
+and the weighted sum,
+\begin{equation}
+  T_t^N(\xi_{0:t}) =\sqrt{N}
+  \sum_{j=0}^t\beta_j(\hat\eta_j^N(\xi_j)-\hat\eta_j(\xi_j))
+\end{equation}
+can therefore be written as
+\begin{align}
+  T_t^N(\xi_{0:t}) &= T_{t-1}^N(\xi_{0:t-1}) +
+  \sqrt{N}\beta_t(\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t)) \notag\\
+  &= \bar{T}_t^N(\xi_{0:t}) + \chi_t^N(\xi_t)
+\end{align}
+where
+\begin{align}
+  \bar{T}_t^N(\xi_{0:t}) &= T_{t-1}^N(\xi_{0:t-1}) +
+  \sqrt{N}\beta_t(\hat\Phi_t(\hat\eta_{t-1}^N)(\xi_t) - \hat\eta_t(\xi_t))
+  \label{eq:bar_t_t} \\
+  \chi_t^N(\xi_t) &=
+  \sqrt{N}\beta_t(\hat\eta_t^N(\xi_t) - \hat\Phi_t(\eta_{t-1}^N)(\xi_t))
+\end{align}
+
+Lemma~\ref{lem:propagation} shows that error propagation leads to controlled
+normal errors; Lemma~\ref{lem:sampling} shows that the act of sampling during
+each iteration also produces a normally-distributed error and
+Lemma~\ref{lem:normality} shows that these two normal errors can be combined
+leading by induction to Proposition~\ref{prop:gen_clt}.
+
+\begin{lemma}\label{lem:propagation}
+  Under the conditions of Proposition~\ref{prop:gen_clt}, if
+  $T_{t-1}^N(\xi_{0:t-1})\xrightarrow{D}\calN(0,V_{t-1}(\xi_{0:t-1}))$, then
+  \begin{equation}
+    \bar{T}_t^N(\xi_{0:t})\xrightarrow{D}\calN(0, \bar{V}_t(\xi_{0:t}))
+  \end{equation}
+  where
+  \begin{equation}
+    \bar{V}_t = V_{t-1}\biggl(\xi_{0:t-2}, \xi_{t-1} +
+    \frac{\beta_t}{\beta_{t-1}}
+    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}\biggr).
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  We begin by re-expressing the difference of interest in a more convenient form:
+  \begin{align}
+    \hat\Phi(\hat\eta_{t-1}^N)(\xi_t) - \hat\eta_t(\xi_t)
+    &= \frac{1}{\hat\eta_{t-1}^NM_t(G_t)}\{
+      \hat\eta_{t-1}^NM_t(G_t\xi_t) -
+      \hat\eta_{t-1}^NM_t(G_t)\hat\eta_t(\xi_t)\} \notag\\
+    &= \frac{1}{\hat\eta_{t-1}^NM_t(G_t)}
+    \{(\hat\eta_{t-1}^N-\hat\eta_{t-1})M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])\}
+  \end{align}
+where the final equality is a simple consequence of the fact that for any
+integrable test function $\varphi$:
+\begin{equation*}
+\hat\eta_{t-1} M_t (G_t \varphi) = \eta_t(G_t) \hat\eta_t(\varphi) \Rightarrow
+\hat\eta_{t-1} M_t (G_t [\xi_t - \hat\eta_t(\xi_t)]) = \eta_t(G_t)
+\underset{=0}{\underbrace{\hat\eta_t(\xi_t - \hat\eta_t(\xi_t))}} .
+\end{equation*}
+
+Substituting this representation into Equation~\eqref{eq:bar_t_t},
+  \begin{align}
+    \bar{T}_t^N(\xi_{0:t})
+    &= T_{t-1}^N(\xi_{0:t-1}) +
+    \frac{\sqrt{N}\beta_t}{\hat\eta_{t-1}^NM_t(G_t)}
+    \{(\hat\eta_{t-1}^N-\hat\eta_{t-1})M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])\}
+    \notag\\
+    &= T_{t-1}^N\biggl(\xi_{0:t-2},
+    \xi_{t-1} + \frac{\beta_t}{\beta_{t-1}}
+    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}^NM_t(G_t)}\biggr)
+  \end{align}
+  The proof is completed by using the result \cite[cf.
+  Sec.~7.4.3]{DelMoral:2004ux}, that if $G_t$ is essentially bounded below
+  then,
+  \begin{equation*}
+    \frac{1}{\hat\eta_{t-1}^NM_t(G_t)} \xrightarrow{P}
+    \frac{1}{\hat\eta_{t-1}M_t(G_t)}
+  \end{equation*}
+  together with the induction hypothesis.
+\end{proof}
+
+\begin{lemma}\label{lem:sampling}
+  Under the conditions of Proposition~\ref{prop:gen_clt},
+  \begin{equation}
+    \lim_{N\to\infty}\chi_t^N(\xi_t)\xrightarrow{D}\calN(0, \hat{V}_t(\xi_t))
+  \end{equation}
+  where
+  \begin{equation}
+    \hat{V}_t(\xi_t) = \beta_t^2\hat\eta_t((\xi_t - \hat\eta_t(\xi_t))^2)
+  \end{equation}
+\end{lemma}
+
+\begin{proof}
+  Consider first the particle system before reweighting with the potential
+  function $G_t$:
+  \begin{equation}
+\sqrt{N}\beta_t
+    \sum_{j=1}^N\frac{\xi_t(\tilde{X}_t^{(j)}) - \hat\eta_{t-1}^N M_t(\xi_t)}{N}
+    = \sum_{j=1}^NU_{t,j}^N
+  \end{equation}
+  where $U_{t,j}^N = \frac{\beta_t}{\sqrt{N}}\{\xi_t(\tilde{X}_t^{(j)}) -
+    \hat\eta_{t-1}^N M_t(\xi_t)\}$. Define, recursively, the $\sigma$-algebras
+    $\calH_t^N = \calH_{t-1}^N \vee
+    \sigma(\{\tilde{X}_{t}^{(j)}\}_{j=1}^N)$, $\calH_{t-1} =
+    \sigma\left(\cup_{N=0}^\infty \calH_{t-1}^N \right)$ and the increasing (in $j$) sequence of
+  $\sigma$-algebras $\calH_{t,j}^N =
+  \calH_{t-1}\vee\sigma(\{\tilde{X}_t^{(l)}\}_{l=1}^j)$. It is clear that
+  \begin{equation}
+    \Exp[U_{t,j}^N|\calH_{t,j-1}^N] = \Exp[U_{t,j}^N|\calH_{t-1}] = 0
+  \end{equation}
+  and so the sequence $U_{t,j}^N$, $j = 1,\dots,N$ comprises a collection of
+  $\calH_{t,j}^N$-martingale increments. Further it can be verified that these
+  martingale increments are square integrable,
+  \begin{align*}
+    \Exp[(U_{t,j}^N)^2|\calH_{t,j-1}^N]
+    &= \Exp[(U_{t,j}^N)^2|\calH_{t-1}] \\
+    &= \frac{\beta_t^2}{N}\{\hat\eta_{t-1}^N M_t(\xi_t^2) -
+      [\hat\eta_{t-1}^N)(\xi_t)]^2\}
+    < c_t \frac{\beta_t^2}{N} %\biggl\{
+     % R_t\lVert\xi_t\rVert_{\infty}^2 + R_t^2\lVert\xi_t\rVert_{\infty}
+     % \biggr\}
+  \end{align*}
+where $c_t < \infty$ exists by the boundedness of $\xi_t$. The
+conditional Linderberg
+  condition is also clearly satisfied. %(e.g., see proof of Lemma 7{} in
+  %\cite{Johansen:2006iv}).
+That is, for any $0 < u\le1$ and $\varepsilon>0$,
+  \begin{equation*}
+    \lim_{N\to\infty}\sum_{j=1}^{\lfloor Nu\rfloor}
+    \Exp[(U_{t,j}^N)^2\bbI_{(\varepsilon,\infty)}(|U_{t,j}^N|)|\calH_{t,j}^N]
+    \xrightarrow{P}0.
+  \end{equation*}
+  Thus we have
+  \begin{align*}
+    \sum_{j=1}^N\Exp[(U_{t,j}^N)^2|\calH_{t,j-1}^N]
+    &= \frac{\beta_t^2}{N}\sum_{j=1}^N
+    \{\hat\eta_{t-1}^N M_t(\xi_t^2) - [\hat\eta_{t-1}^N M_t(\xi_t)]^2\} \\
+    &= \beta_t^2     \{\hat\eta_{t-1}^N M_t(\xi_t^2) - [\hat\eta_{t-1}^N M_t(\xi_t)]^2\}
+  \end{align*}
+  and we can invoke the martingale central
+  limit theorem \cite[pp.~543]{Shiryaev:1995vp},
+  \begin{equation}
+    \lim_{N \to\infty}\chi_t^N(\xi_t)%|\calH_{t-1}
+    \xrightarrow{D}\calN(0,\check{V}_t(\xi_t))
+  \end{equation}
+  where the asymptotic variance, $\check{V}_t(\xi_t)$, may be written as the limit
+  of the sequence defined by
+  \begin{equation}
+    \check{V}_t^N(\xi_t) = \beta_t^2 \{\hat\eta_{t-1}^N M_t (\xi_t^2) -
+      [\hat\eta_{t-1}^NM_t(\xi_t)]^2\}
+  \end{equation}
+  and as (again, see \cite[Section 7.4]{DelMoral:2004ux})
+  \begin{align*}
+    \check{V}_t^N(\xi_t)
+    &\xrightarrow{P} \beta_t^2 \{\hat\eta_{t-1}M_t(\xi_t^2) -
+      [\hat\eta_{t-1}M_t(\xi_t)]^2\}
+  \end{align*}
+  the proof is completed using Slutzky's lemma and applying \cite[Lemma A2]{Chopin:2004cn} which
+  yields that:
+\begin{align*}
+\lim_{N \rightarrow \infty} \mathcal{X}_t^N \xrightarrow{D} \calN(0,\hat{V}_t(\xi_t))
+\end{align*}
+with
+\begin{align*}
+\hat{V}_t(\xi_t) =
+\check{V}_t\left(\frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
+\hat\eta_t(\xi_t)) \right) =
+\beta_t^2 \hat\eta_t\left(
+\frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
+\hat\eta_t(\xi_t))
+\right)
+\end{align*}
+\end{proof}
+
+\begin{lemma}\label{lem:normality}
+  Under conditions of Proposition~\ref{prop:gen_clt}, and the inductive
+  assumption of Lemma~\ref{lem:propagation}, $T_t^N(\xi_{0:t})$ is
+  asymptotically normal with variance stated as in
+  Proposition~\ref{prop:gen_clt}.
+\end{lemma}
+
+\begin{proof}
+  Consider the characteristic function,
+  \begin{align*}
+    \varphi(T_t^N(\xi_{0:t}))(s)
+    &= \Exp[\exp(isT_t^N(\xi_{0:t}))] \\
+    &= \Exp[\exp(is\bar{T}_t^N(\xi_{0:t}))\exp(is\chi_t^N(\xi_t))] \\
+    &= \Exp[\exp(is\bar{T}_t^N(\xi_{0:t}))
+    \Exp[\exp(is\chi_t^N(\xi_t))|\calH_{t-1}^N]] \\
+    &= \Exp[(A_t - \exp(-s^2\hat{V}_t(\xi_t)/2))B_t]
+    +\exp(-s^2\hat{V}_t(\xi_t)/2)\Exp[B_t]
+  \end{align*}
+  where $A_t = \Exp[\exp(is\chi_t^N(\xi_t))|\calH_{t-1}^N]$ and $B_t =
+  \exp(is\bar{T}^N(\xi_{0:t}))$. The first term can easily be shown to
+  converge a.s. to zero as $N\to\infty$ by the asymptotic normality of
+  $\xi_t^N$ and the conditional independence of the particles at iteration $t$
+  given $\mathcal{H}_{t-1}^N$. The second term is the product of two Gaussian
+  characteristic functions and thus we have that $T_t^N$ also follows a
+  Gaussian distribution (see detail in Lemma~10{} in \cite{Johansen:2006iv},
+  for details).
+\end{proof}
+
+Using Lemma~\ref{lem:propagation} to~\ref{lem:normality}, the proof of
+Proposition~\ref{prop:gen_clt} follows by mathematical induction and a trivial
+base case (the first iteration is simple importance sampling).

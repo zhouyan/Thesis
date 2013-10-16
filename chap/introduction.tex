@@ -4,11 +4,297 @@
 \section{Context}
 \label{sec:Context}
 
-\section{Notations}
-\label{sec:Notations}
+Bayesian model comparison has been studied and practiced for a long time.
+There are considerable computational difficulty when using this approach, as
+many high dimensional integrations are involved. The development of Monte
+Carlo algorithms has enabled the practice of Bayesian model comparison for a
+wide range of realistic applications. However, algorithms such as Markov chain
+Monte Carlo (\mcmc) cannot efficiently simulate high dimensional multimodal
+distributions in many situations.
+
+Population based algorithms has been developed in recent decades. However,
+there are little literature on its application to Bayesian model comparison.
+This thesis presents a framework based on sequential Monte Carlo (\smc)
+algorithms within which Bayesian model comparison can be carried out in an
+(semi-) automatic fashion while better accuracy can be obtained compared to
+some other recent developments. This is made possible through the use of
+various adaptive strategies.
+
+This thesis also present work on the practical implementations of \smc
+algorithms. Compared to \mcmc, practical tools for \smc are relatively fewer.
+In addition, there are considerable interest in the utilization of parallel
+computing for the implementation of \smc algorithms. The work presented in
+this thesis provides a toolbox with which researchers can implement generic
+\smc algorithm on parallel computers with relative ease.
 
 \section{Outline}
 \label{sec:Outline}
 
+This thesis is concerned with the methodology of using \smc algorithms for the
+purpose of Bayesian model comparison and their practical implementations. A
+realistic model, positron emission tomography (\pet) compartmental model, will
+be used as a running example throughout this thesis to demonstrate various
+methodologies. Works on the application of Bayesian model comparison for \pet
+was published in \cite{Zhou2013}. This model is introduced later in this
+introduction chapter. It is followed by the following chapter.
+\begin{description}
+  \item[Chapter 2] provides a review of some commonly used model selection
+    methods. In particular some information-theoretic selection criterion and
+    the Bayesian approach. By comparison, it will be shown that Bayesian model
+    comparison is still of interest for some realistic applications where its
+    use was previously limited by the computational cost.
+  \item[Chapter 3] reviews some Monte Carlo algorithms in the context of
+    Bayesian model comparison. It will be shown that there are considerable
+    difficulty for many problems of interest.
+  \item[Chapter 4] presents a framework based on \smc that can be used for the
+    purpose of Bayesian model comparison. In particular, various adaptive
+    strategies will be discussed. This chapter is an extension to
+    \cite{Zhou:2012uz} and \cite{Zhou:2013vx}.
+  \item[Chapter 5] presents a \cpp library for the practical implementation of
+    \smc algorithms. Parallel computing is of particular interest of this
+    work. Part of this chapter is based on \cite{vsmcjss}.
+\end{description}
+
 \section{Positron emission tomography compartmental model}
 \label{sec:Positron emission tomography compartmental model}
+
+Compartmental models are a class of models that describe systems in which some
+real or abstract quantity flows between different (physical or conceptual)
+compartments, each with its own characteristics. It is often of interest to
+infer both parameters that describe the dynamics of the system and the number
+of compartments that are required in order to adequately describe measured
+data within this framework.
+
+A compartmental system comprises a finite number of macroscopic subunits
+called compartments, each of which is assumed to contain homogeneous and
+well-mixed material. The compartments interact by material flowing from one
+compartment to another. There may be flows into one or more compartments from
+outside the system (inflows) and there may be flows from one or more
+compartments out of the system (outflows) \cite{Jacquez:1996gc}. In this
+paper, linear compartmental models are considered, in particular those that
+are identifiable in \pet studies \cite{Schmidt99}. In these models the rate
+of tracer flow from a compartment is proportional to the quantity of tracer in
+that compartment. In such models the flow may be parameterized by a pair of
+transfer coefficients, which are termed rate constants and may take the value
+zero, for each pair of compartments.
+
+This class of models yields a set of ordinary differential equations that
+describe the flow of tracer. Consider an $m$-compartment model. Let
+$\mathbfit{f}(t)$ be the vector whose $i$\xth element corresponds to the
+concentration in the $i$\xth compartment at time $t$. Let $\mathbfit{b}(t)$ describe
+all flow into the system from outside. The $i$\xth element of $\mathbfit{b}(t)$ is
+the rate of inflow into the $i$\xth compartment from the environment. The
+dynamics of such a model may be written as:
+\begin{align*}
+  \dot{\mathbfit{f}}(t) &= A\mathbfit{f}(t) + \mathbfit{b}(t), \\
+  \mathbfit{f}(0) &= \mathbfit\xi,
+\end{align*}
+where $\mathbfit\xi$ is the vector of initial concentrations and
+$\dot{\mathbfit{f}}$
+denotes the time derivative of $\mathbfit{f}$. The matrix $A$ is formed from
+the rate constants (see \cite{Gunn:2001cx}).  The solution to this equation
+is,
+\begin{equation*}
+  \mathbfit{f}(t) = e^{A t}\mathbfit\xi + \int_0^t e^{A(t-s)}\mathbfit{b}(s)\intd s,
+\end{equation*}
+where the matrix exponential $e^{A t} = \sum_{k = 0}^{\infty}
+\frac{(A t)^k}{k!}$.
+
+\pet is an analytical imaging technology that uses compounds labelled with
+positron emitting radionuclides as molecular tracers to image and measure
+biochemical process \emph{in vivo}. It is one of the few methods available
+to neuroscientists to study biochemical processes within living brain, as
+methodology such as magnetic resonance imaging is primarily only able to
+study effects via blood flow changes, while \pet can study changes in the
+biochemical systems themselves. This is of considerable interest within
+research into diseases where biochemical changes are known to be
+responsible for symptomatic changes, such as in schizophrenia and other
+psychiatric diseases \cite{FrankleL2002}.  In a clinical setting, \pet is
+now one of the most commonly used diagnostic procedures for cancer (both
+within and outside the brain), as fluoro-deoxyglucose ([$^{18}$F]-FDG, an
+radiotracer analogue of glucose) can be imaged. Cancer cells tend to be
+very metabolically active, thus requiring more glucose than surrounding
+cells, resulting in a greater uptake of [$^{18}$F]-FDG, leading to an
+indication of cancer location on an [$^{18}$F]-FDG scan \cite{Gambhir2002}.
+
+In a typical molecular assay, a positron-labelled tracer is injected
+intravenously and the \pet camera scans a record of positron emission as
+the tracer decays \cite{Phelps2000}.  With all events detected by the \pet
+camera, the time course of the tissue concentrations are reconstructed as
+three-dimension images \cite{Kinahan1989}. The digital image so captured
+shows the signal integrated over small volume elements (voxels). Each voxel
+has a volume of the order of a few cubic millimetres. This data provides
+the tissue time-activity function, which is the total concentration of
+tracer in all tissue compartments. In the \emph{plasma input compartmental
+  model}, in addition to the \pet data, a separate measurement of the
+concentration of tracer in the plasma is available. This measurement is
+generally assumed to be noise free (it can be measured with much greater
+accuracy than the signal of interest). This model is used in the current
+study. See \cite{Gunn:2001cx} for details of \pet compartmental models in
+general.
+
+There are many reasons that linear \ode models, of which the plasma input
+model is one, are the most commonly used in \pet analysis. Perhaps most
+importantly, such systems have also been shown to characterise \pet
+experimental data well \cite{Lammertsma96}. The amount of data available
+to fit the model for each voxel is relatively small (20-40 time points),
+and even with three compartment linear \ode models, the estimation of six
+parameters is non-trivial; it's clear that attempting to estimate the
+parameters of more general non-linear \ode systems robustly will be close
+to impossible in this setting. Furthermore, on a voxel level, which is the
+type of spatial analysis that is of interest here, the signal-to-noise
+ratio of the data is not high, making any parameter estimation difficult.
+Finally, as the models are estimated for every voxel in the brain
+(typically around 100,000 voxels per scan), computational considerations
+need to be taken into account. Thus, linear \ode models are both
+experimentally useful, and computationally efficient and it is difficult to
+justify the additional complexity that would arise from considering more
+general models. In the remainder of this paper we confine ourselves to
+linear \ode models for this reason, although nonlinear \ode models have
+received considerable attention in other areas in recent years --- see
+\cite{Lawson2011} and references therein.
+
+A plasma input model with $m$ tissue compartments can be written as a set of
+ordinary differential equations,
+\begin{align*}
+  \dot{\mathbfit{C}}_{\mathbfit{T}}(t) & = A \mathbfit{C}_{\mathbfit{T}}(t) + \mathbfit{b} C_P(t)\\
+  %    \label{eq:sys} \\
+  C_T(t) & = \mathbfit{1}^T\mathbfit{C}_{\mathbfit{T}}(t) \\
+  \mathbfit{C}_{\mathbfit{T}}(0) & = \mathbfit{0},
+\end{align*}
+where $\mathbfit{C}_{\mathbfit{T}}(t)$ is an $m$-vector of time-activity functions of
+each tissue compartment, $C_P(t)$ is the plasma time-activity function,
+i.e., the input function. $A$ is the $m \times m$ state transition
+matrix, $\mathbfit{b} = (K_1, 0, \dots, 0)^T$ is an $m$-vector, where $K_1$ is
+the rate constant of input from the plasma into tissue. The $m$-vectors
+$\mathbfit{1}$ and $\mathbfit{0}$ correspond to the $m$-vectors of ones and zeroes,
+respectively. The matrix $A$ takes the form of a diagonally dominant
+matrix with non-positive diagonal elements and non-negative off-diagonal
+elements. Furthermore, $A$ is negative semidefinite \cite{Gunn:2001cx}.
+The solution to this set of \ode{}s is:
+\begin{align}
+  C_T(t) & = C_P(t) \otimes H_{TP}(t) = \int_0^t C_P(t-s) H_{TP}(s)\intd s
+  \label{eq:CT} \\
+  H_{TP}(t) & = \sum_{i=1}^m \phi_i e^{-\theta_i t},\notag
+\end{align}
+where $\otimes$ is the convolution operator and the $\phi_i$ and $\theta_i$
+parameters are functions of the rate constants (in the sense that there is a
+one-to-one mapping between the set of rate constants and the set of
+$\phi_i$ and $\theta_i$ parameters). The input function $C_P(t)$
+is assumed to be nearly continuously measured. The tissue time-activity
+function $C_T(t)$ is measured discretely, leading to measured values of the
+integral of the signal over each of $n$ consecutive, non-overlapping time
+intervals ending at time points $t_1, \dots, t_n$.  The macro parameter of
+interest is the \emph{volume of distribution},
+\begin{equation*}
+  V_D := \int_0^{\infty} H_{TP}(t) \intd t = \sum_{i=1}^m
+  \frac{\phi_i}{\theta_i}.
+\end{equation*}
+This corresponds to the steady state ratio of tissue concentration to
+plasma concentration in a constant plasma concentration regime. That is, if
+an injection of tracers into the plasma were made such that the plasma
+concentration remained constant over the time, then the ratio of
+concentration in the tissues to the concentration in the plasma after an
+infinite time had passed would be exactly $V_D$.
+
+It is assumed that the input is the same at all voxels of the reconstructed
+image. This is not a particularly unrealistic assumption: the input is an
+empirical function derived from online measurements of the concentrations
+of the radiotracer within the blood, calculated on a per second basis. The
+blood carries the tracer to the brain and the timescale on which the
+radiotracer is measured is very fast in comparison with the time
+acquisition of \pet time frames providing a temporal averaging. However,
+the model for each voxel is not assumed to be the same, and different
+number of compartments can be associated with each one. In the model
+fitting, a ``mass univariate'' approach is taken with each voxel being
+analysed separately. This approach is common in the literature and makes
+the problem of dealing with a very large number of voxels feasible.
+However, it imposes very stringent computational requirements: more than
+200,000 voxels must be analyzed (i.e., the time series analysis must be
+repeated separately for each of these voxels), meaning that robustness is
+essential as complex model-specific characterizations and model/algorithm
+tuning cannot be performed on a voxel by voxel basis.
+
+The goal work is to obtain Bayesian estimates of the macro parameter $V_D$ and
+also to estimate the posterior probabilities of models with different number
+of tissue compartments. This macro parameter is highly important when
+considering such quantities as receptor density and occupancy. In addition,
+the number of compartments in the model typically can be identified with free
+tracer, specifically bound tracer (tracer bound to the system under
+investigation) and non-specifically bound tracer (tracer bound to different
+competing systems), indicating the role of certain chemicals within particular
+brain systems.
+
+\subsection{The data}
+\label{sub:The data}
+
+Two data sets are used in this thesis. The first is simulated from a
+three compartments model with the matrix of rate constants,
+\begin{equation}
+  A = \begin{bmatrix}
+    - k_2 - k_3 - k_5 & k_4  & k_6 \\
+    k_3               & -k_4 & 0   \\
+    k_5               & 0    & -k_6
+  \end{bmatrix},
+\end{equation}
+where $k_2 = 3 \times 10^{-3}$, $k_3 = 5.5 \times 10^{-3}$, $k_4 = 1.5 \times
+10^{-3}$, $k_5 = 10^{-3}$ and $k_6 = 3 \times 10^{-3}$. The rate constant of
+input $K_1 = 6\times 10^{-3}$. All parameters have the unit s$^{-1}$ except
+$K_1$ which has unit ml s$^{-1}$ cm$^{-3}$ \cite{RLNomen}. The simulated data
+has 32 time frames with lengths corresponding to the integration periods used
+in real experiments ($27.5$, $32.5$, $2 \times 10$, $20$, $6 \times 30$, $75$,
+$11 \times 120$, $210$, $5 \times 300$, $450$, and $2 \times 600$, all in
+seconds).  Noise is added to the synthetic data such that the noise is
+normally distributed with mean zero, and variance proportional to the time
+activities divided by the length of time frames. The noise is scaled such that
+the highest variance in the sequence is equal to a ``noise level'' variable
+(with the others scaled in proportion).  This noise level ranges from $0.01$
+to $5.12$, from lower than typical region of interest (\roi) analysis (in
+which the data is averaged over a biologically meaningful region in order to
+improve signal to noise ratio) to higher than the noise associated with
+voxel-level analysis \citep{Peng:2008fx}.  For each noise level, 2,000 time
+series were simulated.  Normally distributed errors were assumed (correctly,
+in this simulation study). For each of these time series analysis was carried
+out for each of the three possible models via likelihood-based and Bayesian
+methods as detailed previously.
+
+The other data is a real \pet scan, which is also studied in
+\cite{Peng:2008fx}.  It has about a quarter of a million data sets. See
+\cite{Zhou2013} for more details on this data set.
+
+\subsection{The error model}
+\label{sub:The error model}
+
+In the scenarios considered in this thesis, linear one-, two-, and
+three-compartment models are considered possible; the method could deal with
+other compartmental models straightforwardly, but we focus on these as they
+are the most interesting in the application of interest. Let $t_1, \dots, t_n$
+be the end points of the time frames at which the tissue concentrations are
+measured, let $y_j$, $j = 1, \dots, n$ be the observed data. Measurement error
+is assumed to be white and additive with zero mean and variance proportional
+to activities divided by the length of time frames (these assumptions arise
+from the physical characterization of the \pet system of interest; alternative
+specifications would be possible and appropriate for other situations).
+Recall equation~\eqref{eq:CT},
+\begin{gather*}
+  C_T(t_j;\phi_{1:m},\theta_{1:m}) =
+  \sum_{i=1}^m \phi_i\int_0^{t_j}C_P(s)e^{-\theta_i(t_j-s)} \intd s \\
+  y_j = C_T(t_j;\phi_{1:m},\theta_{1:m}) +
+  \sqrt{\frac{C_T(t_j;\phi_{1:m},\theta_{1:m})} {t_j - t_{j-1}}}
+  \varepsilon_j,
+\end{gather*}
+where $m = 1, 2$, or~$3$ is the number of tissue compartments, $t_0 = 0$,
+and $\varepsilon_j$'s are identically independently distributed random
+variables with mean zero. It is usually assumed that $\varepsilon_j$'s have
+a normal distribution. It is demonstrated below that there is evidence that
+a $t$ distribution better fits the observed data. We consider two error
+structures:
+\begin{align*}
+  \varepsilon_j &\sim \mathcal{N}(0,\lambda^{-1})
+  &\text{Normally-distributed errors} \\
+  \varepsilon_j &\sim \mathcal{T}(0,\tau,\nu)
+  &\text{$t$-distributed errors},
+\end{align*}
+where $\mathcal{N}(0,\lambda^{-1})$ is the normal distribution with mean zero
+and variance $\sigma^2$, and $\mathcal{T}(0,\tau,\nu)$ is the Student $t$
+distribution with location zero, scale $\tau$, and degrees of freedom $\nu$.

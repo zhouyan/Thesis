@@ -1,4 +1,4 @@
-\documentclass[11pt, fontset=Minion, showoverfull, toclevel=2,
+\documentclass[11pt, fontset=Minion, showoverfull, toclevel=2, draftnote,
 bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 \input{macros}
 \addbibresource{thesis.bib}
@@ -6,8 +6,6 @@ bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 \title{Bayesian Model Comparison \\via Sequential Monte Carlo}
 \author{Yan Zhou}
 \date{\today}
-
-% \includeonly{chap/model-selection}
 
 \begin{document}
 
@@ -26,6 +24,7 @@ bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 \printbibliography[heading=reference]
 
 \appendix
+\include{chap/appendix-bayesian-vsmc}
 \include{chap/appendix-vsmc}
 
 \end{document}
