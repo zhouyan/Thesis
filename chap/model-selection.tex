@@ -3,26 +3,27 @@
 
 Model selection is a problem found throughout statistics and related
 disciplines. A number of approaches of model selection has been developed
-through the history of statistics. Each has its own strength and limitations.
-There is no universally best model selection strategy. It is beyond the scope
-of this thesis to give a comprehensive and systematic review of this topic. We
-will review some of the more widely used methods. We are mostly interested in
-the methods that are generic in the sense that their usefulness are not
-limited to a particular class of models.
+through the history of statistics. Each has its own strength and
+limitations.  There is no universally best model selection strategy. It is
+beyond the scope of this thesis to give a comprehensive and systematic review
+of this topic. We will review some of the more widely used methods. We are
+mostly interested in the methods that are generic in the sense that their
+usefulness are not limited to a particular class of models.
 
 Section~\ref{sec:Information theoretic approach} reviews a few information
 theoretic approaches. The most important one of them is the Akaike's
 information criteria (\aic; \cite{Akaike:1973uc,Akaike:1974ih}). A few other
-closely related methods are also reviewed in this section. And the last,
+closely related methods are also reviewed in this section.
 Section~\ref{sec:Bayesian model comparison} reviews the Bayesian approach to
-model comparison.
+model comparison and selection. This chapter is concluded by a dicussion of
+the methods reviewed.
 
 \section{Information theoretic approach}
 \label{sec:Information theoretic approach}
 
 Information theory is a discipline that covers a wide range of theories and
 methods that are fundamental to many of the sciences (see e.g.,
-\cite{Cover:1991vx} for an overview). Most relevant here the \kld
+\cite{Cover:1991vx} for an overview). The most relevant one here is the \kld
 \cite{Kullback:1951va}, which measures the discrepancy between two models.
 Many model selection methods are based on estimators of this measure of
 discrepancy.
@@ -32,30 +33,32 @@ discrepancy.
 
 Assume that the distribution of data is continuous and has a density function
 $g$. Let $f(x) = f(x|\theta)$ be the density function of some continuous
-parametric distribution, where $\theta$ is the parameter vector. Then the \kld
+parametric distribution, where $\theta$ is the parameter vector. The \kld
 between $f$ and $g$ is defined by,
 \begin{equation}
   D_{\kl}(g,f) = \int g(x)\log\Round[bigg]{\frac{g(x)}{f(x|\theta)}}\intd x
   \label{eq:kl}
 \end{equation}
 In \cite{Kullback:1951va}, it was originally developed from information
-theory, as it relates the ``information'' lost when $f$ is used to approximate
-$g$. The \kld is always nonnegative and equals to zero if and only if $g(x) =
-f(x)$ everywhere \cite[][sec.~6.8]{Burnham:2002wc}. The concept can be
-generalized to discrete distributions and more general settings
-\cite[][sec.~2.1.3]{Burnham:2002wc}. For the purpose of simplicity, in the
-remaining of this section, we will assume that the distributions under
+theory, as it relates the ``information'' lost when $f$ is used to
+approximate $g$. The \kld is always nonnegative and equals to zero if and
+only if $g(x) = f(x)$ everywhere \cite[][sec.~6.8]{Burnham:2002wc}. The
+concept can be generalized to discrete distributions and more general
+settings \cite[][sec.~2.1.3]{Burnham:2002wc}. For the purpose of simplicity,
+in the remainder of this section, we will assume that the distributions under
 discussion are continuous.
 
 The criterion of model selection under this theme is thus finding the model
-that minimize the \kld. In reality, there are often a set of candidate models.
-Each model is defined by a parametric distribution. Therefore the model
-section process can be viewed as two steps. First for each model, a parameter
-value is found such that the \kld is minimized within this class. Second, the
-one with the smallest \kld among all models is selected.
+that has the minimum the \kld between the true data generating density and
+and the model density. In reality, there are often a set of candidate
+models.  Each model is defined by a parametric distribution. Therefore the
+model section process can be viewed as two steps. First for each model, a
+value of the parameter vector is found such that the \kld is minimized within
+this class.  Second, the one with the smallest \kld among all models is
+selected.
 
 It is clear that the calculation of $D_{\kl}(g,f)$ relies on the knowledge of
-both $g$, which is unknown, and $f$ as well as the specific parameter
+both $g$, which is unknown, and $f$ as well as the specific parameter vector
 $\theta$. Rewrite equation~\eqref{eq:kl},
 \begin{align}
   D_{\kl}(g,f)
@@ -63,28 +66,28 @@ $\theta$. Rewrite equation~\eqref{eq:kl},
   &= \Exp_g[\log g(X)] - \Exp_g[\log f(X|\theta)],
 \end{align}
 where the first term is a constant. Therefore, minimizing $D_{\kl}(g,f)$ is
-equivalent to minimizing $-\Exp_g[\log f(X|\theta)]$. The later expectation is
-also called the \emph{relative} \kld. Let $\tilde\theta$ denote the value of
-parameter that minimizes the relative \kld and $\hat\theta(\data)$ denote an
-estimator of it, where $\data$ is the data generated from $g$. We have the
-minimum and estimated \kld,
+equivalent to minimizing $(-\Exp_g[\log f(X|\theta)])$. The later expectation
+is also called the \emph{relative} \kld. Let $\tilde\theta$ denote the value
+of the parameter vector that minimizes the relative \kld and
+$\hat\theta(\data)$ denote an estimator of it, where $\data$ is the data
+generated from $g$. We have the minimum and estimated \kld,
 \begin{align}
   \tilde{D}_{\kl}(g,f) &= \text{Constant} - \Exp_g[\log f(X|\tilde\theta)], \\
   \hat{D}_{\kl}(g,f) &= \text{Constant} - \Exp_g[\log f(X|\hat\theta(\data))].
 \end{align}
 Since $\hat\theta(\data)\ne\tilde\theta$ for (almost) all data $\data$, we
-have $\hat{D}_{\kl}(g,f) > \tilde{D}_{\kl}(g,f)$. A more reliable criteria is
-the expected value of $\hat{D}_{\kl}(g,f)$ or,
+have $\hat{D}_{\kl}(g,f) > \tilde{D}_{\kl}(g,f)$. A more reliable cretirion
+is the expected value of $\hat{D}_{\kl}(g,f)$ or,
 \begin{equation}
   \bar{D}_{\kl} = \Exp_{\hat\theta}\Exp_g[\log f(X|\hat\theta(\data))]
   \label{eq:expected kl}
 \end{equation}
-where the outer expectation is with respect to $g$ and integrate out the
+where the outer expectation is with respect to $g$ and integrates out the
 estimated parameter $\hat\theta(\data)$. Note that we cannot compute this term
 analytically since it depends on the true model $g$, which is assumed to be
-unknown. The model selection criteria discussed below rely on the
-approximations of this quantity. Consequently, these methods attempt to select
-the model that on average minimizes, over a set of models, the expected \kld.
+unknown. The model selection criteria discussed below rely on approximations
+of this quantity. Consequently, these methods attempt to select the model
+that on average minimizes, over a set of models, the expected \kld.
 
 \subsection{Akaike's information criteria}
 \label{sub:Akaike's information criteria}
@@ -105,8 +108,8 @@ empirical average $\ell_n(\hat\theta)$. However, as shown in
 \cite{Akaike:1973uc}, this approximation is systematically biased upward (also
 see \cite[][sec.~2.3]{Claeskens:2008tq} for some remarks on the bias). It can
 be shown that the bias is approximately $k/n$ where $k$ is the length of the
-parameter vector $\theta$. This lead to the adjusted estimator of the relative
-\kld,
+parameter vector $\theta$. This lead to the adjusted estimator of the
+expected relative \kld,
 \begin{equation}
   -\frac{1}{n}\ell_n(\hat\theta) + \frac{k}{n}.
 \end{equation}
@@ -119,16 +122,17 @@ and the \aic strategy selects the model with the smallest value of \aic.
 
 A more rigorous derivation of the formula~\eqref{eq:aic} can be found in
 \cite[][sec.~2.3]{Claeskens:2008tq} and \cite[][sec.~6.2]{Burnham:2002wc}.
-Here, we are more interested in when this approximation is good enough for the
-purpose of model selection. Some remarks below are given without proof. For
-technical details, see the two references of the derivation of \aic.
+Here, we are more interested in the conditions under which this approximation
+is good enough for the purpose of model selection. Some remarks below are
+given without proof. For technical details, see the two references of the
+derivation of \aic.
 
 First, the derivation of the bias term is based on a first order Taylor
 expansion of $\Exp_g[\ell_n(\hat\theta)/n - \bar{D}_{\kl}(g,f)]$. The
 assumption about the parametric model $g$ is quite minimal. The accuracy is of
 order $o(n)$. Given more informations about the structure of the models, more
 accurate estimator can be derived by using a second order expansion. See
-Section~\ref{sub:A second order aic}
+Section~\ref{sub:A second order aic}.
 
 Second, more importantly, \aic assumes that the candidate models are close
 enough to the true model. When there is significant misspecification of the

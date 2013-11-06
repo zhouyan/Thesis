@@ -1,8 +1,8 @@
 \chapter{Sequential Monte Carlo for Bayesian Computation}
-\label{cha:Sequential Monte Carlo for Bayesian Computation}
+\label{cha:Appendix Sequential Monte Carlo for Bayesian Computation}
 
 \section{Conditional effective sample size}
-\label{app:Conditional effective sample size}
+\label{sec:Conditional effective sample size}
 
 The exact \ess of an importance sample of size $N$ with proposal $\pi_{t-1}$
 and target $\pi_t$ of \cite{Kong:1994ul} is defined as:
@@ -12,8 +12,8 @@ and target $\pi_t$ of \cite{Kong:1994ul} is defined as:
   \label{eq:essdefinition}
 \end{equation}
 which is widely approximated by the empirical equivalent,replacing
-$1+\var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})$ with the empirical mean squared
-normalized importance weights.
+$1+\var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})$ with the empirical mean
+squared normalized importance weights.
 
 In the context of adaptive specification of an SMC tempering schedule, we are
 interested in the discrepancy between adjacent distributions, $\pi_{t-1}$ and
@@ -44,7 +44,7 @@ its weighted sample average and the second replacing the normalizing constant
 of the weighting function with its empirical analogue.
 
 \section{Proof of proposition 1}
-\label{sec:Proof of proposition 1}
+\label{appsec:Proof of proposition 1}
 
 We begin by making some identifications which allow the connection between the
 \smc sampler algorithm presented above and Feynman-Kac formula to be made
