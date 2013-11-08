@@ -1,0 +1,20 @@
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE Draw $X^0\sim\mu$ where $\mu$ is the initial condition.
+  \STATE Set $t\leftarrow0$.
+  \REPEAT
+    \STATE Draw $(k_1,\dots,k_p)\sim\sigma(1,\dots,p)$ where $\sigma$ is
+    typically a distribution uniform over all permutations of $(1,\dots,p)$.
+    \FOR{$i = 1,\dots,p$}
+      \STATE Draw
+      $X_{k_i}^{t+1}\sim
+      \pi_{k_i}(x_{k_i}|x_{k_1},\dots,x_{k_{i-1}},x_{k_{i+1}},\dots,x_{k_p})$.
+    \ENDFOR
+    \STATE Set $t\leftarrow t+1$.
+  \UNTIL{Sufficient many samples have been produced.}
+  \bottomhrule
+\end{algorithmic}
+\caption{Gibbs sampling (random scan)}
+\label{alg:gibbs random}
+\end{algorithm}

@@ -1,0 +1,20 @@
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE Draw $X^0\sim\mu$ where $\mu$ is the initial condition.
+  \STATE Set $\theta^0$ to an arbitrary valid value.
+  \STATE Set $t\leftarrow0$.
+  \REPEAT
+      \STATE Compute $\theta^t = \theta^t(\theta^0,X^0,\dots,X^{t-1})$
+      \STATE Draw $X^{t + 1}$ using the proposal $q(\cdot|x^t,\theta^t)$ with
+      the Metropolis-Hastings rule.
+      \STATE Set $t\leftarrow t+1$.
+  \UNTIL{The accept rate of the last $K$ iterations are close to $0.234$.}
+  \STATE Set $\theta\leftarrow\theta^t$.
+  \STATE Perform Algorithm~\ref{alg:mh} with proposal $q(\cdot|x) =
+  q(\cdot|x,\theta)$.
+  \bottomhrule
+\end{algorithmic}
+\caption{Adaptive Metropolis-Hastings algorithm}
+\label{alg:adaptive rw}
+\end{algorithm}

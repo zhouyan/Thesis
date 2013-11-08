@@ -1,0 +1,22 @@
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE Draw $X^0\sim\mu$ where $\mu$ is the initial condition.
+  \STATE Set $t\leftarrow0$.
+  \REPEAT
+    \STATE Draw $Y^t\sim q(y|x^t)$.
+    \STATE Compute $\alpha = \min\Curly[bigg]{
+      \frac{\pi(y^t)}{\pi(x^t)}\frac{q(x^t|y^t)}{q(y^t|x^t)}, 1}$
+    \STATE Draw $U\sim\calU[0,1]$.
+    \IF{$U\le\alpha$}
+      \STATE Set $X^{t+1}\leftarrow Y^t$.
+    \ELSE
+      \STATE Set $X^{t+1}\leftarrow X^t$.
+    \ENDIF
+    \STATE Set $t\leftarrow t+1$.
+  \UNTIL{Sufficiently many samples have been produced.}
+  \bottomhrule
+\end{algorithmic}
+\caption{The Metropolis-Hastings algorithm}
+\label{alg:mh}
+\end{algorithm}
