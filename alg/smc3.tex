@@ -1,0 +1,31 @@
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE \emph{Initialisation:} Set $k\leftarrow1$.
+  \STATE\STATESKIP Use Algorithm~\ref{alg:smc2} to obtain weighted samples
+  for $\pi_{T_1}^{(3,1)}$, the parameter posterior for model $\calM_1$
+
+  \STATE \emph{Relative Evidence Calculation}
+  \STATE\STATESKIP Set $k\leftarrow k + 1$, $t\leftarrow0$.
+  \STATE\STATESKIP Denote current weighted samples as
+  $\{W_0^{(k,i)},X_0^{(k,i)}\}_{i=1}^N$ where $X_0^{(k,i)} =
+  (M_0^{(k,i)},\theta_0^{(k,i)})$
+  \STATE\STATESKIP Apply resampling if necessary.
+
+  \STATE\STATESKIP \emph{Iteration:} Set $t\leftarrow t + 1$.
+  \STATE\STATESKIP\STATESKIP Weight $W_t^{(k,i)} \propto W_{t-1}^{(k,i)}
+  {\pi_t(M_{t-1}^{(k,i)})}/{\pi_{t-1}(M_{t-1}^{(k,i)})}$.
+  \STATE\STATESKIP\STATESKIP Apply resampling if necessary.
+  \STATE\STATESKIP\STATESKIP Sample $(M_t^{(k,i)},\theta_t^{(ki)}) \sim
+  K_t(\cdot|M_{t-1}^{(k,i)}\theta_{t-1}^{(k,i)})$, a $\pi_t^{(3,k)}$-invariant
+  kernel.
+
+  \STATE\STATESKIP \emph{Repeat the \emph{Iteration} step up to $t = T_k$}.
+
+  \STATE \emph{Repeat} the \emph{Relative Evidence Calculation} step \emph{until
+    sequentially all relative evidences are calculated}.
+  \bottomhrule
+\end{algorithmic}
+\caption{\smc[3]: A Relative-Evidence-Calculation Approach to Model Comparison.}
+\label{alg:smc3}
+\end{algorithm}

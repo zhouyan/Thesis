@@ -1,50 +1,8 @@
 \chapter{Sequential Monte Carlo for Bayesian Computation}
 \label{cha:Appendix Sequential Monte Carlo for Bayesian Computation}
 
-\section{Conditional effective sample size}
-\label{sec:Conditional effective sample size}
-
-The exact \ess of an importance sample of size $N$ with proposal $\pi_{t-1}$
-and target $\pi_t$ of \cite{Kong:1994ul} is defined as:
-\begin{equation}
-  \text{Exact \ess} =
-  \frac{N}{1 + \var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})}
-  \label{eq:essdefinition}
-\end{equation}
-which is widely approximated by the empirical equivalent,replacing
-$1+\var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})$ with the empirical mean
-squared normalized importance weights.
-
-In the context of adaptive specification of an SMC tempering schedule, we are
-interested in the discrepancy between adjacent distributions, $\pi_{t-1}$ and
-$\pi_t$, and so the \ess defined in Equation \ref{eq:essdefinition} is a
-natural quantity to consider.
-
-However, the \ess as used in the recent SMC literature is invariably computed
-using the empirical mean squared normalized importance weights of the current
-population. If these importance weights have been accumulated over several
-iterations, then they coincide with an \ess based on the excursion since the
-last resampling epoch. The \cess proposed in this paper instead uses a
-weighted sample from $\pi_{t-1}$ to approximate exactly the quantity described
-by Equation \ref{eq:essdefinition}; the different name is used to distinguish
-this quantity from that usually termed the \ess in the SMC literature.
-
-The approximation leading to the \cess, given weighted sample
-$\{W_{t-1}^i,X_{t-1}^i\}_{i=1}^N$ and unnormalized incremental weights
-$w_{t}^j \propto \frac{d\pi_t}{d\pi_{t-1}}(X_{t-1}^i)$ is simply:
-\begin{align*}
-\text{Exact \ess} = \frac{N}{1 + \var_{\pi_{t-1}}(\frac{d\pi_t}{d\pi_{t-1}})}
-\approx& \frac{N}{\sum_{i=1}^N W_{t-1}^i
-  (\frac{d\pi_t}{d\pi_{t-1}}(X_{t-1}^i))^2}\\
-\approx& \frac{N}{\sum_{i=1}^N W_{t-1}^i
-  (\frac{w_t^i}{\sum_{j=1}^N W_{t-1}^j w_t^j})^2} =: \cess,
-\end{align*}
-with the first approximation replacing the expectation under $\pi_{t-1}$ with
-its weighted sample average and the second replacing the normalizing constant
-of the weighting function with its empirical analogue.
-
-\section{Proof of proposition 1}
-\label{appsec:Proof of proposition 1}
+\section{Proof of proposition 5.1}
+\label{sec:Proof of proposition 5.1}
 
 We begin by making some identifications which allow the connection between the
 \smc sampler algorithm presented above and Feynman-Kac formula to be made

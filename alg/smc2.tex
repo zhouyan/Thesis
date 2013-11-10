@@ -1,0 +1,24 @@
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE For each model $k \in \calK$ perform the following algorithm.
+
+  \STATE \emph{Initialisation:} Set $t\leftarrow0$.
+  \STATE\STATESKIP Sample $\theta_0^{(k,i)}\sim\nu_k$ for some proposal
+  distribution $\nu_k$ (usually the parameter prior).
+  \STATE\STATESKIP Weight $W_0^{(k,i)} \propto w_0(\theta_0^{(k,i)}) =
+  {\pi(\theta_0^{(k,i)}|\calM_k)}/{\nu_k(\theta_0^{(k,i)})}$.
+  \STATE\STATESKIP Apply resampling if necessary.
+
+  \STATE \emph{Iteration:} Set $t\leftarrow t + 1$.
+  \STATE\STATESKIP Weight $W_t^{(k,i)} \propto W_{t-1}^{(k,i)}
+  p(\data|\theta_{t-1}^{(k,i)},\calM_k)^{\alpha_k(t/T_k)-\alpha_k([t-1]/T_k)}$.
+  \STATE\STATESKIP Apply resampling if necessary.
+  \STATE\STATESKIP Sample $\theta_t^{(k,i)} \sim
+  K_t(\cdot|\theta_{t-1}^{(k,i)})$, a $\pi_t^{(k,2)}$-invariant kernel.
+
+  \STATE \emph{Repeat} the \emph{Iteration} step \emph{until $t = T_k$}.
+  \bottomhrule
+\end{algorithmic}
+\caption{\smc[2]: A Direct-Evidence-Calculation Approach.}\label{alg:smc2}
+\end{algorithm}

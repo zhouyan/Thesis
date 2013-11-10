@@ -1,6 +1,8 @@
 \begin{table}
-  \caption{Nonlinear \ode model marginal likelihood and Bayes factor estimates
-    with data generated from simple (three components) model.}
+  \caption[Nonlinear \protect\ode model marginal likelihood and Bayes factor
+  estimates (complex model data)]
+  {Nonlinear \ode model marginal likelihood and Bayes factor estimates
+    with data generated from complex (five components) model.}
   \label{tab:node-c}
   \begin{tabu}{X[1l]X[2c]X[2c]X[2c]X[4r]X[4r]X[6r]}
     \toprule
@@ -8,14 +10,14 @@
     \cmidrule(lr){5-6}
     $T$   & Proposal & Annealing & Algorithm   & $m = 3$                 & $m = 5$                & \\ \midrule
     $10 $ & Manual   & Prior (5) & \pmcmc      & $-1651.0\pm27.9$        & $-85.1\pm36.6$         & $1565.9\pm42.1$ \\
-    $30 $ &          &           &             & $\SubBest-1639.7\pm7.4$ & $\SubBest-78.9\pm11.2$ & $\SubBest1560.8\pm12.8$ \\
+    $30 $ &          &           &             & $\SubBest{-1639.7\pm7.4}$ & $\SubBest{-78.9\pm11.2}$ & $\SubBest{1560.8\pm12.8}$ \\
     $100$ &          &           &             & $-1624.6\pm15.7$        & $-75.7\pm24.8$         & $1548.9\pm25.6$ \\ \midrule
     $500$ & Manual   & Prior (5) & \smc[2]-\ds & $-1640.7\pm10.8$        & $-78.5\pm9.8$          & $1562.2\pm10.1$ \\
           &          &           & \smc[2]-\ps & $-1640.8\pm 8.4$        & $-79.2\pm7.9$          & $1561.6\pm 8.5$ \\
     $500$ & Manual   & Adaptive  & \smc[2]-\ds & $-1639.7\pm 6.9$        & $-78.6\pm4.8$          & $1561.1\pm7.1$ \\
           &          &           & \smc[2]-\ps & $-1640.1\pm 5.4$        & $-78.8\pm3.7$          & $1561.3\pm6.8$ \\
     $500$ & Adaptive & Adaptive  & \smc[2]-\ds & $-1639.8\pm 2.2$        & $-79.4\pm1.7$          & $1560.4\pm3.1$ \\
-          &          &           & \smc[2]-\ps & $\Best-1640.2\pm 1.9$   & $\Best-78.5\pm1.5$     & $\Best1561.7\pm2.3$ \\
+          &          &           & \smc[2]-\ps & $\Best{-1640.2\pm1.9}$   & $\Best{-78.5\pm1.5}$     & $\Best{1561.7\pm2.3}$ \\
     \bottomrule
     \multicolumn{7}{r}{%
       \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily

@@ -78,7 +78,7 @@ more concentrated than the prior distribution. And there may be a large
 proportions of samples with small likelihood values and a few with high
 values. For instance, consider the one-compartment \pet model (see
 Section~\ref{sec:Application to positron emission tomography}) and
-informative priors (see Section~\ref{sub:The choice of priors}). Using 100,000
+informative priors (see Section~\ref{sub:Choice of priors}). Using 100,000
 samples from the prior distribution, the empirical mean and standard deviation
 of the estimates from 100 simulations is $-40.9$ and $2.1$, respectively.
 However when the dimension of the model is increased by using two-compartments
@@ -171,7 +171,7 @@ expectation~\eqref{eq:prior expectation}. This leads to the estimator,
   \frac{\sum_{i=1}^N w^{(i)} f(\data|\theta_k^{(i)},\calM_k)}
   {\sum_{i=1}^N w^{(i)}}
 \end{equation}
-where $\w^{(i)}\propto\pi(\theta_k^{(i)}|\calM_k)/\eta(\theta_k^{(i)})$ and
+where $w^{(i)}\propto\pi(\theta_k^{(i)}|\calM_k)/\eta(\theta_k^{(i)})$ and
 $\{\theta_k^{(i)}\}_{i=1}^N$ are distributed with $\eta$. Good performance can
 be obtained when $\eta$ is close to
 $f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)$. In other words, we need some
@@ -597,8 +597,8 @@ the target distribution. In this situation, the sampler is said to be in a
 
 For instance, consider the one-compartment \pet model (see
 Section~\ref{sec:Application to positron emision tomography}), a Normally
-distributed error structure (see Section~\ref{sec:The error models}), and
-non-informative priors (see Section~\ref{sub:The choice of priors}) for the
+distributed error structure (see Section~\ref{sec:Error models}), and
+non-informative priors (see Section~\ref{sub:Choice of priors}) for the
 simulated data. We construct a random walk algorithm with three blocks. Recall
 the parameterization in Section~\ref{sec: Applicaiton to positron emission
   tomography},
@@ -621,7 +621,9 @@ values.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MH_Path.pdf}
-  \caption{Trace of $(\phi_1,\theta_1)$ from three random walk
+  \caption[Trace of parameters in the random walk algorithm for the
+  \protect\pet compartmental model (calibrated)]
+  {Trace of $(\phi_1,\theta_1)$ from three random walk
     Metropolis-Hastings samplers for a \pet model with one components and
     non-informative prior, using well tuned proposal scales. First few values
     of each trace is not shown in the plots since they are far away from the
@@ -631,7 +633,9 @@ values.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MH_H_Path.pdf}
-  \caption{Trace of $(\phi_1,\theta_1)$ from three random walk
+  \caption[Trace of parameters in the random walk algorithm for the
+  \protect\pet compartmental model (uncalibrated)]
+  {Trace of $(\phi_1,\theta_1)$ from three random walk
     Metropolis-Hastings samplers for a \pet model with one components and
     non-informative prior, using proposal scales five times of those tuned}
   \label{fig:pet mh untuned}
@@ -1108,17 +1112,19 @@ example, consider the three-compartments \pet model and non-informative priors
 without ordering (that is, parameters such as $(\phi_1,\theta_1)$ and
 $(\phi_2,\theta_2)$ are exchangeable, see Section~\ref{sec:Application to
   positron emission tomography}). We use one of the real data set and
-constructed a random walk algorithm (see Section~\ref{sub:Random walks}).
-Figure~\ref{fig:pet diag} shows the trace and histogram plots of parameter
-$\theta_1$. It appears that the \mcmc chain has converged well. However, from
-the properties of the model, it is known that this parameter has at least
-three local modes. In fact, this sampler has been trapped into one of them. In
-Figure~\ref{fig:pet diag c} the trace and histogram plots of the same sampler
-but with better calibrated proposal scales are shown.
+constructed a random walk algorithm (see Section~\ref{sub:Metropolis-Hastings
+  llgorithm}). Figure~\ref{fig:pet diag} shows the trace and histogram plots
+of parameter $\theta_1$. It appears that the \mcmc chain has converged well.
+However, from the properties of the model, it is known that this parameter has
+at least three local modes. In fact, this sampler has been trapped into one of
+them. In Figure~\ref{fig:pet diag c} the trace and histogram plots of the same
+sampler but with better calibrated proposal scales are shown.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MH_Diag}
-  \caption{Trace and histogram plots of parameter $\theta_1$ from a \mcmc
+  \caption[Trace and histogram of parameters in the random walk algorithm for
+  the \protect\pet compartmental model (calibrated)]
+  {Trace and histogram plots of parameter $\theta_1$ from a \mcmc
     sampler for \pet model with three components and non-informative priors
     without ordering. The trace plot has 1,000 samples and the histogram plot
     has 10,000 samples. The sampler is not well calibrated.}
@@ -1127,7 +1133,9 @@ but with better calibrated proposal scales are shown.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MH_Diag_C}
-  \caption{Trace and histogram plots of parameter $\theta_1$ from a \mcmc
+  \caption[Trace and histogram of parameters in the random walk algorithm for
+  the \protect\pet compartmental model (uncalibrated)]
+  {Trace and histogram plots of parameter $\theta_1$ from a \mcmc
     sampler for \pet model with three components and non-informative priors
     without ordering. The trace plot has 1,000 samples and the histogram plot
     has 10,000 samples. The sampler is well calibrated.}
@@ -1164,9 +1172,11 @@ ratios fall in the desired interval.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_Converge}
-  \caption{Convergence diagnostics for \pet model with three components using
-    ratio of variance of $V_D$ estimates using final 10,000 samples to that of
-    all 100,000 post burn-in samples.}
+  \caption[Convergence diagnostics for the random walk algorithm for the
+  \protect\pet compartmental model using summary statistics]
+  {Convergence diagnostics for the three-compartments \pet using ratio of
+    variance of $V_D$ estimates using final 10,000 samples to that of all
+    100,000 post burn-in samples.}
   \label{fig:pet diag ratio}
 \end{figure}
 
@@ -1191,7 +1201,9 @@ samplers initialized with different values converge to the same value.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_VD}
-  \caption{Estimates of $V_D$ when starting the \mcmc chain from different
+  \caption[Convergence diagnostics for the random walk algorithm for the
+  \protect\pet compartmental model using averages]
+  {Estimates of $V_D$ when starting the \mcmc chain from different
     values for a typical data set of a \pet model with three component.}
   \label{fig:pet vd mean}
 \end{figure}
@@ -1299,7 +1311,7 @@ moments approximated from the samples as a natural choice of $\gamma$ was
 suggested. In addition, the variance of the estimator can also be estimated
 for $1/\widehat{p(\data)}_{\ghm}^N$ from the posterior samples through,
 \begin{equation}
-  \widehat\var\Square[bigg]{\frac{1}{\widehat{p(\data)}_{\ghm}^N}} =
+  \widehat{\var}\Square[bigg]{\frac{1}{\widehat{p(\data)}_{\ghm}^N}} =
   \frac{1}{N^2}\sum_{i=1}^N \Round[bigg]{
     \frac{\gamma(\theta^{(i)})}{f(\data|\theta^{(i)})\pi(\theta^{(i)})}
     - \frac{1}{\widehat{p(\data)}_{\ghm}^N}}^2.
@@ -1320,11 +1332,10 @@ We conclude the discussion on the generalized harmonic mean estimator with
 results for the \pet compartmental model with real data. For a
 $r$-compartments \pet model (see Section~\ref{sec:Applicaiton to positron
   emission tomography}), a Student $t$ distributed error structure (see
-Section~\ref{sec:The error models}), and informative priors (see
-Section~\ref{sub:The choice of priors}), we construct a random
-Metropolis-Hastings algorithm with four blocks. Again, recall the
-parameterization in Section~\ref{sec:Application to positron emission
-  tomography},
+Section~\ref{sec:Error models}), and informative priors (see
+Section~\ref{sub:Choice of priors}), we construct a random Metropolis-Hastings
+algorithm with four blocks. Again, recall the parameterization in
+Section~\ref{sec:Application to positron emission tomography},
 \begin{enumerate}
   \item Update $\phi_{1:r}$ with a multivariate Normal random walk proposal.
   \item Update $\theta_{1:r}$ with a multivariate Normal random walk proposal.
@@ -1342,13 +1353,14 @@ results shows more plausible structure than the information criteria.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MO}
-  \caption{Model selection results for \pet model using real data set. From
+  \caption[Model selection results for the \protect\pet compartmental model]
+  {Model selection results for \pet model using real data set. From
     top to bottom: Model order selected by \aicc (see Section~\ref{sub:A
       second order aic}); Model order selected by \bic (see
     Section~\ref{sub:Bayes factor}); Model order selected by using Bayesian
     model comparison with marginal likelihood approximated by generalized
     harmonic mean estimator; The posterior model probability
-    $\pi(\calM_k|\data)$ (see Section~\ref{sub:The model choice problem}) with
+    $\pi(\calM_k|\data)$ (see Section~\ref{sub:Model choice problems}) with
     uniform prior model probability $\pi(\calM_k)$.}
   \label{fig:pet mo}
 \end{figure}

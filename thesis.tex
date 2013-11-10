@@ -1,5 +1,10 @@
-\documentclass[11pt, fontset=Minion, showoverfull, toclevel=2, draftnote,
-bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
+\documentclass[
+11pt, fontset=Minion, toclevel=3,
+linespread=1.414, lines=30, oneside, onesideheader,
+bib, bibintoc, biblatexstyle=numeric,
+mintcode, minted=cache,
+draftnote, showoverfull
+]{mthesis}
 \input{macros}
 \addbibresource{thesis.bib}
 \addbibresource{extra.bib}
@@ -12,6 +17,11 @@ bib, bibintoc, biblatexstyle=numeric, mintcode, minted=cache]{mthesis}
 \frontmatter
 \maketitle
 \tableofcontents
+\listoftables
+\listoffigures
+\include{chap/acknowledges}
+\include{chap/declarations}
+\include{chap/abstract}
 
 \mainmatter
 \include{chap/introduction}

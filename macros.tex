@@ -145,5 +145,7 @@
 \def\data{\mathbfit{y}}
 \newcommand{\smc}[1][]{\textsc{smc}#1\xspace}
 
-\def\Best{\ifmmode\color{MRed}\else\textcolor{MRed}{\textsf{Red}}\fi}
-\def\SubBest{\ifmmode\color{MGreen}\else\textcolor{MGreen}{\textsf{Green}}\fi}
+\def\Best#1{\ifmmode\color{MRed}\text{\lnfigures\textbf{\textit{#1}}}
+  \else\textcolor{MRed}{\textsf{\textbf{\textit{Red}}}}:\fi}
+\def\SubBest#1{\ifmmode\color{MGreen}\text{\lnfigures\textit{#1}}
+  \else\textcolor{MGreen}{\textsf{\textit{Green}}}:\fi}

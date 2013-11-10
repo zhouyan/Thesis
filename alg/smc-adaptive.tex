@@ -1,0 +1,39 @@
+\begin{algorithm}
+\begin{algorithmic}
+  \tophrule
+  \STATE \emph{Accuracy control}
+  \STATE\STATESKIP Set constant $\cess^\star\in(0,1)$, using a small pilot
+  simulation if necessary.
+
+  \STATE \emph{Initialization:} Set $t\leftarrow0$.
+  \STATE\STATESKIP Perform the \emph{Initialization} step
+    as in Algorithm~\ref{alg:smc1} or~\ref{alg:smc2}
+
+  \STATE \emph{Iteration:} Set $t\leftarrow t + 1$
+
+  \STATE\STATESKIP \emph{Step size selection}
+  \STATE\STATESKIP\STATESKIP Use a binary search %(or other search algorithms)
+  to find $\alpha^\star$ such that $\cess_{\alpha^\star} = \cess^\star$
+  \STATE\STATESKIP\STATESKIP Set $\alpha_t \leftarrow\alpha^\star$ if
+    $\alpha^\star \le 1$, otherwise set $\alpha_t\leftarrow1$
+
+  \STATE\STATESKIP \emph{Proposal scale calibration}
+  \STATE\STATESKIP\STATESKIP
+  Computing the importance sampling estimates of first two moments of
+  parameters.
+  \STATE\STATESKIP\STATESKIP
+  Set the proposal scale of the Markov proposal $K_t$ with the estimated
+  parameter variances.
+
+  \STATE\STATESKIP Perform the \emph{Iteration} step as in
+  Algorithm~\ref{alg:smc1} or~\ref{alg:smc2} with the found $\alpha_t$
+  and proposal scales.
+
+  \STATE \emph{Repeat} the \emph{Iteration} step %up to $t = T$ (or $T_k$ in the
+    %case of Algorithm~\ref{alg:smc2})}
+    \emph{until $\alpha_t = 1$} then set $T=t$.
+  \bottomhrule
+\end{algorithmic}
+\caption{An Automatic, Generic Algorithm for Bayesian Model Comparison}
+\label{alg:adaptive}
+\end{algorithm}

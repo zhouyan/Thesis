@@ -1,5 +1,7 @@
 \begin{table}
-  \caption{Nonlinear \ode model marginal likelihood and Bayes factor estimates
+  \caption[Nonlinear \protect\ode model marginal likelihood and Bayes factor
+  estimates (simple model data)]
+  {Nonlinear \ode model marginal likelihood and Bayes factor estimates
     with data generated from simple (three components) model.}
   \label{tab:node-s}
   \begin{tabu}{X[1l]X[2c]X[2c]X[2c]X[4r]X[4r]X[6r]}
@@ -8,14 +10,14 @@
     \cmidrule(lr){5-6}
     $T$   & Proposal & Annealing & Algorithm   & $m = 3$                & $m = 5$                & \\ \midrule
     $10 $ & Manual         & Prior (5) & \pmcmc      & $-109.7\pm3.2$         & $-120.3\pm2.5$         & $10.6\pm3.8$ \\
-    $30 $ &                &           &             & $\SubBest-105.0\pm1.2$ & $\SubBest-116.1\pm2.2$ & $\SubBest11.2\pm2.5$ \\
+    $30 $ &                &           &             & $\SubBest{-105.0\pm1.2}$ & $\SubBest{-116.1\pm2.2}$ & $\SubBest{11.2\pm2.5}$ \\
     $100$ &                &           &             & $-134.7\pm7.9$         & $-144.1\pm6.2$         & $9.4\pm11.2$ \\ \midrule
     $500$ & Manual         & Prior (5) & \smc[2]-\ds & $-104.6\pm2.0$         & $-112.7\pm1.8$         & $8.1\pm2.8$ \\
           &                &           & \smc[2]-\ps & $-104.5\pm1.8$         & $-112.7\pm1.5$         & $8.2\pm2.5$ \\
     $500$ & Manual         & Adaptive  & \smc[2]-\ds & $-104.5\pm1.1$         & $-112.7\pm1.1$         & $8.1\pm1.6$ \\
           &                &           & \smc[2]-\ps & $-104.6\pm1.0$         & $-112.8\pm1.0$         & $8.2\pm1.5$ \\
     $500$ & Adaptive       & Adaptive  & \smc[2]-\ds & $-104.5\pm0.5$         & $-112.7\pm0.4$         & $8.1\pm0.8$ \\
-          &                &           & \smc[2]-\ps & $\Best-104.6\pm0.4$    & $\Best-112.8\pm0.3$    & $\Best8.1\pm0.6$ \\
+          &                &           & \smc[2]-\ps & $\Best{-104.6\pm0.4}$    & $\Best{-112.8\pm0.3}$    & $\Best{8.1\pm0.6}$ \\
     \bottomrule
     \multicolumn{7}{r}{%
       \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily
