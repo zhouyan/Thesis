@@ -218,8 +218,17 @@ template is used.
 \subsubsection{Class template}
 \label{ssub:Class template}
 
-Class template is similar to function template, yet somehow simpler. A class
-template define a family of classes. For example,
+\draftnote{Removed the statement that "class template is simpler". I still
+  believe it is true. Class template ask you to specify the template parameter
+  and I never had troubles with its features, including specialization.
+  Function template, though allows it, usually depends on reduction, which
+  when interacted with overloading and specialization and many other C++
+  features that are supposed to be there to help, has cost me countless
+  sleepless nights. In fact, most bugs I fixed in various C++ projects (e.g.,
+  Rcpp) are about function templates.}
+
+Class template is similar to function template. A class template define a
+family of classes. For example,
 \cppfile{snippet/class_template_def.cpp}
 defines a \cppinline{Stack} class template. For simplicity, some edge cases
 and exceptional situations such as calling \cppinline{top} on an empty

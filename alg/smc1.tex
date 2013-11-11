@@ -7,8 +7,9 @@
   \STATE\STATESKIP Weight $W_0^{(i)} \propto w_0(X_0^{(i)}) =
   {\pi(M_0^{(i)}) \pi(\theta^{(i)}_0|M_0^{(i)})}/
   {\nu(M_0^{(i)},\theta_0^{(i)})}$.
-  \STATE\STATESKIP Apply resampling if necessary (e.g., if \ess
-  \cite{Kong:1994ul} less than some threshold).
+  \STATE\STATESKIP Apply resampling if necessary (e.g., if \ess less than some
+  threshold (see Section~\ref{sub:Sequential importance sampling and
+    resampling}).
 
   \STATE \emph{Iteration:} Set $t\leftarrow t + 1$.
   \STATE\STATESKIP Weight $W_t^{(i)} \propto W_{t-1}^{(i)}

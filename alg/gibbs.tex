@@ -6,7 +6,8 @@
   \REPEAT
     \FOR{$i = 1,\dots,p$}
       \STATE Draw
-      $X_i^{t+1}\sim\pi_i(x_i|x_1,\dots,x_{i-1},x_{i+1},\dots,x_p)$.
+      $X_i^{t+1} \sim
+      \pi_i(x_i^{t+1}|x_1^{t+1},\dots,x_{i-1}^{t+1},x_{i+1}^t,\dots,x_p^t)$.
     \ENDFOR
     \STATE Set $t\leftarrow t+1$.
   \UNTIL{Sufficient many samples have been produced.}

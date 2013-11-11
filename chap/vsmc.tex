@@ -188,10 +188,10 @@ of to obtain reasonable performance. For example, while using the \openmp
 programming model, which is widely used by scientists to write parallel
 programs, issues such as thread affinity (associate each thread with a
 particular processor) can often cause large performance differences. More
-recently, devices such as \gpu{}s are even less performance portable. The same
-\opencl \cite{opencl} program can have an order of magnitude difference in
-performance when running on devices from different vendors even they have
-similar raw computational power.
+recently, devices such as \gpu{}s are even less performance portable. The
+author has seen that the same \opencl \cite{opencl} program can have an order
+of magnitude difference in performance when running on devices from different
+vendors even they have similar raw computational power.
 
 We believe that with the development of developer tools for parallel
 computing, such issues will become less common and it will help the wider
@@ -255,10 +255,13 @@ usually analyzed with \rlang, using packages such as \rcoda \cite{rcoda}.
 
 The limitation of \bugs is that the resulting algorithm may not be well tuned
 and it can take a long time to get reasonable results. In particular, it is
-very difficult for the user to provide insights of the algorithm design, such
-as the proposal scales of random walks. In addition, it does not allow more
-flexible design of data structures which can lead to significant inefficiency
-for some applications.
+very difficult for the user to provide input to the algorithm design process.
+The software chooses the algorithm tuning parameters, such as the proposal
+scales for Metropolis random walk algorithms, and even the user has a good
+knowledge of what values are more likely to lead to good performance, it is
+difficult for such knowledge being used by the software. In addition, it does
+not allow more flexible design of data structures which can lead to
+significant inefficiency for some applications.
 
 There are also many packages for the \rlang environment that implement \mcmc
 algorithms. The \rmcmcpack \cite{rmcmcpack} package provides model specific
@@ -276,7 +279,7 @@ Another interesting development is \pymc \cite{pymc}. It is distributed as a
 module for the \python programming language. It is highly influenced by \bugs
 while providing more flexibility and better performance through \python. The
 \cppbugs \cite{cppbugs} is similar to \pymc but is a library for \cpp. It is
-possible to archive much better performance using \cppbugs compared to \bugs
+possible to obtain much better performance using \cppbugs compared to \bugs
 while with only a little more programming efforts. Both \pymc and \cppbugs
 give users access to a general programming language in the process of
 designing the algorithms. Much flexibility and performance are gained through
@@ -298,9 +301,10 @@ specific models.
 \label{ssub:Softwares for smc computing}
 
 Unlike \mcmc algorithms, even the simplest \smc algorithms can be difficult to
-implement in general purpose programming languages for many researchers. There
-is a need for softwares that help researchers to implement complex generic
-\smc algorithm.
+implement in general purpose programming languages for researchers, as the
+implementations of resampling and other aspects of the algorithms are not
+always straightforward. There is a need for softwares that help researchers to
+implement complex generic \smc algorithm.
 
 Many \smc algorithms are often more computational intense than typical \mcmc
 applications. This can be partially attributed to the fact that \smc
@@ -308,9 +312,9 @@ algorithms are often used to simulate complex high dimensional distributions,
 for which \mcmc algorithms often perform poorly. The application of interest
 for \smc algorithms requires highly efficient implementations.
 
-There are relatively less development of softwares for \smc algorithms. The
-\pflib \cite{pflib} toolbox for \matlab is an early development. It is
-restricted to the particle filter setting.
+There are relatively less development of softwares for \smc algorithms. There
+have been some development using \matlab for the purpose of particle
+filtering, such as, the \pflib \cite{pflib} toolbox.
 
 More recently, the \smctc library \cite{smctc} was developed. It provides a
 framework for implementation of generic \smc algorithms in \cpp. It is
@@ -554,7 +558,7 @@ distributions that the \smc sampler operates on. Another example is particle
 filters, which often requires estimates of certain parameters at each
 iteration.
 
-For demonstration purpose, let's assume that our program has all those steps
+For demonstration purpose, let us assume that our program has all those steps
 and need to calculate both the path sampling and other importance sampling
 estimates. In the \vsmc library, all these tasks are performed through the
 \cppinline{Sampler} class. Below is an example of such a program,
@@ -883,11 +887,11 @@ various parallel programming models or on a distributed memory computer with
 The addition of methods that update the particles is more flexible than
 initialization. There are two kinds of updating methods. One is simply called
 \cppinline{move} in \vsmc, and is performed before the possible resampling at
-each iteration. The other is called \cppinline{mcmc}, and is performed after the
-possible resampling. They are often \mcmc type moves. Multiple
-\cppinline{move}'s or \cppinline{mcmc}'s are also allowed. In fact a \vsmc
-sampler consists of a queue of \cppinline{move}'s and a queue of
-\cppinline{mcmc}'s.
+each iteration. The other is called \cppinline{mcmc}, and is performed after
+the possible resampling. They are often \mcmc type moves. Multiple
+\cppinline{move}s or \cppinline{mcmc}s are also allowed. In fact a \vsmc
+sampler consists of a queue of \cppinline{move}s and a queue of
+\cppinline{mcmc}s.
 
 All these are implemented using user defined callbacks similar to the
 \cppinline{init_f} function in the last section, with a slight different
@@ -1217,7 +1221,7 @@ represents 245\% and 1960\% speedup compared to the \cpu, respectively.
 \subsection{Performance and productivity}
 \label{sub:Performance and productivity}
 
-Performance along is not enough for a software to be useful. The productivity,
+Performance alone is not enough for a software to be useful. The productivity,
 the efforts need to develop new algorithms, should also be taken into
 considerations. Due the low level natural of \cpp, it certain takes more
 efforts to develop an algorithm using \vsmc than, say \libbi or \biips.

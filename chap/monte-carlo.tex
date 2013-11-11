@@ -29,7 +29,7 @@ provided that the above expectation exists, by drawing \iid samples from
 $\pi$, say $\{X^{(i)}\}_{i=1}^N$, and approximating the expectation by the
 empirical average,
 \begin{equation}
-  \hat\varphi_{\mc}^N = \frac{1}{N}\sum_{i=1}^N\varphi(x^{(i)}).
+  \hat\varphi_{\mc}^N = \frac{1}{N}\sum_{i=1}^N\varphi(X^{(i)}).
   \label{eq:vanilla mc}
 \end{equation}
 This method is sometime also called \emph{vanilla} Monte Carlo or \emph{na\"\i
@@ -154,13 +154,6 @@ variances as extreme large weights are more likely to occur in this situation.
 Often the same samples are used to evaluate the expectations of different
 functions. And the proposal distribution is chosen such that $\eta$ is close
 to $\pi$ with heavier tails.
-
-\draftnote{Rewrite the paragraph on using importance sampling for the
-  evaluation of marginal likelihood. An explicit estimator is given. And it is
-  made clear that for such an estimator to have good performance, we need
-  knowledge of the posterior distribution, with which we usually can just
-  construct efficient \mcmc algorithms and obtain not only marginal
-  likelihood, but also posterior means, etc.}
 
 In the context of Bayesian model comparison, we are interested in the
 evaluation of the marginal likelihood $p(\data|\calM_k)$. We may use a
@@ -477,11 +470,12 @@ M(x)$.
 \subsection{Metropolis-Hastings algorithm}
 \label{sub:Metropolis-Hastings algorithm}
 
-The Metropolis-Hastings algorithm produces a Markov chain with limiting
-distribution $\pi$ with a conditional density $q(\cdot|x)$ called the
-\emph{proposal} or \emph{instrumental} distribution through the following
-transition. At time $t$, given sample $X^t$, first $Y^t$ is drawn from
-$q(y|x^t)$. Then, set
+The Metropolis-Hastings algorithm, first introduced in
+\cite{Metropolis:1953ex} and then generalized in \cite{Hastings:1970gd},
+produces a Markov chain with limiting distribution $\pi$ with a conditional
+density $q(\cdot|x)$ called the \emph{proposal} or \emph{instrumental}
+distribution through the following transition. At time $t$, given sample
+$X^t$, first $Y^t$ is drawn from $q(y|x^t)$. Then, set
 \begin{equation*}
   X^{t+1} =
   \begin{cases}
@@ -536,6 +530,9 @@ by the proposal $\eta$ up to a multiplier. In other words, there exists a
 constant $M$ such that $\pi(x)\le M\eta(x)$ for all $x$ in the support of
 $\pi$.
 
+\draftnote{Add a simple derivation of the probability expression of the
+  average acceptance rate}
+
 Though uniform ergodicity is a much desired property for a given algorithm,
 without proper optimizing, the performance of an independent proposal is often
 far from ideal. The proposal $\eta$ should be chosen such that it maximizes the
@@ -548,16 +545,38 @@ proposal $Y$ which is distributed with $\eta$, it is defined as,
   = 2\Pr\Round[bigg]{\frac{\pi(Y)}{\eta(Y)}\ge\frac{\pi(X)}{\eta(X)}},
 \end{equation}
 provided that $\pi/\eta$ is absolutely continuous and the expectation is taken
-with respect to $f(x,y) = \pi(x)\eta(y)$. The quantity $\bar\alpha$ measures
-how often a new proposal is accepted in the long run of the algorithm. This
-optimization is generic in the sense that the function of interest $\varphi$
-is not involved. In practice, $\eta$ should be chosen such that it is close to
-$\pi$ as much as possible. The requirement for $\pi/\eta$ to be bounded also
-suggest that $\eta$ at least should not have too thin tails compared to $\pi$.
-Ideally it should have slightly heavier tails than $\pi$ but not much less
-concentrated. In this aspect, the choice of $\eta$ is similar to the choice of
-the proposal distribution for importance sampling. And hence it inherits the
-same difficulties as outlined in Section~\ref{sec:Importance sampling}.
+with respect to $f(x,y) = \pi(x)\eta(y)$. The second equality is made clear by
+the following. Let
+\begin{equation*}
+  z(x,y) = \frac{\pi(y)\eta(x)}{\pi(x)\eta(y)}.
+\end{equation*}
+It is clear that $z(x,y) < 1$ is equivalent to $z(y,x)>1$. For continuous
+distributions,
+\begin{align*}
+  &\Exp\Square[bigg]{\min\Curly[bigg]{\frac{\pi(Y)\eta(X)}{\pi(X)\eta(Y)},1}}
+  \\
+  &\quad= \int \min\{z(x,y),1\} f(x,y)\intd x \intd y \\
+  &\quad= \int_{z(x,y) < 1} z(x,y)f(x,y) \intd x \intd y
+  + \int_{z(x,y)\ge1} f(x,y)\intd x \intd y \\
+  &\quad= \int_{z(x,y) < 1} \frac{\pi(y)\eta(x)}{\pi(x)\eta(y)}
+  \pi(x)\eta(y) \intd x \intd y
+  + \int_{z(x,y) \ge 1} f(x,y)\intd x \intd y \\
+  &\quad= \int_{z(x,y) < 1} \pi(y)\eta(x) \intd x \intd y
+  + \int_{z_(x,y)\ge1} f(x,y)\intd x \intd y \\
+  &\quad= \int_{z(y,x) > 1} f(y, x) \intd x \intd y
+  + \int_{z(x,y)\ge1} f(x,y) \intd x \intd y \\
+  &\quad= 2\Pr(z(x,y)\ge1).
+\end{align*}
+The average acceptance rate $\bar\alpha$ measures how often a new proposal is
+accepted in the long run of the algorithm. This optimization is generic in the
+sense that the function of interest $\varphi$ is not involved. In practice,
+$\eta$ should be chosen such that it is close to $\pi$ as much as possible.
+The requirement for $\pi/\eta$ to be bounded also suggest that $\eta$ at least
+should not have too thin tails compared to $\pi$.  Ideally it should have
+slightly heavier tails than $\pi$ but not much less concentrated. In this
+aspect, the choice of $\eta$ is similar to the choice of the proposal
+distribution for importance sampling. And hence it inherits the same
+difficulties as outlined in Section~\ref{sec:Importance sampling}.
 
 \subsubsection{Random walks}
 \label{ssub:Random walks}
@@ -660,7 +679,9 @@ parameters under $\pi$. In \cite{Roberts:2001ta}, it was further established
 that when the dimension goes to infinity, and the covariance matrix is assumed
 to be diagonal, say $I_d\sigma_d^2$, the optimal scaling of $\sigma_d$ has a
 corresponding acceptance rate $0.234$. This optimal rate has been commonly
-used as a rule of thumb in practice.
+used as a rule of thumb in practice. Some more recent results for other target
+distributions including non-Gaussian cases can be found in, e.g.,
+\cite{Chris:2009vx,Peter:2011vx}
 
 \subsubsection{Adaptive proposal}
 \label{ssub:Adaptive proposal}
@@ -747,7 +768,7 @@ algorithm that transits $X^t$ to $X^{t+1}$ in $p$ steps. At each step $i$
 (within one iteration), $X_i^{t+1}$ is generated from $\pi_i$,
 \begin{equation}
   X_i^{t+1} \sim
-  \pi_i(x_i|x_1^{t+1},\dots,x_{i-1}^{t+1},x_{i+1}^t,\dots,x_p^t).
+  \pi_i(x_i^{t+1}|x_1^{t+1},\dots,x_{i-1}^{t+1},x_{i+1}^t,\dots,x_p^t).
 \end{equation}
 The distributions $\pi_1,\dots,\pi_p$ are called the \emph{full conditionals}.
 This leads to Algorithm~\ref{alg:gibbs}. See \cite[][chap.~8
@@ -756,8 +777,8 @@ and~9]{Robert:2004tn} for a full theoretical treatment of the Gibbs sampling.
 \input{alg/gibbs}
 
 The Markov chain produced by a Gibbs sampler is irreducible if $\pi$ satisfies
-the so-called \emph{positive condition}: All $\pi_i$ are positive implies that
-$\pi$ is also positive \cite[][Theorem~10.8]{Robert:2004tn}. An easier to
+the so-called \emph{positivity condition}: All $\pi_i$ are positive implies
+that $\pi$ is also positive \cite[][Theorem~10.8]{Robert:2004tn}. An easier to
 verify condition for Harris recurrent is that the transition kernel associated
 with Algorithm~\ref{alg:gibbs} is absolutely continuous with respect to $\pi$
 \cite{Tierney:1994uk}. Some simpler conditions can be found in
@@ -769,7 +790,7 @@ Intuitively, the decomposition of the joint density gives a particular
 coordinate system with each step only explore one of the coordinates. It may
 take many cycles for the sampler to move around the surface of the joint
 distribution. As shown in \cite[][note~9.7.1]{Robert:2004tn}, poor
-parameterizations or decomposition can lead to slow convergence to the extend
+parameterizations or decomposition can lead to slow convergence to the extent
 of getting into a trapping state. This kind of situations most commonly occur
 when two highly correlated parameters, say $X_{k_1}$ and $X_{k_2}$, are
 updated in separate Gibbs moves. When $X_{k_1}$ is updated, because of its
@@ -787,11 +808,14 @@ not need to consider an \mcmc algorithm in the first place.
 Another approach is to reparameterize the target distribution with the same
 principle of decomposition. For example, in
 \cite[][sec.~10.4.1]{Robert:2004tn}, an example is given for a bivariate
-normal distribution. To sample $(X_1,X_2)$ from $\calN_2(0, \Sigma)$, using a
-Gibbs sampler operating on $(X_1 + X_2, X_1 - X_2)$ is much faster than that
-on $(X_1,X_2)$. The reparameterization here is based on the eigen basis in
-this example. Note that, this kind of techniques is not unique to the Gibbs
-sampling. They can also be used for other \mcmc algorithms. See, e.g.,
+normal distribution. To sample $(X_1,X_2)$ from $\calN_2(0, \Sigma)$, where
+$\Sigma$ is such that its eigenvalues satisfy $\lambda_{\text{\textsc{min}}}
+\ll \lambda_{\text{\textsc{max}}}$  and its eigen vectors correspond to the
+first and second diagonals of $\Real^2$, using a Gibbs sampler operating on
+$(X_1 + X_2, X_1 - X_2)$ is much faster than that on $(X_1,X_2)$. The
+reparameterization here is based on the eigen basis in this example. Note
+that, this kind of techniques is not unique to the Gibbs sampling. They can
+also be used for other \mcmc algorithms. See, e.g.,
 \cite{Hills:1993vb,Gilks:1996vx} for more discussions on this topic.
 
 \paragraph{Relation with the Metropolis-Hastings algorithm}
@@ -804,12 +828,15 @@ probability is uniformly equal to one \cite[][Theorem~10.13]{Robert:2004tn}.
 Let $Y = (X_{1:i-1},Y_i,X_{i+1:p})$ where $Y_i$ is the value proposed with
 $\pi_i$ at step $i$,
 \begin{align*}
-  \alpha(x,y) &= \frac{\pi(y)}{\pi(x)}
-  \frac{\pi_i(x|x_{1:i-1},x_{i+1:p})}{\pi_i(y|x_{1:i-1},x_{i+1:p})} \\
-  &= \frac{\pi_i(y_i|x_{1:i-1}, x_{i+1:p})\pi(x_{1:i-1},x_{i+1:p})}
-  {\pi_i(x_i|x_{1:i-1}, x_{i+1:p})\pi(x_{1:i-1},x_{i+1:p})}
-  \frac{\pi_i(x_i|x_{1:i-1}, x_{i+1:p})}{\pi_i(y_i|x_{1:i-1}, x_{i+1:p})} \\
-  &= 1
+  \alpha(x,y) &= \min\Curly[bigg]{
+    \frac{\pi(y)}{\pi(x)}
+    \frac{\pi_i(x|x_{1:i-1},x_{i+1:p})}{\pi_i(y|x_{1:i-1},x_{i+1:p})},1} \\
+  &= \min\Curly[bigg]{
+    \frac{\pi_i(y_i|x_{1:i-1}, x_{i+1:p})\pi(x_{1:i-1},x_{i+1:p})}
+    {\pi_i(x_i|x_{1:i-1}, x_{i+1:p})\pi(x_{1:i-1},x_{i+1:p})}
+    \frac{\pi_i(x_i|x_{1:i-1}, x_{i+1:p})}{\pi_i(y_i|x_{1:i-1}, x_{i+1:p})},1}
+  \\
+  &= \min\{1,1\} = 1
 \end{align*}
 
 \paragraph{Random scan}
@@ -837,9 +864,10 @@ models are often in the form,
 \begin{equation*}
   f(\data|\theta) = \int f(\data, \mathbfit{z}|\theta)\intd \mathbfit{z}.
 \end{equation*}
-where $\mathbfit{z}$ is the unobserved data. In these situations, it is
-possible to use \emph{completion} to construct a Gibbs sampler. A
-distribution, say $\eta$ with the following property is chosen,
+where $\mathbfit{z}$ is the unobserved data and $f(\data,\mathbfit{z}|\theta)$
+is the likelihood function given the complete data $(\data,\mathit{z})$. In
+these situations, it is possible to use \emph{completion} to construct a Gibbs
+sampler. A distribution, say $\eta$ with the following property is chosen,
 \begin{equation}
   \int\eta(x,y)\intd y = \int\pi(x)\intd x.
 \end{equation}
@@ -1210,34 +1238,43 @@ samplers initialized with different values converge to the same value.
 
 A more robust approach was proposed in \cite{Robert:1995ge}. The idea is to
 use several convergent estimators based on the same samples. The chain is
-stopped until all estimators are close to each other in the sense that the
-differences are smaller than a preset tolerance value. One obvious estimator
-is the empirical average. Another one is the importance sampling estimator,
+first iterated until all estimators are close to each other in the sense that
+the differences are smaller than a preset tolerance value. And then onwards
+simulations are used for inferences. One obvious estimator is the empirical
+average. Another one is the importance sampling estimator,
 \begin{equation}
-  \varphi_{\mcmc-\is}^N = \sum_{i=1}^N
-  \varphi(Y^{(i)})\frac{\pi(Y^{(i)})}{\eta(Y^{(i)})}
-\end{equation}
-where $\{Y^{(i)}\}_{i=1}^N$ are samples from $\eta$, the proposal distribution.
-The variant of this estimator can be used when the normalizing constants of
-either $\pi$ or $\eta$ are unknown (see Section~\ref{sec:Importance
-  sampling}). In the particular case of the Gibbs sampling, the distribution,
-\begin{equation}
-  \eta(x) \propto \prod_{i=1}^p \pi_i(x_i|x_{1:i-1},x_{i+1:p})
-\end{equation}
-is a natural choice to be used as the proposal distribution and samples from
-Gibbs sampler can be used. For the generic Metropolis-Hastings algorithm, the
-samples simulated from the proposal distributions (both those accepted and
-rejected) can be recycled to calculate the importance sampling estimate. This
-lead to,
-\begin{equation}
-  \varphi_{\mh-\is}^N = \sum_{i=1}^N
-  \varphi(Y^{(i)})\frac{\pi(Y^{(i)})}{q(Y^{(i)}|X^{(i)})}
+  \varphi_{\mcmc-\is}^N
+  = \sum_{i=1}^N \varphi(Y^{(i)})\frac{\pi(Y^{(i)})}{q(Y^{(i)}|X^{(i)})}
   \label{eq:sn is}
 \end{equation}
-or its variant when the normalizing constants of either $\pi$ or $q$ are
-unknown, where $\{Y^{(i)}\}_{i=1}^N$ are the proposed values (both accepted
-and rejected) and $\{X^{(i)}\}_{i=1}^N$ are the accepted values. This approach
-is more robust to trapping state than the simple plots of averages.
+where $\{Y^{(i)}\}_{i=1}^N$ are samples from $q(y^t|x^t)$, the proposal
+distribution with $X^t$ being the state of the Markov chain at time $t$ and
+$Y^t$ the proposed value. When the distributions are known only up to some
+normalizing constants, then a variant similar to that in Equation~\eqref{eq:is
+  unnormalized} is used. Unlike the importance sampling in
+Section~\ref{sec:Importance sampling}, this estimator is based on dependent
+samples instead of \iid samples. However, as shown in
+\cite[][Lemma~12.11]{Robert:2004tn}, the weighted terms in the sum are
+uncorrelated.
+
+\draftnote{Correct the sampling distribution of Gibbs sampling for the IS
+  estimator. And note that though the samples are correlated, the weighted
+  terms are not. In addition, make it clear that the proposal distribution is
+  time dependent}
+
+In the particular case of the Gibbs sampling, the distribution,
+\begin{equation}
+  q(y^t|x^{t-1}) \propto \prod_{i=1}^p \pi_i(y_i^t|y_{1:i-1}^t,x_{i+1:p}^{t-1})
+\end{equation}
+is a natural choice to be used as the proposal distribution and samples from
+Gibbs sampler can be used. In this case, $Y^{(i)} = X^{(i)}$.
+
+For the generic Metropolis-Hastings algorithm, the samples simulated from the
+proposal distributions (both those accepted and rejected) can be recycled to
+calculate the importance sampling estimate. In this case, $Y^{(i)}$ is the
+proposed value (both accepted and rejected) and $X^{(i)}$ are the accepted
+values. This approach is more robust to trapping state than the simple plots
+of averages.
 
 For example, consider an independent Metropolis-Hastings algorithm with
 proposal $\eta$ have only one high probability region $A$ while the target
@@ -1300,16 +1337,18 @@ where $\gamma$ is a proper density function. This is based on the identity,
   \frac{p(\data,\theta)}{p(\data)} \intd \theta
   = \int \frac{\gamma(\theta)}{p(\data,\theta)} \pi(\theta|\data) \intd \theta
 \end{equation}
-It can be seen that the density $\gamma$ plays a role similar to that of the
-proposal distribution for the importance sampling. For similar reasons, high
-efficiency is most likely to be obtained when $\gamma$ is roughly proportional
-to $f(\data|\theta)$ \cite{Kass:1995vb}. And the above equation suggests that
-the estimator has a finite variance if the tails of $\gamma$ is thin enough
-compared to the posterior distribution $\pi(\theta|\data)$. In
-\cite{Gelfand:1994ux} the use of a multivariate Normal distribution with
-moments approximated from the samples as a natural choice of $\gamma$ was
-suggested. In addition, the variance of the estimator can also be estimated
-for $1/\widehat{p(\data)}_{\ghm}^N$ from the posterior samples through,
+It can be seen that the distribution $\gamma$ plays a role similar to that of
+the target distribution for the importance sampling in the sense that the
+posterior distribution now acts as a proposal distribution. For similar
+reasons, high efficiency is most likely to be obtained when $\gamma$ is
+roughly proportional to $f(\data|\theta)$ \cite{Kass:1995vb}. And the above
+equation suggests that the estimator has a finite variance if the tails of
+$\gamma$ is thin enough compared to the posterior distribution
+$\pi(\theta|\data)$. In \cite{Gelfand:1994ux} the use of a multivariate Normal
+distribution with moments approximated from the samples as a natural choice of
+$\gamma$ was suggested. In addition, the variance of the estimator can also be
+estimated for $1/\widehat{p(\data)}_{\ghm}^N$ from the posterior samples
+through,
 \begin{equation}
   \widehat{\var}\Square[bigg]{\frac{1}{\widehat{p(\data)}_{\ghm}^N}} =
   \frac{1}{N^2}\sum_{i=1}^N \Round[bigg]{
@@ -1344,12 +1383,17 @@ Section~\ref{sec:Application to positron emission tomography},
   \item Update $\nu$ with a Normal random walk proposal on the logarithm
     scale, i.e., on $\log\nu$.
 \end{enumerate}
-There is a 100,000 iterations burn-in period and 10,000 iterations are used
-for estimation. The generalized harmonic mean estimator $\hat\varphi_{\ghm}^N$
-is used to compute the Bayes factor. The model selection results, along with
-that from \aic and \bic methods for the purpose of comparison, are shown in
-Figure~\ref{fig:pet mo}. It can be seen that the Bayesian model selection
-results shows more plausible structure than the information criteria.
+There is a 100,000 iterations used for adaptation (the burn-in period) and
+10,000 iterations are used for estimation. The generalized harmonic mean
+estimator $\hat\varphi_{\ghm}^N$ is used to compute the Bayes factor. The
+model selection results, along with that from \aic and \bic methods for the
+purpose of comparison, are shown in Figure~\ref{fig:pet mo}. It can be seen
+that the Bayesian model selection results shows more plausible structure than
+the information criteria. With the information criteria, the distribution of
+the model orders across the image appears to be more or less random while the
+Bayesian results show some structure with more active regions within the brain
+have higher order models. See also the discussion in \cite{Zhou2013} and
+references therein.
 
 \begin{figure}
   \includegraphics[width=\linewidth]{fig/PET_MO}
@@ -1411,7 +1455,7 @@ since
   &= \int\pi(\theta_1^*, \theta_{2:p}|\data)\intd\theta_{2:p} \\
   &= \int\pi(\theta_1^*|\data,\theta_{2:p})
   \pi(\theta_{2:p}|\data)\intd\theta_{2:p} \\
-  &= \Exp[\pi(\theta^*|\data,\theta_{2:p})|\data]
+  &= \Exp[\pi(\theta_1^*|\data,\theta_{2:p})|\data]
 \end{align*}
 where the expectation is taken with respect to the marginal distribution of
 $\theta_{2:p}$ conditional on the data.

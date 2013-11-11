@@ -24,7 +24,8 @@
           X_{k_2}^t$.
     \ENDIF
     \FOR{$k = 0,\dots,T$}
-      \STATE Draw $X_k^t$ with an \mcmc algorithm target $\pi_k$.
+      \STATE Draw $X_k^t\sim K_k(x_k^{t-1},x_k^t)$ where $K_k$ is a
+      $\pi_k$-invariant Markov kernel.
     \ENDFOR
     \STATE Set $t\leftarrow t+1$.
   \UNTIL{Sufficiently many samples have been produced.}

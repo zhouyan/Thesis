@@ -4,21 +4,20 @@
 Model selection is a problem found throughout statistics and related
 disciplines. A number of approaches of model selection has been developed
 through the history of statistics. Each has its own strength and limitations.
-There is no universally best model selection strategy. It is beyond the scope
-of this thesis to give a comprehensive and systematic review of this topic. We
-will review some of the more widely used methods. We are mostly interested in
-the methods that are generic in the sense that their usefulness are not
-limited to a particular class of models.
+There is no universally best model selection strategy. We will review some of
+the more widely used methods. We are mostly interested in the methods that are
+generic in the sense that their usefulness are not limited to a particular
+class of models.
 
-Section~\ref{sec:Information theoretic approach} reviews a few information
-theoretic approaches. The most important one of them is the Akaike's
-information criteria (\aic; \cite{Akaike:1973uc,Akaike:1974ih}). A few other
-closely related methods are also reviewed in this section.
+Section~\ref{sec:Information theoretic approach} reviews a few
+information-theoretic approaches. The most important one of them is the
+Akaike's information criteria (\aic; \cite{Akaike:1973uc,Akaike:1974ih}). A
+few other closely related methods are also reviewed in this section.
 Section~\ref{sec:Bayesian model comparison} reviews the Bayesian approach to
 model comparison and selection. This chapter is concluded by a discussion of
 the methods reviewed.
 
-\section{Information theoretic approach}
+\section{Information-theoretic approach}
 \label{sec:Information theoretic approach}
 
 Information theory is a discipline that covers a wide range of theories and
@@ -75,18 +74,21 @@ generated from $g$. We have the minimum and estimated \kld,
   \hat{D}_{\kl}(g,f) &= \text{Constant} - \Exp_g[\log f(X|\hat\theta(\data))].
 \end{align}
 Since $\hat\theta(\data)\ne\tilde\theta$ for (almost) all data $\data$, we
-have $\hat{D}_{\kl}(g,f) > \tilde{D}_{\kl}(g,f)$. A more reliable cretirion
-is the expected value of $\hat{D}_{\kl}(g,f)$ or,
+have $\hat{D}_{\kl}(g,f) > \tilde{D}_{\kl}(g,f)$. An alternative criterion is
+the expected value of $\hat{D}_{\kl}(g,f)$ or,
 \begin{equation}
   \bar{D}_{\kl} = \Exp_{\hat\theta}\Exp_g[\log f(X|\hat\theta(\data))]
   \label{eq:expected kl}
 \end{equation}
 where the outer expectation is with respect to $g$ and integrates out the
-estimated parameter $\hat\theta(\data)$. Note that we cannot compute this term
-analytically since it depends on the true model $g$, which is assumed to be
-unknown. The model selection criteria discussed below rely on approximations
-of this quantity. Consequently, these methods attempt to select the model
-that on average minimizes, over a set of models, the expected \kld.
+estimated parameter $\hat\theta(\data)$. It is again almost always larger than
+the minimum relative \kld. However, using the expected \kld as a model
+selection criterion allow us to select models that \emph{on average} minimize
+the estimated \kld. Note that we cannot compute this term analytically since
+it depends on the true model $g$, which is assumed to be unknown. The model
+selection criteria discussed below rely on approximations of this quantity.
+Consequently, these methods attempt to select the model that on average
+minimizes, over a set of models, the expected \kld.
 
 \subsection{Akaike's information criteria}
 \label{sub:Akaike's information criteria}
@@ -203,12 +205,14 @@ models using the \aic and other methods are studies. Table~\ref{tab:pet aicc}
 shows the frequencies of models selected by the \aicc for the 2,000 data sets
 simulated from a three-compartments model (see Section~\ref{sec:Simulated and
   real pet data}) while using the \nls estimator. It can be seen that, for
-data sets with small noises, the \aicc method is able to select the
-two-compartments model with a very high frequency. Though this is the true
-model that generated the data, but it is very close as the third compartment
-is difficult to identify (see discussion in \cite{Zhou2013} and references
-therein). However, when the noise level increases, the method is unable to
-identify the second compartment.
+data sets with small noise levels (the highest variance of the Normally
+distributed error added to the simulated time series, with others scaled in
+proportion; see Section~\ref{sec:Simulated and real pet data}), the \aicc
+method is able to select the two-compartments model with a very high
+frequency. Though this is not the true model that generated the data, but it
+is very close as the third compartment is difficult to identify (see
+discussion in \cite{Zhou2013} and references therein). However, when the noise
+level increases, the method is unable to identify the second compartment.
 
 It is possible to derive more accurate second or even higher order
 approximations to the expected relative \kld for some models. However, this
@@ -254,23 +258,23 @@ $\tr(J(\tilde\theta)K(\tilde\theta)^{-1})$ has been developed (see e.g.,
 \cite{Claeskens:2008tq}).
 
 Note that, since $\tilde\theta$ minimize the relative \kld, the expectation of
-the score vector is a zero vector under suitable continuity conditions.
-Further, if $g(x) = f(x|\tilde\theta)$ everywhere, then it is obvious that the
-above two matrices are equal and become the Fisher information matrix,
-provided the ability to exchange the order of integrations and
-differentiations and other regularity conditions. In this case,
-$\tr(J(\theta)K(\theta)^{-1}) = k$, and \tic leads to the \aic formula. It
-becomes clearer now that \aic is an approximation of \tic in the situation
-where the candidate models are close to the true data generating mechanism.
-The \tic method does not have such assumptions and can perform considerably
-better than \aic in the situation of model misspecification.
+the score vector is a zero vector when evaluated at $\tilde\theta$, under
+suitable continuity conditions.  Further, if $g(x) = f(x|\tilde\theta)$
+everywhere, then it is obvious that the above two matrices are equal and
+become the Fisher information matrix, provided the ability to exchange the
+order of integrations and differentiations and other regularity conditions. In
+this case, $\tr(J(\theta)K(\theta)^{-1}) = k$, and \tic leads to the \aic
+formula. It becomes clearer now that \aic is an approximation of \tic in the
+situation where the candidate models are close to the true data generating
+mechanism.  The \tic method does not have such assumptions and can perform
+considerably better than \aic in the situation of model misspecification.
 
 If the \mle is well behaved (see, for example, \cite{Lehmann:1983vx}), then we
-can substitute \mle $\hat\theta$ into equation~\ref{eq:tic} and use empirical
-averages as estimates of $J(\hat\theta)K(\hat\theta)^{-1}$. The explicit form
-of the bias correction term can also be derived for some models. For example,
-see \cite[][sec.~6.6]{Burnham:2002wc}. This allows more accurate evaluations
-of \tic.
+can substitute \mle $\hat\theta$ into equation~\eqref{eq:tic} and use
+empirical averages as estimates of $J(\hat\theta)K(\hat\theta)^{-1}$. The
+explicit form of the bias correction term can also be derived for some models.
+For example, see \cite[][sec.~6.6]{Burnham:2002wc}. This allows more accurate
+evaluations of \tic.
 
 Unlike the refinements of \aic such as \aicc, the \tic method relies heavily
 on the assumption of large sample size. It is difficult to derive small sample
@@ -302,11 +306,10 @@ $\hat\theta(\data)$ is the estimate obtained with all data and the expectation
 is taken under the unknown distribution $g$ that generates the data, is
 obtained through averaging over the left-out data,
 \begin{equation}
-  \hat{R}_f^v(\data,\data^t) =
-  \frac{1}{n_v}\sum_{y\in\data^v}\gamma(y|\hat\theta(\data^t))
+  \hat{R}_f^v(\data,\data^t) = \frac{1}{|\data\backslash\data^t}
+  \sum_{y\in\data\backslash\data^t}\gamma(y|\hat\theta(\data^t))
 \end{equation}
-where $n_v$ is the size of the validation set $\data^v$ and
-$\hat\theta(\data^t)$ is the parameter estimate obtained with only the
+where $\hat\theta(\data^t)$ is the parameter estimate obtained with only the
 training set $\data^t$.  Further, let $\data_1^t,\dots,\data_m^t$ be a
 sequence of non-empty proper subset of $\data$. The cross-validation estimator
 of the risk is defined as,
@@ -321,7 +324,12 @@ An alternative, as seen in \cite{Yang:2007vx}, is called cross-validation
 \emph{with vote}. A model with density $f_1$ is chosen over a model with
 density $f_2$ if and only if $\hat{R}_{f_1}^v(\data,\data_i^t) <
 \hat{R}_{f_2}^v(\data,\data_i^t)$ for a majority of the partitions of the data
-$\data$.
+$\data$. When there are multiple candidate models, the same paper propose the
+following procedure: For each partition of the data $\data$, and the
+corresponding training set $\data_i^t$ and validation set $\data_i^v =
+\data\backslash\data_i^t$, a model with the smallest value of
+$\hat{R}_f^v(\data,\data_i^t)$ is selected. Then the model selected most
+frequently (most voted) among all partitions is chosen as the best model.
 
 There are different ways to split the sample. The most commonly used is
 perhaps the \emph{leave-one-out} procedure \cite{Stone:1974vx,Geisser:1975vx}.
@@ -549,12 +557,12 @@ the ratio can be written as,
       \intd\theta_k}
   {\int p(\data|\theta_{k_2},\calM_{k_2})\pi(\theta_{k_2}|\calM_{k_2})
       \intd\theta_k}
-  = \frac{\pi(\calM_{k_1})}{\pi(\calM_{k_2})}B_{12},
+  = \frac{\pi(\calM_{k_1})}{\pi(\calM_{k_2})}B_{k_1k_2},
   \label{eq:posterior odd}
 \end{equation}
 where
 \begin{equation}
-  B_{12} = \frac
+  B_{k_1k_2} = \frac
   {\int p(\data|\theta_{k_1},\calM_{k_1})\pi(\theta_{k_1}|\calM_{k_1})
       \intd\theta_{k_1}}
   {\int p(\data|\theta_{k_2},\calM_{k_2})\pi(\theta_{k_2}|\calM_{k_2})
@@ -572,20 +580,20 @@ computation of the marginal likelihood for each model $\calM_k\in\calM$,
   p(\data|\calM_k) =
   \int p(\data|\theta_k,\calM_k)\pi(\theta_k|k)\intd\theta_k.
 \end{equation}
-It is obvious that $B_{ij} = B_{ik} B_{kj}$, and thus the Bayes
+It is obvious that $B_{ij} = B_{ik}B_{kj}$, and thus the Bayes
 factor approach is equivalent to choosing the model with the highest marginal
 likelihood, as long as the model set $\calM$ is finite.
 
-The Bayes factor, $B_{12}$, can be interpreted as the evidence provided by the
-data in favor model $\calM_{k_1}$ against model $\calM_{k_2}$. The marginal
-likelihood $p(\data|\calM_k)$ is also called the evidence supporting model
-$\calM_k$. In \cite{Jeffreys:1961ua}, it is suggested that the Bayes factor
-can be interpreted on a $\log_{10}$ scale. His interpretations are reproduced
-in Table~\ref{tab:bayes factor log10 scale}. The interpretation of the Bayes
-factor can be application dependent. The Jeffreys' interpretation, and a
-similar scale based on the $2\log B_{12}$, which is on the same scale as the
-likelihood ratio test, shown in \cite{Kass:1995vb} are only general
-guidelines. Other interpretations can be more suitable for specific
+The Bayes factor, $B_{k_1k_2}$, can be interpreted as the evidence provided by
+the data in favor model $\calM_{k_1}$ against model $\calM_{k_2}$. The
+marginal likelihood $p(\data|\calM_k)$ is also called the evidence supporting
+model $\calM_k$. In \cite{Jeffreys:1961ua}, it is suggested that the Bayes
+factor can be interpreted on a $\log_{10}$ scale. His interpretations are
+reproduced in Table~\ref{tab:bayes factor log10 scale}. The interpretation of
+the Bayes factor can be application dependent. The Jeffreys' interpretation,
+and a similar scale based on the $2\log B_{k_1k_2}$, which is on the same
+scale as the likelihood ratio test, shown in \cite{Kass:1995vb} are only
+general guidelines. Other interpretations can be more suitable for specific
 applications. For example, \cite{Kass:1995vb} mentioned that for forensic
 evidence to be conclusive in a criminal trial, the posterior odds of guilt
 against innocence need to be at least 1,000.
@@ -599,9 +607,9 @@ to the evaluation of the full posterior probabilities offsets the limitation.
 
 The calculation of the Bayes factor can be made exact using analytical results
 only occasionally. In most applications of interest, approximations has to be
-used. Two approaches are widely used. On is using Monte Carlo approximations.
-Another is based on the asymptotic behavior of the Bayes factor. A few of the
-later is reviewed here.
+used. Two approaches are widely used. One is to use Monte Carlo
+approximations. Another is based on the asymptotic behavior of the Bayes
+factor. Two of the later are reviewed here.
 
 \subsubsection{Bayesian information criteria}
 \label{ssub:Bayesian information criteria}
@@ -717,8 +725,8 @@ distributions as the prior. In \cite[][sec.~5.2]{Bernardo:1994vd}, it was
 argued that the conjugate prior reduced the input of prior information to only
 the choice of parameter values and thus cannot be fully justified from a
 subjective perspective. Though their mathematical simplicity make them
-attractive in practice, for many applications of interest it is nearly
-impossible to find such priors.
+attractive in practice, for many applications of interest it is difficult to
+find such priors.
 
 \subsubsection{Non-informative priors}
 \label{ssub:Non-informative priors}
@@ -738,6 +746,8 @@ prior of location parameters such as the mean of a Normal distribution.
 
 \paragraph{Jeffreys priors}
 
+\draftnote{Add notes about the invariance of Jeffreys priors}
+
 Jeffreys priors \cite{Jeffreys:1946jf} have the form,
 \begin{equation}
   \pi(\theta_k|\calM_k)\propto\sqrt{\Abs{I(\theta_k)}}
@@ -751,10 +761,21 @@ where
   \frac{\partial^2\log p (\data|\theta_k,\calM_k)}
   {\partial\theta_k\partial\theta_k^T}\intd\data,
 \end{align}
-is the \emph{Fisher's information}. The basic idea behind Jeffreys priors is
-that the prior shall contain no more information than the observed data do.
-The Fisher information is widely accepted as an indicator of the amount of
-information brought by the model about the parameter $\theta_k$ given the data
+is the \emph{Fisher's information}. The defining property of Jeffreys priors
+is its invariance in the sense that, for a one-to-one transformation $\phi_k =
+h(\theta_k)$, we have,
+\begin{align*}
+  I(\phi_k) &= \frac{I(h^{-1}(\phi_k))}{(h'(h^{-1}(\phi_k)))^2} \\
+  \pi(\phi_k) &= \frac{\sqrt{\Abs{I(\theta_k)}}}{h'(\theta_k)}.
+\end{align*}
+The first equality is given by the Jacobian transformation. And the second
+states that the Jeffreys prior of the transformed parameter $\phi_k$ is the
+same as the one obtained by changing variable of the Jeffreys prior of
+$\theta_k$. In other words, a change of variable does not change the prior
+under the Jeffreys rule. Another informal interpretation is that, the prior
+shall contain no more information than the observed data do. The Fisher
+information is widely accepted as an indicator of the amount of information
+brought by the model about the parameter $\theta_k$ given the data
 \cite{Fisher:1956vx}. Therefore, intuitively values of $\theta_k$ for which
 $I(\theta_k)$ is large is more likely than those for which $I(\theta_k)$ is
 small.
@@ -773,7 +794,7 @@ for successful applications using improper priors. In general, for more
 complex models using proper priors is recommended since it might be easier to
 verify that the posteriors are also proper. In the situation where the derived
 Jeffreys priors are improper, it is possible to use some proper distribution
-to approximate them. For example, a Gamma distribution can be used to
+to approximate them. For example, an inverse Gamma distribution can be used to
 arbitrarily closely approximate $\pi(x)\propto1/x$, which is often seen as the
 Jeffreys prior for scale parameters, such as as the precision parameter of the
 Normal distribution.
@@ -910,9 +931,10 @@ $A$ is,
     k_5               & 0    & -k_6
   \end{bmatrix}.
 \end{equation*}
-It is believed that all the rate constants take values in the range $[5
-\times 10^{-4}, 10^{-2}]$. Without loss of generality, we impose the
-identifiability constraint $\theta_1 \leq \theta_2 \leq \theta_3$, then,
+It is believed that all the rate constants take values in the range $[5 \times
+10^{-4}, 10^{-2}]$ (for example see \cite{Zhou2013,Peng:2008fx}). Without loss
+of generality, we impose the identifiability constraint $\theta_1 \leq
+\theta_2 \leq \theta_3$, then,
 \begin{gather}
   0 < \theta_1 \le k_2 \le 10^{-2} \\
   \theta_1 \leq \theta_2 \leq \theta_3 \leq \max\{2(k_2 + k_3 + k_5), 2k_4,
@@ -998,10 +1020,14 @@ may fail to evaluate these integrations accurately. The work of this thesis
 aim to provide a new framework within which the computational difficulty is
 further lowered than current practice.
 
+\draftnote{Correct a typo. Adam commented about "model information", which I
+  have little idea what it is in this context. I believe the intention was
+  "more information"}
+
 This review is far from comprehensive. We have restricted ourselves to methods
 that have minimal assumptions about the form of the models. For particular
 models, many other methods have been developed. For example, in regression
-analysis, the Mallow's $C_p$ is a popular model selection criterion. For model
+analysis, the Mallow's $C_p$ is a popular model selection criterion. For more
 information on information-theoretic approaches we refer to
 \cite{Burnham:2002wc,Claeskens:2008tq}.
 
