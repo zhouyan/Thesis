@@ -1,13 +1,8 @@
 .PHONY : plot
 
-.PHONY : test
-
 .PHONY : clean
 
 plot : Adaptive_Dist.pdf Adaptive_Proposal.pdf CESS_Iter_Mean.pdf CESS_Iter_Var.pdf CESS_Path_Var.pdf CESS_SMC_Var.pdf Fixed_Proposal.pdf MCMC_Iter_Var.pdf Particle_Iter_Var.pdf PET_MH_C_Diag.pdf PET_MH_Diag.pdf PET_MH_H_Path.pdf PET_MH_Path.pdf Typical_PET.pdf GMM_Resample.pdf
-
-test : all test.tex
-	latexmk -silent -f test.tex >/dev/null
 
 clean :
 	rm -f *.aux *.log *.out *.fdb_latexmk *.synctex.gz *.pyg *.fls *busy*

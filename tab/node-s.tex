@@ -1,12 +1,18 @@
-\begin{table}
-  \caption[Nonlinear \protect\ode model marginal likelihood and Bayes factor
+\clearpage
+\thispagestyle{empty}
+\newgeometry{hmargin={1in,1in},vmargin={1in,2in},bindingoffset=\mclassbinding}
+\begin{table}[t]
+  \linespread{1.1}\selectfont
+  \caption
+  [Nonlinear \protect\ode model marginal likelihood and the Bayes factor
   estimates (simple model data)]
-  {Nonlinear \ode model marginal likelihood and Bayes factor estimates
-    with data generated from simple (three components) model.}
+  {Nonlinear \ode model marginal likelihood and the Bayes factor estimates
+    with data generated from a simple (three components) model.}
   \label{tab:node-s}
-  \begin{tabu}{X[1l]X[2c]X[2c]X[2c]X[4r]X[4r]X[6r]}
+  \begin{tabu}{X[0.3l]X[0.8c]X[0.8c]X[0.8c]X[1r]X[1r]X[1r]}
     \toprule
-    &&&& \multicolumn{2}{c}{Marginal likelihood ($\log p(\data|\calM_k)\pm\sd$)} & Bayes factor ($\log B_{3,5}\pm\sd$) \\
+    &&&& \multicolumn{2}{c}{Marginal likelihood} & Bayes factor \\
+    &&&& \multicolumn{2}{c}{$\log p(\data|\calM_k)\pm\sd$} & $\log B_{3,5}\pm\sd$ \\
     \cmidrule(lr){5-6}
     $T$   & Proposal & Annealing & Algorithm   & $m = 3$                & $m = 5$                & \\ \midrule
     $10 $ & Manual         & Prior (5) & \pmcmc      & $-109.7\pm3.2$         & $-120.3\pm2.5$         & $10.6\pm3.8$ \\
@@ -48,3 +54,4 @@
       \end{minipage}}
   \end{tabu}
 \end{table}
+\restoregeometry

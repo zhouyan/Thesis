@@ -1,22 +1,28 @@
-\begin{table}
-    \caption[Gaussian mixture model posterior model probability estimates]
-    {Gaussian mixture model posterior model probability estimates obtained via
-      \smc[1] and \rjmcmc}
-    \label{tab:gmm-prob}
-    \begin{tabu}{X[2l]X[2l]X[1c]X[1c]X[1c]X[1c]X[1l]X[1c]X[1c]}
-      \toprule
-      & & \multicolumn{7}{c}{Number of components} \\
-      \cmidrule(lr){3-9}
-      Quantity & Algorithm & $\le2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $\ge8$ \\
-      \midrule
-      $\Prob(\calM_k|\data)$ & \smc[1]
-      & $0$ & $0.0022$ & $0.89$ & $0.10$ & $0.0064$ & $0.0014$ & $0$ \\
-                         & \rjmcmc
-      & $0$ & $0.0013$ & $0.89$ & $0.10$ & $0.0062$ & $0.0025$ & $0$ \\
-      $\log B_{4,k}$     & \smc[1]
-      & $\infty$ & $6.00$ & $0$ & $2.15$ & $4.93$ & $6.45$ & $\infty$ \\
-                         & \rjmcmc
-      & $\infty$ & $6.53$ & $0$ & $2.15$ & $4.97$ & $5.87$ & $\infty$ \\
-      \bottomrule
-    \end{tabu}
+\draftnote{There are still some overfull boxes in this
+  Table~5.3, but it shall look just fine once I drop the
+  draft option of the document class and do not shall the overfull bars}
+
+\begin{table}[t]
+  \linespread{1.1}\selectfont
+  \caption
+  [Gaussian mixture model posterior model probability]
+  {Gaussian mixture model posterior model probability estimates obtained via
+    \smc[1] and \rjmcmc.}
+  \label{tab:gmm-prob}
+  \begin{tabu}{X[2l]X[2.5l]X[1c]X[1c]X[1c]X[1c]X[1l]X[1c]X[1c]}
+    \toprule
+    & & \multicolumn{7}{c}{Number of components} \\
+    \cmidrule(lr){3-9}
+    Quantity & Algorithm & $\le2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $\ge8$ \\
+    \midrule
+    $\Prob(\calM_k|\data)$ & \smc[1]
+    & $0$ & $0.0022$ & $0.89$ & $0.10$ & $0.0064$ & $0.0014$ & $0$ \\
+    & \rjmcmc
+    & $0$ & $0.0013$ & $0.89$ & $0.10$ & $0.0062$ & $0.0025$ & $0$ \\
+    $\log B_{4,k}$     & \smc[1]
+    & $\infty$ & $6.00$ & $0$ & $2.15$ & $4.93$ & $6.45$ & $\infty$ \\
+    & \rjmcmc
+    & $\infty$ & $6.53$ & $0$ & $2.15$ & $4.97$ & $5.87$ & $\infty$ \\
+    \bottomrule
+  \end{tabu}
 \end{table}

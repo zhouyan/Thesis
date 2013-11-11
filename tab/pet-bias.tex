@@ -1,5 +1,8 @@
-\begin{table}
-  \begingroup\small
+\begin{table}[t]
+  \linespread{1.1}\selectfont
+  \caption{Path sampling estimates of marginal likelihood of two-compartments
+    \protect\pet model for the simulated data set.}
+  \label{tab:pet-bias}
   \begin{tabularx}{\linewidth}{lXXXX}
     \toprule
     & \multicolumn{4}{c}{Number of grid points (compared to sampled iterations)} \\
@@ -15,13 +18,13 @@
     Boole
     & $-40.9\pm1.09$ & $-39.9\pm1.04$ & $-39.4\pm1.04$ & $-39.2\pm1.05$ \\
     \bottomrule
-  \end{tabularx}\endgroup
-  \caption[\protect\pet compartmental model path sampling estimates bias
-  reduction]
-  {Path sampling estimator of marginal likelihood of two components
-    \pet model. The estimator was approximated using samples from \smc[2]
-    algorithm with 1,000 particles and 20 iterations, with different numerical
-    integration strategies. Large sample result (see Table~\ref{tab:pet-py})
-    provide an estimate of $-39.2$.}
-  \label{tab:pet-bias}
+    \multicolumn{5}{r}{%
+      \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily
+        The estimator was approximated using samples from \smc[2] algorithm
+        with 1,000 particles and 20 iterations, with different numerical
+        integration strategies. Large sample result (see
+        Table~\ref{tab:pet-py}) shows that the accurate value is about
+        $-39.2$.
+      \end{minipage}}
+  \end{tabularx}
 \end{table}

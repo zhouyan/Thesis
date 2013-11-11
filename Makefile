@@ -1,7 +1,13 @@
 .PHONY : thesis
 
 thesis :
-	latexmk -f -silent thesis.tex > /dev/null
+	latexmk -f -silent thesis.tex >/dev/null
+
+table :
+	latexmk -f -silent table.tex >/dev/null
+
+figure :
+	latexmk -f -silent figure.tex >/dev/null
 
 clean :
 	latexmk -c

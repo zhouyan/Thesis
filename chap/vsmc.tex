@@ -1167,15 +1167,7 @@ parallelization is less efficient than other industry strength programming
 models. However, with 1000 or more particles, which is less than typical
 applications, the difference is not very significant.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{fig/bench-smp-time-running}
-  \includegraphics[width=\linewidth]{fig/bench-smp-speedup-running}
-  \caption[Performance of \protect\vsmc \protect\smp implementations]
-  {Performance of \cpp implementations of Bayesian modeling for
-    Gaussian mixture model (Linux; Xeon W3550, 3.06GHz, 4 cores, 8 threads).}
-  \label{fig:bench-smp-perf}
-\end{figure}
+\input{fig/vsmc_bench_smp}
 
 \subsection{Using the \protect\opencl module}
 \label{sub:Using the OpenCL module}
@@ -1207,16 +1199,7 @@ peak performance of 24.48 GFLOPS. The \gpu has a theoretical peak performance
 of 60 GFLOPS in double precision and 480 GFLOPS in single precision. This
 represents 245\% and 1960\% speedup compared to the \cpu, respectively.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{fig/bench-ocl-time-running}
-  \includegraphics[width=\linewidth]{fig/bench-ocl-speedup-running}
-  \caption[Performance of \protect\vsmc \protect\opencl implementations]
-  {Performance of \opencl implementations of Bayesian modeling for
-    Gaussian mixture model (Linux; Xeon W3550 \gpu, 3.06GHz, 4 cores, 8
-    threads; NVIDIA Quadro 2000).}
-  \label{fig:bench-ocl-perf}
-\end{figure}
+\input{fig/vsmc_bench_ocl}
 
 \subsection{Performance and productivity}
 \label{sub:Performance and productivity}

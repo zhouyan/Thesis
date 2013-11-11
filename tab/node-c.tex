@@ -1,12 +1,18 @@
-\begin{table}
-  \caption[Nonlinear \protect\ode model marginal likelihood and Bayes factor
+\clearpage
+\thispagestyle{empty}
+\newgeometry{hmargin={1in,1in},vmargin={1in,2in},bindingoffset=\mclassbinding}
+\begin{table}[t]
+  \linespread{1.1}\selectfont
+  \caption
+  [Nonlinear \protect\ode model marginal likelihood and the Bayes factor
   estimates (complex model data)]
-  {Nonlinear \ode model marginal likelihood and Bayes factor estimates
-    with data generated from complex (five components) model.}
+  {Nonlinear \ode model marginal likelihood and the Bayes factor estimates
+    with data generated from a complex (five components) model.}
   \label{tab:node-c}
-  \begin{tabu}{X[1l]X[2c]X[2c]X[2c]X[4r]X[4r]X[6r]}
+  \begin{tabu}{X[0.3l]X[0.8c]X[0.8c]X[0.8c]X[1r]X[1r]X[1r]}
     \toprule
-    &&&& \multicolumn{2}{c}{Marginal likelihood ($\log p(\data|\calM_k)\pm\sd$)} & Bayes factor ($\log B_{3,5}\pm\sd$) \\
+    &&&& \multicolumn{2}{c}{Marginal likelihood} & Bayes factor \\
+    &&&& \multicolumn{2}{c}{$\log p(\data|\calM_k)\pm\sd$} & $\log B_{3,5}\pm\sd$ \\
     \cmidrule(lr){5-6}
     $T$   & Proposal & Annealing & Algorithm   & $m = 3$                 & $m = 5$                & \\ \midrule
     $10 $ & Manual   & Prior (5) & \pmcmc      & $-1651.0\pm27.9$        & $-85.1\pm36.6$         & $1565.9\pm42.1$ \\
@@ -30,8 +36,7 @@
 
         Proposal: The proposal scales of the \mcmc kernels. The ``Manual''
         proposal is manually tuned such that the accept rates fall between
-        $[0.2, 0.6]$. The ``Adaptive'' proposal is dynamically set using
-        moments estimates from the last iteration of the particle system.
+        $[0.2, 0.6]$. The ``Adaptive'' proposal is dynamically set using moments estimates from the last iteration of the particle system.
 
         Annealing: The annealing scheme of the distributions, $\alpha(t/T_k)$
         in Equation~\ref{eq:geometry_2}. The ``Prior (5)'' scheme is
@@ -48,3 +53,4 @@
       \end{minipage}}
   \end{tabu}
 \end{table}
+\restoregeometry

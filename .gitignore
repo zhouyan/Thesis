@@ -5,6 +5,7 @@
 *.blg
 *.fdb_latexmk
 *.fls
+*.lod
 *.lof
 *.log
 *.lot
@@ -15,9 +16,13 @@
 *.toc
 
 thesis.pdf
+table.pdf
+figure.pdf
 outline.pdf
 pieces/*.pdf
 chap/*.pdf
 
 .minted-thesis
 .minted-outline
+.minted-table
+.minted-figure

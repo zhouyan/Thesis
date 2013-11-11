@@ -770,11 +770,7 @@ Section~\ref{sub:Choice of priors}) and thus the parameters are exchangeable,
 similar to that of a mixture model. This creates a multimodal posterior
 surface for models with two or more compartments.
 
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/Typical_PET}
-  \caption{Typical real \protect\pet data}
-  \label{fig:typical real pet}
-\end{figure}
+\input{fig/typical_pet}
 
 \subsection{Improved univariate numerical integration}
 \label{sub:Improved univariate numerical integration}
@@ -806,8 +802,8 @@ $\{\alpha_t'\}_{t=0}^{T'}$ than $\{\alpha_t\}_{t=0}^T$. Since higher order
 numerical integrations based on approximations of derivatives obtained from
 Monte Carlo methods may potentially be unstable in some situations, the second
 approach can be more appealing in some applications. A demonstration of the
-bias reduction effect is provided in Section~\ref{sub:Positron Emission
-  Tomography compartmental model}.
+bias reduction effect is provided in Section~\ref{sub:Positron emission
+  tomography compartmental model}.
 
 \subsection{Adaptive specification of distributions}
 \label{sub:Adaptive specification of distributions}
@@ -932,16 +928,7 @@ a sample approximation of the expected sum of unnormalized weights when
 considering sampling from $\pi_{t-1}$ and targeting $\pi_t$ by simple
 importance sampling.
 
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/Adaptive_Dist}
-  \caption[Variations of the distribution specification parameter for the
-  \protect\pet compartmental model using adaptive \protect\smc algorithms]
-  {A typical plot of $\alpha_t - \alpha_{t-1}$ against $\alpha_t$ (for the
-    \pet compartmental model using \smc[2] algorithm.) The specifications of
-    the adaptive parameter (\ess or \cess) are adjusted such that all four
-    samplers use roughly the same number of distributions.}
-  \label{fig:adaptive_alpha}
-\end{figure}
+\input{fig/adaptive_dist}
 
 More specifically, in practice, when using \cess to adaptively place
 distributions, a value $\cess^\star \in (0, 1)$ is chosen, and at each
@@ -964,7 +951,7 @@ from each as seen in Figure~\ref{fig:typical real pet}, is more prominent. The
 variance reduction can more than 50\% when using the \cess-based strategy.
 More performance comparisons for various settings of the samplers can be found
 in Section~\ref{sub:Nonlinear ordinary differential equations}
-and~\ref{sub:Positron Emission Tomography compartmental model}.
+and~\ref{sub:Positron emission tomography compartmental model}.
 
 \subsubsection[Relations of cess*, number of distributions, and estimator
 variance]
@@ -991,31 +978,15 @@ relation between the variance of path sampling estimator and the value of
 $\cess^\star$. Similar relations can be observed for the standard estimator
 (Equation~\eqref{eq:smc2-ds}), which is not shown here.
 
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/CESS_Iter_Mean}
-  \caption[Relations between average number of distributions and
-  \protect\cess]
-  {Relations between average number of distributions and
-    $\cess^\star$. The number of distributions ranges from $\sim$30 to
-    $\sim$1,300.}
-  \label{fig:cess iter mean}
-\end{figure}
-
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/CESS_Path_Var}
-  \caption[Relations between the variance of the path sampling estimator and
-  \protect\cess]
-  {Relations between the variance of the path sampling estimator and
-    $\cess^\star$.}
-  \label{fig:cess path var}
-\end{figure}
+\input{fig/cess_iter_mean}
+\input{fig/cess_path_var}
 
 Though the coefficient of the proportionality varies for different
-applications or data sets, the relation shown in figures~\ref{fig:cess iter
+applications or data sets, the relation shown in Figures~\ref{fig:cess iter
   mean} and~\ref{fig:cess path var} provide a useful guidelines to select the
-value of $\cess^\star$. A small sample experiment can be conducted before using a
-value of $\cess^\star$ more close to $1$ to obtain satisfactory estimates or to
-utilize given computational resources.
+value of $\cess^\star$. A small sample experiment can be conducted before
+using a value of $\cess^\star$ more close to $1$ to obtain satisfactory
+estimates or to utilize given computational resources.
 
 \subsection{Adaptive specification of proposals}
 \label{sub:Adaptive specification of proposals}
@@ -1068,23 +1039,8 @@ As these algorithms are known to be somewhat sensitive to scaling, and we seek
 approaches robust enough to employ with little user intervention, we have not
 investigated this strategy here.
 
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/Adaptive_Proposal}
-  \caption[Acceptance rates of adaptive \protect\smc algorithms]
-  {Average random walk acceptance rates for \pet compartmental models
-    with data sets in Figure~\ref{fig:typical real pet} using adaptive
-    proposal scales}
-  \label{fig:pet adaptive proposal}
-\end{figure}
-
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/Fixed_Proposal}
-  \caption[Acceptance rates of non-adaptive \protect\smc algorithms]
-  {Average random walk acceptance rates for \pet compartmental models
-    with data sets in Figure~\ref{fig:typical real pet} using fixed proposal
-    scales}
-  \label{fig:pet fixed proposal}
-\end{figure}
+\input{fig/adaptive_proposal}
+\input{fig/fixed_proposal}
 
 Adaptive specification of proposals is most useful when manual tuning is
 difficult or even impossible. We consider the three real \pet data sets shown
@@ -1168,8 +1124,8 @@ scheme which is manually tuned. The placement of the distributions is either
 \input{tab/pet-bf-accuracy}
 
 The results are shown in Table~\ref{tab:pet four sampler same dist}. More
-comprehensive results can be found in Section~\ref{sec:Positron Emission
-  Tomography compartmental model}. However, from this particular example, we
+comprehensive results can be found in Section~\ref{sub:Positron emission
+  tomography compartmental model}. However, from this particular example, we
 can see that the combination of the two adaptive schemes provides superior
 performance at very little computation cost. Table~\ref{tab:pet four sampler
   same iter} shows actually equivalent results. Instead of fixing the number
@@ -1401,15 +1357,7 @@ operation can outweight the attendant increase in Monte Carlo variance and
 that is what we observed here (and in the case of the other examples
 considered below; results not shown.)
 
-\begin{figure}
-  \includegraphics[width=\linewidth]{fig/GMM_Resample}
-  \caption[Variance of standard standard estimator and path sampling using
-  adaptive resampling]
-  {Monte Carlo variance of standard estimator and path sampling
-    estimator using different threshold of $\ess/N$ for Gaussian mixture model
-    with \smc[2] algorithm. The variances are plotted on log scale}
-  \label{fig:gmm resample}
-\end{figure}
+\input{fig/gmm_resample}
 
 On the other hand, in this work we advocate resampling adaptively instead of
 resampling every iteration. The proposed adaptive schedule also has
@@ -1554,25 +1502,14 @@ distributions, increasing either of them can always benefit the accuracy of
 the estimators. We will study this trade-off more carefully with the next more
 realistic example.
 
-\subsection{Positron Emission Tomography compartmental model}
-\label{sub:Positron Emission Tomography compartmental model}
+\subsection{Positron emission tomography compartmental model}
+\label{sub:Positron emission tomography compartmental model}
 
 It is now interesting to compare the proposed algorithm with other
 state-of-art algorithms using the more realistic \pet compartmental model
 example.
 
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/PETPlot-smc2-ps-bw}
-  \caption[Volume of distribution of real \protect\pet compartmental model
-  data]
-  {Estimates of $V_D$ from a single \pet scan as found using \smc[2].
-    The data shows that the volume of distribution exhibits substantial
-    spatial variation. Note that each pixel in the image represent an estimate
-    from an individual time series data set. There are approximately a quarter
-    of a million of them and each requires a Monte Carlo simulation to select
-    a model.}
-  \label{fig:petplot}
-\end{figure}
+\input{fig/pet_plot}
 
 As mentioned before, real neuroscience data sets involve a very large number
 ($\sim$200,000 per brain) of time series, which are typically somewhat
@@ -1706,14 +1643,7 @@ shown in Table~\ref{tab:pet-bias}
 
 \paragraph{Trade-off between number of particles and distributions}
 
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/Particle_Iter_Var}
-  \caption[Variance of path sampling estimator and total number of samples
-  using \protect\smc algorithm]
-  {Variance of path sampling estimator and total number of samples
-    using the \smc[2] algorithm.}
-  \label{fig:particle iter num}
-\end{figure}
+\input{fig/particle_iter_var}
 
 It can be seen through the nonlinear \ode and the \pet examples that, there is
 a trade-off between the number of particles and distributions. Increasing
@@ -1756,16 +1686,7 @@ that, given the same total number of samples simulated, using more
 distributions almost always outperforms using more \mcmc moves. However, with
 sufficient large number of samples, the difference is minimal.
 
-\begin{figure}[t]
-  \includegraphics[width=\linewidth]{fig/MCMC_Iter_Var}
-  \caption[Variance of path sampling estimator and total number of samples
-  using \protect\smc algorithm]
-  {Variance of path sampling estimates and total number of samples
-    using the \smc[2] algorithm. Both samplers use 1,000 particles but with
-    different number of distributions and passes of \mcmc moves at each
-    iteration}
-  \label{fig:fast mcmc iter}
-\end{figure}
+\input{fig/mcmc_iter_var}
 
 \paragraph{Real data results}
 

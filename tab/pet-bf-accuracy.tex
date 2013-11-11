@@ -1,17 +1,19 @@
 \begin{table}[t]
-  \caption[Accuracy of Bayes factor estimates]
-  {Bayes factor estimates ($\log B_{1,2}\pm\sd$) for the simulated
-    \pet data set using \smc[2] algorithm. All four samplers are configured such
-    that about 200 distributions are used.}
+  \linespread{1.1}\selectfont
+  \caption[Performance of the Bayes factor estimator using adaptive
+  \protect\smc algorithms]
+  {The standard Bayes factor estimates ($\log B_{2,1}\pm\sd$) for the
+    simulated \pet data set using the \smc[2] algorithm. All four samplers are
+    configured such that about 200 distributions are used.}
   \label{tab:pet four sampler same dist}
   \begin{tabularx}{\linewidth}{lXX}
     \toprule
     & \multicolumn{2}{c}{Proposal scales} \\
     \cmidrule(lr){2-3}
-    Schedule & Fixed & Adaptive \\
+     & Fixed & Adaptive \\
     \midrule
-    Deterministic schedule ($\alpha_k(t/_k) = (t/T_k)^5$) & $1.6\pm0.27$ & $1.6\pm0.22$ \\
-    \cess-based adaptive schedule & $1.6\pm0.19$ & $1.6\pm0.15$ \\
+    Fixed annealing ($\alpha_k(t/_k) = (t/T_k)^5$) & $1.6\pm0.27$ & $1.6\pm0.22$ \\
+    \cess-based adaptive annealing & $1.6\pm0.19$ & $1.6\pm0.15$ \\
     \bottomrule
   \end{tabularx}
 \end{table}

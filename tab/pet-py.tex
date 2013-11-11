@@ -1,49 +1,49 @@
-\begin{table}
-  \def\B{\color{MBlue}\it}
-  \def\R{\color{MRed}\bf}
-  \begingroup\small
-    \begin{tabularx}{\linewidth}{lllCCCC}
-      \toprule
-      \multicolumn{3}{l}{Proposal scales}  & \multicolumn{3}{c}{Manual} & Adaptive \\
-      \cmidrule(lr){1-3}\cmidrule(lr){4-6}\cmidrule(lr){7-7}
-      \multicolumn{3}{l}{Annealing scheme} & Prior (5) & Posterior (5) & \multicolumn{2}{c}{Adaptive} \\
-      \cmidrule(lr){1-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}\cmidrule(lr){6-7}
-      %
-      $T$    & $N$   & Algorithm   & \multicolumn{4}{c}{Marginal likelihood estimates ($\log p(\theta_k|\data)\pm\text{\sd}$)} \\ \midrule
-      $500$  & $30 $ & \pmcmc      & $ -39.1\pm  0.56$ & $-926.8\pm376.99$ && \\
-      $500$  & $192$ & \smc2-\ds & $\B-39.2\pm0.25$ & $\B-39.7\pm1.06$ & $\B-39.2\pm0.18$ & $\R-39.1\pm0.12$ \\
-             &       & \smc2-\ps & $\B-39.2\pm0.25$ & $-91.3\pm21.69$  & $\B-39.2\pm0.18$ & $-39.1\pm0.13$   \\
-      $100 $ & $960$ & \smc2-\ds & $-39.3\pm0.36$   & $-40.6\pm1.41$   & $-39.2\pm0.31$   & $-39.2\pm0.19$   \\
-             &       & \smc2-\ps & $-39.3\pm0.35$   & $302.1\pm46.29$  & $-39.3\pm0.31$   & $-39.2\pm0.18$   \\ \midrule
-      $1000$ & $30 $ & \pmcmc      & $ -39.3\pm  0.46$ & $-884.1\pm307.88$ && \\
-      $1000$ & $192$ & \smc2-\ds & $\B-39.2\pm0.19$ & $\B-39.4\pm0.68$ & $\B-39.2\pm0.17$ & $\R-39.1\pm0.10$ \\
-             &       & \smc2-\ps & $\B-39.2\pm0.19$ & $-66.0\pm13.26$  & $\B-39.2\pm0.17$ & $\R-39.1\pm0.10$  \\
-      $200 $ & $960$ & \smc2-\ds & $-39.2\pm0.22$   & $-39.8\pm1.21$   & $-39.2\pm0.18$   & $-39.1\pm0.11$   \\
-             &       & \smc2-\ps & $-39.2\pm0.22$   & $175.5\pm26.84$  & $-39.2\pm0.18$   & $-39.2\pm0.11$   \\ \midrule
-      $2000$ & $30 $ & \pmcmc      & $ -39.3\pm  0.28$ & $-928.7\pm204.93$ && \\
-      $2000$ & $192$ & \smc2-\ds & $-39.2\pm0.14$   & $\B-39.3\pm0.41$ & $-39.1\pm0.12$   & $-39.1\pm0.07$  \\
-             &       & \smc2-\ps & $-39.2\pm0.14$   & $-51.2\pm4.30$   & $-39.2\pm0.12$   & $-39.1\pm0.07$  \\
-      $400 $ & $960$ & \smc2-\ds & $\B-39.2\pm0.13$ & $-39.4\pm0.73$   & $\B-39.2\pm0.11$ & $-39.2\pm0.07$   \\
-             &       & \smc2-\ps & $\B-39.2\pm0.13$ & $106.0\pm14.36$  & $\B-39.2\pm0.11$ & $\R-39.2\pm0.06$ \\ \midrule
-      $5000$ & $30$  & \pmcmc      & $ -39.3\pm  0.21$ & $-917.6\pm129.54$ && \\
-      $5000$ & $192$ & \smc2-\ds & $-39.2\pm0.09$   & $\B-39.2\pm0.20$ & $-39.2\pm0.08$   & $-39.1\pm0.04$   \\
-             &       & \smc2-\ps & $-39.2\pm0.09$   & $-43.8\pm2.13$   & $-39.2\pm0.08$   & $-39.1\pm0.04$   \\
-      $1000$ & $960$ & \smc2-\ds & $\B-39.2\pm0.08$ & $-39.2\pm0.31$   & $\B-39.2\pm0.07$ & $\R-39.2\pm0.03$ \\
-             &       & \smc2-\ps & $\B-39.2\pm0.08$ & $-65.7\pm5.54$   & $\B-39.2\pm0.07$ & $\R-39.2\pm0.03$ \\
-      \bottomrule
-    \end{tabularx}
-  \endgroup
+\clearpage
+\thispagestyle{empty}
+\newgeometry{hmargin={1in,1in},vmargin={1in,2in},bindingoffset=\mclassbinding}
+\begin{table}[t]
+  \linespread{1.1}\selectfont
   \caption[\protect\pet compartmental model marginal likelihood estimates]
-  {Marginal likelihood estimates of two components \pet model. $T$:
-    Number of distributions in \smc and number of iterations used for
-    inference in \pmcmc. $N$: Number of particles in \smc and number chains in
-    \pmcmc. The \pmcmc and \smc with $N = 192$ are completely $N$-way
-    parallelized.  \smc with $N = 960$ are $N/5$-way parallelized. {\B
-      Italic}: Minimum variance for the same computational cost and the same proposal
-    scales and annealing schemes.  {\R Bold}: Minimum variance for the same computaitonal
-    cost and all proposal scales and annealing schemes.}
+  {Marginal likelihood estimates of two components \pet model. $T$: Number of
+    distributions in \smc and number of iterations used for inference in
+    \pmcmc. $N$: Number of particles in \smc and number chains in \pmcmc. The
+    \pmcmc and \smc with $N = 192$ are completely $N$-way parallelized.  \smc
+    with $N = 960$ are $N/5$-way parallelized. \SubBest: Minimum variance for
+    the same computational cost and the same proposal scales and annealing
+    schemes. \Best: Minimum variance for the same computaitonal cost and all
+    proposal scales and annealing schemes.}
   \label{tab:pet-py}
+  \begin{tabu}{X[0.4l]X[0.4l]X[0.7c]X[0.8r]X[1r]X[0.8r]X[0.8r]}
+    \toprule
+    \multicolumn{3}{l}{Proposal scales}  & \multicolumn{3}{c}{Manual} & Adaptive \\
+    \cmidrule(lr){1-3}\cmidrule(lr){4-6}\cmidrule(lr){7-7}
+    \multicolumn{3}{l}{Annealing scheme} & Prior (5) & Posterior (5) & \multicolumn{2}{c}{Adaptive} \\
+    \cmidrule(lr){1-3}\cmidrule(lr){4-4}\cmidrule(lr){5-5}\cmidrule(lr){6-7}
+    $T$    & $N$   & Algorithm   & \multicolumn{4}{c}{Marginal likelihood estimates ($\log p(\theta_k|\data)\pm\text{\sd}$)} \\ \midrule
+    $500$  & $30 $ & \pmcmc      & $ -39.1\pm  0.56$ & $-926.8\pm376.99$ && \\
+    $500$  & $192$ & \smc2-\ds & $\SubBest{-39.2\pm0.25}$ & $\SubBest{-39.7\pm1.06}$ & $\SubBest{-39.2\pm0.18}$ & $\Best{-39.1\pm0.12}$ \\
+    &       & \smc2-\ps & $\SubBest{-39.2\pm0.25}$ & $-91.3\pm21.69$  & $\SubBest{-39.2\pm0.18}$ & $-39.1\pm0.13$   \\
+    $100 $ & $960$ & \smc2-\ds & $-39.3\pm0.36$   & $-40.6\pm1.41$   & $-39.2\pm0.31$   & $-39.2\pm0.19$   \\
+    &       & \smc2-\ps & $-39.3\pm0.35$   & $302.1\pm46.29$  & $-39.3\pm0.31$   & $-39.2\pm0.18$   \\ \midrule
+    $1000$ & $30 $ & \pmcmc      & $ -39.3\pm  0.46$ & $-884.1\pm307.88$ && \\
+    $1000$ & $192$ & \smc2-\ds & $\SubBest{-39.2\pm0.19}$ & $\SubBest{-39.4\pm0.68}$ & $\SubBest{-39.2\pm0.17}$ & $\Best{-39.1\pm0.10}$ \\
+    &       & \smc2-\ps & $\SubBest{-39.2\pm0.19}$ & $-66.0\pm13.26$  & $\SubBest{-39.2\pm0.17}$ & $\Best{-39.1\pm0.10}$  \\
+    $200 $ & $960$ & \smc2-\ds & $-39.2\pm0.22$   & $-39.8\pm1.21$   & $-39.2\pm0.18$   & $-39.1\pm0.11$   \\
+    &       & \smc2-\ps & $-39.2\pm0.22$   & $175.5\pm26.84$  & $-39.2\pm0.18$   & $-39.2\pm0.11$   \\ \midrule
+    $2000$ & $30 $ & \pmcmc      & $ -39.3\pm  0.28$ & $-928.7\pm204.93$ && \\
+    $2000$ & $192$ & \smc2-\ds & $-39.2\pm0.14$   & $\SubBest{-39.3\pm0.41}$ & $-39.1\pm0.12$   & $-39.1\pm0.07$  \\
+    &       & \smc2-\ps & $-39.2\pm0.14$   & $-51.2\pm4.30$   & $-39.2\pm0.12$   & $-39.1\pm0.07$  \\
+    $400 $ & $960$ & \smc2-\ds & $\SubBest{-39.2\pm0.13}$ & $-39.4\pm0.73$   & $\SubBest{-39.2\pm0.11}$ & $-39.2\pm0.07$   \\
+    &       & \smc2-\ps & $\SubBest{-39.2\pm0.13}$ & $106.0\pm14.36$  & $\SubBest{-39.2\pm0.11}$ & $\Best{-39.2\pm0.06}$ \\ \midrule
+    $5000$ & $30$  & \pmcmc      & $ -39.3\pm  0.21$ & $-917.6\pm129.54$ && \\
+    $5000$ & $192$ & \smc2-\ds & $-39.2\pm0.09$   & $\SubBest{-39.2\pm0.20}$ & $-39.2\pm0.08$   & $-39.1\pm0.04$   \\
+    &       & \smc2-\ps & $-39.2\pm0.09$   & $-43.8\pm2.13$   & $-39.2\pm0.08$   & $-39.1\pm0.04$   \\
+    $1000$ & $960$ & \smc2-\ds & $\SubBest{-39.2\pm0.08}$ & $-39.2\pm0.31$   & $\SubBest{-39.2\pm0.07}$ & $\Best{-39.2\pm0.03}$ \\
+    &       & \smc2-\ps & $\SubBest{-39.2\pm0.08}$ & $-65.7\pm5.54$   & $\SubBest{-39.2\pm0.07}$ & $\Best{-39.2\pm0.03}$ \\
+    \bottomrule
+  \end{tabu}
 \end{table}
+\restoregeometry
 
 % & & $ -39.1\pm  0.56$ & $-926.8\pm376.99$ &&& \\
 % & $\B-39.2\pm0.25$ & $\B-39.7\pm1.06$ & $\B-39.2\pm0.18$ & $\R-39.1\pm0.12$ & $\B-39.2\pm0.13$ \\

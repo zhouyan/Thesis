@@ -1,18 +1,20 @@
 \begin{table}[t]
-  \caption[Cost of Bayes factor estimates]
-  {Number of distributions used for the simulated \pet data set using
-    \smc[2] algorithm. All four samplers are configured such that the Bayes
-    factor estimates ($\log B_{1,2}$) have a standard deviation of
+  \linespread{1.1}\selectfont
+  \caption[Computational cost of the Bayes factor estimates using adaptive
+  \protect\smc algorithms]
+  {The number of distributions used for the simulated \pet data set using the
+    \smc[2] algorithm. All four samplers are configured such that the standard
+    Bayes factor estimates ($\log B_{2,1}$) have a standard deviation of
     approximately $0.27$.}
   \label{tab:pet four sampler same iter}
   \begin{tabularx}{\linewidth}{lXX}
     \toprule
     & \multicolumn{2}{c}{Proposal scales} \\
     \cmidrule(lr){2-3}
-    Schedule & Fixed & Adaptive \\
+    & Fixed & Adaptive \\
     \midrule
-    Deterministic schedule ($\alpha_k(t/T_k) = (t/T_k)^5$) & $200$ & $182$ \\
-    \cess-based adaptive schedule & $175$ & $157$ \\
+    Fixed annealing ($\alpha_k(t/T_k) = (t/T_k)^5$) & $200$ & $182$ \\
+    \cess-based adaptive annealing & $175$ & $157$ \\
     \bottomrule
   \end{tabularx}
 \end{table}
