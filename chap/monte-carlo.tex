@@ -181,13 +181,16 @@ One possible solution to such problems is to use some form of adaptive
 schemes. For example, \cite{ManSuk:1992vx} proposed to use a family of
 parametric distributions as proposal distributions and the parameters are
 iteratively tuned. In their paper, a multivariate $t$ distribution is used as
-an example, which is flexible for some applications. However, for complex
-target distribution, especially that are high dimensional and multimodal, it
-is difficult to find an explicit parametric distribution that can sample those
-local modes efficiently. We will see in the next chapter, sequential Monte
-Carlo algorithms can iteratively construct efficient importance sampling
-proposals and are particularly suited for a wide range of applications,
-including Bayesian model comparison.
+an example. Compared to a multivariate Normal distribution, it has
+tails and by changing the degree of freedom and other parameters, the
+distribution can be changed into different shapes to match the characteristics
+of the target distribution. This can be flexible for some applications.
+However, for complex target distribution, especially that are high dimensional
+and multimodal, it is difficult to find an explicit parametric distribution
+that can sample those local modes efficiently. We will see in the next
+chapter, sequential Monte Carlo algorithms can iteratively construct efficient
+importance sampling proposals and are particularly suited for a wide range of
+applications, including Bayesian model comparison.
 
 \section{Markov chain Monte Carlo}
 \label{sec:Markov chain Monte Carlo}
@@ -1384,13 +1387,15 @@ Section~\ref{sec:Application to positron emission tomography},
     scale, i.e., on $\log\nu$.
 \end{enumerate}
 There is a 100,000 iterations used for adaptation (the burn-in period) and
-10,000 iterations are used for estimation. The generalized harmonic mean
-estimator $\hat\varphi_{\ghm}^N$ is used to compute the Bayes factor. The
-model selection results, along with that from \aic and \bic methods for the
-purpose of comparison, are shown in Figure~\ref{fig:pet mo}. It can be seen
-that the Bayesian model selection results shows more plausible structure than
-the information criteria. With the information criteria, the distribution of
-the model orders across the image appears to be more or less random while the
+10,000 iterations are used for estimation. Results in \cite{Zhou2013} showed
+that the long burn-in period is more than enough for the majority of the
+samplers to converge well. The generalized harmonic mean estimator
+$\hat\varphi_{\ghm}^N$ is used to compute the Bayes factor. The model
+selection results, along with that from \aic and \bic methods for the purpose
+of comparison, are shown in Figure~\ref{fig:pet mo}. It can be seen that the
+Bayesian model selection results shows more plausible structure than the
+information criteria. With the information criteria, the distribution of the
+model orders across the image appears to be more or less random while the
 Bayesian results show some structure with more active regions within the brain
 have higher order models. See also the discussion in \cite{Zhou2013} and
 references therein.
@@ -1471,10 +1476,7 @@ the identity,
 \end{align}
 and using a Gibbs sampler operate on $\theta_{i:p}$ with
 $\pi(\theta_{i:p}|\data,\theta_{1:i-1}^*)$ as the target distribution and an
-estimator similar to that in Equation~\eqref{eq:est gibbs first}. This is
-possible because of the full conditionals required to construct the Gibbs
-sampler are available, otherwise the Gibbs sampler on $\theta$ cannot be
-constructed.
+estimator similar to that in Equation~\eqref{eq:est gibbs first}.
 
 In addition to the usual requirement of a Gibbs sampler, that all the full
 conditionals can be sampled from, this method also requires that all these
@@ -1505,7 +1507,16 @@ constants via a simple integral relationship,
   \intd\alpha.
   \label{eq:path integral}
 \end{equation}
-where the inner expectation is taken with respect to $\pi_{\alpha}$.
+where the inner expectation is taken with respect to $\pi_{\alpha}$ and
+$Z_{\alpha}$ is the normalizing constant for the unnormalized density
+$\gamma_{\alpha}$. The path sampling estimator for the ratio of the
+normalizing constants $Z_1$ and $Z_0$ are based on Monte Carlo approximations
+of the above integration. One direct approach, as seen in \cite{Gelman:1998ei}
+is to simulate samples $(\alpha,X)$ where $\alpha$ are uniformly distributed
+on the interval $[0,1]$ and conditional on $\alpha$, $X$ is distributed with
+$\pi_{\alpha}$. As we will see, with some modifications of the evaluation of
+the outer integration, this estimator can be approximated using samples from
+the population \mcmc.
 
 There are various ways of constructing such a family of distributions, for
 example, the sequence of distributions in Equation~\eqref{eq:power post},

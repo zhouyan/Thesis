@@ -466,9 +466,7 @@ normalizing constant of the posterior $p(\theta_k|\data,\calM_k)$.
 
 From Equation~\eqref{eq:full posterior}, it is clear that the posterior model
 probability $\pi(\calM_k|\data)$ is a marginal of the full posterior,
-\begin{equation}
-  \pi(\calM_k|\data) =
-  \frac{
+\begin{equation} \pi(\calM_k|\data) = \frac{
     \pi(\calM_k)
     \int p(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\intd\theta_k
   }{
@@ -484,17 +482,18 @@ section, we assume that the calculation of required quantities is possible and
 accurate.
 
 Our aim is to choose the ``best'' model from the set $\calM$. There will
-usually be actions taken after the model selection, for example inference of
-the past or prediction of the future. It is the consequences of these actions
-of interest instead of the chosen model itself. Therefore, from a
-decision-theoretic perspective, the ``best'' model should maximize the utility
-for some quality of interest. However, in practice it is common to ignore the
-actions following the model selection and the sole interest is the true model,
-say $\calM_t$. This is because that the Bayesian framework is often used to
-simultaneously provide parameter estimation, model selection, model averaging
-and other inferences. It is difficult to define a criterion that choose the
-model that is best for all these purposes. In this case, it is natural to
-define a zero-one utility function, say $u(\calM_k,\calM_t)$,
+usually be actions taken after the model selection, for example, parameter
+estimation, or prediction of future events, etc. It is the consequences of
+these actions of interest instead of the chosen model itself. Therefore, from
+a decision-theoretic perspective, the ``best'' model should maximize the
+utility for some quality of interest. However, in practice it is common to
+ignore the actions following the model selection and the sole interest is the
+true model, say $\calM_t$. This is because that the Bayesian framework is
+often used to simultaneously provide parameter estimation, model selection,
+model averaging and other inferences. It is difficult to define a criterion
+that choose the model that is best for all these purposes. One simplified
+criterion is to choose the ``true model''. In this case, it is natural to
+define a zero-one utility function, say $u(\calM_k,\calM_t)$, defined by
 \begin{equation}
   u(\calM_k,\calM_t) =
   \begin{cases}
@@ -517,11 +516,12 @@ with the highest posterior probability.
 
 Bayesian model selection can be attractive for a few reasons. First, it
 provides a natural probabilistic interpretation of the results. It is very
-easy to account model uncertainty within this framework. The posterior model
-probabilities can be used as weights to construct weighted estimator. This
-leads to the Bayesian model averaging. See, for example
-\cite{Raftery:1997vx,Clyde:1999vx,Draper:1995vx}, for more discussions and
-examples.
+easy to account model uncertainty within this framework. When there are more
+than one models well supported by the data and it is uncertain which one shall
+be chosen as the best model, the posterior model probabilities can be used as
+weights to construct weighted estimator. This leads to the Bayesian model
+averaging. See, for example \cite{Raftery:1997vx,Clyde:1999vx,Draper:1995vx},
+for more discussions and examples.
 
 Second, it is also consistent in the sense that if there is indeed a true
 model, given enough data, it is guaranteed to be selected. Later we will see
@@ -580,28 +580,32 @@ computation of the marginal likelihood for each model $\calM_k\in\calM$,
   p(\data|\calM_k) =
   \int p(\data|\theta_k,\calM_k)\pi(\theta_k|k)\intd\theta_k.
 \end{equation}
-It is obvious that $B_{ij} = B_{ik}B_{kj}$, and thus the Bayes
-factor approach is equivalent to choosing the model with the highest marginal
-likelihood, as long as the model set $\calM$ is finite.
+It is obvious that $B_{ij} = B_{ik}B_{kj}$, and thus the Bayes factor approach
+is equivalent to choosing the model with the highest marginal likelihood
+provided that the model prior distribution $\pi(\calM_k)$ is uniform, as long
+as the model set $\calM$ is finite.
 
 The Bayes factor, $B_{k_1k_2}$, can be interpreted as the evidence provided by
-the data in favor model $\calM_{k_1}$ against model $\calM_{k_2}$. The
-marginal likelihood $p(\data|\calM_k)$ is also called the evidence supporting
-model $\calM_k$. In \cite{Jeffreys:1961ua}, it is suggested that the Bayes
-factor can be interpreted on a $\log_{10}$ scale. His interpretations are
-reproduced in Table~\ref{tab:bayes factor log10 scale}. The interpretation of
-the Bayes factor can be application dependent. The Jeffreys' interpretation,
-and a similar scale based on the $2\log B_{k_1k_2}$, which is on the same
-scale as the likelihood ratio test, shown in \cite{Kass:1995vb} are only
-general guidelines. Other interpretations can be more suitable for specific
-applications. For example, \cite{Kass:1995vb} mentioned that for forensic
-evidence to be conclusive in a criminal trial, the posterior odds of guilt
-against innocence need to be at least 1,000.
+the data in favor model $\calM_{k_1}$ against model $\calM_{k_2}$. As noted
+earlier, the marginal likelihood $p(\data|\calM_k)$ is also called the
+evidence supporting model $\calM_k$. In \cite{Jeffreys:1961ua}, it is
+suggested that the Bayes factor can be interpreted on a $\log_{10}$ scale. His
+interpretations are reproduced in Table~\ref{tab:bayes factor log10 scale}.
+The interpretation of the Bayes factor can be application dependent. The
+Jeffreys' interpretation, and a similar scale based on the $2\log B_{k_1k_2}$,
+which is on the same scale as the likelihood ratio test, shown in
+\cite{Kass:1995vb} are only general guidelines. Other interpretations can be
+more suitable for specific applications. For example, \cite{Kass:1995vb}
+mentioned that for forensic evidence to be conclusive in a criminal trial, the
+posterior odds of guilt against innocence need to be at least 1,000.
 
 A final remark about the Bayes factor is that, though obviously it can only be
 used when the set of candidate models is finite, it is not necessarily an
-issue for many interesting cases. The relative ease of computation, compared
-to the evaluation of the full posterior probabilities offsets the limitation.
+issue for many interesting cases. As we will see later in the next chapter,
+evaluating the marginal likelihood by simulating samples from the model
+posterior can be relatively easy compared to to evaluating the full posterior
+probabilities. The ease of computation might offset the limitation that only
+finite sets of models can be dealt with.
 
 \input{tab/bayes-factor-scale}
 
@@ -705,15 +709,15 @@ distribution shall represent the prior beliefs. That is, it represents how
 much is already known about the data generating mechanism and what is believed
 about it before the observation of the data, no more or no less. It shall not
 only describe all knowledge already known, but also more importantly preserve
-all the ignorance. If it contains more information than what is actually
-known, the inference can be biased. In other words, one can always construct a
-prior distribution such that inference will be biased towards one's
-preference, which is not necessarily rational. The priors need to be
-considered carefully on a per problem basis. It is often too difficult to
-elicit a precise distribution from prior information. Therefore it is
-necessary to make at least partially arbitrary choice of the prior
-distribution \cite[][chap.~3]{Robert:2007tc}\cite{Kass:1995vb}. Nonetheless
-there are a few classes of prior distributions frequently used in practice.
+all ignorance. If it contains more information than what is actually known,
+the inference can be biased. In other words, one can always construct a prior
+distribution such that inference will be biased towards one's preference,
+which is not necessarily rational. The priors need to be considered carefully
+on a per problem basis. It is often too difficult to elicit a precise
+distribution from prior information. Therefore it is necessary to make at
+least partially arbitrary choice of the prior distribution
+\cite[][chap.~3]{Robert:2007tc}\cite{Kass:1995vb}. Nonetheless there are a few
+classes of prior distributions frequently used in practice.
 
 \subsubsection{Conjugate priors}
 \label{ssub:Conjugate priors}
@@ -731,9 +735,9 @@ find such priors.
 \subsubsection{Non-informative priors}
 \label{ssub:Non-informative priors}
 
-In situations where no or little prior information are available, the
-so-called ``non-informative'' priors are often used. Many of them are derived
-from the data or the likelihood function of the models.
+In situations where no or little prior information are available, so-called
+``non-informative'' priors are often used. Many of them are derived from the
+data or the likelihood function of the models.
 
 \paragraph{Flat tails}
 
@@ -861,15 +865,17 @@ probabilities of the parameter falling into each of the partition
 \cite[][sec.~3.2.2]{Robert:2007tc}.
 
 A more systematic approach is the \emph{maximum entropy priors}
-\cite{Jaynes:1989vx}. Assume that some characteristics of the parameter
-$\theta_k$ is known in the form of prior expectations,
+\cite{Jaynes:1989vx}. Assume that some characteristics of the parameter vector
+$\theta_k$ in the model $\calM_k$ is known in the form of prior expectations,
 \begin{equation}
   \Exp_{\pi}[h_i(\theta_k)|\calM_k] = \gamma_i, \qquad\text{for } i =
   1,\dots,K
   \label{eq:exp constraints}
 \end{equation}
 where the expectation is taken with respect to the prior distribution
-$\pi(\theta_k|\calM_k)$. In finite setting, define
+$\pi(\theta_k|\calM_k)$ and $h_i$ is some function. For example, if the mean
+and variance of the parameter is known, than we might have $h_1(x) = x$ and
+$h_2(x) = x^2$ in the univariate case. In finite setting, define
 \begin{equation}
   \calE(\pi) = -\sum_{\theta_k\in\Theta_k}
   \pi(\theta_k|\calM_k)\log \pi (\theta_k|\calM_k)

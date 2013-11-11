@@ -5,7 +5,9 @@
   \STATE Set $\theta^0$ to an arbitrary valid value.
   \STATE Set $t\leftarrow0$.
   \REPEAT
-      \STATE Compute $\theta^t = \theta^t(\theta^0,X^0,\dots,X^{t-1})$
+      \STATE Compute $\theta^t = \gamma^t(\theta^0,X^0,\dots,X^{t-1})$ where
+      $\gamma^t$ is a transformation that update the parameters based on past
+      samples.
       \STATE Draw $X^{t + 1}$ using the proposal $q(\cdot|x^t,\theta^t)$ with
       the Metropolis-Hastings rule.
       \STATE Set $t\leftarrow t+1$.

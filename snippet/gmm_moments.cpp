@@ -28,7 +28,8 @@ class GMM_Moments : MonitorEvalOMP<GMM<R> >
             res[omega_idx(j, 1)] = csp.state(GMM<R>::omega_idx(j));
         }
 
-        // Record the second and up to Order raw moments
+        // Record the second and up to Order $M$ raw moments
+        // Using the simple recursion $X^m = X^1X^{m-1}$
         for (std::size_t m = 2; m <= Order; ++m) {
             for (std::size_t j = 0; j != R; ++j) {
                 res[mu_idx(j, m)] =

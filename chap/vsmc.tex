@@ -200,7 +200,7 @@ spread of parallel computing.
 The last but not least problem with parallel computing is that, not all
 algorithms can be parallelized or at least not efficiently. Many \mcmc
 algorithms are typical examples. And they can hardly benefit much from future
-computer technology advancement. This issue can only be solved by developing
+computer technology advancement. This issue can be better solved by developing
 new algorithms that are more suitable for today's and future computers.
 
 \subsection{Softwares for Monte Carlo computing}
@@ -1257,14 +1257,14 @@ library is adequate.
 The library also support \opencl parallelization. The performance is
 impressive as seen in Section~\ref{sub:Using the OpenCL module}. It is widely
 believed that \opencl programming is tedious and hard. Limited by the scope of
-this paper, the \opencl implementation (distributed with the \vsmc source) is
-not documented in this chapter. Overall the \opencl implementation has about
-800 lines including both host and device code. It is not an enormous increase
-in effort when compared to the 500 lines \smp implementation. Less than
-doubling the code base but gaining more than 15 times performance speedup, we
-consider the programming effort is relatively small. Moreover, the \gpu used
-in the examples is relatively lower end and outdated. With better hardware,
-the same implementation has the potential to gain hundreds of times
+this chapter, the \opencl implementation (distributed with the \vsmc source)
+is not documented in this chapter. Overall the \opencl implementation has
+about 800 lines including both host and device code. It is not an enormous
+increase in effort when compared to the 500 lines \smp implementation. Less
+than doubling the code base but gaining more than 15 times performance
+speedup, we consider the programming effort is relatively small. Moreover, the
+\gpu used in the examples is relatively lower end and outdated. With better
+hardware, the same implementation has the potential to gain hundreds of times
 performance speedup.
 
 In addition, the \opencl language is essentially a variant of the C

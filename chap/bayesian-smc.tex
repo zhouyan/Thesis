@@ -17,9 +17,8 @@ are used to ``help'' the simulation. One such algorithm, which is essentially
 a generalization of the Metropolis-Hastings algorithm, population \mcmc is
 reviewed in Section~\ref{sub:Population mcmc}, in which the easier to simulate
 distribution ``lends'' information to the target and accelerates its mixing.
-Another example of population based algorithm is the recent development of
-particle \mcmc \cite{Andrieu:2010gc}, which embed \smc samplers inside \mcmc
-algorithms. The \smc sampler will be the central topic of this chapter
+Another population based algorithm, \smc sampler, is the central topic of this
+chapter
 
 Sequential Monte Carlo (\smc) samplers, in various forms has been around for
 more than a decade and widely used in many fields. Until recently there has
@@ -967,9 +966,11 @@ More performance comparisons for various settings of the samplers can be found
 in Section~\ref{sub:Nonlinear ordinary differential equations}
 and~\ref{sub:Positron Emission Tomography compartmental model}.
 
-\subsubsection[cess*, number of distributions, and estimator variance]
-{$\cess^\star$, number of distributions, and estimator variance}
-\label{ssub:cess*, number of distributions, and estimator variance}
+\subsubsection[Relations of cess*, number of distributions, and estimator
+variance]
+{Relations of $\cess^\star$, number of distributions, and estimator variance}
+\label{ssub:Relations of cess*, number of distributions, and estimator
+  variance}
 
 It is intuitively to see that, when using a \cess-based adaptive scheme, where
 at each iteration $t$, $\cess_t$ is fixed with a value $\cess^\star$, the more
@@ -1270,7 +1271,7 @@ introduced in Chapter~\ref{cha:vSMC: A C++ Library for Parallel SMC}.
 Since \cite{Richardson:1997ea}, the Gaussian mixture model (\gmm) has
 provided a canonical example of a model-order-determination problem. We use
 the model formulation of \cite{DelMoral:2006hc} to illustrate the efficiency
-and robustness of the methods proposed in this paper compared to other
+and robustness of the methods proposed in this chapter compared to other
 approaches. The model is as follows; data $\data = (y_1,\dots,y_n)$ are
 independently and identically distributed as
 \begin{equation*}
@@ -1734,7 +1735,8 @@ accuracy. When using the adaptive algorithms proposed in this work, it is
 equivalent to tune the value of $\cess^\star$. As shown in
 Section~\ref{sub:Adaptive specification of distributions}, the relation
 between $\cess^\star$ and the variance of estimators provides a predictable
-way to configure the samplers.
+way to configure the samplers, at least for the particular examples considered
+in this chapter.
 
 \paragraph{Fast mixing \mcmc kernels and number of distributions}
 
@@ -1769,26 +1771,26 @@ sufficient large number of samples, the difference is minimal.
 
 Finally, the methodology of \smc[2]-\ps was applied to measured positron
 emission tomography data using the same compartmental setup as in the
-simulations. The data shown in Figure~\ref{fig:petplot} comes from a study
-into opioid receptor density in Epilepsy, with the data being described in
-detail in \cite{Jiang:2009kf} (also see section~\ref{sec:Simulated and real
-  pet data}). It is expected that there will be considerable spatial
-smoothness to the estimates of the volume of distribution, as this is in line
-with the biology of the system being somewhat regional. Some regions will have
-much higher receptor density while others will be much lower, yielding higher
-and lower values of the volume of distribution, respectively.  While we did
-not impose any spatial smoothness but rather estimated the parameters
-independently for each time series at each spatial location, as can be seen,
-smooth spatial estimates of the volume of distribution consistent with
-neurological understanding were found using the approach. This method is
-computationally feasible for the entire brain on a voxel-by-voxel basis, due
-to the ease of parallelization of the \smc algorithm. In the analysis
-performed here 1,000 particles were used, along with an adaptive schedule
-using a constant $\cess^\star/N = 0.999$, resulting in about 180 to 200
-intermediate distributions. The model selection results are very close to
-those obtained by a  previous study of the same data \cite{Zhou2013}, although
-the present approach requires much less implementation effort and has roughly
-the same computational cost.
+simulations. The data that lead to the $V_D$ estimation as shown in
+Figure~\ref{fig:petplot} comes from a study into opioid receptor density in
+Epilepsy, with the data being described in detail in \cite{Jiang:2009kf} (also
+see section~\ref{sec:Simulated and real pet data}). It is expected that there
+will be considerable spatial smoothness to the estimates of the volume of
+distribution, as this is in line with the biology of the system being somewhat
+regional. Some regions will have much higher receptor density while others
+will be much lower, yielding higher and lower values of the volume of
+distribution, respectively.  While we did not impose any spatial smoothness
+but rather estimated the parameters independently for each time series at each
+spatial location, as can be seen, smooth spatial estimates of the volume of
+distribution consistent with neurological understanding were found using the
+approach. This method is computationally feasible for the entire brain on a
+voxel-by-voxel basis, due to the ease of parallelization of the \smc
+algorithm. In the analysis performed here 1,000 particles were used, along
+with an adaptive schedule using a constant $\cess^\star/N = 0.999$, resulting
+in about 180 to 200 intermediate distributions. The model selection results
+are very close to those obtained by a  previous study of the same data
+\cite{Zhou2013}, although the present approach requires much less
+implementation effort and has roughly the same computational cost.
 
 \subsection{Summary}
 
@@ -1855,13 +1857,14 @@ and placement of distributions can affect the mixing speed and hence
 performance considerably, increasing the number of distributions will always
 benefit an \smc sampler given the same number of particles. When coupled with a
 path sampling estimator, this leads to less bias and variance. Compared to its
-no-resampling variant, it has been shown that \smc samplers with resampling
-can reduce the variance of normalizing constant estimates considerably.
+no-resampling variant (i.e., \aic), it has been shown that \smc samplers with
+resampling can reduce the variance of normalizing constant estimates
+considerably.
 
 Even after three decades of intensive development, no Monte Carlo method can
 solve the Bayesian model comparison problem completely automatically without
 any manual tuning. However, \smc algorithms and the adaptive strategies
-demonstrated in this paper show that even for realistic, interesting problems,
+demonstrated in this chapter show that even for realistic, interesting problems,
 these samplers can provide good results with very minimal tuning and few
 design difficulties. For many applications, they could already be used as near
 automatic, robust solutions. For more challenging problems, the robustness of
