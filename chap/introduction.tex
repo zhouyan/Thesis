@@ -4,6 +4,22 @@
 \section{Context}
 \label{sec:Context}
 
+\draftnote{Add a gentler intro paragraph at the beginning. I might still
+  improve it before all is settled.}
+
+Model comparison and selection are problems found throughout the discipline of
+statistics. It can appear in different forms, such as the choice of regressors
+in regression analysis, or the determination of the number of components in
+mixture models. Often, there can be more than one model that can be
+potentially used to describe the data and to make predications or for other
+purposes. However, some models might be better than others in the sense that
+the estimation and predication based on them have smaller errors or variances,
+etc. Some models are more simpler than others while providing the comparable
+accuracy. In many application areas, model selection is important for the
+purpose of identifying the underlying reasons of certain phenomena observed
+through the data. It is also important when finding the best estimation or
+prediction procedures for some applications.
+
 Bayesian model comparison has been studied and practiced for a long time.
 There are considerable computational difficulty when using this approach, as
 many high dimensional integrations are involved. The development of Monte
@@ -27,6 +43,32 @@ computing for the implementation of \smc algorithms. The work presented in
 this thesis provides a toolbox with which researchers can implement generic
 \smc algorithm on parallel computers with relative ease.
 
+\section{Notations}
+\label{sec:Notations}
+
+Most notations used in this thesis are introduced and defined in context. A
+few conventions are followed through out the thesis.
+
+Capital Latin letters, such as $X$, is used to denote random variables and
+corresponding lower case letters, such as $x$ are used to denote their
+realizations. In the context of Markov chain, we use notations such as $X^t$
+to denote the random variable to indicate its dependency on time $t$. For
+various Monte Carlo estimators, we use notations such as $X^{(i)}$ to denote
+the random variables of samples, including the case of  \mcmc algorithms. The
+difference between $X^t$ and $X^{(i)}$ is to explicitly express that in some
+algorithms, not all samples from a Markov chain are used for estimation
+purpose. For \smc algorithms, we use $X_t^{(i)}$ to denote the particle value
+of of particle $i$ at time $t$.
+
+The letter $\data$ is used throughout this thesis to denote the data. The
+letter $\Exp$ is used to denote the expectation of random variables. And
+wherever appropriate, $\Exp_{\pi}$ is used to denote the expectation with
+respect to a distribution $\pi$. The letters $\Pr$ is used to denote
+probabilities of random events.
+
+Other notations are usually only used in particular sections or their meaning
+are clear in the context where they are used.
+
 \section{Outline}
 \label{sec:Outline}
 
@@ -41,7 +83,7 @@ introduction chapter. It is followed by the following chapter.
   \item[Chapter 2] provides a review of some commonly used model selection
     methods. In particular some information-theoretic selection criterion and
     the Bayesian approach. By comparison, it will be shown that Bayesian model
-    comparison is still of interest for some realistic applications where its
+    comparison is of interest for some realistic applications where its
     use was previously limited by the computational cost.
   \item[Chapter 3] reviews some Monte Carlo algorithms in the context of
     Bayesian model comparison. It will be shown that there are considerable
