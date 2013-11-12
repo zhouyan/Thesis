@@ -55,13 +55,13 @@ various proposed strategies.
 
 \smc samplers allow us to obtain, iteratively, collections of weighted samples
 from a sequence of distributions $\{\pi_t\}_{t\ge0}$ over essentially any
-random variables on some measurable spaces $(E_t,\calE_t)$. It is an extension
-of the \emph{sequential importance sampling} (\sis) and resampling algorithms.
-In the remainder of this section, sequential importance sampling and
-resampling algorithms are introduced. Then how they are generalized to \smc
-samplers for the purpose of the current work are discussed. To simplify the
-discussion, we will assume that the distributions are continuous and their
-density functions which will also be denoted by $\{\pi_t\}_{t\ge0}$.
+random variables on some spaces $E_t$. It is an extension of the
+\emph{sequential importance sampling} (\sis) and resampling algorithms.  In
+the remainder of this section, sequential importance sampling and resampling
+algorithms are introduced. Then how they are generalized to \smc samplers for
+the purpose of the current work are discussed. To simplify the discussion, we
+will assume that the distributions are continuous and their density functions
+which will also be denoted by $\{\pi_t\}_{t\ge0}$.
 
 \subsection{Sequential importance sampling and resampling}
 \label{sub:Sequential importance sampling and resampling}
@@ -470,9 +470,8 @@ are three fundamentally different approaches to the computations,
     $\pi(\calM_k|\data)$ directly.
   \item Calculate the evidence, the marginal likelihood $p(\data|\calM_k)$, of
     each model.
-  \item Calculate pairwise evidence ratios, the Bayes factor $B_{k_1k_2} =
-    p(\data|\calM_{k_1})/p(\data|\calM_{k_2})$ for two models indexed by $k_1$
-    and $k_2$.
+  \item Calculate pairwise evidence ratios, the Bayes factor $B_{k_1k_2}$ for
+    two models indexed by $k_1$ and $k_2$.
 \end{enumerate}
 Each approach admits a natural \smc strategy.
 
@@ -874,12 +873,11 @@ The exact \ess of an importance sample of size $N$ with proposal $\pi_{t-1}$
 and target $\pi_t$ of \cite{Kong:1994ul} is defined as,
 \begin{equation}
   \text{Exact }\ess_t =
-  \frac{N}{1 + \var_{\pi_{t-1}}(\frac{\diff\pi_t}{\diff\pi_{t-1}})}
+  \frac{N}{1 + \var_{\pi_{t-1}}\Round[Big]{\frac{\diff\pi_t}{\diff\pi_{t-1}}}}
   \label{eq:essdefinition}
 \end{equation}
-which is widely approximated by the empirical equivalent, replacing
-$1+\var_{\pi_{t-1}}[\diff\pi_t/\diff\pi_{t-1}]$ with the empirical mean
-squared normalized importance weights.
+which is widely approximated by the empirical equivalent, replacing the
+denominator with the empirical mean squared normalized importance weights.
 
 In the context of adaptive specification of an SMC tempering schedule, we are
 interested in the discrepancy between adjacent distributions, $\pi_{t-1}$ and
@@ -895,7 +893,7 @@ sample from $\pi_{t-1}$ to approximate exactly the quantity described by
 Equation~\eqref{eq:essdefinition}. The different name is used to distinguish
 this quantity from that usually termed the \ess in the \smc literature.
 
-The approximation leading to the \cess, given weighted sample
+The approximation leading to the \cess, given samples
 $\{W_{t-1}^{(i)},X_{t-1}^{(i)}\}_{i=1}^N$ and unnormalized incremental weights
 $w_{t}^{(i)} \propto (\diff\pi_t/\diff\pi_{t-1})(X_{t-1}^{(i)})$ is simply,
 \begin{align*}
@@ -1509,20 +1507,16 @@ It is now interesting to compare the proposed algorithm with other
 state-of-art algorithms using the more realistic \pet compartmental model
 example.
 
-\input{fig/pet_plot}
-
 As mentioned before, real neuroscience data sets involve a very large number
-($\sim$200,000 per brain) of time series, which are typically somewhat
-heterogeneous (also see Figure~\ref{fig:typical real pet}).
-Figure~\ref{fig:petplot} shows estimates of $V_D$ from a typical \pet scan
-generated using the \smc[2] algorithm as will be discussed later. Robustness
-is therefore especially important. An application-specific \mcmc algorithm was
-developed for this problem in \cite{Zhou2013} and its results are shown in the
-Section~\ref{ssub:Generalized harmonic mean estimator}. A significant amount
-of tuning of the algorithms was required to obtain good results.The results
-shown in Figure~\ref{fig:petplot} are very close to those of \cite{Zhou2013}
-but, as is shown later, they were obtained with almost no manual tuning effort
-and at similar computational cost.
+(about a quarter of a million per brain) of time series, which are typically
+somewhat heterogeneous (also see Figure~\ref{fig:typical real pet}).
+Robustness is therefore especially important. An application-specific \mcmc
+algorithm was developed for this problem in \cite{Zhou2013} and its results
+are shown in the Section~\ref{ssub:Generalized harmonic mean estimator}. A
+significant amount of tuning of the algorithms was required to obtain good
+results.The results shown in Figure~\ref{fig:petplot} are very close to those
+of \cite{Zhou2013} but, as is shown later, they were obtained with almost no
+manual tuning effort and at similar computational cost.
 
 For the \smc and the population \mcmc algorithms, the requirement of
 robustness means that the algorithm must be able to calibrate itself

@@ -13,10 +13,10 @@ $K$ and $\eta(\varphi) = \int \eta(dx) \varphi(x)$ for any $\eta$-integrable
 function $\varphi$.
 
 A Feynman-Kac formula describes the law of a Markov chain on
-$\{(E_t,\mathcal{E}_t)\}_{t\geq 0}$ (with initial distribution
-$\hat\eta_0$ and transitions $M_t$) evolving in the presence of a
-(time-varying) potential (described by $G_t$) such that the marginal law of
-the $t^\text{th}$ coordinate is:
+$\{(E_t,\mathcal{E}_t)\}_{t\geq 0}$ (with initial distribution $\hat\eta_0$
+and transitions $M_t$) evolving in the presence of a (time-varying) potential
+(described by $G_t$) such that the marginal law of the $t^\text{th}$
+coordinate is:
 \begin{equation*}
   \hat\eta_t(A) = \frac
   {
@@ -31,11 +31,12 @@ the $t^\text{th}$ coordinate is:
     G(\tilde{x}^\prime_i)
   }
 \end{equation*}
-for any measurable set $A$.
-
-It is convenient to define the operator $\hat\Phi_t(\eta)(\diff
-\tilde{x}_t) = G_t(\tilde{x}_t)\eta M_t(\diff \tilde{x}_t)/\eta
-M_t(G_t)$ which allows us to write, recursively, $\hat\eta_t =
+for any measurable set $A$. It is convenient to define the operator 
+\begin{equation*}
+  \hat\Phi_t(\eta)(\diff\tilde{x}_t)
+  = G_t(\tilde{x}_t)\eta M_t(\diff \tilde{x}_t)/\eta M_t(G_t)
+\end{equation*}
+which allows us to write, recursively, $\hat\eta_t =
 \hat\Phi_t(\hat\eta_{t-1})$ and to define the intermediate
 distributions $\eta_t = \hat\eta_{t-1}M_t$ such that $\hat\eta_t(\diff
 \tilde{x}_t) = G_t(\tilde{x}_t) \eta_t(d\tilde{x}_t) /
@@ -44,11 +45,14 @@ distributions $\eta_t = \hat\eta_{t-1}M_t$ such that $\hat\eta_t(\diff
 If $\mathcal{X}$ denotes the space upon which an \smc sampler with \mcmc
 proposal $K_t$ at time $t$ and sequence of target distributions $\pi_t$
 operates, then we obtain $\pi_t$ as the final coordinate marginal of the
-Feynman-Kac distribution at time $t$ if we identify $E_t = \mathcal{X}^t$,
-$M_{t}(\tilde{x}_{t-1},d\tilde{x}_t) =
-\delta_{\tilde{x}_{t-1}}(d\tilde{x}_{t,1:t-1})
-K_t(\tilde{x}_{t,t-1},d\tilde{x}_t)$ and $G_t(\tilde{x}_t) =
-\pi_{t}(\tilde{x}_{t,t-1}) / \pi_{t-1}(\tilde{x}_{t,t-1})$.
+Feynman-Kac distribution at time $t$ if we identify $E_t = \mathcal{X}^t$ and
+\begin{align*}
+  M_{t}(\tilde{x}_{t-1},d\tilde{x}_t) &=
+  \delta_{\tilde{x}_{t-1}}(d\tilde{x}_{t,1:t-1})
+  K_t(\tilde{x}_{t,t-1},d\tilde{x}_t)\\
+  G_t(\tilde{x}_t) &=
+  \pi_{t}(\tilde{x}_{t,t-1}) / \pi_{t-1}(\tilde{x}_{t,t-1}).
+\end{align*}
 
 To provide symmetry between the simulation system and the ideal system which
 it targets, it is convenient to let $\tilde{X}_t^i$ denote the extended
@@ -70,28 +74,29 @@ In order to proceed, we prove the following more general result to which
 Proposition~\ref{prop:path_clt} is a direct corollary.
 
 \begin{proposition}\label{prop:gen_clt}
-  Under the regularity conditions given in \cite[section 9.4, pp.
-  300--306]{DelMoral:2004ux}, a weighted sum of integrals obtained from
-  successive generations of the particle approximation of a Feynman-Kac flow
-  $\{\hat\eta_t\}_{t=0}^T$, with the application of multinomial resampling
-  at every iteration, obeys a central limit theorem in the following sense,
-  for a collection of finite weights $\beta_t\in\Real$ and bounded measurable
-  functions $\xi_t:E_t \to\Real$ (where, in the historical process case
-  described above it is required that $\xi_t(\tilde{x}_t) =
+  Under the regularity conditions given in
+  \cite[][sec.~9.4,]{DelMoral:2004ux}, a weighted sum of integrals obtained
+  from successive generations of the particle approximation of a Feynman-Kac
+  flow $\{\hat\eta_t\}_{t=0}^T$, with the application of multinomial
+  resampling at every iteration, obeys a central limit theorem in the
+  following sense, for a collection of finite weights $\beta_t\in\Real$ and
+  bounded measurable functions $\xi_t:E_t \to\Real$ (where, in the historical
+  process case described above it is required that $\xi_t(\tilde{x}_t) =
   \xi_t(\tilde{x}_{t,t})$):
   \begin{equation}
     \lim_{N\to\infty}\sqrt{N}
     \sum_{t=0}^T\beta_t(\hat\eta_t^N(\xi_t)-\hat\eta_t(\xi_t))
     \xrightarrow{D}\calN(0,V_T(\xi_{0:T}))
   \end{equation}
-  where $V_t$, $0\le t \le T$ is defined by the following recursion:
+  where $V_t$, $0\le t \le T$ is defined by the following recursion,
   \begin{align}
     V_0(\xi_0) =& \beta_0 \int \hat\eta_0(x_0)(\xi_0(x_0) -
     \eta_0(\xi_0))^2 dx_0\notag\\
-    V_t(\xi_{0:t}) =& V_{t-1}\biggl(\xi_{0:t-2}, \xi_{t-1}
-    + \frac{\beta_t}{\beta_{t-1}}
-    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}\biggr)
-    + \beta_t^2\hat\eta_t\left(\frac{G_t(\cdot) (\xi_t(\cdot)-\hat\eta_t(\xi_t))^2}{\hat\eta_t(G_t)}\right).
+    V_t(\xi_{0:t}) =& V_{t-1}\Round[bigg]{\xi_{0:t-2}, \xi_{t-1}
+      + \frac{\beta_t}{\beta_{t-1}}
+      \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}}\notag\\
+    &\quad+ \beta_t^2\hat\eta_t\Round[bigg]{
+      \frac{G_t(\cdot) (\xi_t(\cdot)-\hat\eta_t(\xi_t))^2}{\hat\eta_t(G_t)}}.
   \end{align}
 \end{proposition}
 
@@ -124,23 +129,26 @@ where
   \sqrt{N}\beta_t(\hat\eta_t^N(\xi_t) - \hat\Phi_t(\eta_{t-1}^N)(\xi_t))
 \end{align}
 
-Lemma~\ref{lem:propagation} shows that error propagation leads to controlled
-normal errors; Lemma~\ref{lem:sampling} shows that the act of sampling during
-each iteration also produces a normally-distributed error and
-Lemma~\ref{lem:normality} shows that these two normal errors can be combined
-leading by induction to Proposition~\ref{prop:gen_clt}.
+Lemma~\appref{lem:propagation} shows that error propagation leads to
+controlled normal errors; Lemma~\appref{lem:sampling} shows that the act of
+sampling during each iteration also produces a normally-distributed error and
+Lemma~\appref{lem:normality} shows that these two normal errors can be combined
+leading by induction to Proposition~\appref{prop:gen_clt}.
 
 \begin{lemma}\label{lem:propagation}
-  Under the conditions of Proposition~\ref{prop:gen_clt}, if
-  $T_{t-1}^N(\xi_{0:t-1})\xrightarrow{D}\calN(0,V_{t-1}(\xi_{0:t-1}))$, then
+  Under the conditions of Proposition~\appref{prop:gen_clt}, if
+  \begin{equation*}
+    T_{t-1}^N(\xi_{0:t-1})\xrightarrow{D}\calN(0,V_{t-1}(\xi_{0:t-1})),
+  \end{equation*}
+  then
   \begin{equation}
     \bar{T}_t^N(\xi_{0:t})\xrightarrow{D}\calN(0, \bar{V}_t(\xi_{0:t}))
   \end{equation}
   where
   \begin{equation}
-    \bar{V}_t = V_{t-1}\biggl(\xi_{0:t-2}, \xi_{t-1} +
-    \frac{\beta_t}{\beta_{t-1}}
-    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}\biggr).
+    \bar{V}_t = V_{t-1}\Round[bigg]{\xi_{0:t-2}, \xi_{t-1} +
+      \frac{\beta_t}{\beta_{t-1}}
+      \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}M_t(G_t)}}.
   \end{equation}
 \end{lemma}
 
@@ -149,33 +157,33 @@ leading by induction to Proposition~\ref{prop:gen_clt}.
   \begin{align}
     \hat\Phi(\hat\eta_{t-1}^N)(\xi_t) - \hat\eta_t(\xi_t)
     &= \frac{1}{\hat\eta_{t-1}^NM_t(G_t)}\{
-      \hat\eta_{t-1}^NM_t(G_t\xi_t) -
-      \hat\eta_{t-1}^NM_t(G_t)\hat\eta_t(\xi_t)\} \notag\\
+    \hat\eta_{t-1}^NM_t(G_t\xi_t) -
+    \hat\eta_{t-1}^NM_t(G_t)\hat\eta_t(\xi_t)\} \notag\\
     &= \frac{1}{\hat\eta_{t-1}^NM_t(G_t)}
     \{(\hat\eta_{t-1}^N-\hat\eta_{t-1})M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])\}
   \end{align}
-where the final equality is a simple consequence of the fact that for any
-integrable test function $\varphi$:
-\begin{equation*}
-\hat\eta_{t-1} M_t (G_t \varphi) = \eta_t(G_t) \hat\eta_t(\varphi) \Rightarrow
-\hat\eta_{t-1} M_t (G_t [\xi_t - \hat\eta_t(\xi_t)]) = \eta_t(G_t)
-\underset{=0}{\underbrace{\hat\eta_t(\xi_t - \hat\eta_t(\xi_t))}} .
-\end{equation*}
-
-Substituting this representation into Equation~\eqref{eq:bar_t_t},
+  where the final equality is a simple consequence of the fact that for any
+  integrable test function $\varphi$:
+  \begin{equation*}
+    \hat\eta_{t-1} M_t (G_t \varphi) = \eta_t(G_t) \hat\eta_t(\varphi)
+    \Rightarrow
+    \hat\eta_{t-1} M_t (G_t [\xi_t - \hat\eta_t(\xi_t)]) = \eta_t(G_t)
+    \underset{=0}{\underbrace{\hat\eta_t(\xi_t - \hat\eta_t(\xi_t))}} .
+  \end{equation*}
+  Substituting this representation into Equation~{\allcapt (A.6)},
   \begin{align}
     \bar{T}_t^N(\xi_{0:t})
     &= T_{t-1}^N(\xi_{0:t-1}) +
     \frac{\sqrt{N}\beta_t}{\hat\eta_{t-1}^NM_t(G_t)}
     \{(\hat\eta_{t-1}^N-\hat\eta_{t-1})M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])\}
     \notag\\
-    &= T_{t-1}^N\biggl(\xi_{0:t-2},
-    \xi_{t-1} + \frac{\beta_t}{\beta_{t-1}}
-    \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}^NM_t(G_t)}\biggr)
+    &= T_{t-1}^N\Round[bigg]{\xi_{0:t-2},
+      \xi_{t-1} + \frac{\beta_t}{\beta_{t-1}}
+      \frac{M_t(G_t[\xi_t-\hat\eta_t(\xi_t)])}{\hat\eta_{t-1}^NM_t(G_t)}}
   \end{align}
-  The proof is completed by using the result \cite[cf.
-  Sec.~7.4.3]{DelMoral:2004ux}, that if $G_t$ is essentially bounded below
-  then,
+  The proof is completed by using the result
+  \cite[][sec.~7.4.3]{DelMoral:2004ux}, that if $G_t$ is essentially bounded
+  below then,
   \begin{equation*}
     \frac{1}{\hat\eta_{t-1}^NM_t(G_t)} \xrightarrow{P}
     \frac{1}{\hat\eta_{t-1}M_t(G_t)}
@@ -184,7 +192,7 @@ Substituting this representation into Equation~\eqref{eq:bar_t_t},
 \end{proof}
 
 \begin{lemma}\label{lem:sampling}
-  Under the conditions of Proposition~\ref{prop:gen_clt},
+  Under the conditions of Proposition~\appref{prop:gen_clt},
   \begin{equation}
     \lim_{N\to\infty}\chi_t^N(\xi_t)\xrightarrow{D}\calN(0, \hat{V}_t(\xi_t))
   \end{equation}
@@ -198,16 +206,15 @@ Substituting this representation into Equation~\eqref{eq:bar_t_t},
   Consider first the particle system before reweighting with the potential
   function $G_t$:
   \begin{equation}
-\sqrt{N}\beta_t
+    \sqrt{N}\beta_t
     \sum_{j=1}^N\frac{\xi_t(\tilde{X}_t^{(j)}) - \hat\eta_{t-1}^N M_t(\xi_t)}{N}
     = \sum_{j=1}^NU_{t,j}^N
   \end{equation}
   where $U_{t,j}^N = \frac{\beta_t}{\sqrt{N}}\{\xi_t(\tilde{X}_t^{(j)}) -
-    \hat\eta_{t-1}^N M_t(\xi_t)\}$. Define, recursively, the $\sigma$-algebras
-    $\calH_t^N = \calH_{t-1}^N \vee
-    \sigma(\{\tilde{X}_{t}^{(j)}\}_{j=1}^N)$, $\calH_{t-1} =
-    \sigma\left(\cup_{N=0}^\infty \calH_{t-1}^N \right)$ and the increasing (in $j$) sequence of
-  $\sigma$-algebras $\calH_{t,j}^N =
+  \hat\eta_{t-1}^N M_t(\xi_t)\}$. Define, recursively, the $\sigma$-algebras
+  $\calH_t^N = \calH_{t-1}^N \vee \sigma(\{\tilde{X}_{t}^{(j)}\}_{j=1}^N)$,
+  $\calH_{t-1} = \sigma\Round[bigg]{\cup_{N=0}^\infty \calH_{t-1}^N}$ and the
+  increasing (in $j$) sequence of $\sigma$-algebras $\calH_{t,j}^N =
   \calH_{t-1}\vee\sigma(\{\tilde{X}_t^{(l)}\}_{l=1}^j)$. It is clear that
   \begin{equation}
     \Exp[U_{t,j}^N|\calH_{t,j-1}^N] = \Exp[U_{t,j}^N|\calH_{t-1}] = 0
@@ -219,16 +226,12 @@ Substituting this representation into Equation~\eqref{eq:bar_t_t},
     \Exp[(U_{t,j}^N)^2|\calH_{t,j-1}^N]
     &= \Exp[(U_{t,j}^N)^2|\calH_{t-1}] \\
     &= \frac{\beta_t^2}{N}\{\hat\eta_{t-1}^N M_t(\xi_t^2) -
-      [\hat\eta_{t-1}^N)(\xi_t)]^2\}
-    < c_t \frac{\beta_t^2}{N} %\biggl\{
-     % R_t\lVert\xi_t\rVert_{\infty}^2 + R_t^2\lVert\xi_t\rVert_{\infty}
-     % \biggr\}
+    [\hat\eta_{t-1}^N)(\xi_t)]^2\}
+    < c_t \frac{\beta_t^2}{N}
   \end{align*}
-where $c_t < \infty$ exists by the boundedness of $\xi_t$. The
-conditional Linderberg
-  condition is also clearly satisfied. %(e.g., see proof of Lemma 7{} in
-  %\cite{Johansen:2006iv}).
-That is, for any $0 < u\le1$ and $\varepsilon>0$,
+  where $c_t < \infty$ exists by the boundedness of $\xi_t$. The conditional
+  Linderberg condition is also clearly satisfied. That is, for any $0 <
+  u\le1$ and $\varepsilon>0$,
   \begin{equation*}
     \lim_{N\to\infty}\sum_{j=1}^{\lfloor Nu\rfloor}
     \Exp[(U_{t,j}^N)^2\bbI_{(\varepsilon,\infty)}(|U_{t,j}^N|)|\calH_{t,j}^N]
@@ -241,8 +244,8 @@ That is, for any $0 < u\le1$ and $\varepsilon>0$,
     \{\hat\eta_{t-1}^N M_t(\xi_t^2) - [\hat\eta_{t-1}^N M_t(\xi_t)]^2\} \\
     &= \beta_t^2     \{\hat\eta_{t-1}^N M_t(\xi_t^2) - [\hat\eta_{t-1}^N M_t(\xi_t)]^2\}
   \end{align*}
-  and we can invoke the martingale central
-  limit theorem \cite[pp.~543]{Shiryaev:1995vp},
+  and we can invoke the martingale central limit theorem
+  \cite[][pp.~543]{Shiryaev:1995vp},
   \begin{equation}
     \lim_{N \to\infty}\chi_t^N(\xi_t)%|\calH_{t-1}
     \xrightarrow{D}\calN(0,\check{V}_t(\xi_t))
@@ -251,36 +254,36 @@ That is, for any $0 < u\le1$ and $\varepsilon>0$,
   of the sequence defined by
   \begin{equation}
     \check{V}_t^N(\xi_t) = \beta_t^2 \{\hat\eta_{t-1}^N M_t (\xi_t^2) -
-      [\hat\eta_{t-1}^NM_t(\xi_t)]^2\}
+    [\hat\eta_{t-1}^NM_t(\xi_t)]^2\}
   \end{equation}
-  and as (again, see \cite[Section 7.4]{DelMoral:2004ux})
+  and as (again, see \cite[][sec.~7.4]{DelMoral:2004ux})
   \begin{align*}
     \check{V}_t^N(\xi_t)
     &\xrightarrow{P} \beta_t^2 \{\hat\eta_{t-1}M_t(\xi_t^2) -
-      [\hat\eta_{t-1}M_t(\xi_t)]^2\}
+    [\hat\eta_{t-1}M_t(\xi_t)]^2\}
   \end{align*}
-  the proof is completed using Slutzky's lemma and applying \cite[Lemma A2]{Chopin:2004cn} which
-  yields that:
-\begin{align*}
-\lim_{N \rightarrow \infty} \mathcal{X}_t^N \xrightarrow{D} \calN(0,\hat{V}_t(\xi_t))
+  the proof is completed using Slutzky's lemma and applying
+  \cite[][Lemma~\textsc{a2}]{Chopin:2004cn} which yields that:
+  \begin{align*}
+    \lim_{N \rightarrow \infty} \mathcal{X}_t^N \xrightarrow{D}
+  \calN(0,\hat{V}_t(\xi_t))
 \end{align*}
 with
 \begin{align*}
-\hat{V}_t(\xi_t) =
-\check{V}_t\left(\frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
-\hat\eta_t(\xi_t)) \right) =
-\beta_t^2 \hat\eta_t\left(
-\frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
-\hat\eta_t(\xi_t))
-\right)
+  \hat{V}_t(\xi_t) &=
+  \check{V}_t\Round[bigg]{\frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
+    \hat\eta_t(\xi_t))} \\
+  &= \beta_t^2 \hat\eta_t\Round[bigg]{
+    \frac{G_t(\cdot)}{\hat\eta_{t-1}M_t(G_t)} (\xi_t(\cdot) -
+    \hat\eta_t(\xi_t))}
 \end{align*}
 \end{proof}
 
 \begin{lemma}\label{lem:normality}
-  Under conditions of Proposition~\ref{prop:gen_clt}, and the inductive
-  assumption of Lemma~\ref{lem:propagation}, $T_t^N(\xi_{0:t})$ is
+  Under conditions of Proposition~\appref{prop:gen_clt}, and the inductive
+  assumption of Lemma~\appref{lem:propagation}, $T_t^N(\xi_{0:t})$ is
   asymptotically normal with variance stated as in
-  Proposition~\ref{prop:gen_clt}.
+  Proposition~\appref{prop:gen_clt}.
 \end{lemma}
 
 \begin{proof}
@@ -304,6 +307,6 @@ with
   for details).
 \end{proof}
 
-Using Lemma~\ref{lem:propagation} to~\ref{lem:normality}, the proof of
-Proposition~\ref{prop:gen_clt} follows by mathematical induction and a trivial
+Using Lemma~\appref{lem:propagation} to~\appref{lem:normality}, the proof of
+Proposition~\appref{prop:gen_clt} follows by mathematical induction and a trivial
 base case (the first iteration is simple importance sampling).

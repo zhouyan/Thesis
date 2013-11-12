@@ -5,13 +5,17 @@ bib, bibintoc, biblatexstyle=numeric,
 mintcode, minted=cache,
 draftnote, showoverfull
 ]{mthesis}
+
 \input{macros}
 
+\renewbibmacro{in:}
+{\ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}}
 \addbibresource{thesis.bib}
 \addbibresource{extra.bib}
+
 \title{Bayesian Model Comparison \\via Sequential Monte Carlo}
 \author{Yan Zhou}
-\date{\today}
+\date{November 2013}
 
 \begin{document}
 

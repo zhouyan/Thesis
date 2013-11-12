@@ -1067,12 +1067,12 @@ sampler.path_sampling();
 \subsection{Example: Path sampling with the \smc[2] algorithm}
 \label{sub:Example: Path sampling with the SMC2 algorithm}
 
-In the case of Algorithm~\ref{alg:smc2}, the path sampling integrands is
-simply the log-likelihood, and $\alpha_t = \alpha(t/T)$. Therefore the
-implementation of a generic \cppinline{path_eval} is straightforward. Again,
-we assume that the value collection type $T$ provides access to $\alpha(t/T)$
-and the log-likelihood in the same way as the \cppinline{GMM} class. We can
-implement the function template as the following,
+In Algorithm~\ref{alg:smc2}, the path sampling integrands is simply the
+log-likelihood, and $\alpha_t = \alpha(t/T)$. Therefore the implementation of
+a generic \cppinline{path_eval} is straightforward. Again, we assume that the
+value collection type $T$ provides access to $\alpha(t/T)$ and the
+log-likelihood in the same way as the \cppinline{GMM} class. We can implement
+the function template as the following,
 \cppfile{snippet/path_eval_f.cpp}
 Other \smc algorithms such Algorithm~\ref{alg:smc3} may have different path
 sampling estimator expression. But the implementation is similar.
@@ -1256,8 +1256,8 @@ knowledge of \cpp, writing \opencl kernels (the part of the program that are
 executed on the device, such as \gpu{}s) is not a difficult task. What often
 makes \opencl programming difficult is the management of the devices. It
 involves the understanding an array of layers of the underlying hardware.
-There are examples\footnote{For example,
-  \url{https://developer.apple.com/library/mac/samplecode/OpenCL_FFT/Introduction/Intro.html}}
+There are examples\footnote{See
+  \url{https://developer.apple.com/library/mac/samplecode/OpenCL_FFT/Introduction/Intro.html} for examples.}
 where a major part of the program is irrelevant to the algorithm itself. This
 is not the case of using \vsmc. The library provides facilities to manage
 \opencl platforms and devices as well as common operations. The

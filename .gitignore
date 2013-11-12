@@ -15,14 +15,12 @@
 *.synctex.gz*
 *.toc
 
-thesis.pdf
-table.pdf
 figure.pdf
+layout.pdf
 outline.pdf
-pieces/*.pdf
+table.pdf
+thesis.pdf
 chap/*.pdf
+pieces/*.pdf
 
 .minted-thesis
-.minted-outline
-.minted-table
-.minted-figure

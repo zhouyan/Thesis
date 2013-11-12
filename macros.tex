@@ -59,8 +59,6 @@
 \UseAbbr{unix}
 \UseAbbr{wis}
 
-\def\aicc{\ifmmode\aic_c\else\aic{}$_c$\xspace\fi}
-
 \UseAbbr[\aocl][\sffamily]{AMD APP OpenCL}
 \UseAbbr[\armadillo][\sffamily]{Armadillo}
 \UseAbbr[\biips][\sffamily]{BiiPS}
@@ -135,13 +133,14 @@
 \newmintinline{sh}{}
 \newmintinline{make}{}
 
-\def\xth{\textsups{th}\xspace}
-
-\def\STATESKIP{\hskip.68cm}
-\def\data{\mathbfit{y}}
+\newcommand\aicc{\ifmmode\aic_c\else\aic{}$_c$\xspace\fi}
+\newcommand\data{\mathbfit{y}}
 \newcommand{\smc}[1][]{\textsc{smc}#1\xspace}
-
-\def\Best#1{\ifmmode\color{MRed}\text{\lnfigures\textbf{\textit{#1}}}
+\newcommand\xth{\textsups{th}\xspace}
+\newcommand\STATESKIP{\hskip.68cm}
+\newcommand\Best[1]{\ifmmode\color{MRed}\text{\lnfigures\textbf{\textit{#1}}}
   \else\textcolor{MRed}{\textsf{\textbf{\textit{Red}}}}:\fi}
-\def\SubBest#1{\ifmmode\color{MGreen}\text{\lnfigures\textit{#1}}
+\newcommand\SubBest[1]{\ifmmode\color{MGreen}\text{\lnfigures\textit{#1}}
   \else\textcolor{MGreen}{\textsf{\textit{Green}}}:\fi}
+
+\setlength\parindent{2.5em}

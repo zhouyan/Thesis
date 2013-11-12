@@ -1,6 +1,13 @@
 \chapter{Positron emission tomography compartmental model}
 \label{cha:Positron emission tomography compartmental model}
 
+Bayesian model comparison for positron emission tomography (\pet)
+compartmental model was studied before by the author. This thesis use this
+realistic example for the demonstration purpose in the following chapters.
+This chapter introduces the compartmental model and its application to \pet.
+Later we will frequent refer to materials here for details of the model
+setting. This chapter is based on \cite{Zhou2013} by the author.
+
 \section{Compartmental model}
 \label{sec:Compartmental model}
 
@@ -17,20 +24,19 @@ well-mixed material. The compartments interact by material flowing from one
 compartment to another. There may be flows into one or more compartments from
 outside the system (inflows) and there may be flows from one or more
 compartments out of the system (outflows) \cite{Jacquez:1996gc}. In this
-paper, linear compartmental models are considered, in particular those that
-are identifiable in \pet studies \cite{Schmidt99}. In these models the rate
+thesis, linear compartmental models are considered. In these models the rate
 of tracer flow from a compartment is proportional to the quantity of tracer in
 that compartment. In such models the flow may be parameterized by a pair of
 transfer coefficients, which are termed rate constants and may take the value
 zero, for each pair of compartments.
 
-This class of models yields a set of ordinary differential equations that
-describe the flow of tracer. Consider an $m$-compartment model. Let
+This class of models yields a set of ordinary differential equations (\ode)
+that describe the flow of tracer. Consider an $r$-compartments model. Let
 $\mathbfit{f}(t)$ be the vector whose $i$\xth element corresponds to the
 concentration in the $i$\xth compartment at time $t$. Let $\mathbfit{b}(t)$
 describe all flow into the system from outside. The $i$\xth element of
 $\mathbfit{b}(t)$ is the rate of inflow into the $i$\xth compartment from the
-environment. The dynamics of such a model may be written as:
+environment. The dynamics of such a model may be written as,
 \begin{align*}
   \dot{\mathbfit{f}}(t) &= A\mathbfit{f}(t) + \mathbfit{b}(t), \\
   \mathbfit{f}(0) &= \mathbfit\xi,
@@ -38,13 +44,14 @@ environment. The dynamics of such a model may be written as:
 where $\mathbfit\xi$ is the vector of initial concentrations and
 $\dot{\mathbfit{f}}$
 denotes the time derivative of $\mathbfit{f}$. The matrix $A$ is formed from
-the rate constants (see \cite{Gunn:2001cx}).  The solution to this equation
-is,
+the rate constants (see \cite{Gunn:2001cx}). The solution
+\cite[][sec.~8.3.1]{Seber:2003vx} to this equation is,
 \begin{equation*}
-  \mathbfit{f}(t) = e^{A t}\mathbfit\xi + \int_0^t e^{A(t-s)}\mathbfit{b}(s)\intd s,
+  \mathbfit{f}(t) = e^{A t}\mathbfit\xi +
+  \int_0^t e^{A(t-s)}\mathbfit{b}(s)\intd s,
 \end{equation*}
-where the matrix exponential $e^{A t} = \sum_{k = 0}^{\infty}
-\frac{(A t)^k}{k!}$.
+where the matrix exponential $e^{A t} = I + \sum_{k=1}^{\infty}
+\frac{(At)^k}{k!}$ and $I$ denotes the identity matrix.
 
 \section{Application to positron emission tomography}
 \label{sec:Application to positron emission tomography}
@@ -53,7 +60,7 @@ Positron emission tomography (\pet) is an analytical imaging technology that
 uses compounds labelled with positron emitting radionuclides as molecular
 tracers to image and measure biochemical process \emph{in vivo}. It is one of
 the few methods available to neuroscientists to study biochemical processes
-within living brain, as methodology such as magnetic resonance imaging is
+within living brains, as methodology such as magnetic resonance imaging is
 primarily only able to study effects via blood flow changes, while \pet can
 study changes in the biochemical systems themselves. This is of considerable
 interest within research into diseases where biochemical changes are known to
@@ -67,78 +74,75 @@ greater uptake of [$^{18}$F]-FDG, leading to an indication of cancer location
 on an [$^{18}$F]-FDG scan \cite{Gambhir2002}.
 
 In a typical molecular assay, a positron-labelled tracer is injected
-intravenously and the \pet camera scans a record of positron emission as
-the tracer decays \cite{Phelps2000}.  With all events detected by the \pet
-camera, the time course of the tissue concentrations are reconstructed as
-three-dimension images \cite{Kinahan1989}. The digital image so captured
-shows the signal integrated over small volume elements (voxels). Each voxel
-has a volume of the order of a few cubic millimetres. This data provides
-the tissue time-activity function, which is the total concentration of
-tracer in all tissue compartments. In the \emph{plasma input compartmental
-  model}, in addition to the \pet data, a separate measurement of the
-concentration of tracer in the plasma is available. This measurement is
-generally assumed to be noise free (it can be measured with much greater
-accuracy than the signal of interest). This model is used in the current
-study. See \cite{Gunn:2001cx} for details of \pet compartmental models in
-general.
+intravenously and the \pet camera scans a record of positron emission as the
+tracer decays \cite{Phelps2000}.  With all events detected by the \pet camera,
+the time course of the tissue concentrations are reconstructed as
+three-dimension images \cite{Kinahan1989}. The digital image so captured shows
+the signal integrated over small volume elements, termed \emph{voxels}. Each
+voxel has a volume of the order of a few cubic millimetres. This data provides
+the tissue time-activity function, which is the total concentration of tracer
+in all tissue compartments. In the \emph{plasma input compartmental model}, in
+addition to the \pet data, a separate measurement of the concentration of
+tracer in the plasma is available. This measurement is generally assumed to be
+noise free (it can be measured with much greater accuracy than the signal of
+interest). This model is used in the current study. See \cite{Gunn:2001cx} for
+details of \pet compartmental models in general.
 
 There are many reasons that linear \ode models, of which the plasma input
 model is one, are the most commonly used in \pet analysis. Perhaps most
 importantly, such systems have also been shown to characterize \pet
 experimental data well \cite{Lammertsma96}. The amount of data available
 to fit the model for each voxel is relatively small (20-40 time points),
-and even with three compartment linear \ode models, the estimation of six
+and even with three-compartments linear \ode models, the estimation of six
 parameters is non-trivial; it's clear that attempting to estimate the
 parameters of more general non-linear \ode systems robustly will be close
 to impossible in this setting. Furthermore, on a voxel level, which is the
 type of spatial analysis that is of interest here, the signal-to-noise
 ratio of the data is not high, making any parameter estimation difficult.
 Finally, as the models are estimated for every voxel in the brain
-(typically around 100,000 voxels per scan), computational considerations
-need to be taken into account. Thus, linear \ode models are both
-experimentally useful, and computationally efficient and it is difficult to
-justify the additional complexity that would arise from considering more
-general models. In the remainder of this paper we confine ourselves to
-linear \ode models for this reason, although nonlinear \ode models have
-received considerable attention in other areas in recent years -- see
-\cite{Lawson2011} and references therein.
+(typically around a quarter of a million voxels per scan), computational
+considerations need to be taken into account. Thus, linear \ode models are
+both experimentally useful, and computationally efficient and it is difficult
+to justify the additional complexity that would arise from considering more
+general models.
 
-A plasma input model with $m$ tissue compartments can be written as a set of
+A plasma input model with $r$ tissue compartments can be written as a set of
 ordinary differential equations,
 \begin{align*}
   \dot{\mathbfit{C}}_{\mathbfit{T}}(t)
   & = A \mathbfit{C}_{\mathbfit{T}}(t) + \mathbfit{b} C_P(t)\\
-  C_T(t) & = \mathbfit{1}^T\mathbfit{C}_{\mathbfit{T}}(t) \\
-  \mathbfit{C}_{\mathbfit{T}}(0) & = \mathbfit{0},
+  C_T(t) & = \mathbf{1}^T\mathbfit{C}_{\mathbfit{T}}(t) \\
+  \mathbfit{C}_{\mathbfit{T}}(0) & = \mathbf{0},
 \end{align*}
-where $\mathbfit{C}_{\mathbfit{T}}(t)$ is an $m$-vector of time-activity
+where $\mathbfit{C}_{\mathbfit{T}}(t)$ is an $r$-vector of time-activity
 functions of each tissue compartment, $C_P(t)$ is the plasma time-activity
-function, i.e., the input function. $A$ is the $m \times m$ state transition
-matrix, $\mathbfit{b} = (K_1, 0, \dots, 0)^T$ is an $m$-vector, where $K_1$ is
-the rate constant of input from the plasma into tissue. The $m$-vectors
-$\mathbfit{1}$ and $\mathbfit{0}$ correspond to the $m$-vectors of ones and
-zeroes, respectively. The matrix $A$ takes the form of a diagonally dominant
-matrix with non-positive diagonal elements and non-negative off-diagonal
-elements. Furthermore, $A$ is negative semidefinite \cite{Gunn:2001cx}.  The
-solution to this set of \ode{}s is:
+function, i.e., the input function. $A$ is the $r \times r$ state transition
+matrix, $\mathbfit{b} = (K_1, 0, \dots, 0)^T$ is an $r$-vector, where $K_1$ is
+the rate constant of input from the plasma into tissues. The $r$-vectors
+$\mathbf{1}$ and $\mathbf{0}$ correspond to the $r$-vectors of ones and zeros,
+respectively. The matrix $A$ takes the form of a diagonally dominant matrix
+with non-positive diagonal elements and non-negative off-diagonal elements.
+Furthermore, $A$ is negative semidefinite \cite{Gunn:2001cx}. The solution to
+this set of \ode is:
 \begin{align}
   C_T(t) & = C_P(t) \otimes H_{TP}(t) = \int_0^t C_P(t-s) H_{TP}(s)\intd s
   \label{eq:CT} \\
-  H_{TP}(t) & = \sum_{i=1}^m \phi_i e^{-\theta_i t},\notag
+  H_{TP}(t) & = \sum_{i=1}^r \phi_i e^{-\theta_i t},
 \end{align}
-where $\otimes$ is the convolution operator and the $\phi_i$ and $\theta_i$
-parameters are functions of the rate constants (in the sense that there is a
-one-to-one mapping between the set of rate constants and the set of
-$\phi_i$ and $\theta_i$ parameters). The input function $C_P(t)$
-is assumed to be nearly continuously measured. The tissue time-activity
-function $C_T(t)$ is measured discretely, leading to measured values of the
-integral of the signal over each of $n$ consecutive, non-overlapping time
-intervals ending at time points $t_1, \dots, t_n$.  The macro parameter of
-interest is the \emph{volume of distribution},
-\begin{equation*}
-  V_D := \int_0^{\infty} H_{TP}(t) \intd t = \sum_{i=1}^m
+where $\otimes$ is the convolution operator and the $\phi_{1:r}$ and
+$\theta_{1:r}$ parameters are functions of the rate constants (in the sense
+that there is a one-to-one mapping between the set of rate constants and the
+set of $\phi_{1:r}$ and $\theta_{1:r}$ parameters). The input function
+$C_P(t)$ is assumed to be nearly continuously measured. The tissue
+time-activity function $C_T(t)$ is measured discretely, leading to measured
+values of the integral of the signal over each of $n$ consecutive,
+non-overlapping time intervals ending at time points $t_1, \dots, t_n$.  The
+macro parameter of interest is the \emph{volume of distribution}, $V_D$,
+defined by
+\begin{equation}
+  V_D = \int_0^{\infty} H_{TP}(t) \intd t = \sum_{i=1}^m
   \frac{\phi_i}{\theta_i}.
-\end{equation*}
+\end{equation}
 This corresponds to the steady state ratio of tissue concentration to
 plasma concentration in a constant plasma concentration regime. That is, if
 an injection of tracers into the plasma were made such that the plasma
@@ -147,38 +151,27 @@ concentration in the tissues to the concentration in the plasma after an
 infinite time had passed would be exactly $V_D$.
 
 It is assumed that the input is the same at all voxels of the reconstructed
-image. This is not a particularly unrealistic assumption: the input is an
-empirical function derived from online measurements of the concentrations
-of the radiotracer within the blood, calculated on a per second basis. The
-blood carries the tracer to the brain and the timescale on which the
-radiotracer is measured is very fast in comparison with the time
-acquisition of \pet time frames providing a temporal averaging. However,
-the model for each voxel is not assumed to be the same, and different
-number of compartments can be associated with each one. In the model
-fitting, a ``mass univariate'' approach is taken with each voxel being
-analysed separately. This approach is common in the literature and makes
-the problem of dealing with a very large number of voxels feasible.
-However, it imposes very stringent computational requirements: more than
-200,000 voxels must be analyzed (i.e., the time series analysis must be
-repeated separately for each of these voxels), meaning that robustness is
-essential as complex model-specific characterizations and model/algorithm
-tuning cannot be performed on a voxel by voxel basis.
-
-The goal work is to obtain Bayesian estimates of the macro parameter $V_D$ and
-also to estimate the posterior probabilities of models with different number
-of tissue compartments. This macro parameter is highly important when
-considering such quantities as receptor density and occupancy. In addition,
-the number of compartments in the model typically can be identified with free
-tracer, specifically bound tracer (tracer bound to the system under
+image. However, the model for each voxel is not assumed to be the same, and
+different number of compartments can be associated with each one. The model
+selection problem is to find the number of compartments given the data at any
+voxel. The number of compartments in the model typically can be identified
+with free tracer, specifically bound tracer (tracer bound to the system under
 investigation) and non-specifically bound tracer (tracer bound to different
 competing systems), indicating the role of certain chemicals within particular
-brain systems.
+brain systems. In the model fitting, a ``mass univariate'' approach is taken
+with each voxel being analyzed separately. This approach is common in the
+literature and makes the problem of dealing with a very large number of voxels
+feasible. However, it imposes very stringent computational requirements. About
+a quarter of a million voxels must be analyzed (i.e., the time series analysis
+must be repeated separately for each of these voxels), meaning that robustness
+is essential as complex model-specific characterizations and model/algorithm
+tuning cannot be performed on a voxel by voxel basis.
 
 \section{Simulated and real \protect\pet data}
 \label{sec:Simulated and real pet data}
 
-Two data sets are used in this thesis. The first is simulated from a
-three compartments model with the matrix of rate constants,
+Two kinds of data are used in this thesis. The first is simulated from a
+three-compartments model with the matrix of rate constants,
 \begin{equation}
   A = \begin{bmatrix}
     - k_2 - k_3 - k_5 & k_4  & k_6 \\
@@ -189,7 +182,7 @@ three compartments model with the matrix of rate constants,
 where $k_2 = 3 \times 10^{-3}$, $k_3 = 5.5 \times 10^{-3}$, $k_4 = 1.5 \times
 10^{-3}$, $k_5 = 10^{-3}$ and $k_6 = 3 \times 10^{-3}$. The rate constant of
 input $K_1 = 6\times 10^{-3}$. All parameters have the unit s$^{-1}$ except
-$K_1$ which has unit ml s$^{-1}$ cm$^{-3}$ \cite{RLNomen}. The simulated data
+$K_1$, which has unit ml s$^{-1}$ cm$^{-3}$ \cite{RLNomen}. The simulated data
 has 32 time frames with lengths corresponding to the integration periods used
 in real experiments ($27.5$, $32.5$, $2 \times 10$, $20$, $6 \times 30$, $75$,
 $11 \times 120$, $210$, $5 \times 300$, $450$, and $2 \times 600$, all in
@@ -202,14 +195,42 @@ to $5.12$, from lower than typical region of interest (\roi) analysis (in
 which the data is averaged over a biologically meaningful region in order to
 improve signal to noise ratio) to higher than the noise associated with
 voxel-level analysis \citep{Peng:2008fx}.  For each noise level, 2,000 time
-series were simulated.  Normally distributed errors were assumed (correctly,
-in this simulation study). For each of these time series analysis was carried
-out for each of the three possible models via likelihood-based and Bayesian
-methods as detailed previously.
+series were simulated.
 
-The other data is a real \pet scan, which is also studied in
-\cite{Peng:2008fx}.  It has about a quarter of a million data sets. See
-\cite{Zhou2013} for more details on this data set.
+\input{fig/pet_plot}
+
+Data from a \pet study using [$^{11}$C]diprenorphine are also used in this
+thesis. The same data was previously analyzed in
+\cite{Peng:2008fx,Jiang:2009kf}. In both studies, parameter estimation instead
+of model selection is of interest. The overall aim of the study was to
+quantify opioid receptor concentration in the brain of normal subjects
+allowing a baseline to be found for subsequent studies on diseases such as
+epilepsy. Diseases such as epilepsy tend to involve changes in brain receptor
+concentrations or occupancy levels either due to physical lesions within the
+brain or other chemically relevance differences from normal controls. Two
+dynamic scans from a measured [$^{11}$C]diprenorphine study of normal
+subjects, for which an arterial input function was available, were analyzed.
+One of them is used in this thesis.  [$^{11}$C]diprenorphine is a tracer that
+binds to the opioid (pain) receptor system in the brain. The subject underwent
+95-min dynamic [$^{11}$C]diprenorphine \pet baseline scans on the same camera.
+The subjects were injected 185 MBq of [$^{11}$C]diprenorphine. \pet scans were
+acquired in \textsc{3d} mode on a Siemens/\textsc{cti ecat exact3d} \pet
+camera, with a spatial resolution after image reconstruction of approximately
+5{}mm. Data were reconstructed using the reprojection algorithm
+\citep{Kinahan1989} with ramp and Colsher filters cutoff at Nyquist frequency.
+Reconstructed voxel size were $2.096$mm $\times$ $2.096$mm $\times$ $2.43$mm.
+Acquisition was performed in listmode (event-by-event) and scans were rebinned
+into 32 time frames of increasing duration. The end time points of each frame
+is the same as in the simulated data. Frame-by-frame movement correction was
+performed on the \pet images. Overall this resulted in images of size
+$128\times128\times95$ voxels, which when masked to include only brain
+regions, resulted in 233,054 separate time series respectively to be analyzed.
+Thus this represents a massive repeated application of the proposed framework
+for Bayesian analysis.  Figure~\ref{fig:typical real pet} shows the estimates
+of $V_D$ for this data obtained in previous study \cite{Zhou2013}. It can seen
+that the spatial structure of the data is heterogeneous. Robustness of
+algorithms is needed to obtain good performance for the large number of data
+sets.
 
 \section{Error models}
 \label{sec:Error models}
@@ -219,31 +240,31 @@ three-compartment models are considered possible; the method could deal with
 other compartmental models straightforwardly, but we focus on these as they
 are the most interesting in the application of interest. Let $t_1, \dots, t_n$
 be the end points of the time frames at which the tissue concentrations are
-measured, let $y_j$, $j = 1, \dots, n$ be the observed data. Measurement error
-is assumed to be white and additive with zero mean and variance proportional
-to activities divided by the length of time frames (these assumptions arise
-from the physical characterization of the \pet system of interest; alternative
+measured, let $y_1,\dots,y_n$ be the observed data. Measurement error is
+assumed to be white and additive with zero mean and variance proportional to
+activities divided by the length of time frames (these assumptions arise from
+the physical characterization of the \pet system of interest; alternative
 specifications would be possible and appropriate for other situations).
-Recall equation~\eqref{eq:CT},
+Recall Equation~\eqref{eq:CT},
 \begin{gather*}
-  C_T(t_j;\phi_{1:m},\theta_{1:m}) =
-  \sum_{i=1}^m \phi_i\int_0^{t_j}C_P(s)e^{-\theta_i(t_j-s)} \intd s \\
-  y_j = C_T(t_j;\phi_{1:m},\theta_{1:m}) +
-  \sqrt{\frac{C_T(t_j;\phi_{1:m},\theta_{1:m})} {t_j - t_{j-1}}}
-  \varepsilon_j,
+  C_T(t_j;\phi_{1:r},\theta_{1:r}) =
+  \sum_{i=1}^j \phi_i\int_0^{t_j}C_P(s)e^{-\theta_i(t_j-s)} \intd s \\
+  y_i = C_T(t_i;\phi_{1:r},\theta_{1:r}) +
+  \sqrt{\frac{C_T(t_i;\phi_{1:r},\theta_{1:r})} {t_i - t_{i-1}}}
+  \varepsilon_i,
 \end{gather*}
-where $m = 1, 2$, or~$3$ is the number of tissue compartments, $t_0 = 0$,
-and $\varepsilon_j$'s are identically independently distributed random
-variables with mean zero. It is usually assumed that $\varepsilon_j$'s have
-a normal distribution. It is demonstrated below that there is evidence that
-a $t$ distribution better fits the observed data. We consider two error
-structures:
+where $r = 1, 2$, or~$3$ is the number of tissue compartments, $t_0 = 0$, and
+$\varepsilon_{1:n}$ are identically independently distributed random variables
+with mean zero. It is usually assumed that $\varepsilon_{1:r}$ have a Normal
+distribution. It is demonstrated in \cite{Zhou2013} that there is evidence
+that a Student $t$ distribution better fits the observed data. Therefore, we
+consider two error structures,
 \begin{align*}
   \varepsilon_j &\sim \mathcal{N}(0,\lambda^{-1})
   &\text{Normally-distributed errors} \\
   \varepsilon_j &\sim \mathcal{T}(0,\tau,\nu)
   &\text{$t$-distributed errors},
 \end{align*}
-where $\mathcal{N}(0,\lambda^{-1})$ is the normal distribution with mean zero
-and variance $\sigma^2$, and $\mathcal{T}(0,\tau,\nu)$ is the Student $t$
+where $\mathcal{N}(0,\lambda^{-1})$ is the Normal distribution with mean zero
+and precision $\lambda$, and $\mathcal{T}(0,\tau,\nu)$ is the Student $t$
 distribution with location zero, scale $\tau$, and degrees of freedom $\nu$.

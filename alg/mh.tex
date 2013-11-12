@@ -4,7 +4,7 @@
   \STATE Draw $X^0\sim\mu$ where $\mu$ is the initial condition.
   \STATE Set $t\leftarrow0$.
   \REPEAT
-    \STATE Draw $Y^t\sim q(y|x^t)$.
+    \STATE Draw $Y^t\sim q(y^t|x^t)$.
     \STATE Compute $\alpha = \min\Curly[bigg]{
       \frac{\pi(y^t)}{\pi(x^t)}\frac{q(x^t|y^t)}{q(y^t|x^t)}, 1}$
     \STATE Draw $U\sim\calU[0,1]$.

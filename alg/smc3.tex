@@ -7,18 +7,18 @@
 
   \STATE \emph{Relative Evidence Calculation}
   \STATE\STATESKIP Set $k\leftarrow k + 1$, $t\leftarrow0$.
-  \STATE\STATESKIP Denote current weighted samples as
+  \STATE\STATESKIP Let
   $\{W_0^{(k,i)},X_0^{(k,i)}\}_{i=1}^N$ where $X_0^{(k,i)} =
-  (M_0^{(k,i)},\theta_0^{(k,i)})$
+  (\theta_0^{(k,i),\calM_0^{(k,i)}})$ denote the current samples.
   \STATE\STATESKIP Apply resampling if necessary.
 
   \STATE\STATESKIP \emph{Iteration:} Set $t\leftarrow t + 1$.
   \STATE\STATESKIP\STATESKIP Weight $W_t^{(k,i)} \propto W_{t-1}^{(k,i)}
-  {\pi_t(M_{t-1}^{(k,i)})}/{\pi_{t-1}(M_{t-1}^{(k,i)})}$.
+  {\pi_t(\calM_{t-1}^{(k,i)})}/{\pi_{t-1}(\calM_{t-1}^{(k,i)})}$.
   \STATE\STATESKIP\STATESKIP Apply resampling if necessary.
-  \STATE\STATESKIP\STATESKIP Sample $(M_t^{(k,i)},\theta_t^{(ki)}) \sim
-  K_t(\cdot|M_{t-1}^{(k,i)}\theta_{t-1}^{(k,i)})$, a $\pi_t^{(3,k)}$-invariant
-  kernel.
+  \STATE\STATESKIP\STATESKIP Sample $(\theta_t^{(k,i)},\calM_t^{(k,i)}) \sim
+  K_t(\cdot|\theta_{t-1}^{(k,i)},\calM_{t-1}^{(k,i)})$, a
+  $\pi_t^{(3,k)}$-invariant kernel.
 
   \STATE\STATESKIP \emph{Repeat the \emph{Iteration} step up to $t = T_k$}.
 

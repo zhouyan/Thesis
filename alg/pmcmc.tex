@@ -9,12 +9,9 @@
     \STATE Draw $k_1$ from a uniform distribution on $(0,\dots,T-1)$. Set
     $k_2\leftarrow k_1 + 1$.
     \STATE Draw $Y_{k_1}^t\sim q_{k_1}(y_{k_1}^t|x_{k_2}^t)$ and
-    $Y_{k_2}^t\sim q_{k_2}(y_{k_2}^t|x_{k_1}^t)$
-    \STATE Compute $\alpha = \min\Curly[bigg]{
-      \frac{\pi_{k_1}(y_{k_1}^t)\pi_{k_2}(y_{k_2}^t)
-        q_{k_1}(x_{k_2}^t|y_{k_1}^t)q_{k_2}(x_{k_1}^t|y_{k_2}^t)}
-      {\pi_{k_1}(x_{k_1}^t)\pi_{k_2}(x_{k_2}^t)
-        q_{k_1}(y_{k_1}^t|x_{k_2}^t)q_{k_2}^t(y_{k_2}^t|x_{k_1}^t)}, 1}$
+    $Y_{k_2}^t\sim q_{k_2}(y_{k_2}^t|x_{k_1}^t)$.
+    \STATE Compute $\alpha$, the acceptance probabilty according to the
+    Metropolis-Hastings rule.
     \STATE Draw $U\sim\calU[0,1]$.
     \IF{$U\le\alpha$}
       \STATE Set $X_{k_1}^{t+1}\leftarrow Y_{k_1}^t$, $X_{k_2}^{t+1}\leftarrow

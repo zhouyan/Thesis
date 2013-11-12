@@ -3,16 +3,14 @@
 
 Model selection is a problem found throughout statistics and related
 disciplines. A number of approaches of model selection has been developed
-through the history of statistics. Each has its own strength and limitations.
-There is no universally best model selection strategy. We will review some of
-the more widely used methods. We are mostly interested in the methods that are
-generic in the sense that their usefulness are not limited to a particular
-class of models.
+through the history of statistics. We will review some of the more widely used
+methods. We are mostly interested in methods that are generic in the sense
+that their usefulness are not limited to a particular class of models.
 
 Section~\ref{sec:Information theoretic approach} reviews a few
-information-theoretic approaches. The most important one of them is the
-Akaike's information criteria (\aic; \cite{Akaike:1973uc,Akaike:1974ih}). A
-few other closely related methods are also reviewed in this section.
+information-theoretic approaches. The most important one of them is perhaps
+the Akaike's information criteria (\aic; \cite{Akaike:1973uc,Akaike:1974ih}).
+A few other closely related methods are also reviewed in this section.
 Section~\ref{sec:Bayesian model comparison} reviews the Bayesian approach to
 model comparison and selection. This chapter is concluded by a discussion of
 the methods reviewed.
@@ -21,7 +19,7 @@ the methods reviewed.
 \label{sec:Information theoretic approach}
 
 Information theory is a discipline that covers a wide range of theories and
-methods that are fundamental to many of the sciences (see e.g.,
+methods that are fundamental to many scientific disciplines (see e.g.,
 \cite{Cover:1991vx} for an overview). The most relevant one here is the \kld
 \cite{Kullback:1951va}, which measures the discrepancy between two models.
 Many model selection methods are based on estimators of this measure of
@@ -49,15 +47,15 @@ discussion are continuous.
 
 The criterion of model selection under this theme is thus finding the model
 that has the minimum the \kld between the true data generating density and the
-model density. In reality, there are often a set of candidate models. Each
-model is defined by a parametric distribution. Therefore the model section
-process can be viewed as two steps. First for each model, a value of the
-parameter vector is found such that the \kld is minimized within this class.
-Second, the one with the smallest \kld among all models is selected.
+model density. There are often a set of candidate models. Each model is
+defined by a parametric distribution. Therefore the model selection process
+can be viewed as carried out in two steps. First, for each model a value of
+the parameter vector is found such that the \kld is minimized within this
+model. Second, the one with the smallest \kld among all models is selected.
 
 It is clear that the calculation of $D_{\kl}(g,f)$ relies on the knowledge of
-both $g$, which is unknown, and $f$ as well as the specific parameter vector
-$\theta$. Rewrite equation~\eqref{eq:kl},
+both $g$, which is unknown, and $f$ as well as the value of the parameter
+vector $\theta$. Rewrite Equation~\eqref{eq:kl},
 \begin{align}
   D_{\kl}(g,f)
   &= \int g(x)\log g(x) \intd x - \int g(x) \log f(x|\theta) \intd x \notag\\
@@ -75,7 +73,7 @@ generated from $g$. We have the minimum and estimated \kld,
 \end{align}
 Since $\hat\theta(\data)\ne\tilde\theta$ for (almost) all data $\data$, we
 have $\hat{D}_{\kl}(g,f) > \tilde{D}_{\kl}(g,f)$. An alternative criterion is
-the expected value of $\hat{D}_{\kl}(g,f)$ or,
+the expected value of $\hat{D}_{\kl}(g,f)$,
 \begin{equation}
   \bar{D}_{\kl} = \Exp_{\hat\theta}\Exp_g[\log f(X|\hat\theta(\data))]
   \label{eq:expected kl}
@@ -129,11 +127,11 @@ given without proof. For technical details, see the two references of the
 derivation of \aic.
 
 First, the derivation of the bias term is based on a first order Taylor
-expansion of $\Exp_g[\ell_n(\hat\theta)/n - \bar{D}_{\kl}(g,f)]$. The
-assumption about the parametric model $g$ is quite minimal. The accuracy is of
-order $o(n)$. Given more informations about the structure of the models, more
-accurate estimator can be derived by using a second order expansion. See
-Section~\ref{sub:A second order aic}.
+expansion of $\Exp_g[\ell_n(\hat\theta)/n - \bar{D}_{\kl}(g,f)]$. The accuracy
+is of order $o(n)$. The assumption about the parametric model $f$ is quite
+minimal. Given more informations about the structure of the models, more
+accurate estimator can be derived by using a second order expansion (see
+Section~\ref{sub:A second order aic}).
 
 Second, more importantly, \aic assumes that the candidate models are close
 enough to the true model. When there is significant misspecification of the
@@ -144,12 +142,12 @@ estimator of the expected relative \kld is discussed, of which \aic is a
 special case.
 
 Third, though earlier we assumed \iid samples, which leads to the
-convergence~\eqref{eq:ml convergence} as a motivation of using \mle for the
-estimation of expected relative \kld. This is not necessary for the derivation
-of \aic. The \aic model selection method has also been successfully used for
-dependent data. For example, \cite{Lee:2001tm} shows that \aic is efficient
-for selecting the order of an autoregressive process. However, \aic does
-assume that the model distribution is well behaved in the sense that the
+convergence~\eqref{eq:ml convergence} as a motivation of using the \mle for
+the estimation of expected relative \kld. This is not necessary for the
+derivation of \aic. The \aic model selection method has also been successfully
+used for dependent data. For example, \cite{Lee:2001tm} shows that \aic is
+efficient for selecting the order of an autoregressive process. However, \aic
+does assume that the model distribution is well behaved in the sense that the
 estimator used to evaluate the criterion is indeed close to the minimizer of
 the \kld.
 
@@ -159,7 +157,7 @@ in the sense that when there are multiple models with the minimum expected
 the log-likelihood function increases linearly as the sample size increases
 while the penalty term $2k$ is not affected. Therefore, the \aic strategy is
 likely going to select more complex models when more data becomes available.
-This is formally shown in \cite{Sin:1996vs}: when there are more than one
+This is formally shown in \cite{Sin:1996vs}: When there are more than one
 model that minimizes the \kld, \aic does not necessarily choose the simplest
 model.
 
@@ -181,14 +179,14 @@ various source, is that \aicc shall be used in place of \aic when $n/k\le40$,
 see e.g., \cite[][sec.~2.4]{Burnham:2002wc}.
 
 \aicc is just one way to improve \aic for small sample size. In particular, it
-is derived in the case of a model with linear structure and normal errors (see
-\cite{Hurvich:1989ev} and \cite[][sec.~6.4.1]{Burnham:2002wc} for derivations
-of \aicc). With other models, other forms of improved \aic can be derived.
-However, this form has also been used successfully in literature even in
-nonlinear non-Gaussian cases, for example see \cite{Turkheimer:2003iy} for its
-applications to \pet compartmental models.
+is derived in the case of a model with linear structure and Gaussian errors
+(see \cite{Hurvich:1989ev} and \cite[][sec.~6.4.1]{Burnham:2002wc} for
+derivations of \aicc). With other models, other forms of improved \aic can be
+derived. However, this form has also been used successfully in literature even
+in nonlinear non-Gaussian cases, for example see \cite{Turkheimer:2003iy} for
+its applications to \pet compartmental models.
 
-Both \aic and \aicc assumes the use of \mle for the computation of the
+Both \aic and \aicc assumes the use of the \mle for the computation of the
 criteria. However, in many nonlinear situations, the estimator is obtained
 through optimization of criteria other than the likelihood function. For
 example, nonlinear least squares (\nls) estimator and other optimization
@@ -209,7 +207,7 @@ data sets with small noise levels (the highest variance of the Normally
 distributed error added to the simulated time series, with others scaled in
 proportion; see Section~\ref{sec:Simulated and real pet data}), the \aicc
 method is able to select the two-compartments model with a very high
-frequency. Though this is not the true model that generated the data, but it
+frequency. Though this is not the true model that generated the data, it
 is very close as the third compartment is difficult to identify (see
 discussion in \cite{Zhou2013} and references therein). However, when the noise
 level increases, the method is unable to identify the second compartment.
@@ -217,14 +215,13 @@ level increases, the method is unable to identify the second compartment.
 It is possible to derive more accurate second or even higher order
 approximations to the expected relative \kld for some models. However, this
 may not be possible for some realistic applications. For example, the \pet
-compartmental models does not have an explicit form of likelihood function,
+compartmental model does not have an explicit form of the likelihood function,
 which may create significant technical difficulty if we want to refine the
 \aic approximation of expected relative \kld. More importantly, such
 refinement of \aic relies on the assumption about the explicit form of the
 true model $g$ or one that closely imitates it. When the form of the model is
 drastically different from the one used to derive criteria such as \aicc, then
-poor results of model selection is likely to be obtained as we seen in the
-\pet compartmental model.
+poor results of model selection is likely to be obtained as we have seen here.
 
 \subsection{Takeuchi's information criterion}
 \label{sub:Takeuchi's information criterion}
@@ -247,38 +244,36 @@ the variance matrix of the score vector, respectively,
   }\quad\text{and}\quad
   K(\theta) = \var_g\Square[bigg]{
     \frac{\partial\log f(X|\theta)}{\partial\theta}
-  }.
+  },
 \end{equation}
-provided that all the differentiations and integrations exist. The
-expectations are taken with respect to the true data generating distribution
-$g$. Ideally \tic shall be evaluated at the minimizer of \kld $\tilde\theta$.
-In reality, the \mle is used to evaluate the likelihood function and various
-estimator of the bias correction term
-$\tr(J(\tilde\theta)K(\tilde\theta)^{-1})$ has been developed (see e.g.,
-\cite{Claeskens:2008tq}).
+provided that all differentiations and integrations exist. The expectations
+are taken with respect to the true data generating distribution $g$. Ideally
+\tic shall be evaluated at the minimizer of \kld, $\tilde\theta$. In reality,
+the \mle is used to evaluate the likelihood function and various estimator of
+the bias correction term $\tr(J(\tilde\theta)K(\tilde\theta)^{-1})$ has been
+developed (see e.g., \cite{Claeskens:2008tq}). If the \mle is well behaved
+(see, for example, \cite{Lehmann:1983vx}), then we can substitute the \mle
+$\hat\theta$ into Equation~\eqref{eq:tic} and use empirical averages as
+estimates of $J(\hat\theta)K(\hat\theta)^{-1}$. The explicit form of the bias
+correction term can also be derived for some models. For example, see
+\cite[][sec.~6.6]{Burnham:2002wc}. This allows more accurate evaluations of
+\tic.
 
 Note that, since $\tilde\theta$ minimize the relative \kld, the expectation of
 the score vector is a zero vector when evaluated at $\tilde\theta$, under
-suitable continuity conditions.  Further, if $g(x) = f(x|\tilde\theta)$
+suitable continuity conditions. Further, if $g(x) = f(x|\tilde\theta)$
 everywhere, then it is obvious that the above two matrices are equal and
 become the Fisher information matrix, provided the ability to exchange the
 order of integrations and differentiations and other regularity conditions. In
-this case, $\tr(J(\theta)K(\theta)^{-1}) = k$, and \tic leads to the \aic
-formula. It becomes clearer now that \aic is an approximation of \tic in the
+this case, $\tr(J(\theta)K(\theta)^{-1}) = k$, and the \tic leads to the \aic
+formula. It becomes clear now that \aic is an approximation of \tic in the
 situation where the candidate models are close to the true data generating
-mechanism.  The \tic method does not have such assumptions and can perform
+mechanism. The \tic method does not have such assumptions and can perform
 considerably better than \aic in the situation of model misspecification.
-
-If the \mle is well behaved (see, for example, \cite{Lehmann:1983vx}), then we
-can substitute \mle $\hat\theta$ into equation~\eqref{eq:tic} and use
-empirical averages as estimates of $J(\hat\theta)K(\hat\theta)^{-1}$. The
-explicit form of the bias correction term can also be derived for some models.
-For example, see \cite[][sec.~6.6]{Burnham:2002wc}. This allows more accurate
-evaluations of \tic.
 
 Unlike the refinements of \aic such as \aicc, the \tic method relies heavily
 on the assumption of large sample size. It is difficult to derive small sample
-correction for the \tic approximation of expected \kld. See also the
+correction for the \tic approximation of the expected \kld. See also the
 discussion in \cite[][sec.~6.7.8]{Burnham:2002wc}
 
 \subsection{Cross-validation}
@@ -296,23 +291,24 @@ the usefulness of the model is determined.
 Formally, following \cite{Geisser:1975vx}, let $\data = (y_1,\dots,y_n)$ be
 the data set and $\data^t\subset\data$ be a non-empty proper subset. The
 subsample $\data^t$ is called the \emph{training set} and $\data^v =
-\data\backslash\data^t$ is called the \emph{validation set}. For each model
-$f(\cdot|\theta)$, a loss function is defined, say $\gamma(\cdot|\theta)$. The
-choice of function $\gamma$ is formally arbitrary. However, it is taken as a
-measure of the fitness of the model. One commonly used is the log density
-function, $\gamma(x|\theta) = -\log f(x|\theta)$ (see \cite{Stone:1977vx}).
-The risk estimator of $\Exp_g[\gamma(X|\hat\theta(\data))]$, where
-$\hat\theta(\data)$ is the estimate obtained with all data and the expectation
-is taken under the unknown distribution $g$ that generates the data, is
-obtained through averaging over the left-out data,
+\data\backslash\data^t$ is called the \emph{validation set}. For each model,
+defined by a parametric distribution with density $f(\cdot|\theta)$, a loss
+function is defined, say $\gamma(\cdot|\theta)$. The choice of the loss
+function $\gamma$ is formally arbitrary. However, it is taken as a measure of
+the fitness of the model. A commonly used one is the log density function,
+$\gamma(x|\theta) = -\log f(x|\theta)$ \cite{Stone:1977vx}. The risk estimator
+of $\Exp_g[\gamma(X|\hat\theta(\data))]$, where $\hat\theta(\data)$ is the
+estimate obtained with all data and the expectation is taken with respect to
+the unknown distribution $g$ that generates the data, is obtained through
+averaging over the left-out data,
 \begin{equation}
-  \hat{R}_f^v(\data,\data^t) = \frac{1}{|\data\backslash\data^t}
+  \hat{R}_f^v(\data,\data^t) = \frac{1}{\Abs{\data\backslash\data^t}}
   \sum_{y\in\data\backslash\data^t}\gamma(y|\hat\theta(\data^t))
 \end{equation}
 where $\hat\theta(\data^t)$ is the parameter estimate obtained with only the
-training set $\data^t$.  Further, let $\data_1^t,\dots,\data_m^t$ be a
-sequence of non-empty proper subset of $\data$. The cross-validation estimator
-of the risk is defined as,
+training set $\data^t$. Further, let $\data_1^t,\dots,\data_m^t$ be a sequence
+of non-empty proper subset of $\data$. The cross-validation estimator of the
+risk is defined as,
 \begin{equation}
   \hat{R}_f^{\cv}(\data,\{\data_i^t\}_{i=1}^m) =
   \frac{1}{m}\sum_{i=1}^m \hat{R}_f^v(\data,\data_i^t).
@@ -324,19 +320,19 @@ An alternative, as seen in \cite{Yang:2007vx}, is called cross-validation
 \emph{with vote}. A model with density $f_1$ is chosen over a model with
 density $f_2$ if and only if $\hat{R}_{f_1}^v(\data,\data_i^t) <
 \hat{R}_{f_2}^v(\data,\data_i^t)$ for a majority of the partitions of the data
-$\data$. When there are multiple candidate models, the same paper propose the
+$\data$. When there are multiple candidate models, the same paper proposed the
 following procedure: For each partition of the data $\data$, and the
 corresponding training set $\data_i^t$ and validation set $\data_i^v =
 \data\backslash\data_i^t$, a model with the smallest value of
 $\hat{R}_f^v(\data,\data_i^t)$ is selected. Then the model selected most
-frequently (most voted) among all partitions is chosen as the best model.
+frequently (the most voted) among all partitions is chosen as the best model.
 
 There are different ways to split the sample. The most commonly used is
 perhaps the \emph{leave-one-out} procedure \cite{Stone:1974vx,Geisser:1975vx}.
 In this case, training sets $\data_i^t = \data\backslash\{y_i\}$ for $i =
 1,\dots,n$ are used. A more general scheme is that $k$ observations are left
 out for each training set and all possible combinations are considered
-\cite{Shao:1993vx}.  It is clear that $k=1$ yields the leave-one-out procedure
+\cite{Shao:1993vx}. It is clear that $k=1$ yields the leave-one-out procedure
 and for large sample size, a modest $k$ can lead to higher computational cost
 as the number of possible partitions is the binomial coefficient. This is also
 called the $k$\emph{-fold} procedure. Other procedures are also possible. For
@@ -348,7 +344,7 @@ the leave-one-out procedure, leads to the estimator,
 \begin{equation}
   -\frac{1}{n}\sum_{i=1}^n\log f(y_i|\hat\theta(\data_i^t))
 \end{equation}
-where $\hat\theta(\data_i^t)$ is the estimator obtained using the subsample
+where $\hat\theta(\data_i^t)$ is the estimate obtained using the subsample
 $\data_i^t = \data\backslash\{y_i\}$. It was shown in \cite{Stone:1978vx} that
 this is asymptotically equivalent to the \aic strategy for model selection.
 
@@ -356,7 +352,7 @@ An alternative for linear regression models was proposed in
 \cite{Allen:1974vx}. The squared difference between the observation and the
 predictor is used as the risk estimator. Given a model $y_i = \beta^T x_i +
 \varepsilon_i$, and let $\hat{y}_i$ be the predictor of $y_i$ obtained with
-the model fitted with all but the $i$\xth observations, i.e., using the
+the model fitted with all but the $i$\xth observation, i.e., using the
 leave-one-out procedure, this leads to the \press statistic,
 \begin{equation}
   \press = \sum_{i=1}^n(y_i - \hat{y}_i)^2
@@ -370,15 +366,15 @@ amount of literature on cross-validation for various model selection problems.
 For some models, specific choice of the function $\gamma$ were proposed. For
 example, the \press statistic shown earlier and its more robust variant such
 as replacing the squared error by the absolute error
-\cite[][sec.~2.9]{Claeskens:2008tq}.  Also as argued in the same book, the use
+\cite[][sec.~2.9]{Claeskens:2008tq}. Also as argued in the same book, the use
 of $\gamma(x|\theta) = -\log f(x|\theta)$ is a sensible choice for many
 applications, as the resulting cross-validation estimator can be interpreted
 as an estimator of the expected relative \kld.
 
 The partition of the sample can influence the performance more significantly.
 And the procedure that minimizes the bias and variance of the risk estimator
-is not necessary the same as the one that produce best model selection
-results.  For example, for regression models with random covariates,
+is not necessary the same as the one that produces the best model selection
+results. For example, for regression models with random covariates,
 \cite{Breiman:1992vx} gave examples that the best risk estimator is obtained
 with the leave-one-out procedure while a 10-fold cross-validation can produce
 more accurate model selection results. More generally, the performance depends
@@ -392,21 +388,16 @@ when use a $k$-fold procedure.
 
 Bayes' theorem, in its simplest form is stated as below,
 \begin{equation}
-  p(H|\data) = \frac{p(\data|H)p(H)}{p(\data)} \label{eq:bayes}
+  p(H|\data) = \frac{\Pr(\data|H)\Pr(H)}{\Pr(\data)} \label{eq:bayes}
 \end{equation}
 where $\data$ is the data and $H$ is a hypothesis. Like many other probability
 theories, technically Bayes' theorem merely provides a method of accounting
 for the uncertainty. There are different interpretations, rooted in the views
-of probabilities. One of them is the \emph{subjective} view, with which the
-only thing matters is uncertainty and the Bayesian method provides a rational
-way to update one's \emph{personal} belief in order to make rational
-decisions. Though not agreed upon universally, this perspective has been
-accepted by many Bayesian statistician, for example, see
-\cite[][chap.~1]{Bernardo:1994vd} and references therein. In this thesis, we
-are more concerned with the practical applications of the Bayesian model
-comparison technique, its computational difficulties, and its implementation
-for realistic models. Such more philosophical issues are mentioned here for
-completeness. They will not be elaborated further.
+of probabilities. See \cite[][chap.~1]{Bernardo:1994vd} and references therein
+for discussions on this topic. In this thesis, we are more concerned with the
+practical applications of the Bayesian model comparison technique, its
+computational difficulties, and its implementation for realistic models.  More
+philosophical issues will not be elaborated in this chapter.
 
 A throughout treatment of Bayesian modeling from a decision-theoretic
 perspective can be found in \cite{Robert:2007tc}. Formal mathematical
@@ -418,7 +409,7 @@ decision cannot be considered separately from rational beliefs. And rational
 beliefs shall be built upon available information (the data) and any personal
 preference input (the prior information).
 
-In the remaining of this section, we first introduce the formalization of the
+In the remainder of this section, we first introduce the formalization of the
 model choice problem within the Bayesian framework. In particular how it leads
 to the important Bayes factor, which is discussed in Section~\ref{sub:Bayes
   factor}. In Section~\ref{sub:Choice of priors} we discuss the construction
@@ -442,22 +433,22 @@ the model, conditional upon the data is given by the following density,
 defined on the space $\bigcup_{k\in\calK}\{\calM_k\}\times\Theta_k$,
 \begin{equation}
   \pi(\theta_k,\calM_k|\data) =
-  \frac{p(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\pi(\calM_k)}{p(\data)}
+  \frac{p(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\pi(\calM_k)}{p(\data)},
   \label{eq:full posterior}
 \end{equation}
 where
 \begin{align}
-  p(\data) &= \sum_{k\in\calK}p(\data|\calM_k)\pi(\calM_k) \\
+  p(\data) &= \sum_{k\in\calK}p(\data|\calM_k)\pi(\calM_k), \\
   p(\data|\calM_k) &=
-  \int p(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\intd\theta_k
+  \int p(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)\intd\theta_k.
   \label{eq:marginal likelihood}
 \end{align}
 The distribution $\pi(\theta_k,\calM_k|\data)$ is termed the \emph{full
-  posterior}. The within model posterior distribution of the parameter is
+  posterior}. The within model posterior distribution of the parameters is
 given by,
 \begin{equation}
   \pi(\theta_k|\data,\calM_k) =
-  \frac{p(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)}{p(\data|\calM_k)}
+  \frac{p(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)}{p(\data|\calM_k)}.
   \label{eq:within posterior}
 \end{equation}
 The term $p(\data|\calM_k)$ is called the \emph{marginal likelihood} or the
@@ -491,9 +482,9 @@ ignore the actions following the model selection and the sole interest is the
 true model, say $\calM_t$. This is because that the Bayesian framework is
 often used to simultaneously provide parameter estimation, model selection,
 model averaging and other inferences. It is difficult to define a criterion
-that choose the model that is best for all these purposes. One simplified
-criterion is to choose the ``true model''. In this case, it is natural to
-define a zero-one utility function, say $u(\calM_k,\calM_t)$, defined by
+that chooses a model best for all these purposes. In the simplified setting,
+where only the true model is of interest, it is natural to define a zero-one
+utility function, say $u(\calM_k,\calM_t)$,
 \begin{equation}
   u(\calM_k,\calM_t) =
   \begin{cases}
@@ -519,9 +510,9 @@ provides a natural probabilistic interpretation of the results. It is very
 easy to account model uncertainty within this framework. When there are more
 than one models well supported by the data and it is uncertain which one shall
 be chosen as the best model, the posterior model probabilities can be used as
-weights to construct weighted estimator. This leads to the Bayesian model
-averaging. See, for example \cite{Raftery:1997vx,Clyde:1999vx,Draper:1995vx},
-for more discussions and examples.
+weights to construct weighted estimator. This leads to Bayesian model
+averaging. See, e.g., \cite{Raftery:1997vx,Clyde:1999vx,Draper:1995vx}, for
+more discussions and examples.
 
 Second, it is also consistent in the sense that if there is indeed a true
 model, given enough data, it is guaranteed to be selected. Later we will see
@@ -622,7 +613,7 @@ The Bayesian information criterion (\bic) was developed as a large sample
 approximation to the marginal likelihood $p(\data|\theta_k,\calM_k)$
 \cite{Schwarz:1978uv}. The \bic is defined as,
 \begin{equation}
-  \text{\bic} = -2\ell_n(\hat\theta_k) + k\log(n).
+  \text{\bic} = -2\ell_n(\hat\theta_k) + k\log(n),
   \label{eq:bic}
 \end{equation}
 where $\ell_n(\hat\theta_k)$ is the log-likelihood function evaluated at the
@@ -635,20 +626,18 @@ distribution $\pi(\theta_k|\calM_k)$ is eliminated in this strategy. This also
 leads to some argue that \bic is not a full fledged Bayesian approach. A
 derivation of \bic can be found in \cite[][sec.~3.2]{Claeskens:2008tq}.
 
-Similar to the \aic, the \bic assumes that the sample size is large enough so
-that it can approximate the marginal likelihood properly. In addition \bic
-also assumes ``good behavior'' of the likelihood function in the sense that
-the \mle is in the high posterior probability region. These assumptions
-restricted the use of \bic in many situations. See \cite{Berger:2001uy} for
-examples that the irregularity of likelihood function causes the \bic method
-failed. Moreover, in non-\iid situations, the definition of the parameter
-dimension $k$ is ambiguous \cite{Spiegelhalter:1998uc, Kass:1995vb}. There are
-other criticism of the \bic strategy. For example
-\cite[][sec.~7.2.3]{Robert:2007tc} argued that the \bic strategy eliminated
-the subjective input into the Bayes modeling since the value of \bic does not
-depend on the prior distribution. However this is equally argued as an
-advantage of this strategy in the case that priors, to which the Bayes factors
-can be very sensitive, are hard to specify.
+Similar to the \aic, the \bic assumes that the sample size is large enough
+such that it can approximate the marginal likelihood properly. In addition,
+the \bic also assumes ``good behavior'' of the likelihood function in the
+sense that the \mle is in the high posterior probability region. These
+assumptions restricted the use of the \bic in many situations. See
+\cite{Berger:2001uy} for examples that the irregularity of likelihood function
+causes the \bic method failed. There are other criticism of the \bic strategy.
+For example \cite[][sec.~7.2.3]{Robert:2007tc} argued that the \bic strategy
+eliminated the subjective input into the Bayes modeling since the value of
+\bic does not depend on the prior distribution. However this is equally argued
+as an advantage of this strategy in the case that priors, to which the Bayes
+factors can be very sensitive, are hard to specify.
 
 Though \bic is not an estimator of the \kld, in \cite{Sin:1996vs} it was shown
 that asymptotically \bic is able to choose the simplest model that minimizes
@@ -663,11 +652,11 @@ model that minimizes the prediction error. In
 efficient for regression variable selection.
 
 Table~\ref{tab:pet bic} shows the frequencies of models selected by the \bic
-for the 2,000 \pet data sets simulated from a three-compartments model (see
+for the 2,000 \pet data sets simulated from the three-compartments model (see
 Section~\ref{sec:Simulated and real pet data}) while using the \nls estimator.
 Compared to the use of \aicc (Table~\ref{tab:pet aicc}), the results are quite
-similar though \bic does tend to select lower order models slightly more
-frequently. Intuitively, \bic penalize complex models more than \aic for
+similar though \bic does tend to select lower order models more frequently.
+Intuitively, the \bic penalizes model complexity more than \aic for
 $n\ge\EE^2\approx7.4$ (and thus the penalty term $k\log(n) > 2k$).
 
 \input{tab/pet-bic}
@@ -688,16 +677,14 @@ other sources. In general, it is an adequate approximation if the likelihood
 function is close to Normal \cite{Kass:1995vb}.
 
 Often the maximizer of the posterior density is not easily obtained. A
-variant of the Laplace approximation is to use the \mle instead. For
+variant of the Laplace approximation is to use the \mle instead. For a
 sufficient large sample size, the posterior is likely to peak at the same
 region as the likelihood function.
 
 Though less popular than the \bic approximation, the Laplace approximation
 does not eliminate the effects of the priors. For some applications, it
 provide a low cost (compared to simulation techniques) alternative to evaluate
-the Bayes factor over a range of priors. As we will see soon, the choice of
-priors may affect the Bayesian model comparison results considerably. See also
-the next section on the issue of calibrating priors.
+the Bayes factor over a range of priors.
 
 \subsection{Choice of priors}
 \label{sub:Choice of priors}
@@ -745,8 +732,8 @@ The simplest form is a uniform distribution or some distribution with flat
 tails such as a Cauchy distribution. This choice can provide a robust prior in
 the sense that outliers and misspecification of priors will not affect the
 results significantly. For example, see \cite{OHagan:1990vx} and
-\cite{Fan:1992vx} for analysis of the use Student $t$ distribution as the
-prior of location parameters such as the mean of a Normal distribution.
+\cite{Fan:1992vx} for analysis of the use of the Student $t$ distribution as
+the prior of location parameters such as the mean of a Normal distribution.
 
 \paragraph{Jeffreys priors}
 
@@ -768,10 +755,11 @@ where
 is the \emph{Fisher's information}. The defining property of Jeffreys priors
 is its invariance in the sense that, for a one-to-one transformation $\phi_k =
 h(\theta_k)$, we have,
-\begin{align*}
-  I(\phi_k) &= \frac{I(h^{-1}(\phi_k))}{(h'(h^{-1}(\phi_k)))^2} \\
-  \pi(\phi_k) &= \frac{\sqrt{\Abs{I(\theta_k)}}}{h'(\theta_k)}.
-\end{align*}
+\begin{equation*}
+  I(\phi_k) = \frac{I(h^{-1}(\phi_k))}{(h'(h^{-1}(\phi_k)))^2}
+  \qquad\text{and}\qquad
+  \pi(\phi_k) propto \frac{\sqrt{\Abs{I(\theta_k)}}}{h'(\theta_k)}.
+\end{equation*}
 The first equality is given by the Jacobian transformation. And the second
 states that the Jeffreys prior of the transformed parameter $\phi_k$ is the
 same as the one obtained by changing variable of the Jeffreys prior of
@@ -800,13 +788,13 @@ verify that the posteriors are also proper. In the situation where the derived
 Jeffreys priors are improper, it is possible to use some proper distribution
 to approximate them. For example, an inverse Gamma distribution can be used to
 arbitrarily closely approximate $\pi(x)\propto1/x$, which is often seen as the
-Jeffreys prior for scale parameters, such as as the precision parameter of the
+Jeffreys prior for scale parameters, such as as the precision parameter of a
 Normal distribution.
 
 \paragraph{Reference priors}
 
-Another class of non-informative priors is called \emph{reference priors}
-introduced in \cite{Bernardo:1979uq}. Reference priors aims to derive priors
+Another class of non-informative priors is called \emph{reference priors},
+introduced in \cite{Bernardo:1979uq}. Reference priors aim to derive priors
 such that the distance between the posterior and prior is maximized, usually
 measured in terms of the \kld \cite{Kullback:1951va}. In some sense, a
 reference prior is the least informative prior. See \cite{Berger:1989vj,
@@ -815,7 +803,7 @@ more information on this class of priors.
 
 Another form of the reference priors is to partition the parameter vector
 $\theta_k = (\theta_k^{(1)},\theta_k^{(2)})$ where $\theta_k^{(1)}$ is the
-parameter of interest and $\theta_k^{(2)}$ is the nuisance parameter.  First
+parameter of interest and $\theta_k^{(2)}$ is the nuisance parameter. First
 $\pi(\theta_k^{(2)}|\theta_k^{(1)},\calM_k)$ is defined as the Jeffreys prior
 associated with $p(\data|\theta_k,\calM_k)$ when $\theta_k^{(1)}$ is fixed.
 Then define the marginal,
@@ -827,7 +815,7 @@ Then define the marginal,
 and compute the Jeffreys prior $\pi(\theta_k^{(1)}|\calM_k)$ associated with
 $\tilde{p}(\data|\theta_k^{(1)},\calM_k)$. By using the Jeffreys prior, given
 fixed parameter of interest, the effects of the nuisance parameter is
-eliminated. Note that the above integration may not be defined.
+eliminated.
 
 \paragraph{Using non-informative priors for \pet compartmental models}
 
@@ -837,13 +825,15 @@ consider the simulated data (see Section~\ref{sec:Simulated and real pet
   data}) and using Normally distributed errors (see Section~\ref{sec:Error
   models}). An approximation to the Jeffreys prior was used for the precision
 parameter of the Normal distribution. And uniform distributions are used for
-the rate constants. The interval of the uniform distributions are the same as
+the $\theta_{1:r}$ and $\phi_{1:r}$ parameters (see
+Section~\ref{sec:Application to positron emission tomography} for the
+parameterization). The interval of the uniform distributions are the same as
 considered feasible in the optimization procedures such as the \nls estimator.
 The results of model selection is shown in Table~\ref{tab:pet vague}. Compared
 to the results of using \aicc and \bic (Tables~\ref{tab:pet aicc}
-and~\ref{tab:pet bic}), it is a vast improvement. For data with low level of
-noise there is a high frequency of selecting the true model. For more noisy
-data, it is expected the second and third compartments are difficult to
+and~\ref{tab:pet bic}), it is a significant improvement. For data with low
+level of noise there is a high frequency of selecting the true model. For more
+noisy data, it is expected the second and third compartments are difficult to
 identify. However, the results are much more satisfactory than those of \aicc
 and \bic.
 
@@ -896,9 +886,9 @@ prior discussed earlier. Such choice is justified in
 \cite[][chap.~9]{Robert:2007tc}.
 
 The maximum entropy prior in essence select a prior that preserves the prior
-information -- the expectations of $\{h_i(\theta_k)\}_{i=1}^K$ while makes
+information -- the expectations of $\{h_i(\theta_k)\}_{i=1}^K$ while making
 it as close to the non-informative prior as possible. Therefore, the prior
-knowledge the presented in the prior while the ignorance is also preserved.
+knowledge is presented in the prior while the ignorance is also preserved.
 
 \paragraph{Using informative priors for \pet compartmental models}
 
@@ -910,8 +900,9 @@ In \cite{Anderson:1983wk} some useful results about compartmental models in
 general were provided. Recall the parameterizations in
 Section~\ref{sec:Application to positron emission tomography}. Let
 $\gamma_{0j}$ denote the rate constant of the outflow from the $j$\xth
-compartment into the environment.  Without loss of generality, assume that the
-parameters $\theta_i$ are ordered, $\theta_1 \le \dots \le \theta_r$. Then,
+compartment into the environment. Without loss of generality, assume that the
+parameters $\theta_{1:r}$ are ordered, $\theta_1 \le \dots \le \theta_r$.
+Then,
 \begin{enumerate}
   \item $0 \le \theta_i \le 2\max_j|A_{jj}|$ for all $i$.
   \item $\min_j\gamma_{0j} \le \theta_1 \le \max_j\gamma_{0j}$.
@@ -927,9 +918,9 @@ imposing upper and lower bounds on the possible values of the parameters. As
 we subsequently find that inference is not overly sensitive to the prior
 specification we do not pursue more complicated approaches.
 
-To demonstrate the idea, an informative prior distributions for a
-three-compartments model is constructed. First note that the transition matrix
-$A$ is,
+To demonstrate the idea, an informative prior distribution for parameters
+$\theta_{1:3}$ and $\phi_{1:3}$ in the three-compartments model is
+constructed. First note that the transition matrix $A$ is,
 \begin{equation*}
   A = \begin{bmatrix}
     - k_2 - k_3 - k_5 & k_4  & k_6 \\
@@ -954,14 +945,14 @@ large contribution to $V_D = \sum_{i=1}^r \phi_i/\theta_i$. In fact, as $A$
 has only negative real eigenvalues, $\theta_1$ is the spectral radius of $A$.
 It is not well known how large the ratio $(\phi_1/\theta_1)/V_D$ will be.
 However, it is easy to conduct a numerical study here, given the small number
-of parameters. It is found that among all possible combination of $k$s,
-$\phi_1/ \theta_1 \ge 0.5 V_D$. If the combinations of the rate constants are
-restricted to those without excessively large differences between them, i.e.,
-cases in which, say, $k_5 \gg k_6$ are not considered, then $\phi_1/\theta_1
-\ge 0.7 V_D$. The reason for not considering these cases is that such
-irreversible (trapped) models yield infinite $V_D$ estimates and it is
-generally known in advance that the tracer employed will exhibit reversible
-dynamics.
+of parameters. It is found that among all possible combination of rate
+constants, $\phi_1/ \theta_1 \ge 0.5 V_D$. If the combinations of the rate
+constants are restricted to those without excessively large differences
+between them, i.e., cases in which, say, $k_5 \gg k_6$ are not considered,
+then $\phi_1/\theta_1 \ge 0.7 V_D$. The reason for not considering these cases
+is that such irreversible (trapped) models yield infinite $V_D$ estimates and
+it is generally known in advance that the tracer employed will exhibit
+reversible dynamics.
 
 With these informations we can then construct informative priors for the
 parameters of interest. More technical details can be found in
@@ -979,18 +970,17 @@ priors (Table~\ref{tab:pet vague}).
 
 Though intuitively the influence of priors can be eliminated given enough
 data. In the particular problem of Bayesian model comparison, it should be
-noted that Bayesian model comparison can be more sensitive to the choice of
-prior than parameter estimations in the sense that more data are need
-to eliminate the influence of priors when it comes to the value of Bayes
-factor than a posterior parameter estimator.
-\cite{Kass:1993vy,Kass:1995vb}.
+noted that the Bayes factor can be more sensitive to the choice of prior than
+parameter estimations in the sense that more data are need to eliminate the
+influence of priors when it comes to the value of the Bayes factor than a
+posterior parameter estimator \cite{Kass:1993vy,Kass:1995vb}.
 
-It is also important to evaluate the Bayes factor over a range of possible
-priors to assess the sensitivity issues. This is often computational expensive
-since many high dimensional integrations are required. When there is enough
-information to construct parametric priors, it is possible to alter the values
-of parameters and recompute the Bayes factor \cite{McCulloch:1991hj}. In
-general situations, a less computational expensive method is to use the
+It is therefore of interest to evaluate the Bayes factor over a range of
+possible priors to assess the sensitivity issues. This is often computational
+expensive since many high dimensional integrations are required. When there is
+enough information to construct parametric priors, it is possible to alter the
+values of parameters and recompute the Bayes factor \cite{McCulloch:1991hj}.
+In general situations, a less computational expensive method is to use the
 Laplace approximation to compare the Bayes factor using different priors
 \cite{Kass:1992tz}. It is also proposed in the literature to use the maximum
 of the Bayes factor (and thus the maximal evidence against a model) to
