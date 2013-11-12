@@ -1,4 +1,3 @@
-\clearpage
 \thispagestyle{empty}
 \newgeometry{hmargin={1in,1in},vmargin={1in,2in},bindingoffset=\mclassbinding}
 \begin{table}[t]
@@ -27,24 +26,12 @@
     \bottomrule
     \multicolumn{7}{r}{%
       \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily
-        $T$: The number of distributions. That is, the number parallel \mcmc
-        chains for \pmcmc algorithm and the number of iterations for the \smc
-        algorithm. For the \pmcmc algorithm, at each iteration, a single \mcmc
-        chain is chosen randomly to be updated. There is a 50,000 iterations
-        burin period and another 10,000 iterations are used for inference. For
-        the \smc algorithm, 1,000 particles are used.
+        $T$: The number of distributions.
 
-        Proposal: The proposal scales of the \mcmc kernels. The ``Manual''
-        proposal is manually tuned such that the accept rates fall between
-        $[0.2, 0.6]$. The ``Adaptive'' proposal is dynamically set using
-        moments estimates from the last iteration of the particle system.
+        Proposal: The proposal scales of the \mcmc kernels.
 
-        Annealing: The annealing scheme of the distributions, $\alpha(t/T_k)$
-        in Equation~\ref{eq:geometry_2}. The ``Prior (5)'' scheme is
-        concentrated around the prior distribuiton, with $\alpha(t/T_k) =
-        (t/T_k)^5$. The ``Adaptive'' scheme set $\alpha$ dynamically such that
-        for each iteration, \cess is a constant. The constant value of \cess
-        is chosen such that on average, 500 iterations was produced.
+        Annealing: The annealing scheme of the distributions,
+        $\alpha_k(t/T_k)$ in Equation~\ref{eq:geometry_2}.
 
         \Best: The estimate with the smallest variance among all algorithms
         settings.

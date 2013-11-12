@@ -1303,8 +1303,8 @@ estimator.
 
 The \smc[1] implementation uses 10,000 particles and 500 distributions. The
 \rjmcmc implementation uses five million iterations in addition to one million
-iterations of burn-in period. The resulting estimates of model probabilities
-are shown in Table~\ref{tab:gmm-prob}.
+iterations of burn-in period for adaptation. The resulting estimates of model
+probabilities are shown in Table~\ref{tab:gmm-prob}.
 
 The \smc[2], \smc[3] and \ais implementations use 1,000 particles and 500
 iterations. The population \mcmc implementation uses 50 chains and 10,000
@@ -1463,15 +1463,16 @@ computational cost of after burn-in iterations is roughly the same as the
 entire \smc algorithm. In addition, changing $T$ within the range of the
 number of cores available does not substantially change the computational cost
 of a generic parallel implementation of the population \mcmc algorithm. We
-compare results from $T = 10,30,$ and~$100$.
+compare results from $T = 10,30,$ and~$100$. For the \smc algorithms,
+stratified resampling is applied.
 
 The results for data generated from the simple model ($m = 3$) and complex
 model ($m = 5$), again summarizing variability amongst 100 runs of each
 algorithm, are shown in Table~\ref{tab:node-s} and~\ref{tab:node-c},
 respectively.
 
-\input{tab/node-s}
-\input{tab/node-c}
+\afterpage{\clearpage\input{tab/node-s}}
+\afterpage{\clearpage\input{tab/node-c}}
 
 As shown in both cases, the number of distributions can affect the performance
 of population \mcmc algorithms considerably. When using 10 distributions,
@@ -1562,9 +1563,10 @@ dramatically with respect to the change of $\alpha$. This is included there to
 test if the algorithm is capable of producing sensible results when the
 sequence of distributions is specified poorly, which is quite a possible
 scenario in realistic applications. In addition, the adaptive schedule based
-upon \cess is also implemented for the \smc[2] algorithm.
+upon \cess is also implemented for the \smc[2] algorithm. For the \smc
+algorithms, stratified resampling is applied.
 
-Results from 100 replicate runs of the two algorithms under various regimes
+Result from 100 replicate runs of the two algorithms under various regimes
 can be found in Table~\ref{tab:pet-py} and~\ref{tab:pet-bf} for the marginal
 likelihood and Bayes factor estimates, respectively. The \smc algorithms
 consistently outperforms the population \mcmc algorithms in the parallel
@@ -1586,8 +1588,8 @@ results (though with a larger variance compared to other schedules). In
 summary, the \smc algorithm is much more robust than the population \mcmc
 algorithm in this example.
 
-\input{tab/pet-py}
-\input{tab/pet-bf}
+\afterpage{\clearpage\input{tab/pet-py}}
+\afterpage{\clearpage\input{tab/pet-bf}}
 
 \paragraph{Effects of adaptive schedule}
 

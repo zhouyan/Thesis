@@ -23,4 +23,4 @@ thesis.pdf
 chap/*.pdf
 pieces/*.pdf
 
-.minted-thesis
+.minted-*

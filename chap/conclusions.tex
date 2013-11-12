@@ -8,6 +8,8 @@ for generic \smc algorithms are also presented.
 \section{Contributions}
 \label{sec:Contributions}
 
+\draftnote{More details in contributions and conclusions reached}
+
 In Chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation}, the
 algorithms presented can accurately approximate the Bayes factor with little
 or no human tuning for many applications of interest. Some theoretical results
@@ -20,8 +22,32 @@ extended to other algorithms such as \smc[3] straightforwardly. The
 performance of the presented algorithms is studied in detail through various
 empirical experiments.
 
-Chapter~\ref{cha:vSMC: A C++ Library for Parallel SMC}, a \cpp library was
-developed. It provides a tool for the implementation of generic \smc
+It is found that, compared to \mcmc approach to Bayesian model comparison, the
+\smc approach is often more robust. Both the standard and the path sampling
+estimators are more more stable when compared to the generalized harmonic mean
+estimator used in the \mcmc setting. Though there are also estimators used for
+some specific \mcmc algorithms such as the Gibbs sampling, that is more stable
+than the generalized harmonic mean estimator, they often require knowledge of
+the models that are often absent in reality. In contrast, the \smc algorithm
+and its estimators are more generic and therefore applicable in more areas of
+interest.
+
+There are considerable performance gain of the adaptive \smc algorithms, in
+particular the \cess-based adaptive specification of distributions. Unlike
+adaptive \mcmc algorithms, such strategies has little computational cost. In
+addition, it is also generic in the sense that it does not depend on a
+specific form of the intermediate distributions. It is recommended that such
+strategies shall be employed for complex models, where the characteristics of
+the posterior distribution is hardly known and it is difficult to manually
+specify a smooth path from the prior towards the posterior.
+
+In summary, the \smc framework for Bayesian model comparison presented in this
+thesis has the potential to solve many realistic problems which are previously
+difficult with the \mcmc algorithms or requires significantly less efforts to
+optimize the algorithm.
+
+In Chapter~\ref{cha:vSMC: A C++ Library for Parallel SMC}, a \cpp library is
+introduced. It provides a tool for the implementation of generic \smc
 algorithms. Compared to some established softwares, it has either a higher
 level of flexibility in the sense of enabling the implementation of general
 algorithms instead of particular models; or higher performance through the use
@@ -32,15 +58,23 @@ of parallel computing.
 
 Though many convincing results have been shown in Chapter~\ref{cha:Sequential
   Monte Carlo for Bayesian Computation}, theoretical development is also
-needed. In particular, the better performance of \cess based adaptive scheme
+needed. In particular, the better performance of \cess-based adaptive scheme
 has only been shown empirically. It might be of interest to establish if it is
 better in some sense when compared to some commonly used deterministic
-scheme and under what conditions. Some algorithms have potential applications
-in scenarios different than those shown in this thesis. For example, the
-\smc[3] algorithm may be used for Bayesian model expansion. It may be of
-interest to see if the approach presented in this thesis has any significant
-advantage when compared to alternatives in terms of accuracy and computational
-efficiency.
+scheme and under what conditions.
+
+Some algorithms have potential applications in scenarios different than those
+shown in this thesis. For example, the \smc[3] algorithm may be used for
+Bayesian model expansion. It may be of interest to see if the approach
+presented in this thesis has any significant advantage when compared to
+alternatives in terms of accuracy and computational efficiency.
+
+In this thesis, most examples use a geometric annealing scheme to specify the
+intermediate distributions. However, the adaptive strategies proposed are not
+limited to this setting. There are other forms of the sequence of
+distributions, such as the data tempering mentioned before. The adaptive
+strategies proposed. It is of interest to see if strategies studied in this
+thesis can benefit more general situations.
 
 The work presented in Chapter~\ref{cha:vSMC: A C++ Library for Parallel SMC}
 can be useful for many researchers. However, it still requires considerable

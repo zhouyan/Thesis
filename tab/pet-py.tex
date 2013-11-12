@@ -1,17 +1,9 @@
-\clearpage
 \thispagestyle{empty}
 \newgeometry{hmargin={1in,1in},vmargin={1in,2in},bindingoffset=\mclassbinding}
 \begin{table}[t]
   \linespread{1.1}\selectfont
   \caption[\protect\pet compartmental model marginal likelihood estimates]
-  {Marginal likelihood estimates of two components \pet model. $T$: Number of
-    distributions in \smc and number of iterations used for inference in
-    \pmcmc. $N$: Number of particles in \smc and number chains in \pmcmc. The
-    \pmcmc and \smc with $N = 192$ are completely $N$-way parallelized.  \smc
-    with $N = 960$ are $N/5$-way parallelized. \SubBest: Minimum variance for
-    the same computational cost and the same proposal scales and annealing
-    schemes. \Best: Minimum variance for the same computaitonal cost and all
-    proposal scales and annealing schemes.}
+  {Marginal likelihood estimates of two components \pet model.}
   \label{tab:pet-py}
   \begin{tabu}{X[0.4l]X[0.4l]X[0.7c]X[0.8r]X[1r]X[0.8r]X[0.8r]}
     \toprule
@@ -41,6 +33,23 @@
     $1000$ & $960$ & \smc2-\ds & $\SubBest{-39.2\pm0.08}$ & $-39.2\pm0.31$   & $\SubBest{-39.2\pm0.07}$ & $\Best{-39.2\pm0.03}$ \\
     &       & \smc2-\ps & $\SubBest{-39.2\pm0.08}$ & $-65.7\pm5.54$   & $\SubBest{-39.2\pm0.07}$ & $\Best{-39.2\pm0.03}$ \\
     \bottomrule
+    \multicolumn{7}{r}{%
+      \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily
+        $T$: The number of distributions.
+
+        $N$: The number of particles.
+
+        Proposal: The proposal scales of the \mcmc kernels.
+
+        Annealing: The annealing scheme of the distributions,
+        $\alpha_k(t/T_k)$ in Equation~\ref{eq:geometry_2}.
+
+        \Best: The estimate with the smallest variance among all algorithms
+        settings.
+
+        \SubBest: The estimate with the smallest variance for a single
+        algorithm (\smc[2] or \pmcmc) among different settings.
+      \end{minipage}}
   \end{tabu}
 \end{table}
 \restoregeometry
