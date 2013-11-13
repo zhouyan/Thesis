@@ -1,0 +1,49 @@
+\begin{figure}
+  \centering
+  \begin{tikzpicture}[scale=0.4]
+    \draw (0,0) rectangle (2,20);
+
+    \draw [densely dashed] (4,0) rectangle (24,20);
+    \draw [densely dotted] (13.5,19.5) -- (13.5,10.5);
+    \draw [densely dotted] (14.5,19.5) -- (14.5,10.5);
+    \draw [densely dotted] (13.5,9.5)  -- (13.5,0.5) ;
+    \draw [densely dotted] (14.5,9.5)  -- (14.5,0.5) ;
+    \draw [densely dotted] (4.5 ,10.5) -- (13.5,10.5);
+    \draw [densely dotted] (4.5 ,9.5)  -- (13.5,9.5) ;
+    \draw [densely dotted] (14.5,10.5) -- (23.5,10.5);
+    \draw [densely dotted] (14.5,9.5)  -- (23.5,9.5) ;
+    \draw (5,19)  rectangle (11,13); 
+    \draw (23,19) rectangle (17,13); 
+    \draw (5,1)   rectangle (11,7) ; 
+    \draw (23,1)  rectangle (17,7) ; 
+    \draw [->] (2,16.5) -- (5,16.5);
+    \draw [->] (5,15.5) -- (2,15.5);
+    \draw [->,dashed] (11  ,16.5) -- (13.5,16.5);
+    \draw [->,dashed] (14.5,16.5) -- (17  ,16.5);
+    \draw [->,dashed] (17  ,15.5) -- (14.5,15.5);
+    \draw [->,dashed] (13.5,15.5) -- (11  ,15.5);
+    \draw [->,dashed] (11  ,4.5)  -- (13.5,4.5) ;
+    \draw [->,dashed] (14.5,4.5)  -- (17  ,4.5) ;
+    \draw [->,dashed] (17  ,3.5)  -- (14.5,3.5) ;
+    \draw [->,dashed] (13.5,3.5)  -- (11  ,3.5) ;
+    \draw [->,dashed] (7.5 ,7)    -- (7.5 ,9.5) ;
+    \draw [->,dashed] (7.5 ,10.5) -- (7.5 ,13)  ;
+    \draw [->,dashed] (8.5 ,13)   -- (8.5 ,10.5);
+    \draw [->,dashed] (8.5 ,9.5)  -- (8.5 ,7)   ;
+    \draw [->,dashed] (19.5,10.5) -- (19.5,13)  ;
+    \draw [->,dashed] (20.5,13)   -- (20.5,10.5);
+    \draw [->,dashed] (19.5,7)    -- (19.5,9.5) ;
+    \draw [->,dashed] (20.5,9.5)  -- (20.5,7)   ;
+
+    \draw (-1,10) node {$C_P$};
+    \draw (25,10) node {$C_T$};
+    \draw (8,16)  node {$C_{T_1}$};
+    \draw (8,4)   node {$C_{T_i}$};
+    \draw (20,16) node {$C_{T_j}$};
+    \draw (20,4)  node {$C_{T_n}$};
+    \draw (3,17)  node {$K_1$};
+    \draw (3,15)  node {$k_2$};
+  \end{tikzpicture}
+  \caption{Illustration of the plasma input \protect\pet compartmental model}
+  \label{fig:plasma}
+\end{figure}

@@ -261,7 +261,7 @@ incremental weights clearly depend on the choice of the backward kernels. See
 There are many ways to specify the sequence of distributions. For many
 applications, such a sequence arises from the problem setting naturally.
 
-In \cite{Chopin:2002hg}, a data tempering scheme was considered in the context
+In \cite{Chopin:2002hg} a data tempering scheme was considered in the context
 of Bayesian inference for static parameters. Suppose data $\data =
 (y_1,\dots,y_n)$ are available and it is of interest to inference the
 posterior distribution of some parameter vector $\theta$, $\pi(\theta|\data)$.
@@ -801,8 +801,8 @@ $\{\alpha_t'\}_{t=0}^{T'}$ than $\{\alpha_t\}_{t=0}^T$. Since higher order
 numerical integrations based on approximations of derivatives obtained from
 Monte Carlo methods may potentially be unstable in some situations, the second
 approach can be more appealing in some applications. A demonstration of the
-bias reduction effect is provided in Section~\ref{sub:Positron emission
-  tomography compartmental model}.
+bias reduction effect is provided in Section~\ref{sub:pet compartmental
+  model}.
 
 \subsection{Adaptive specification of distributions}
 \label{sub:Adaptive specification of distributions}
@@ -812,7 +812,7 @@ sample at time $t-1$, such as that considered here, it is relatively
 straightforward to consider sample-dependent, adaptive specification of the
 sequence of distributions (typically by choosing the value of a tempering
 parameter, such as $\alpha_t = \alpha_k(t/T_k)$ in Algorithm~\ref{alg:smc2})
-based upon the current samples. In \cite{Jasra:2010eh}, such a method of
+based upon the current samples. In \cite{Jasra:2010eh} such a method of
 adaptive placing the distributions in \smc algorithms based on controlling the
 rate at which the effective sample size (\ess; \cite{Kong:1994ul}) falls was
 proposed. With very little computation cost, this provides an automatic method
@@ -949,7 +949,7 @@ from each as seen in Figure~\ref{fig:typical real pet}, is more prominent. The
 variance reduction can more than 50\% when using the \cess-based strategy.
 More performance comparisons for various settings of the samplers can be found
 in Section~\ref{sub:Nonlinear ordinary differential equations}
-and~\ref{sub:Positron emission tomography compartmental model}.
+and~\ref{sub:pet compartmental model}.
 
 \subsubsection[Relations of cess*, number of distributions, and estimator
 variance]
@@ -1122,15 +1122,15 @@ scheme which is manually tuned. The placement of the distributions is either
 \input{tab/pet-bf-accuracy}
 
 The results are shown in Table~\ref{tab:pet four sampler same dist}. More
-comprehensive results can be found in Section~\ref{sub:Positron emission
-  tomography compartmental model}. However, from this particular example, we
-can see that the combination of the two adaptive schemes provides superior
-performance at very little computation cost. Table~\ref{tab:pet four sampler
-  same iter} shows actually equivalent results. Instead of fixing the number
-of distributions, we configured the samplers such that they all give roughly
-the same precision of the estimates. It is rather obvious to see that the use
-of adaptive methods actually give a considerable reduction of computational
-cost for a given desired precision of the estimates.
+comprehensive results can be found in Section~\ref{sub:pet compartmental
+  model}. However, from this particular example, we can see that the
+combination of the two adaptive schemes provides superior performance at very
+little computation cost. Table~\ref{tab:pet four sampler same iter} shows
+actually equivalent results. Instead of fixing the number of distributions, we
+configured the samplers such that they all give roughly the same precision of
+the estimates. It is rather obvious to see that the use of adaptive methods
+actually give a considerable reduction of computational cost for a given
+desired precision of the estimates.
 
 \input{tab/pet-bf-cost}
 
@@ -1416,37 +1416,39 @@ was observed.
 \subsection{Nonlinear ordinary differential equations}
 \label{sub:Nonlinear ordinary differential equations}
 
-The example from the previous section suggests that \smc[2] performs well
-relative to the other \smc possibilities. Given the wide range of settings in
-which it can be easily deployed, we will now concentrate further on this
-method. It also suggests that in the simple case of Gaussian mixtures, a
-complete adaptive strategy for both distribution specification and proposal
-scales works well. In this section, this will now be further explored in a
-more complex model, a nonlinear ordinary differential equations (\ode) system.
-This model, which was studied in \cite{Calderhead:2009bd}, is known as the
-Goodwin model. The \ode system, for an $m$-component model, is:
+In this section, this will now be further explored in a more complex model, a
+nonlinear ordinary differential equations (\ode) system. This model, which
+was studied in \cite{Calderhead:2009bd}, is known as the Goodwin model. The
+\ode system, for an $r$-component model, is,
 \begin{align*}
-  \frac{\diff X_1(t)}{\diff t} &= \frac{a_1}{1 + a_2 X_m(t)^{\rho}}
+  \frac{\diff X_1(t)}{\diff t} &= \frac{a_1}{1 + a_2 X_r(t)^{\rho}}
   - \alpha X_1(t)  & \\
   \frac{\diff X_i(t)}{\diff t} &= k_{i-1}X_{i-1}(t) - \alpha X_i(t)
-  & i = 2,\dots,m \\
-  X_i(0) &= 0 & i = 1,\dots,m
+  & i = 2,\dots,r \\
+  X_i(0) &= 0 & i = 1,\dots,r
 \end{align*}
-The parameters $\{\alpha,a_1,a_2,k_{1:m-1}\}$ have common prior distribution
-$\calGa(0.1, 0.1)$. Under this setting, $X_{1:m}(t)$ can exhibit either
+The parameters $\{\alpha,a_1,a_2,k_{1:r-1}\}$ have common prior distribution
+$\calGa(0.1, 0.1)$. Under this setting, $X_{1:r}(t)$ can exhibit either
 unstable oscillation or a constant steady state. The data are simulated for
-$m=\{3,5\}$ at equally spaced time points from $0$ to $60$, with time step
+$r=3$ and~$5$ at equally spaced time points from $0$ to $60$, with time step
 $0.5$. The last 80 data points of $(X_1(t), X_2(t))$ are used for inference.
-Normally-distributed noise with standard  deviation $\sigma=0.2$ is added to
+Normally-distributed noise with standard deviation $\sigma=0.2$ is added to
 the simulated data. Following \cite{Calderhead:2009bd}, the variance of the
 additive measurement error is assumed to be known. Therefore, the posterior
-distribution has $m+2$ parameters for an $m$-component model.
+distribution has $r+2$ parameters for an $r$-component model.
 
 As shown in \cite{Calderhead:2009bd}, when $\rho > 8$, due to the possible
 instability of the \ode system, the posterior can have a considerable number
 of local modes. In this example, we set $\rho = 10$. Also, as the solution to
 the \ode system is somewhat unstable, slightly different data can result in
 very different posterior distributions.
+
+The example from the previous section suggests that \smc[2] performs well
+relative to the other \smc possibilities. Given the wide range of settings in
+which it can be easily deployed, we will now concentrate further on this
+method. It also suggests that in the simple case of Gaussian mixtures, a
+complete adaptive strategy for both distribution specification and proposal
+scales works well. 
 
 \subsubsection{Results}
 
@@ -1466,8 +1468,8 @@ of a generic parallel implementation of the population \mcmc algorithm. We
 compare results from $T = 10,30,$ and~$100$. For the \smc algorithms,
 stratified resampling is applied.
 
-The results for data generated from the simple model ($m = 3$) and complex
-model ($m = 5$), again summarizing variability amongst 100 runs of each
+The results for data generated from the simple model ($r = 3$) and complex
+model ($r = 5$), again summarizing variability amongst 100 runs of each
 algorithm, are shown in Table~\ref{tab:node-s} and~\ref{tab:node-c},
 respectively.
 
@@ -1501,8 +1503,8 @@ distributions, increasing either of them can always benefit the accuracy of
 the estimators. We will study this trade-off more carefully with the next more
 realistic example.
 
-\subsection{Positron emission tomography compartmental model}
-\label{sub:Positron emission tomography compartmental model}
+\subsection{\protect\pet compartmental model}
+\label{sub:pet compartmental model}
 
 It is now interesting to compare the proposed algorithm with other
 state-of-art algorithms using the more realistic \pet compartmental model

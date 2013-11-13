@@ -67,8 +67,30 @@ wherever appropriate, $\Exp_{\pi}$ is used to denote the expectation with
 respect to a distribution $\pi$. The letters $\Pr$ is used to denote
 probabilities of random events.
 
-Other notations are usually only used in particular sections or their meaning
-are clear in the context where they are used.
+For a scalar function of an $n$-vector $\theta = (\theta_1,\dots,\theta_n)^T$,
+say $f(\theta)$, we use the notation,
+\begin{equation}
+  \frac{\partial^2 f(\theta)}{\partial\theta\partial\theta^T}
+\end{equation}
+to denote the Hessian matrix, i.e., a matrix whose element at the $i$\xth row
+and $j$\xth column is $\partial f(\theta)/\partial\theta_i\theta_j$. We also
+use the notation
+\begin{equation}
+  \frac{\partial f(\theta)}{\partial\theta}
+\end{equation}
+to denote the score vector whose $i$\xth element is $\partial
+f(\theta)/\partial\theta_i$. For an $m$-vector function $f(\theta) =
+(f_1(\theta),\dots,f_m(\theta))$, we use the notation
+\begin{equation}
+  J(f(\theta)) = \frac{\partial f(\theta)}{\partial\theta}
+\end{equation}
+to denote the Jacobian matrix whose element at the $i$\xth row and $j$\xth
+column is $\partial f_i(\theta)/\partial\theta_j$.
+
+To avoid introducing too many notations, some notations might be reused if
+their meanings are clear in context and their usage is limited to a
+particular section where it is relevant. These and some other notations are
+defined when they are used.
 
 \section{Outline}
 \label{sec:Outline}

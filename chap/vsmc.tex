@@ -361,7 +361,7 @@ past decade. The \smc and related algorithms are clearly among them. The
 population \mcmc (see Section~\ref{sub:Population mcmc}) algorithm can also be
 parallelized though less efficiently. For example, see results in
 Section~\ref{sub:Nonlinear ordinary differential equations}
-and~\ref{sub:Positron Emission Tomography compartmental model}. More recently
+and~\ref{sub:Positron emission tomography compartmental model}. More recently
 the particle \mcmc algorithm \cite{Andrieu:2010gc} is also well suited for
 parallel computing.
 
@@ -1256,8 +1256,7 @@ knowledge of \cpp, writing \opencl kernels (the part of the program that are
 executed on the device, such as \gpu{}s) is not a difficult task. What often
 makes \opencl programming difficult is the management of the devices. It
 involves the understanding an array of layers of the underlying hardware.
-There are examples\footnote{See
-  \url{https://developer.apple.com/library/mac/samplecode/OpenCL_FFT/Introduction/Intro.html} for examples.}
+There are examples\footnote{See \url{https://developer.apple.com/library/mac/samplecode/OpenCL_FFT} for examples}
 where a major part of the program is irrelevant to the algorithm itself. This
 is not the case of using \vsmc. The library provides facilities to manage
 \opencl platforms and devices as well as common operations. The
