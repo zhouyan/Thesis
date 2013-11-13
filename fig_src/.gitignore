@@ -7,10 +7,8 @@
 *.lot
 *.ltx
 *.out
-*.pdf
 *.pyg
 *.sh
 *.sty
 *.synctex.gz*
 *.toc
-*.pdf
