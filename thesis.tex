@@ -2,8 +2,7 @@
 11pt, fontset=Minion, toclevel=3, colorfullink=false,
 linespread=1.414, lines=30, oneside, onesideheader,
 bib, bibintoc, biblatexstyle=numeric,
-mintcode, minted=cache,
-showoverfull
+mintcode, minted=cache
 ]{mthesis}
 \usepackage{pdfpages}
 \ExecuteBibliographyOptions{url=true}
@@ -47,6 +46,7 @@ showoverfull
 
 \begingroup
   \appendix
+  \include{chap/appendix-monte-carlo}
   \include{chap/appendix-bayesian-vsmc}
   \include{chap/appendix-vsmc}
 \endgroup
