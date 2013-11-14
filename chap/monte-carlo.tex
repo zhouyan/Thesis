@@ -565,22 +565,22 @@ see later, it is a special case of the Metropolis-Hastings algorithm.
 
 A Gibbs sampler, as first introduced by \cite{Geman:1993bp}, assumes that the
 random variable $X$ can be written as $X = (X_1,\dots,X_p)$, where $X_i$'s are
-either unidimensional or multidimensional. Moreover, suppose that we can
-simulate from the corresponding conditional distributions $\pi_1,\dots,\pi_p$,
+either unidimensional or multidimensional. Let $\pi_1,\dots,\pi_p$ denote the 
+\emph{full conditionals}, defined by
 \begin{equation}
   X_i|x_1,\dots,x_{i-1},x_{i+1},\dots,x_p
-  \sim \pi_i(x_i|x_1,\dots,x_{i-1},x_{i+1},\dots,x_p)
+  \sim \pi_i(x_i|x_1,\dots,x_{i-1},x_{i+1},\dots,x_p).
 \end{equation}
-for $i = 1,\dots,p$. The associated Gibbs sampler is given by the following
-algorithm that transits $X^t$ to $X^{t+1}$ in $p$ steps. At each step $i$
-(within one iteration), $X_i^{t+1}$ is generated from $\pi_i$,
+If sampling from each of these distributions is possible, the associated
+Gibbs sampler is given by the following algorithm that transits $X^t$ to
+$X^{t+1}$ in $p$ steps. At each step $i$ (within one iteration), $X_i^{t+1}$
+is generated from $\pi_i$,
 \begin{equation}
   X_i^{t+1} \sim
   \pi_i(x_i^{t+1}|x_1^{t+1},\dots,x_{i-1}^{t+1},x_{i+1}^t,\dots,x_p^t).
 \end{equation}
-The distributions $\pi_1,\dots,\pi_p$ are called the \emph{full conditionals}.
-This leads to Algorithm~\ref{alg:gibbs}. See \cite[][chap.~8
-and~9]{Robert:2004tn} for a full theoretical treatment of the Gibbs sampling.
+This leads to Algorithm~\ref{alg:gibbs}. See \cite[][chap.~9
+and~10]{Robert:2004tn} for a full theoretical treatment of the Gibbs sampling.
 
 \input{alg/gibbs}
 
@@ -635,16 +635,19 @@ in which at each step a single component is updated using its full conditional
 as the proposal distribution. It is easy to verify that the acceptance
 probability is uniformly equal to one \cite[][Theorem~10.13]{Robert:2004tn}.
 Let $Y = (X_{1:i-1},Y_i,X_{i+1:p})$ where $Y_i$ is the value proposed with
-$\pi_i$ at step $i$,
+$\pi_i$ at step $i$. The acceptance probability is then,
+\begin{equation*}
+  \alpha(x,y) = \min\Curly[bigg]{
+    \frac{\pi(y)}{\pi(x)}
+    \frac{\pi_i(x|x_{1:i-1},x_{i+1:p})}{\pi_i(y|x_{1:i-1},x_{i+1:p})},1}.
+\end{equation*}
+Rewrite $\pi(x)$ and $\pi(y)$ in the form of conditional densities, it follows
 \begin{align*}
   \alpha(x,y) &= \min\Curly[bigg]{
-    \frac{\pi(y)}{\pi(x)}
-    \frac{\pi_i(x|x_{1:i-1},x_{i+1:p})}{\pi_i(y|x_{1:i-1},x_{i+1:p})},1} \\
-  &= \min\Curly[bigg]{
     \frac{\pi_i(y_i|x_{1:i-1}, x_{i+1:p})\pi(x_{1:i-1},x_{i+1:p})}
     {\pi_i(x_i|x_{1:i-1}, x_{i+1:p})\pi(x_{1:i-1},x_{i+1:p})}
     \frac{\pi_i(x_i|x_{1:i-1}, x_{i+1:p})}{\pi_i(y_i|x_{1:i-1}, x_{i+1:p})},1}
-  \\
+    \\
   &= \min\{1,1\} = 1
 \end{align*}
 
@@ -752,10 +755,6 @@ vector $u$, say $q(u)$. The acceptance probability becomes
 where the last term is the determinant of the Jacobian transformation. The
 design of efficient between-model moves is often difficult, and the mixing of
 these moves largely determines the performance of the algorithm.
-
-\sidenote{I checked that the acceptance probabilities of RJMCMC is correct.
-  And I added a short paragraph to make it clear that these moves are usually
-  designed in pairs}
 
 It should be noted that, in the above we only described the move that
 transits the parameters from the space of one model into another. As
@@ -989,9 +988,10 @@ However, obtaining analytical bounds can be prohibitively difficult.
 \paragraph{Graphical approach}
 
 A natural empirical approach is to draw plots of simulated samples to detect
-non-stationary behaviors. For instance, \cite{Gelfand:1990it} drew sequence of
-the samples ${X^t}_{t\ge1}$ against the time $t$, which is a functionality now
-commonly seen in softwares for implementing \mcmc algorithms.
+non-stationary behaviors. For instance, \cite{Gelfand:1990it} drew sequence
+of the samples $\{X^t\}_{t\ge1}$ against the time $t$, which is a
+functionality now commonly seen in softwares for implementing \mcmc
+algorithms.
 
 It should be emphasized that, even when the plots appears to show stationary
 behavior, it is still possible that the algorithm has not converged or
@@ -1218,7 +1218,7 @@ Bayesian results show some structure with more active regions within the brain
 have higher order models. See also the discussion in \cite{Zhou2013} and
 references therein.
 
-\input{fig/pet_mo}
+\afterpage{\input{fig/pet_mo}\clearpage}
 
 The convergence results for this simulation was already shown in
 Figure~\ref{fig:pet diag ratio}. It should be noted that, though as shown in
@@ -1280,7 +1280,7 @@ the identity,
   &= \int \pi(\theta_i^*|\data,\theta_{1:i-1}^*,\theta_{i+1:p})
   \pi(\theta_{i+1:p}|\data,\theta_{1:i-1}^*) \intd\theta_{i+1:p}
 \end{align}
-and using a Gibbs sampler operate on $\theta_{i:p}$ with
+and using a Gibbs sampler operating on $\theta_{i:p}$ with
 $\pi(\theta_{i:p}|\data,\theta_{1:i-1}^*)$ as the target distribution and an
 estimator similar to that in Equation~\eqref{eq:est gibbs first}.
 

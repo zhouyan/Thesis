@@ -1167,7 +1167,7 @@ parallelization is less efficient than other industry strength programming
 models. However, with 1000 or more particles, which is less than typical
 applications, the difference is not very significant.
 
-\input{fig/vsmc_bench_smp}
+\afterpage{\input{fig/vsmc_bench_smp}\clearpage}
 
 \subsection{Using the \protect\opencl module}
 \label{sub:Using the OpenCL module}
@@ -1192,14 +1192,16 @@ the \opencl implementations have a high overhead when compared to the \tbb
 implementation. With a large number of particles, \aocl has a similar
 performance as the \tbb implementation. \iocl is about 40\% faster than the
 \tbb implementation. This is due to more efficient vectorization and compiler
-optimizations. The double precision performance of the NVIDIA \gpu has a 220\%
-speedup and the single precision performance has near 1600\% speedup. As a
-rough reference for the expected performance gain, the \cpu has a theoretical
-peak performance of 24.48 GFLOPS. The \gpu has a theoretical peak performance
-of 60 GFLOPS in double precision and 480 GFLOPS in single precision. This
-represents 245\% and 1960\% speedup compared to the \cpu, respectively.
+optimizations. The double precision performance of the NVIDIA \gpu has a
+220\% speedup and the single precision performance has near 1600\% speedup.
+As a rough reference for the expected performance gain, the \cpu has a
+theoretical peak performance of 24.48 \gflops (floating point operations per
+seconds, measured in the unit $10^9$). The \gpu has a theoretical peak
+performance of 60 \gflops in double precision and 480 \gflops in single
+precision. This represents 245\% and 1960\% speedup compared to the \cpu,
+respectively.
 
-\input{fig/vsmc_bench_ocl}
+\afterpage{\input{fig/vsmc_bench_ocl}\clearpage}
 
 \subsection{Performance and productivity}
 \label{sub:Performance and productivity}
