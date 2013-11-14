@@ -25,7 +25,8 @@ $\varphi$ with respect to a (continuous) distribution $\pi$,
 \begin{equation*}
   \Exp_{\pi}[\varphi(X)] = \int\varphi(x)\pi(x)\intd x
 \end{equation*}
-provided that the above expectation exists, by drawing \iid samples from
+provided that the above expectation exists, by drawing identically
+independently distributed (i.i.d.) samples from
 $\pi$, say $\{X^{(i)}\}_{i=1}^N$, and approximating the expectation by the
 empirical average,
 \begin{equation}
@@ -104,7 +105,7 @@ continuous and the two expectations are taken with respect to $\pi$ and
 $\eta$, respectively. The above equation is termed \emph{importance
 fundamental identity} in \cite{Robert:2004tn}. The distribution $\eta$ is
 often called the \emph{proposal} or \emph{instrumental} distribution. Thus
-given \iid samples $\{X^{(i)}\}_{i=1}^N$ from distribution $\eta$, the
+given i.i.d\ samples $\{X^{(i)}\}_{i=1}^N$ from distribution $\eta$, the
 expectation $\Exp_{\pi}[\varphi(X)]$ can be approximated by the following
 importance sampling estimator,
 \begin{equation}
@@ -443,7 +444,7 @@ long time for the chain to move outside the neighborhood of one local mode of
 the target distribution. In this situation, the sampler is said to be in a
 \emph{trapping state}.
 
-For instance, consider the \pet compartmental models (see
+For instance, consider the \pet compartmental model (see
 Section~\ref{sec:Application to positron emission tomography}), a Normally
 distributed error structure (see Section~\ref{sec:Error models}), and
 non-informative priors (see Section~\ref{sub:Choice of priors}) for the
@@ -474,7 +475,7 @@ As seen in the above example, finding the optimal scales for a random walk
 algorithm can be important for realistic applications. One way to measure the
 optimality of the random walk is based on the asymptotic behavior of an
 \emph{efficiency criterion} equal to the ratio of the variance of an
-estimator based on an \iid sample and the variance of the estimator
+estimator based on an i.i.d\ sample and the variance of the estimator
 $\hat\varphi_{\mcmc}^N$ in Equation~\eqref{eq:mcmc est}. In
 \cite{Roberts:1997dg} it was recommended that the optimal proposal
 distribution should produce chains with acceptance rate close to $0.5$ for
@@ -1018,7 +1019,7 @@ $X^{t_2}$ have the same distribution for any two arbitrary time points $t_1$
 and $t_2$. Therefore standard tests can be used to compare the distribution of
 samples $(X^t,\dots,X^{t+p-1})$ and $(X^{t+p},\dots,X^{t+2p})$. It should be
 noted that the correlations between samples should be taken into
-considerations. One solution is to use subsamples. A \emph{batch size} $G$ is
+considerations. One solution is to use sub-samples. A \emph{batch size} $G$ is
 introduced. Quasi-independent samples
 $(X^{t_1+G},X^{t_1+2G},\dots,X^{t_1+pG})$ and
 $(X^{t_2+G},X^{t_2+2G},\dots,X^{t_2+pG})$ are used to conduct the tests. See
@@ -1077,7 +1078,7 @@ that depends on the current state $X^t$. When the distributions are known
 only up to some normalizing constants, then a variant similar to that in
 Equation~\eqref{eq:is unnormalized} is used. Unlike the importance sampling
 in Section~\ref{sec:Importance sampling}, this estimator is based on
-dependent samples instead of \iid samples. However, as shown in
+dependent samples instead of i.i.d\ samples. However, as shown in
 \cite[][Lemma~12.11]{Robert:2004tn}, the weighted terms in the sum are
 uncorrelated.
 
@@ -1363,7 +1364,7 @@ in Chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation} for
 sequential Monte Carlo. More results for the \pet model and other examples can
 also be found in the same chapter.
 
-\section{Discussion}
+\section{Discussions}
 \label{sec:Monte Carlo Discussion}
 
 In this chapter, a few Monte Carlo algorithms have been reviewed. One of the

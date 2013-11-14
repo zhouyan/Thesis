@@ -665,7 +665,7 @@ exploration of as complicated a space as that employed within \rjmcmc or
 exactly the same manner as in the \smc[2] case. In \smc[3], the same estimator
 provides a direct estimate of the Bayes factor.
 
-\subsection{Path Sampling via \smc[2]/\smc[3]}
+\subsection{Path sampling via \smc[2]/\smc[3]}
 \label{sub:Path Sampling via smc2/smc3}
 
 The estimation of the normalizing constant associated with our sequences of
@@ -1057,7 +1057,7 @@ one of the data sets, the parameter $\nu$ fails to move at all. Considering
 that there are about a quarter of a million such data sets to be estimated in
 a single \pet scan, adaptively specifying the proposal scales is the only
 feasible approach. Note that, this problem is not unique to the \pet
-compartmental models at all. In many realistic applications, there are a large
+compartmental model at all. In many realistic applications, there are a large
 number of data sets which vary considerably from each other.
 
 \subsection{An automatic and adaptive algorithm}
@@ -1568,14 +1568,14 @@ scenario in realistic applications. In addition, the adaptive schedule based
 upon \cess is also implemented for the \smc[2] algorithm. For the \smc
 algorithms, stratified resampling is applied.
 
-Result from 100 replicate runs of the two algorithms under various regimes
-can be found in Table~\ref{tab:pet-py} and~\ref{tab:pet-bf} for the marginal
+Result from 100 replicate runs of the two algorithms under various regimes can
+be found in Table~\ref{tab:pet-py} and~\ref{tab:pet-bf} for the marginal
 likelihood and Bayes factor estimates, respectively. The \smc algorithms
 consistently outperforms the population \mcmc algorithms in the parallel
-settings. The Monte Carlo \sd of \smc algorithms is typically of the order of
-one fifth of the corresponding estimates from population \mcmc in most
-scenarios. In some settings with the smaller number of samples, the two
-algorithms can be comparable. Also at the lowest computational costs, the
+settings. The Monte Carlo standard deviation of \smc algorithms is typically
+of the order of one fifth of the corresponding estimates from population \mcmc
+in most scenarios. In some settings with the smaller number of samples, the
+two algorithms can be comparable. Also at the lowest computational costs, the
 samplers with more time steps and fewer particles outperform those with the
 converse configuration by a fairly large margin in terms of estimator
 variance. It shows that with limited resources, ensuring the similarity of
@@ -1603,21 +1603,21 @@ in most cases slightly less than the fixed numbers.
 
 It is found that, with little computational overhead, adaptive schedules do
 provide the best results (or very nearly so) and do so without user
-intervention. The reduction of Monte Carlo \sd varies among different
-configurations. For moderate or larger number of distributions, a reduction
-about 50\% was observed. In addition, it shall be noted that, in this example,
-the bias of the path sampling estimates are much more sensitive to the
-schedules than the previous Gaussian mixture model example. A vanilla linear
-schedule does not provide a low bias estimator at all even when the number of
-distributions is increased to a considerably larger number. The prior schedule
-though provides a nearly unbiased estimator, there is no clear theoretical
-evidence showing that this shall work for other situations. Even it has more
-general usage, as suggested in \cite{Calderhead:2009bd}, the power still has
-to be chosen (in the previous \gmm example, $p = 2$ was the best choice while
-in this \pet example $p = 5$ is more suitable). In contrast, The adaptive
-schedule, without any manual calibration, can provide a nearly unbiased
-estimator, even when path-sampling is employed, in addition to potential
-variance reduction.
+intervention. The reduction of Monte Carlo standard deviation varies among
+different configurations. For moderate or larger number of distributions, a
+reduction about 50\% was observed. In addition, it shall be noted that, in
+this example, the bias of the path sampling estimates are much more sensitive
+to the schedules than the previous Gaussian mixture model example. A vanilla
+linear schedule does not provide a low bias estimator at all even when the
+number of distributions is increased to a considerably larger number. The
+prior schedule though provides a nearly unbiased estimator, there is no clear
+theoretical evidence showing that this shall work for other situations. Even
+it has more general usage, as suggested in \cite{Calderhead:2009bd}, the power
+still has to be chosen (in the previous \gmm example, $p = 2$ was the best
+choice while in this \pet example $p = 5$ is more suitable). In contrast, The
+adaptive schedule, without any manual calibration, can provide a nearly
+unbiased estimator, even when path-sampling is employed, in addition to
+potential variance reduction.
 
 \paragraph{Bias reduction for path sampling estimator}
 
@@ -1733,7 +1733,7 @@ also clear that the negligible cost of the bias reduction techniques described
 means that one should always consider using these to reduce the bias inherent
 in path sampling estimation.
 
-\section{Discussion}
+\section{Discussions}
 \label{sec:Bayesian SMC discussion}
 
 It has been shown that \smc is an effective Monte Carlo method for Bayesian

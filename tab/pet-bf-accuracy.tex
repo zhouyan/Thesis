@@ -1,10 +1,7 @@
 \begin{table}[t]
-  \linespread{1.1}\selectfont
-  \caption[Performance of the Bayes factor estimator using adaptive
-  \protect\smc algorithms]
-  {The standard Bayes factor estimates ($\log B_{2,1}\pm\sd$) for the
-    simulated \pet data set using the \smc[2] algorithm. All four samplers are
-    configured such that about 200 distributions are used.}
+  \UseAltLinespread
+  \caption{The standard Bayes factor estimates for a
+    simulated \protect\pet data set using the \protect\smc[2] algorithm. }
   \label{tab:pet four sampler same dist}
   \begin{tabularx}{\linewidth}{lXX}
     \toprule
@@ -15,5 +12,11 @@
     Fixed annealing ($\alpha_k(t/_k) = (t/T_k)^5$) & $1.6\pm0.27$ & $1.6\pm0.22$ \\
     \cess-based adaptive annealing & $1.6\pm0.19$ & $1.6\pm0.15$ \\
     \bottomrule
+    \multicolumn{3}{r}{%
+      \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily
+        All four samplers are configured such that about 200 distributions are
+        used. The estimates $\log B_{2,1}\pm\sd$) are obtained from 100
+        simulations for each sampler.
+      \end{minipage}}
   \end{tabularx}
 \end{table}
