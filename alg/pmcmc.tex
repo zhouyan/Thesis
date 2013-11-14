@@ -6,24 +6,18 @@
   \ENDFOR
   \STATE Set $t\leftarrow0$.
   \REPEAT
-    \STATE Draw $k_1$ from a uniform distribution on $(0,\dots,T-1)$. Set
-    $k_2\leftarrow k_1 + 1$.
-    \STATE Draw $Y_{k_1}^t\sim q_{k_1}(y_{k_1}^t|x_{k_2}^t)$ and
-    $Y_{k_2}^t\sim q_{k_2}(y_{k_2}^t|x_{k_1}^t)$.
-    \STATE Compute $\alpha$, the acceptance probabilty according to the
-    Metropolis-Hastings rule.
-    \STATE Draw $U\sim\calU[0,1]$.
-    \IF{$U\le\alpha$}
-      \STATE Set $X_{k_1}^{t+1}\leftarrow Y_{k_1}^t$, $X_{k_2}^{t+1}\leftarrow
-          Y_{k_2}^t$.
-    \ELSE
-      \STATE Set $X_{k_1}^{t+1}\leftarrow X_{k_1}^t$, $X_{k_2}^{t+1}\leftarrow
-          X_{k_2}^t$.
-    \ENDIF
     \FOR{$k = 0,\dots,T$}
-      \STATE Draw $X_k^t\sim K_k(x_k^{t-1},x_k^t)$ where $K_k$ is a
+      \STATE Draw $X_k^{t+1}\sim K_k(x_k^x,x_k^{t+1})$ where $K_k$ is a
       $\pi_k$-invariant Markov kernel.
     \ENDFOR
+    \STATE Draw $k_1$ and $k_2$, $k_1\ne k_2$, from $\{0,\dots,T\}$ such that
+    the distribution of $(k_1,k_2)$ is uniform over all possible permutations.
+    \STATE Draw $Y_{k_1}^{t+1}\sim q_{k_1}(y_{k_1}^{t+1}|x_{k_2}^{t+1})$ and
+    $Y_{k_2}^{t+1}\sim q_{k_2}(y_{k_2}^{t+1}|x_{k_1}^{t+1})$.
+    \STATE Compute $\alpha$, the acceptance probability according to the
+    Metropolis-Hastings rule ($\alpha((x_{k_1}^t,x_{k_2}^t)$ in Equation~\eqref{eq:exchange accept} for an exchange move and $\alpha(x_{k_1}^t,x_{k_2}^t,y_{k_1}^{t+1},y_{k_2}^{t+1})$ in Equation~\eqref{eq:cross accept} for a crossover move). With probability $\alpha$, set
+    $X_{k_1}^{t+1}\leftarrow Y_{k_1}^{t+1}$, $X_{k_2}^{t+1}\leftarrow
+    Y_{k_2}^{t+1}$.
     \STATE Set $t\leftarrow t+1$.
   \UNTIL{Sufficiently many samples have been produced.}
   \bottomhrule

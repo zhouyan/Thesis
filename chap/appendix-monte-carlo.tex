@@ -1,0 +1,200 @@
+\chapter{Monte Carlo Methods}
+\label{cha:Appendix Monte Carlo Methods}
+
+\section{Discrete time Markov chain}
+\label{sec:Appendix Discrete time Markov chain}
+
+A Markov chain can be defined in terms of \emph{transition kernels}. In
+general, consider a measurable space, say $(E,\calE)$, a transition kernel
+$K$ is a function defined on $E\times\calE$ such that $K(x,\cdot)$ is a
+probability measure for every $x\in E$ and $K(\cdot,A)$ is measurable for
+every $A\in\calE$.
+
+A discrete time Markov chain, denoted by $(X^t)$ is a sequence of random
+variables $X^0,X^1,\dots,X^t,\dots$ such that conditional on
+$(x^{t-1},\dots,x^0)$, $X^t$ has the same distribution as it has conditional
+on $x^{t-1}$. Clearly a transition kernel is such a conditional distribution.
+In the context of \mcmc algorithms, we are mostly concerned with \emph{time
+homogeneous} Markov chains. A Markov chain $(X^t)$ is said to be time
+homogeneous if it satisfies the following (\emph{weak}) \emph{Markov
+property}: For every initial distribution of $X^0$, $\mu$, and every $(t+1)$
+samples $(X^0,\dots,X^t)$, and some measurable function $\varphi$,
+\begin{equation}
+  \Exp_{\mu}[\varphi(X^{t+1},X^{t+2},\dots)|x^0,\dots,x_n] =
+  \Exp_{x^t}[\varphi(X^1,X^2,\dots)],
+\end{equation}
+where $\Exp_{\mu}$ denotes the expectation with respect to the law of the
+chain given the initial distribution of $X^0$ and $\Exp_{x^t}$ denote the
+expectation with respect to the law of the chain conditional on $X^t = x^t$.
+
+In the remaining of this section, we define a few properties of Markov chains that are particularly relevant in the study of \mcmc algorithms.
+
+\subsection{Irreducibility}
+\label{sub: Appdendix Irreducibility}
+
+A Markov chain $(X^t)$ with transition kernel $K$ on $(E,\calE)$ is said to
+be $\psi$-\emph{irreducible}, for a given measure $\psi$, if for every
+$A\in\calE$ such that $\psi(A)>0$, there exists $t$ such that $K^t(x,A)>0$
+for all $x\in E$. This chain is said to be \emph{strongly}
+$\psi$-\emph{irreducible} if $t=1$ for every $A\in\calE$ such that
+$\psi(A)>0$.
+
+An equivalent way of saying irreducibility is that for $x\in E$, $A\in\calE$,
+$P_x(\tau_A\le\infty) > 0$, where $\tau_A = \inf\{t\ge1;X^t\in A\}$ is the
+smallest value of $t$ that the chain enters the set $A$, namely the
+\emph{first hitting time} at $A$ and $P_x$ denote the law of the chain
+conditional on the initial state $x$. In other words, the probability of
+reach any set $A$ in finite many steps is positive.
+
+Two related concepts, \emph{atom} and \emph{small set}, are useful for
+formally defining aperiodicity and ergodicity later. A Markov chain $(X^t)$
+is said to have an \emph{atom} $\alpha\in\calE$ if there exists an associated
+nonzero measure $\eta$ such that, $K(x,A) = \eta(A)$ for all $x\in\alpha$ and
+$A\in\calE$. A set $C$ is said to be \emph{small} if there exists
+$m\in\Natural$ and a nonzero measure $\eta_m$ such that
+$K^m(x,A)\ge\eta_m(A)$, for all $x\in C$ and $A\in\calE$.
+
+\subsection{Cycles and Aperiodicity}
+\label{sub: Appdendix Cycles and Aperiodicity}
+
+A $\psi$-irreducible chain $(X^t)$ has a \emph{cycle of length} $d$ if there
+exists a small set $C$, an integer $M$, and a probability distribution
+$\eta_M$ such that $d$ is the greatest common denominator of
+\begin{equation*}
+  \{m\ge1;\text{ There exists }\varepsilon_m > 0\text{ such that }C\text{ is
+    small for }\eta_m\ge\varepsilon_m\eta_M\}.
+\end{equation*}
+A chain is \emph{aperiodic} if $d = 1$. If there exists a small set $C$ and
+an associated measure $\eta_1$ such that $\eta_1(C) > 0$, that is it is
+possible to go from $C$ to $C$ in a single step, the chain is said to be
+\emph{strongly aperiodic}.
+
+A sufficient condition for aperiodicity is that the kernel is positive in a
+neighborhood of a state $x$. Then the chain can stay in this neighborhood for
+an arbitrary time. If a chain is not aperiodic, then the return from one
+state to its own neighborhood will requires a forced passage through another
+part of the space, which is clearly an undesired property for an \mcmc
+algorithm. It will be shown that for the algorithms discussed in this
+chapter, they are aperiodic.
+
+\subsection{Recurrence}
+\label{sub: Appdendix Recurrence}
+
+For a Markov chain $(X^t)$ on $(E,\calE)$, a set $A\in\calE$ is said to be
+\emph{recurrent} if for all $x\in A$, $\Exp_x[N_A] = \infty$ where $N_A =
+\sum_{t=1}^{\infty}\bbI_A(X^t)$ is the number of passages through $A$. The
+Markov chain is said to be recurrent if there exists a measure $\psi$ such
+that the chain is $\psi$-irreducible and for all $A\in\calE$ such that
+$\psi(A)>0$, $A$ is recurrent.
+
+A sufficient condition for a $\psi$-irreducible chain to be recurrent is that
+there exists a small set $C$ with $\psi(C)>0$ such that $P_x(\tau_C<\infty) =
+1$ for all $x\in C$ where $\tau_C$ is the first hitting time at $C$.
+
+A stronger property is called the \emph{Harris recurrence}. A set $A\in\calE$
+is said to be Harris recurrent if for all $x\in A$, $P_x(N_A = \infty) = 1$.
+The $\psi$-irreducible Markov chain is said to be Harris recurrent if for all
+$A\in\calE$ such that $\psi(A)>0$, $A$ is Harris recurrent.
+
+Informally, Harris recurrence says that starting from \emph{everywhere} in
+the space $E$, every part of the space will be visited for infinite instances
+with probability one. This is important for \mcmc algorithms in the sense
+that Harris recurrence guarantees unique limiting distribution (up to a
+multiplicative factor).
+
+\subsection{Invariant measure}
+\label{sub: Appdendix Invariant measure}
+
+A $\sigma$-finite measure $\pi$ is \emph{invariant} for a Markov chain with
+transition kernel $K$ if,
+\begin{equation}
+  \pi(A) = \int K(x,A)\pi(\diff x)
+\end{equation}
+for all $A\in\calE$. When an invariant \emph{probability} measure exists for
+a $\psi$-irreducibility chain, the chain is said to be \emph{positive}. A
+positive chain is always recurrent. Also the invariant measure is unique for
+a recurrent chain, up to a multiplicative factor. It is trivial to see that,
+for a invariant probability measure $\pi$ of a Markov chain $(X^t)$, if
+$X^0\sim\pi$, then $X^t\sim\pi$ for all $t\ge1$. Thus this distribution is
+also often referred to as the \emph{stationary} measure.
+
+A related concept is the \emph{reversibility}. A stationary Markov chain
+$(X^t)$ is said to be \emph{reversible} if the distribution of $X^{t+1}$
+conditional on $X^t = x$ is the same as the distribution of $X^t$ conditional
+on $X^{t+1} = x$. Intuitively, this says that the direction of time is
+irrelevant. The chain has the same stationary if it travels backward in time.
+A sufficient condition for a Markov chain to have an invariant probability
+distribution $\pi$ and be reversible is the existence of the \emph{detailed
+balance} condition,  
+\begin{equation}
+  \pi(x)K(x,y) = \pi(y)K(y,x).
+\end{equation}
+
+\subsection{Ergodicity}
+\label{sub: Appdendix Ergodicity}
+
+As stated in the beginning of this section, \mcmc algorithms relies on the
+limiting $\pi$ of a Markov chain $(X^t)$, which has the property that, if
+$X^t\sim\pi$, then $X^{t+1}\sim\pi$. In other words, we are interested in the
+convergence of the distribution $P_{\mu}^t = \mu K^t$ where $\mu$ is the
+initial distribution of $X^0$. More importantly, we are interested in the
+independence of initial condition $\mu$ of its limiting behavior when
+$n\to\infty$. In the following we establish that the invariant distribution
+$\pi$ is such a limiting distribution.
+
+% TODO check the definition of K(\alpha,\alpha)
+For a Harris recurrent and positive Markov chain $(X^t)$ with transition
+kernel $K$ and invariant distribution $\pi$, an atom $\alpha$ is
+\emph{ergodic} if
+\begin{equation}
+  \lim_{t\to\infty}\Abs{K^t(\alpha,\alpha) - \pi(\alpha)} = 0,
+\end{equation}
+where $K(\alpha,\alpha) = \int_{\alpha}K(x,\alpha)\pi(\diff x)$ and $K^t =
+K\vysmwhtcircle K^{t-1}$. For more general situations, the convergence is
+established through the \emph{total variance norm}, defined for two measure
+$\mu_1$ and $\mu_2$ on the space $(E,\calE)$,
+\begin{equation}
+  \Norm{\mu_1-\mu_2}_{TV} = \sup_{A\in\calE}\Abs{\mu_1(A) - \mu_2(A)}.
+\end{equation}
+Two important results are that, if a Markov chain $(X^t)$ is Harris recurrent,
+positive and aperiodic, with transition kernel $K$ and invariant distribution
+$\pi$, then
+\begin{equation}
+  \lim_{t\to\infty}\Norm{\mu K^t(x,\cdot) - \pi}_{TV} = 0
+\end{equation}
+for every initial distribution $\mu$. And this total variance norm decreases
+in $t$. From here, it becomes clear why the recurrence and aperiodicity
+discussed before are important for \mcmc algorithms. Note that the above
+results also implies that, for bounded function $\varphi$,
+\begin{equation}
+  \lim_{t\to\infty}\Abs{\Exp_{\mu}[\varphi(X^t)] - \Exp_{\pi}[\varphi(X)]}
+  = 0,
+\end{equation}
+where the first expectation is with respect to $P_{\mu}^n$, and the second is
+for a random variable distributed with $\pi$. This result establishes the
+validity of using dependent samples from \mcmc algorithms for the
+approximation of integration with respect to $\pi$.
+
+However, the above results only states that the Markov chain will converge. It
+does not imply how fast the chain converges to its limiting distribution. Two
+stronger form of convergence is \emph{geometric} and \emph{uniform}
+ergodicity.
+
+A Markov chain $(X^t)$ with transition kernel $K$ on $(E,\calE)$ and invariant
+distribution $\pi$, is said to be \emph{geometrically ergodic}, if there
+exists $r > 1$ such that for all $x\in E$,
+\begin{equation}
+  \sum_{t=1}^{\infty} r^n\Norm{\mu K^t(x,\cdot)-\pi}_{TV} <\infty.
+\end{equation}
+This implies that,
+\begin{equation}
+  \Norm{\mu K^t(x,\cdot)-\pi}_{TV}\le r^{-t}M(x)
+\end{equation}
+where $M(x) = \sum_{t=1}^{\infty} r^t\Norm{\mu K^t(x,\cdot)-\pi}_{TV}$. In
+other words, the chain converges at least at a speed of a geometric sequence.
+We emphasize that $M(x)$ is a function of the initial value $x$.
+
+A stronger form of convergence, \emph{uniform} ergodicity requires that the
+convergence speed is the same for all $x\in E$, or in other words $M(x)$ is
+bounded. That is, the above convergence holds for a finite constant $M =
+\sup_x M(x)$.

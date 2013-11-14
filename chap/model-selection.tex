@@ -768,11 +768,11 @@ transformation,
   I(\phi_k) = (J(h^{-1}(\phi_k)))^T I(h^{-1}(\phi_k)) 
   (J(h^{-1}(\phi_k)))
 \end{equation*}
-whre $J(h^{-1}(\phi_k))$ is the Jacobian matrix and for $\theta_k =
-h^{-1}(\phi_k)$,
+whre $J(h^{-1}(\phi_k))$ is the Jacobian matrix. For $\theta_k =
+h^{-1}(\phi_k)$, it follows,
 \begin{equation*}
   \pi(\phi_k)
-  \propto \sqrt{\Abs{\det(I(\theta_k))\det(J(h^{-1}(\phi_k)))}}
+  \propto \sqrt{\Abs{I(\theta_k)}\Abs{J(h^{-1}(\phi_k))}}
   \propto \pi(\theta_k)
   \Abs[bigg]{\det\Round[bigg]{\frac{\diff\theta_k}{\diff\phi_k}}}
 \end{equation*}
