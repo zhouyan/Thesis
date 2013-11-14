@@ -1,5 +1,17 @@
 .PHONY : thesis
 
+.PHONY : table
+
+.PHONY : figure
+
+.PHONY : layout
+
+.PHONY : cover
+
+.PHONY : clean
+
+.PHONY : all
+
 thesis :
 	latexmk -f -silent thesis.tex >/dev/null
 
@@ -14,6 +26,8 @@ layout :
 
 cover :
 	latexmk -f -silent cover.tex >/dev/null
+
+all : thesis table figure layout cover
 
 clean :
 	latexmk -c

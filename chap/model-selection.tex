@@ -46,7 +46,7 @@ in the remainder of this section, we will assume that the distributions under
 discussion are continuous.
 
 The criterion of model selection under this theme is thus finding the model
-that has the minimum \kld between the true data generating distribuiton and
+that has the minimum \kld between the true data generating distribution and
 the model distribution. There are often a set of candidate models. Each model
 is defined by a parametric distribution. Therefore model selection can be
 viewed a two-step process. First, for each model a value of the parameter
@@ -106,7 +106,7 @@ log-likelihood function. This suggests the use of the \mle, denoted by
 $\hat\theta$, which maximizes $\ell_n(\theta)$ as an estimator of
 $\tilde\theta$, which minimizes $D_{\kl}(g,f)$. The expected \kld
 $\bar{D}_{\kl}(g,f)$ can be approximated by empirical average
-$\ell_n(\hat\theta)$, upto an additive constant that is the same for all
+$\ell_n(\hat\theta)$, up to an additive constant that is the same for all
 models. However, as shown in \cite{Akaike:1973uc}, this approximation is
 systematically biased upward (also see \cite[][sec.~2.3]{Claeskens:2008tq}
 for some remarks on this bias). It can be shown that the bias is
@@ -461,7 +461,7 @@ normalizing constant of the posterior $p(\theta_k|\data,\calM_k)$.
 
 From Equation~\eqref{eq:full posterior}, it is clear that the posterior model
 probability $\pi(\calM_k|\data)$ is a marginal of the full posterior, and can
-be calcualted given the prior $\pi(\calM_k)$,
+be calculated given the prior $\pi(\calM_k)$,
 \begin{equation}
   \pi(\calM_k|\data) = \frac{
     \pi(\calM_k)
@@ -630,7 +630,7 @@ of \bic.
 
 It is clear from the formulation of \bic that the influence of the prior
 distribution $\pi(\theta_k|\calM_k)$ is eliminated in this strategy. This
-also leads to some argue that the \bic stragey is not a full fledged Bayesian
+also leads to some argue that the \bic strategy is not a full fledged Bayesian
 approach. A derivation of \bic can be found in
 \cite[][sec.~3.2]{Claeskens:2008tq}.
 
@@ -757,7 +757,7 @@ where
   = -\Exp_{\data}\Square[bigg]{\frac{\partial^2\log p(\data|\theta_k,\calM_k)}
     {\partial\theta_k\partial\theta_k^T}}
 \end{equation}
-where the expectation is taken with repsect to the likelihood function
+where the expectation is taken with respect to the likelihood function
 $p(\data|\theta_k,\calM_k)$, is the \emph{Fisher information}. The defining
 property of Jeffreys priors is its invariance in the sense that, for a
 one-to-one transformation $\phi_k = h(\theta_k)$, we have the Jacobian
@@ -766,7 +766,7 @@ transformation,
   I(\phi_k) = (J(h^{-1}(\phi_k)))^T I(h^{-1}(\phi_k)) 
   (J(h^{-1}(\phi_k)))
 \end{equation*}
-whre $J(h^{-1}(\phi_k))$ is the Jacobian matrix. For $\theta_k =
+where $J(h^{-1}(\phi_k))$ is the Jacobian matrix. For $\theta_k =
 h^{-1}(\phi_k)$, it follows,
 \begin{equation*}
   \pi(\phi_k)
@@ -836,7 +836,7 @@ In \cite{Zhou2013} the results of using non-informative priors for the
 Bayesian analysis of the \pet compartmental models were obtained. Here we
 consider the simulated data (see Section~\ref{sec:Simulated and real pet
 data}) and using Normally distributed errors (see Section~\ref{sec:Error
-models}). An inver Gamma disribution approximation to the Jeffreys prior was
+models}). An inver Gamma distribution approximation to the Jeffreys prior was
 used for the precision parameter of the Normal distribution. Uniform
 distributions are used for the $\theta_{1:r}$ and $\phi_{1:r}$ parameters
 (see Section~\ref{sec:Application to positron emission tomography} for the

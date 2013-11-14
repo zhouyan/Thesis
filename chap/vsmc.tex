@@ -665,9 +665,9 @@ create a \cppinline{SingleParticle<T>} object corresponding to the particle
 \cppinline{i}. There are a few member functions of
 \cppinline{SingleParticle<T>} that make access to individual particles easier
 than through the interface of \cppinline{Particle<T>}. For instance, for each
-particle, a \cppinline{Particle<T>} object construct an indepent \cppoo{} \rng
-engine. For example, the following uses it to generate standard Normal random
-variates,
+particle, a \cppinline{Particle<T>} object construct an independent \cppoo{}
+\rng engine. For example, the following uses it to generate standard Normal
+random variates,
 \begin{cppcode}
 std::normal_distribution<double> rnorm(0, 1);
 std::vector<double> z(particle.size());
@@ -724,7 +724,7 @@ parameter of \cppinline{StateMatrix}.
 
 Second, the static member functions \cppinline{mu_idx}, etc., returns the
 index of the $\mu_j$, etc., in each row of the \cppinline{StateMatrix}. For
-example, to access $\lambda_j$ of the $i$th particle, we can use
+example, to access $\lambda_j$ of the $i$\xth particle, we can use
 \begin{cppcode}
 particle.value().state(i, GMM<R>::lambda_idx(j));
 \end{cppcode}
