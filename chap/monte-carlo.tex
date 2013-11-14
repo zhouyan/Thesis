@@ -995,17 +995,17 @@ commonly seen in softwares for implementing \mcmc algorithms.
 It should be emphasized that, even when the plots appears to show stationary
 behavior, it is still possible that the algorithm has not converged or
 explored the support of the target distribution surface efficiently. For
-example, consider the three-compartments \pet model and non-informative priors
-without ordering (that is, parameters such as $(\phi_1,\theta_1)$ and
+example, consider the three-compartments \pet model and non-informative
+priors without ordering (that is, parameters such as $(\phi_1,\theta_1)$ and
 $(\phi_2,\theta_2)$ are exchangeable, see Section~\ref{sec:Application to
-  positron emission tomography}). We use one of the real data set and
+positron emission tomography}). We use one of the real data set and
 constructed a random walk algorithm (see Section~\ref{sub:Metropolis-Hastings
-  llgorithm}). Figure~\ref{fig:pet diag} shows the trace and histogram plots
-of parameter $\theta_1$. It appears that the \mcmc chain has converged well.
-However, from the properties of the model, it is known that this parameter has
-at least three local modes. In fact, this sampler has been trapped into one of
-them. In Figure~\ref{fig:pet diag c} the trace and histogram plots of the same
-sampler but with better calibrated proposal scales are shown.
+algorithm}). Figure~\ref{fig:pet diag} shows the trace and histogram plots of
+parameter $\theta_1$. It appears that the \mcmc chain has converged well.
+However, from the properties of the model, it is known that this parameter
+has at least three local modes. In fact, this sampler has been trapped into
+one of them. In Figure~\ref{fig:pet diag c} the trace and histogram plots of
+the same sampler but with better calibrated proposal scales are shown.
 
 \input{fig/pet_mh_diag}
 \input{fig/pet_mh_diag_c}

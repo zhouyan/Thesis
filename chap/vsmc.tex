@@ -361,7 +361,7 @@ past decade. The \smc and related algorithms are clearly among them. The
 population \mcmc (see Section~\ref{sub:Population mcmc}) algorithm can also be
 parallelized though less efficiently. For example, see results in
 Section~\ref{sub:Nonlinear ordinary differential equations}
-and~\ref{sub:Positron emission tomography compartmental model}. More recently
+and~\ref{sub:pet compartmental model}. More recently
 the particle \mcmc algorithm \cite{Andrieu:2010gc} is also well suited for
 parallel computing.
 
@@ -659,7 +659,7 @@ object, one can construct a \cppinline{SingleParticle<T>} object that
 abstracts one of the particle from the collection. For example,
 \begin{cppcode}
 Particle<T> particle(N);
-SingleParticle<T> sp(i, &particle);
+SingleParticle<T> (i, &particle);
 \end{cppcode}
 create a \cppinline{SingleParticle<T>} object corresponding to the particle
 \cppinline{i}. There are a few member functions of
