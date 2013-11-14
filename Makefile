@@ -12,6 +12,9 @@ figure :
 layout :
 	latexmk -f -silent layout.tex >/dev/null
 
+cover :
+	latexmk -f -silent cover.tex >/dev/null
+
 clean :
 	latexmk -c
 	rm -f *busy*

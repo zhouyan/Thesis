@@ -5,6 +5,7 @@ bib, bibintoc, biblatexstyle=numeric,
 mintcode, minted=cache,
 draftnote, showoverfull
 ]{mthesis}
+\usepackage{pdfpages}
 \ExecuteBibliographyOptions{url=true}
 
 \input{macros}
@@ -14,15 +15,13 @@ draftnote, showoverfull
 \addbibresource{thesis.bib}
 \addbibresource{extra.bib}
 
-\title{Bayesian Model Comparison \\via Sequential Monte Carlo}
-\author{Yan Zhou}
-\date{November 2013}
-
 \begin{document}
+
+\includepdf[pages=-]{library}
 
 \begingroup
   \frontmatter
-  \maketitle
+  \input{title}
   \tableofcontents
   \listoftables
   \listoffigures
