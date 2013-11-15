@@ -1167,7 +1167,9 @@ parallelization is less efficient than other industry strength programming
 models. However, with 1000 or more particles, which is less than typical
 applications, the difference is not very significant.
 
-\afterpage{\input{fig/vsmc_bench_smp}\clearpage}
+\begingroup
+\afterpage{\input{fig/vsmc_bench_smp}\input{fig/vsmc_bench_ocl}\clearpage}
+\endgroup
 
 \subsection{Using the \protect\opencl module}
 \label{sub:Using the OpenCL module}
@@ -1200,8 +1202,6 @@ seconds, measured in the unit $10^9$). The \gpu has a theoretical peak
 performance of 60 \gflops in double precision and 480 \gflops in single
 precision. This represents 245\% and 1960\% speedup compared to the \cpu,
 respectively.
-
-\afterpage{\input{fig/vsmc_bench_ocl}\clearpage}
 
 \subsection{Performance and productivity}
 \label{sub:Performance and productivity}

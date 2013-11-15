@@ -1473,8 +1473,9 @@ model ($r = 5$), again summarizing variability amongst 100 runs of each
 algorithm, are shown in Table~\ref{tab:node-s} and~\ref{tab:node-c},
 respectively.
 
-\afterpage{\input{tab/node-s}\clearpage}
-\afterpage{\input{tab/node-c}\clearpage}
+\begingroup
+\afterpage{\input{tab/node-s}\input{tab/node-c}\clearpage}
+\endgroup
 
 As shown in both cases, the number of distributions can affect the performance
 of population \mcmc algorithms considerably. When using 10 distributions,

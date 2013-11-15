@@ -751,7 +751,7 @@ where
 \end{equation}
 where the expectation is taken with respect to the likelihood function
 $p(\data|\theta_k,\calM_k)$, is the \emph{Fisher information}. The defining
-property of Jeffreys priors is its invariance in the sense that, for a
+property of Jeffreys priors is their invariance in the sense that, for a
 one-to-one transformation $\phi_k = h(\theta_k)$, we have the Jacobian
 transformation,
 \begin{equation*}
@@ -764,7 +764,7 @@ h^{-1}(\phi_k)$, it follows,
   \pi(\phi_k)
   \propto \sqrt{\Abs{I(\theta_k)}\Abs{J(h^{-1}(\phi_k))}}
   \propto \pi(\theta_k)
-  \Abs[bigg]{\det\Round[bigg]{\frac{\diff\theta_k}{\diff\phi_k}}}
+  \Abs[bigg]{\frac{\diff\theta_k}{\diff\phi_k}}
 \end{equation*}
 The above expression states that the Jeffreys prior of the transformed
 parameter $\phi_k$ is the same as the one obtained by changing variable of
@@ -774,8 +774,8 @@ is that, the prior should contain no more information than the observed data
 do. The Fisher information is widely accepted as an indicator of the amount
 of information brought by the model about the parameter $\theta_k$ given the
 data \cite{Fisher:1956vx}. Therefore, intuitively values of $\theta_k$ for
-which $I(\theta_k)$ is large is more likely than those for which
-$I(\theta_k)$ is small.
+which $I(\theta_k)$ are large are more likely than those for which
+$I(\theta_k)$ are small.
 
 However, Jeffreys priors derived for many models may be problematic. It is
 often the case that the derived Jeffreys priors can be improper. For example,
@@ -784,7 +784,7 @@ the real line. This can create technical difficulties if the improper priors
 also lead to improper posteriors since the marginal likelihood, as the
 normalizing constant of the posteriors, cannot be computed. This makes the
 Bayesian model choice problem difficult to formalize. See also the discussion
-in \cite{Kass:1995vb}. However, improper priors can also lead proper
+in \cite{Kass:1995vb}. However, improper priors can also lead to proper
 posteriors, for example see \cite[][sec.~2.9]{Gelman:2003vx},
 \cite[][sec.~1.5]{Robert:2007tc}, \cite{Kass:1995vb} and references therein
 for successful applications using improper priors. In general, for more
@@ -801,10 +801,11 @@ Normal distribution.
 Another class of non-informative priors is called \emph{reference priors},
 introduced in \cite{Bernardo:1979uq}. Reference priors aim to derive priors
 such that the distance between the posterior and prior is maximized, usually
-measured in terms of the \kldfull \cite{Kullback:1951va}. In some sense, a
-reference prior is the least informative prior. See \cite{Berger:1989vj,
-Berger:1992kf, Berger:1992wo} and \cite[][sec.~5.4]{Bernardo:1994vd} for more
-information on this class of priors.
+measured in terms of the \kldfull \cite{Kullback:1951va} (also see
+Section~\ref{sub:Kullback-Liebler divergence}). In some sense, a reference
+prior is the least informative prior. See \cite{Berger:1989vj, Berger:1992kf,
+Berger:1992wo} and \cite[][sec.~5.4]{Bernardo:1994vd} for more information on
+this class of priors.
 
 Another form of the reference priors is to partition the parameter vector
 $\theta_k = (\theta_k^{(1)},\theta_k^{(2)})$ where $\theta_k^{(1)}$ is the
@@ -824,14 +825,14 @@ eliminated.
 
 \paragraph{Using non-informative priors for the \pet compartmental model}
 
-In \cite{Zhou2013} the results of using non-informative priors for the
-Bayesian analysis of the \pet compartmental model were obtained. Here we
-consider the simulated data (see Section~\ref{sec:Simulated and real pet
-data}) and using Normally distributed errors (see Section~\ref{sec:Error
-models}). An inverse Gamma distribution approximation to the Jeffreys prior
-was used for the precision parameter of the Normal distribution. Uniform
-distributions are used for the $\theta_{1:r}$ and $\phi_{1:r}$ parameters
-(see Section~\ref{sec:Application to positron emission tomography} for the
+In \cite{Zhou2013} results of using non-informative priors for the Bayesian
+analysis of the \pet compartmental model were obtained. Here we consider the
+simulated data (see Section~\ref{sec:Simulated and real pet data}) and using
+Normally distributed errors (see Section~\ref{sec:Error models}). An inverse
+Gamma distribution approximation to the Jeffreys prior was used for the
+precision parameter of the Normal distribution. Uniform distributions are
+used for the $\theta_{1:r}$ and $\phi_{1:r}$ parameters (see
+Section~\ref{sec:Application to positron emission tomography} for the
 parameterization). The interval of the uniform distributions are the same as
 considered feasible in the optimization procedures such as the \nls
 estimator. The results of model selection is shown in Table~\ref{tab:pet
@@ -870,7 +871,7 @@ $\theta_k$ in the model $\calM_k$ are known in the form of prior expectations,
 where the expectation is taken with respect to the prior distribution
 $\pi(\theta_k|\calM_k)$ and $h_i$ is some function. For example, if the mean
 and variance of the parameter is known, then we might have $h_1(x) = x$ and
-$h_2(x) = x^2$ in the univariate case. In finite setting, define
+$h_2(x) = x^2$ in the univariate case. In a finite setting, define the entropy
 \begin{equation}
   \calE(\pi) = -\sum_{\theta_k\in\Theta_k}
   \pi(\theta_k|\calM_k)\log \pi (\theta_k|\calM_k)
@@ -887,13 +888,13 @@ distribution, say $\pi_0(\theta_k)$. Define the entropy as the negative
     \frac{\pi_0(\theta_k)}{\pi(\theta_k|\calM_k)}}\intd\theta_k
 \end{equation}
 The reference distribution $\pi_0$ can be chosen as one of the non-informative
-priors discussed earlier. Such choice is justified in
+priors discussed earlier. Such a choice is justified in
 \cite[][chap.~9]{Robert:2007tc}.
 
 The maximum entropy procedure in essence selects a prior that preserves the
 prior information -- the expectations of $\{h_i(\theta_k)\}_{i=1}^K$ while
 making it as close to the non-informative prior as possible. Therefore, the
-prior knowledge is presented in while the ignorance is also preserved.
+prior knowledge is presented while the ignorance is also preserved.
 
 \paragraph{Using informative priors for the \pet compartmental model}
 
@@ -925,7 +926,7 @@ specification we do not pursue more complicated approaches.
 
 To demonstrate the idea, an informative prior distribution for parameters
 $\theta_{1:3}$ and $\phi_{1:3}$ in the three-compartments model is
-constructed. First note that the transition matrix $A$ is,
+constructed. First note that the transition matrix $A$ (see Section~\ref{sec:Simulated and real pet data}) is,
 \begin{equation*}
   A = \begin{bmatrix}
     - k_2 - k_3 - k_5 & k_4  & k_6 \\
@@ -942,7 +943,6 @@ $\theta_1 \leq \theta_2 \leq \theta_3$, then,
   \theta_1 \leq \theta_2 \leq \theta_3 \leq \max\{2(k_2 + k_3 + k_5), 2k_4,
   2k_6\} \le 6 \times 10^{-2}
 \end{gather}
-
 Under the imposed ordering, as $\theta_1$ is the smallest exponent, the term
 $\phi_1e^{-\theta_1 t}$ decays more slowly than any other term in the
 expansion. Consequently, $\phi_1/\theta_1$ is likely to make a relatively
@@ -956,16 +956,25 @@ cases in which, say, $k_5 \gg k_6$ are not considered, then $\phi_1/\theta_1
 \ge 0.7 V_D$. The reason for not considering these cases is that such
 irreversible (trapped) models yield infinite $V_D$ estimates and it is
 generally known in advance that the tracer employed will exhibit reversible
-dynamics.
+dynamics. In addition, from results of previous studies, it is reasonable to
+believe that $V_D$ in the range from $10$ to $30$ for the majority of voxels.
+We might just set $V_D\approx 20$.
 
 With this information we can then construct informative priors for the
-parameters of interest. More technical details can be found in
-\cite{Zhou2013}. In particular, truncated Normal distributions are used as
-the priors for the parameters given all the upper and lower bounds.
-Table~\ref{tab:pet informative} shows the model selection results when using
-these informative priors. It can be seen that, especially for data with
-higher noise level, the results are considerably improved compared to using
-vague priors (Table~\ref{tab:pet vague}).
+parameters of interest. The means the distributions of $\phi_{1:r}$ are
+chosen such that they are less than $K_1$ but sum up to it, without
+significant differences among than. Conditional on $\phi_{1:r}$, the
+distributions of $\theta_{1:r}$ can be specified. For example, conditional on
+$\phi_1$, $\theta_1$ has mean $\phi_1/(0.8V_D)$ (since $0.7V_D \le
+\phi_1/\theta_1 \le V_D$). Similarly the distributions of $\theta_i$
+conditional on $\phi_{1:i}$ and $\theta_{1:i-1}$ for $i = 2$ and~$3$ can be
+constructed. More technical details can be found in \cite{Zhou2013}. In
+particular, truncated Normal distributions are used as the priors for the
+parameters given all the upper and lower bounds. Table~\ref{tab:pet
+informative} shows the model selection results when using these informative
+priors. It can be seen that, especially for data with higher noise level, the
+results are considerably improved compared to using vague priors
+(Table~\ref{tab:pet vague}).
 
 \input{tab/pet-informative}
 
@@ -976,7 +985,21 @@ Though intuitively the influence of priors can be eliminated given enough
 data. In the particular problem of Bayesian model comparison, it should be
 noted that the Bayes factor can be more sensitive to the choice of prior than
 the posterior means of parameters, in the sense that more data are needed to
-eliminate the influence of priors. \cite{Kass:1993vy,Kass:1995vb}.
+eliminate the influence of priors \cite{Kass:1993vy,Kass:1995vb}.
+
+Note that by ``more data'', we not only refer the situation where a larger
+sample size is obtained, but also when the data are measured more accurately.
+For example, compare the results of using informative priors
+(Table~\ref{tab:pet informative}) and those of using vague priors
+(Table~\ref{tab:pet vague}) for the \pet compartmental model. For less noisy
+data (i.e., the data is more informative), the difference is minimal. For
+noisy data (i.e., the data is less informative), there are considerable
+difference in model selection results. In contrast, the estimates of $V_D$
+see much less difference even for very noisy data in terms of mean squared
+errors (\mse; results are not shown in this thesis, see \cite{Zhou2013}).
+Though in our example, such difference is not problematic, the sensitivity of
+the Bayes factor to the choice of priors should not be overlooked in
+realistic applications.
 
 It is therefore of interest to evaluate the Bayes factor over a range of
 possible priors to assess the sensitivity issues. This is often
