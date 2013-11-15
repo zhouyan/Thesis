@@ -2,8 +2,8 @@
 \label{cha:Monte Carlo Methods}
 
 As shown in the last chapter, Bayesian model comparison usually involves
-computations of some integrations with respect to complex posterior
-distributions. Only in very special situations, these can be resolved
+computation of some integrations with respect to complex posterior
+distributions. Only in very special situations, this can be resolved
 analytically. In most cases, these integrations are approximated using
 simulation techniques. In this chapter, we review some of the widely used
 Monte Carlo methods with an emphasis on their applications to Bayesian
@@ -76,7 +76,7 @@ This estimator was studied in \cite{McCulloch:1991hj} and also mentioned in
 \cite{Kass:1995vb}. However, this approach often results in large variances.
 The likelihood function (and thus the posterior distribution) is often much
 more concentrated than the prior distribution. And there may be a large
-proportions of samples with small likelihood values and a few with high
+proportion of samples with small likelihood values and a few with high
 values. For instance, consider the one-compartment \pet model (see
 Section~\ref{sec:Application to positron emission tomography}) and
 informative priors (see Section~\ref{sub:Choice of priors}). Using 100,000
@@ -174,7 +174,7 @@ $f(\data|\theta_k,\calM_k)\pi(\theta_k|\calM_k)$. In other words, we need
 some knowledge of the posterior distribution $\pi(\theta_k|\data,\calM_k)$,
 which is often not available for complex models. Even when some
 characteristics of the posterior distribution are available, other techniques
-might be preferred. For example, with such informations, algorithms reviewed
+might be preferred. For example, with such information, algorithms reviewed
 in the next section may allow us to efficiently simulate dependent samples
 with the posterior distribution as the limiting distribution.
 
@@ -188,7 +188,7 @@ distribution can be changed into different shapes to match the
 characteristics of the target distribution. This can be flexible for some
 applications. However, for many distributions of interest, especially that
 are high dimensional and multimodal, it is difficult to find an explicit
-parametric distribution that can sample those local modes efficiently. We
+parametric distribution that can sample those local modes efficiently. As we
 will see in the next chapter, sequential Monte Carlo algorithms can
 iteratively construct efficient proposals and are suitable for a wide range
 of applications, including Bayesian model comparison.
@@ -232,8 +232,9 @@ ones are reviewed.
 \label{sub:Discrete time Markov chain}
 
 This section briefly discusses some notions of discrete time Markov chains.
-Most concepts are introduced in a descriptive way. For formal definitions,
-see Section~\appref{sec:Appendix Discrete time Markov chain}. Also see
+Most concepts are introduced in a descriptive way and we restrict ourselves
+to the continuous case. For formal definitions in more general settings, see
+Appendix~\appref{sec:Appendix Discrete time Markov chain}. Also see
 \cite[][chap.~6]{Robert:2004tn} for a treatment of the topic in more detail
 in the context of \mcmc algorithms.
 
@@ -241,8 +242,7 @@ A Markov chain can be defined in terms of \emph{transition kernels}. For
 continuous random variables $X$ and $X'$ defined in space $E$, which are
 ordered in time in some sense, a transition kernel is the distribution of
 $X'$ conditional on $X$. That is, $\Pr(X'\in A|x) = \int K(x,x')\intd x'$
-where $A\subset E$. We also call $K$ just \emph{kernel}. More general
-definition is given in Section~\ref{sec:Appendix Discrete time Markov chain}.
+where $A\subset E$. We also call $K$ just \emph{kernel}.
 
 A discrete time Markov chain, denoted by $(X^t)$ is a sequence of random
 variables $X^0,X^1,\dots,X^t,\dots$ such that conditional on
@@ -333,7 +333,7 @@ holds \cite[][Theorem~7.4 and Corollary~7.5]{Robert:2004tn}.
 
 The Metropolis-Hastings algorithm is important not only because it has found
 many applications, but also because it is the foundation of many other
-algorithms. For example the reversible jump \mcmc and the population \mcmc
+algorithms. For example the reversible jump \mcmc and population \mcmc
 algorithms, reviewed later in Section~\ref{sub:Reversible jump mcmc}
 and~\ref{sub:Population mcmc}, respectively, can both be viewed as extensions
 to this algorithm.
@@ -405,7 +405,7 @@ as possible. The requirement for $\pi/\eta$ to be bounded also suggests that
 $\eta$ at least should not have too thin tails compared to $\pi$. Ideally it
 should have slightly heavier tails than $\pi$ but not much less concentrated.
 In this aspect, the choice of $\eta$ is similar to the choice of the proposal
-distribution for the importance sampling. And hence it inherits the same
+distribution for the importance sampling. Hence it inherits the same
 difficulties as outlined in Section~\ref{sec:Importance sampling}.
 
 \subsubsection{Random walks}
@@ -417,7 +417,7 @@ $q(y|x) = q(\Abs{y - x})$. This leads to the acceptance probability,
 \begin{equation}
   \alpha(x,y) = \min\Curly[bigg]{\frac{\pi(y)}{\pi(x)},1}.
 \end{equation}
-This algorithm does not satisfies conditions for the uniform ergodicity in
+This algorithm does not satisfy conditions for the uniform ergodicity in
 general. However it is geometrically ergodic under certain conditions. In
 \cite{Mengersen:1996th}, a condition based on log-concavity of $\pi$ in the
 tails was given. The Markov chain is geometrically ergodic if,
@@ -457,7 +457,7 @@ simulated data. We construct a random walk algorithm with three blocks,
 \end{enumerate}
 Both Figure~\ref{fig:pet mh tuned} and~\ref{fig:pet mh untuned} show the
 trace of $(\phi_1, \theta_1)$ from three samplers for the one-compartment
-model, initialized with different values. Each sampler is iterated for 10,000
+model, initialized with different values. Each sampler is iterated 10,000
 times. In the former, the proposal scales (the variance of the Normal
 distributions, which are univariate in the case of the one-compartment model)
 are well tuned and the later uses scales five times of the former. In
@@ -538,10 +538,10 @@ when to stop adaptation was discussed in \cite{Andrieu:2008kh} and references
 therein. There are more advanced techniques where the adaptive scheme attains
 a vanishing adaptation property. Informally, after a long enough period, the
 adaptive algorithm will only change the parameter $\theta$ slightly and
-eventually it becomes stable. These algorithms require more careful designs
+eventually it becomes stable. These algorithms require more careful design
 to assure convergence.
 
-Adaptive scheme is often necessary for realistic applications. For example,
+Adaptive schemes are often necessary for realistic applications. For example,
 consider the \pet compartmental model. As seen earlier, the scaling of the
 Normal random walk influences the performance greatly. However, in a single
 \pet scan, there are about a quarter of a million data sets, each results in
@@ -610,7 +610,7 @@ few general methodologies to solve this problem. The practical rule is to
 create decompositions as independent as possible. For instance, in the
 special case that $(X_1,\dots,X_p)$ are mutually independent, then a Gibbs
 sampler is equivalent to sampling directly from the target distribution.
-Admittedly, such decompositions, though exist, can hardly be found in
+Admittedly, such decompositions, though they exist, can hardly be found in
 interesting cases, otherwise one would not need to consider an \mcmc
 algorithm in the first place.
 
@@ -685,7 +685,7 @@ sampler. A distribution, say $\eta$ with the following property is chosen,
 \end{equation}
 In other words, $\pi$ is a marginal of $\eta$. Then the Gibbs sampler is
 constructed with the full conditionals of $\eta$ instead of $\pi$. The
-subchain of the resulting Markov chain that corresponding to the marginal
+subchain of the resulting Markov chain that corresponds to the marginal
 $\pi$ is then $\pi$-invariant. When such a technique is used, there are many
 possible choices of $\eta$ to complete $\pi$. Some applications provide
 natural choices, such as the aforementioned missing data models.
@@ -771,13 +771,13 @@ the pair is performed.
 The main difficulties lie in the choice of cross-model proposals and the
 bijection $T$. Though the mapping $T$ theoretically is quite flexible, its
 creation and optimization can be quite difficult in practice. This is
-specifically true when the parameter space is complicated. In some extreme
+particularly true when the parameter space is complicated. In some extreme
 cases, creating a valid kernel is already difficult. For example, in
 multimodal models, where \rjmcmc has gain substantial attention, information
 available in posterior distributions of any given model does not characterize
 modes that exist only in models of higher dimension; and thus a successful
-between model move between these dimensions becomes difficult
-\cite{Jasra:2007id}. Inefficient proposals results in Markov chains that are
+between-model move between these dimensions becomes difficult
+\cite{Jasra:2007id}. Inefficient proposals result in Markov chains that are
 slow to explore the whole parameter space. However, the natural ideas of
 neighborhood and others, which proved to be useful concepts for within model
 simulations, may no longer be intuitive in the variable dimension model
@@ -787,15 +787,15 @@ last iteration, when transformed might be in a low probability region of the
 model of the current iteration. In addition, \rjmcmc does not characterize
 all models well as some may be visited by the chain only rarely. This may not
 be a problem when the model is indeed of low posterior probability and there
-are little interest in such models. However, in some cases it will be
+is little interest in such models. However, in some cases it will be
 difficult to determine whether the low acceptance rates of between model
 moves results from actual characteristics of the posterior or from a poorly
 adapted proposal kernel.
 
 Some discussion of the optimization of the cross-model moves can be found in
 \cite{Green:2009tr}. Also the adaptive scheme for the Metropolis-Hastings
-algorithms has been extended for \rjmcmc, for example \cite{Hastie:2005vi}.
-However little other work are known for the actual performance of this kind
+algorithm has been extended for \rjmcmc, for example \cite{Hastie:2005vi}.
+However little other work is known for the actual performance of this kind
 of improvement to \rjmcmc. In \cite{Green:2001tk} a method called
 \emph{delayed rejection} was discussed. In this method, a rejection of a
 proposal does not immediately lead to the acceptance of current state,
@@ -805,21 +805,21 @@ efficiency improvement but with increased computation cost.
 \subsection{Population \protect\mcmc}
 \label{sub:Population mcmc}
 
-Population-based methods have been considered in recent researches. An entire
+Population-based methods have been considered in recent research. An entire
 family of such algorithms, sequential Monte Carlo, is considered in
 Chapter~\ref{cha:Sequential Monte Carlo for Bayesian Computation}. Another
-algorithm, the population \mcmc, which has seen applications in the area of
+algorithm, population \mcmc, which has seen applications in the area of
 Bayesian model comparison, is reviewed in this section.
 
-The population \mcmc operates by constructing a sequence of distributions
+Population \mcmc operates by constructing a sequence of distributions
 $\{\pi_t\}_{t=0}^T$ with at least one of them being the target distribution
-$\pi$. Parallel \mcmc chains are simulated for each of these distributions. In
-addition, the chains interact with each other with swapping or crossover
+$\pi$. Parallel \mcmc chains are simulated for each of these distributions.
+In addition, the chains interact with each other by swapping or crossover
 moves, which allows fast mixing chains to ``lend'' information to slow mixing
 chains. The outputs are therefore samples that approximate the product
 $\prod_{t=0}^T\pi_t$ with the target distribution being a marginal.
 
-Different choices of the sequence of distributions is possible. One commonly
+Different choices of the sequence of distributions are possible. One commonly
 used in practice is called tempering. For a target $\pi$, a sequence
 $\{\pi_t\}_{t=0}^T$ is constructed such that,
 \begin{equation}
@@ -845,7 +845,7 @@ initializing $T$ Markov chains for each of the marginals $\{\pi_t\}_{t=0}^T$
 with a common support $E$, at each iteration, two types of moves are
 performed. One is \emph{local} moves, sometimes termed \emph{mutation}, that
 advances each chain individually using an \mcmc algorithms such as the
-Metropolis-Hastings algorithm or the Gibbs sampling. One can select one chain
+Metropolis-Hastings algorithm or the Gibbs sampling. One may select one chain
 at random in each iteration to mutate or advance all chains in parallel. The
 other type is \emph{global} moves. The purpose is to allow fast mixing chains
 to transfer information into slowly mixing chains. In each global move, two
@@ -915,7 +915,7 @@ denote the proposed states. Then the acceptance probability is,
 In \cite{Jasra:2007in} it was found that the cross over move can be more
 efficient than the exchange move.
 
-The population \mcmc algorithm can be more efficient than simulating from a
+Population \mcmc algorithm can be more efficient than simulating from a
 single chain. Consider the situation where the \mcmc algorithm targeting
 distributions $\pi_1$ and $\pi_2$ might be trapped. If $\pi_1$ and $\pi_2$
 are similar in the sense of the shape of the locations of local modes. And
@@ -926,46 +926,47 @@ such an exchange is accepted than the \mcmc algorithm jumps into the other
 modes itself. Those chains that mix fast can explore the parameter space more
 efficiently than those mix slower and are more likely to visit all the high
 probability regions. Through the global moves they propose values in other
-high probability regions to slowly mixing chains to help them avoiding
+high probability regions to slowly mixing chains to help them avoid
 trapping states.
 
 \paragraph{Optimal placement of distributions}
 
-As discussed earlier, the population \mcmc allows efficient simulation of
+As discussed earlier, population \mcmc allows efficient simulation of
 previously difficult problem, though at a cost of increasing computational
 cost. However, the algorithm requires another layer of optimization in
-additional to the mixing speed of each local move -- the placement of the
-sequence of distributions $\{\pi_t\}_{t=0}^T$. If too many chains are present,
-the information can take many global moves to transfer from fast mixing chains
-to slowly mixing ones. If there are too few chains and they are placed far
-apart of each other, the global moves are likely to have small acceptance
-rates. In \cite{Atchade:2010ha}, based on the idea of maximizing the average
-information exchanged at each iteration, it was recommended that an optimal
-placement of the distributions should have an global acceptance rate around
-$0.234$. The optimal placement of the distributions can be obtained
-iteratively if $\{\pi_t\}_{t=0}^T$ belongs to a family of distributions, say
-$\pi_{\alpha} = \pi(\cdot|\alpha)$, indexed by $\alpha$. The algorithm first
-finds $\alpha_0$ and $\alpha_1$ such that the population \mcmc algorithm
-operating on $\{\pi_{\alpha_t}\}_{t=0}^1$ has a global acceptance rate close
-to $0.234$. For example, if a tempering scheme is used, one can set $\alpha_0
-= 0$ and use a binary search algorithm to find $\alpha_1$ since the smaller
-$\alpha_1$, the higher the acceptance rate. The algorithm proceeds in the same
-way to find $\alpha_t$ for $t>1$.
+addition to the mixing speed of each local move -- the placement of the
+sequence of distributions $\{\pi_t\}_{t=0}^T$. If too many chains are
+present, the information can take many global moves to transfer from fast
+mixing chains to slowly mixing ones. If there are too few chains and they are
+placed far apart from each other, the global moves are likely to have small
+acceptance rates. In \cite{Atchade:2010ha}, based on the idea of maximizing
+the average information exchanged at each iteration, it was recommended that
+an optimal placement of the distributions should have an global acceptance
+rate around $0.234$. The optimal placement of the distributions can be
+obtained iteratively if $\{\pi_t\}_{t=0}^T$ belongs to a family of
+distributions, say $\pi_{\alpha} = \pi(\cdot|\alpha)$, indexed by $\alpha$.
+The algorithm first finds $\alpha_0$ and $\alpha_1$ such that the population
+\mcmc algorithm operating on $\{\pi_{\alpha_t}\}_{t=0}^1$ has a global
+acceptance rate close to $0.234$. For example, if a tempering scheme is used,
+one can set $\alpha_0 = 0$ and use a binary search algorithm to find
+$\alpha_1$ since the smaller $\alpha_1$, the higher the acceptance rate. The
+algorithm proceeds in the same way to find $\alpha_t$ for $t>1$.
 
 \subsection{Convergence diagnostic}
 \label{sub:Convergence diagnostic}
 
-One important issue of \mcmc algorithms is its speed of convergence. It is
-well understood yet sometime over looked in practice. In the previous sections
-we demonstrated for many algorithms, under fairly general conditions, the
-chains produced are ergodic, or even geometrically ergodic (random walk). In
-some cases the chain can be uniformly ergodic (independent Metropolis-Hastings
-algorithm). However, such development provides little insight on how many
-iterations the algorithm should be run to produce accurate estimates.
+One important issue of \mcmc algorithms is their speed of convergence. It is
+well understood yet sometime over looked in practice. In the previous
+sections we demonstrated for many algorithms, under fairly general
+conditions, the chains produced are ergodic, or even geometrically ergodic
+(random walk). In some cases the chain can be uniformly ergodic (independent
+Metropolis-Hastings algorithm). However, such development provides little
+insight on how many iterations the algorithm should be run to produce
+accurate estimates.
 
-Convergence of an \mcmc algorithm is assessed with monitoring certain
+Convergence of an \mcmc algorithm is assessed by monitoring certain
 statistics of samples. This process is also called \emph{convergence
-  diagnostic}. There are two types of convergence
+diagnostic}. There are two types of convergence
 \cite[][chap.~12]{Robert:2004tn} widely used in practice. As we will see
 later, a convergence diagnostic can at best determine that a chain has not
 converged yet. One cannot be certain that a chain does converge.
@@ -990,7 +991,7 @@ However, obtaining analytical bounds can be prohibitively difficult.
 A natural empirical approach is to draw plots of simulated samples to detect
 non-stationary behaviors. For instance, \cite{Gelfand:1990it} drew sequence
 of the samples $\{X^t\}_{t\ge1}$ against the time $t$, which is a
-functionality now commonly seen in softwares for implementing \mcmc
+functionality now commonly seen in softwares that implement \mcmc
 algorithms.
 
 It should be emphasized that, even when the plots appears to show stationary
@@ -1183,7 +1184,7 @@ considerable care in the implementation, especially the choice of the density
 $\gamma$, to ensure good performance and indeed a finite variance estimator.
 
 The method described above can be used for most \mcmc algorithms, such as the
-Metropolis-Hastings algorithm, the Gibbs sampling and the population \mcmc (by
+Metropolis-Hastings algorithm, the Gibbs sampling and population \mcmc (by
 only using the subchain that corresponding to the distribution of interest).
 
 \paragraph{Results for \pet compartmental model}
@@ -1299,14 +1300,14 @@ known including their normalizing constants.
 \subsubsection{Population \mcmc with path sampling}
 \label{ssub:Population mcmc with path sampling}
 
-For the population \mcmc, proposed in \cite{Calderhead:2009bd}, a Monte Carlo
+For population \mcmc, as proposed in \cite{Calderhead:2009bd}, a Monte Carlo
 approximation to the path sampling estimator \cite{Gelman:1998ei} can be used
 for the purpose of approximating the marginal likelihood. Given a parameter
 $\alpha$ which defines a family of distributions, $\{\pi_{\alpha} =
 \gamma_{\alpha}/Z_{\alpha}\}_{\alpha\in[0,1]}$ which moves smoothly from
 $\pi_0 = \gamma_0/Z_0$ to $\pi_1 = \gamma_1/Z_1$ as $\alpha$ increases from
-zero to one, one can estimate the logarithm of the ration of their normalizing
-constants via a simple integral relationship,
+zero to one, one can estimate the logarithm of the ration of their
+normalizing constants via a simple integral relationship,
 \begin{equation}
   \log\Round[bigg]{\frac{Z_1}{Z_0}} = \int_0^1\Exp_{\pi_{\alpha}}
   \Square[bigg]{\frac{\diff\log\gamma_{\alpha}(X)}{\diff\alpha}}
@@ -1322,11 +1323,11 @@ is to simulate samples $(\alpha,X)$ where $\alpha$ are uniformly distributed
 on the interval $[0,1]$ and conditional on $\alpha$, $X$ is distributed with
 $\pi_{\alpha}$. As we will see, with some modifications of the evaluation of
 the outer integration, this estimator can be approximated using samples from
-the population \mcmc.
+a population \mcmc.
 
 There are various ways of constructing such a family of distributions, for
 example, the sequence of distributions in Equation~\eqref{eq:power post},
-$\alpha = \alpha(t/T)$. The population \mcmc provides samples that can be used
+$\alpha = \alpha(t/T)$. Population \mcmc provides samples that can be used
 to approximate this path sampling estimator. Given samples
 $\{X_0^{(i)},\dots,X_T^{(i)}\}_{i=1}^N$ from $N$ iterations of a population
 \mcmc sampler, one can approximate the expectation under distribution
@@ -1392,7 +1393,7 @@ estimators. The harmonic mean estimator and its generalizations can be
 calculated for most \mcmc algorithms. However, they suffer the stability
 issues. For the Gibbs sampling and the Metropolis-Hastings algorithm, there
 exist more stable estimators. However, they require knowledge of certain
-distributions that are not always available. The population \mcmc can also use
+distributions that are not always available. Population \mcmc can also use
 the path sampling estimator. There is a trade-off between convergence speed
 and the accuracy of the estimator in term of its bias.
 

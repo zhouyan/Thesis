@@ -8,10 +8,10 @@ to the implementation of the illustrative and performance comparison examples
 in previous chapters. It evolves into a sophisticated \cpp framework for
 implementing \smc algorithms on both sequential and parallel hardware.
 
-The library makes use of some modern \cpp techniques. One shall not need to be
-an expert on all of them to use the library. Most of the examples in this
-chapter shall be self-explanatory to readers with some basic knowledge of
-\cpp. For those interested, Appendix~\appref{sec:Modern C++} serve as a brief
+The library makes use of some modern \cpp techniques. One should not need to
+be an expert on all of them to use the library. Most of the examples in this
+chapter are self-explanatory to readers with some basic knowledge of \cpp.
+For those interested, Appendix~\appref{sec:Modern C++} serve as a brief
 introduction to \cpp templates and callable objects, two features used
 extensively in the \vsmc library.
 
@@ -57,7 +57,7 @@ statisticians use computers.
 \label{ssub:Parallelism strategies}
 
 The best overall strategy for \emph{scalable parallelism} is \emph{data
-  parallelism} \cite{datapar}. There are various definitions of data
+parallelism} \cite{datapar}. There are various definitions of data
 parallelism. Narrower definitions only permit collection-oriented operations,
 such as applying the same function to all elements of an array. A wider view
 is that the parallelism grows (preferably linearly) as the data size or the
@@ -66,15 +66,15 @@ integration algorithm belongs to this strategy. As the number of samples
 increases, one can always use more parallel computing resource to run the
 sampler with the same amount of time without increasing the speed of each
 computing unit. Note that, here we ignored issues such as generating random
-numbers in parallel, which will be discussed later, and other factors that may
-slow down the performance when the number of parallel computing units
-increases beyond certain limit. In contrast, an \mcmc algorithm usually cannot
-be parallelized in a scalable way. To obtain better statistical results, often
-the only way is to increase the number of iterations, and thus no matter how
-much parallel computational resource are available, the computing time will
-increase without increasing the speed of the processors. It shall be obvious
-that many \smc algorithms can be parallelized using data parallelization in a
-scalable way.
+numbers in parallel, which will be discussed later, and other factors that
+may slow down the performance when the number of parallel computing units
+increases beyond certain limit. In contrast, an \mcmc algorithm usually
+cannot be parallelized in a scalable way. To obtain better statistical
+results, often the only way is to increase the number of iterations, and thus
+no matter how much parallel computational resource are available, the
+computing time will increase without increasing the speed of the processors.
+It should be obvious that many \smc algorithms can be parallelized using data
+parallelization in a scalable way.
 
 The opposite of data parallelism is \emph{functional parallelism}, an approach
 that runs different functional parts of a program in parallel. At best,
@@ -235,7 +235,7 @@ user. This is closely related to the application area of the software. At the
 lowest level, some softwares used to solve a particular problem are
 implemented using some programming languages such as \rlang or \cpp from
 ground up. Some of them provide frameworks on top of which the user only need
-to fill in some problem specific informations.
+to fill in some problem specific information.
 
 In the following, we review a few more important development for Monte Carlo
 computing. Most of those that are relevant to the work in this thesis can be
@@ -587,7 +587,7 @@ callback that implement application specific operations.
 
 At the core of each implementation of \smc algorithms using the \vsmc library
 is the definition of the value collection type that abstracts
-$\{X^{(i)}\}_{i=1}^N$. \vsmc does not restrict how the values shall be
+$\{X^{(i)}\}_{i=1}^N$. \vsmc does not restrict how the values should be
 actually stored. They can be stored in the main memory, spread among nodes of
 a cluster, in \gpu memory or even in a database. Users can define their own
 value collection type to fulfill various application specific needs. For full
@@ -707,13 +707,13 @@ The \cppinline{GMM} class will abstract the \gmm in addition to the state of
 all particle values at any given generation. Therefore, we have the following
 design goals for this class,
 \begin{enumerate}
-  \item The data, which is associated with the model shall be stored in and
+  \item The data, which is associated with the model should be stored in and
     can be accessed through this class.
   \item The calculation of the likelihood and the prior densities, which are
-    characteristics of the model shall be possible through this class.
+    characteristics of the model should be possible through this class.
   \item The distribution specification parameter $\alpha$ and the \mcmc
     proposal scales, which are properties of a given generation of the
-    particle system shall be associated with this class.
+    particle system should be associated with this class.
 \end{enumerate}
 This class is outlined as below.
 \cppfile{snippet/gmm_value.cpp}
@@ -812,7 +812,7 @@ initialize each of the parameter to $\calN(\mu,\sigma^2)$, where $\calN$
 denotes the Normal distribution. We can implement it as the following,
 \cppfile{snippet/init_normal.cpp}
 In this example, we used the second parameter \cppinline{param} to pass
-informations about the Normal distribution, its mean and standard deviation.
+information about the Normal distribution, its mean and standard deviation.
 In the body of the program (the \cppinline{main} function), we can use it as
 the following,
 \begin{cppcode}
@@ -907,14 +907,14 @@ To add \cppinline{move_f} into the queue of \cppinline{move}'s, call
 sampler.move(move_f, false);
 \end{cppcode}
 The second argument, a boolean value, indicate whether the new
-\cppinline{move} shall be appended to the existing (possibly empty) queue (if
+\cppinline{move} should be appended to the existing (possibly empty) queue (if
 it is set to \cppinline{false}); or the queue should be cleared before set a
 new one. The queue of the \cppinline{mcmc}'s is manipulated similarly.
 
 \subsection{Example: Updating the weights in the \smc[2] algorithm}
 \label{sub:Example: Updating the weights in the SMC2 algorithm}
 
-Recall Algorithm~\ref{alg:smc2}, the updating of weights shall be performed
+Recall Algorithm~\ref{alg:smc2}, the updating of weights should be performed
 before possible resampling at each iteration. And the change of the weights
 are calculated with the incremental weights,
 \begin{align*}
@@ -1037,7 +1037,7 @@ the user passed to \cppinline{Sampler<T>::monitor}; and thus one does not need
 global variables or other similar techniques to access this value. The output
 pointer \cppinline{res} points to an $N \times m$ output array of row major
 order. That is, after the calling of the function, the value of
-\cppinline{res[i * dim + j]} shall be $h_j(X^{(i)})$.
+\cppinline{res[i * dim + j]} should be $h_j(X^{(i)})$.
 
 Implementation of the path sampling estimator (Section~\ref{sub:Path Sampling
   via smc2/smc3}) can be viewed as a special kind of monitor. In addition to

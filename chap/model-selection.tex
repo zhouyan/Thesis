@@ -45,13 +45,13 @@ settings \cite[][sec.~2.1.3]{Burnham:2002wc}. For the purpose of simplicity,
 in the remainder of this section, we will assume that the distributions under
 discussion are continuous.
 
-The criterion of model selection under this theme is thus finding the model
+A procedure of model selection under this theme is thus finding the model
 that has the minimum \kld between the true data generating distribution and
 the model distribution. There are often a set of candidate models. Each model
 is defined by a parametric distribution. Therefore model selection can be
 viewed as a two-step process. First, for each model a value of the parameter
 vector is found such that the \kld is minimized within this model across the
-parameter space. Second, the model with the smallest \kld among all models is
+parameter space. Second, a model with the smallest \kld among all models are
 selected.
 
 It is clear that the calculation of $D_{\kl}(g,f)$ relies on the knowledge of
@@ -132,7 +132,7 @@ derivation of \aic.
 First, the derivation of the bias term is based on a first order Taylor
 expansion of $\Exp_g[\ell_n(\hat\theta)/n - \bar{D}_{\kl}(g,f)]$. The
 accuracy is of order $o(n)$. The assumption about the parametric model $f$ is
-quite minimal. Given more informations about the structure of the models,
+quite minimal. Given more information about the structure of the models,
 more accurate estimator can be derived by using a second order expansion
 (discussed later in Section~\ref{sub:A second order aic}).
 
@@ -153,15 +153,14 @@ process. However, \aic does assume that the model distribution is well
 behaved in the sense that the estimator used to evaluate the criterion is
 indeed close to the minimizer of the \kld.
 
-The last but not least, \aic has the tendency of selecting more complex
-models in the sense that when there are multiple models with the minimum
-expected \kld, \aic is likely to choose the model with more parameters.
-Intuitively, the log-likelihood function increases linearly as the sample
-size grows, while the penalty term $2k$ is not affected. Therefore, the \aic
-strategy is likely going to select more complex models when more data becomes
-available. This is formally shown in \cite{Sin:1996vs}: When there are more
-than one model that minimizes the \kld, \aic does not necessarily choose the
-simplest model.
+Last but not least, \aic has the tendency of selecting more complex models in
+the sense that when there are multiple models with the minimum expected \kld,
+\aic is likely to choose the model with more parameters. Intuitively, the
+log-likelihood function increases linearly as the sample size grows, while
+the penalty term $2k$ is not affected. Therefore, the \aic strategy is likely
+going to select more complex models when more data becomes available. This is
+formally shown in \cite{Sin:1996vs}: When there are more than one model that
+minimizes the \kld, \aic does not necessarily choose the simplest model.
 
 \subsection{A second order \protect\aic}
 \label{sub:A second order aic}
@@ -285,12 +284,12 @@ of the bias term. It is difficult to derive small sample correction for the
 
 Cross-validation has a long history in applied and theoretical statistics. It
 has been formalized in \cite{Geisser:1975vx} and \cite{Stone:1974vx} (also
-see the introduction in this paper for an overview of earlier development on
-this method). The basic idea is to split the data into two parts. One part of
-the data is used for model fitting and the resulting estimates of parameters
-are used to predict the other part of the data. By comparing the predictions
-based on part of the data and the observed other part, the usefulness of the
-model is determined.
+see the introduction in \cite{Stone:1974vx} for an overview of earlier
+development on this method). The basic idea is to split the data into two
+parts. One part of the data is used for model fitting and the resulting
+estimates of parameters are used to predict the other part of the data. By
+comparing the predictions based on part of the data and the observed other
+part, the usefulness of the model is determined.
 
 Formally, following \cite{Geisser:1975vx}, let $\data = (y_1,\dots,y_n)$ be
 the data set and $\data^t\subset\data$ be a non-empty proper subset. The
@@ -340,7 +339,7 @@ combinations are considered \cite{Shao:1993vx}. It is clear that $k=1$ yields
 the leave-one-out procedure and for large sample size, a modest $k$ can lead
 to higher computational cost as the number of possible partitions is the
 binomial coefficient. This is also called the $k$\emph{-fold} procedure.
-Other procedures are also possible. For more informations we refer to
+Other procedures are also possible. For more information we refer to
 \cite{Stone:1978vx} and \cite{Hjorth:1994vx}.
 
 There are also different choices of the loss function $\gamma$. The one
@@ -405,15 +404,14 @@ technique, its computational difficulties, and its implementation for
 realistic models. More philosophical issues will not be elaborated in this
 thesis.
 
-A throughout treatment of Bayesian modeling from a decision-theoretic
-perspective can be found in \cite{Robert:2007tc}. Formal mathematical
-representations can also be found in \cite[][sec.~5.1 and
-sec.~6.1]{Bernardo:1994vd}. Notions of rational decisions in the context of
-uncertainty was also made precise in the form of axioms in
-\cite{DeFinetti:1974tg,DeFinetti:1975ua}. It is assumed that a rational
-decision cannot be considered separately from rational beliefs. And rational
-beliefs shall be built upon available information (the data) and any personal
-preference input (the prior information).
+A treatment of Bayesian modeling from a decision-theoretic perspective can be
+found in \cite{Robert:2007tc}. Formal mathematical representations can also
+be found in \cite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd}. Notions of
+rational decisions in the context of uncertainty was also made precise in the
+form of axioms in \cite{DeFinetti:1974tg,DeFinetti:1975ua}. It is assumed
+that a rational decision cannot be considered separately from rational
+beliefs. And rational beliefs should be built upon available information (the
+data) and any personal preference input (the prior information).
 
 In the remainder of this section, we first introduce the formalization of the
 model choice problem within the Bayesian framework. It leads to the important
@@ -474,16 +472,16 @@ be calculated given the prior $\pi(\calM_k)$,
   \label{eq:post model prob}
 \end{equation}
 The Bayesian model choice problem mostly centers around the inference of this
-posterior model probability. Many methods for computing this probability is
+posterior model probability. Many methods for computing this probability are
 reviewed in Chapter~\ref{cha:Monte Carlo Methods}. In the remainder of this
 section, we assume that the calculation of required quantities is possible and
 accurate.
 
 Our aim is to choose the ``best'' model from the set $\calM$. There will
 usually be actions taken after the model selection, for example, parameter
-estimation, or prediction of future events, etc. It is the consequences of
-these actions of interest instead of the chosen model itself. Therefore, from
-a decision-theoretic perspective, the ``best'' model should maximize the
+estimation, or prediction of future events, etc. The consequences of these
+actions instead of the chosen model itself are of interest. Therefore, from a
+decision-theoretic perspective, the ``best'' model should maximize the
 utility for some quality of interest. However, in practice it is common to
 ignore the actions following the model selection and the sole interest is the
 true model, say $\calM_t$. This is because that the Bayesian framework is
@@ -504,8 +502,7 @@ utility given data $\data$ is the model with the highest posterior
 probability $\pi(\calM_k|\data)$ \cite[][chap.~6]{Bernardo:1994vd}. Also see
 \cite[][sec.~7.2.1]{Robert:2007tc} for an in-depth discussion of the
 difficulties of the Bayesian formulation in the model choice problem and the
-reason of why such a simplified maximum posterior probability approach is
-used.
+reason why such a simplified maximum posterior probability approach.
 
 It should be noted that the use of the zero-one utility is only valid if the
 true model $\calM_t$ belongs to $\calM$. Otherwise, the utility is always zero
@@ -515,9 +512,9 @@ with the highest posterior probability.
 Bayesian model selection can be attractive for a few reasons. First, it
 provides a natural probabilistic interpretation of the results. It is very
 easy to account model uncertainty within this framework. When there are more
-than one models well supported by the data and it is uncertain which one shall
-be chosen as the best model, the posterior model probabilities can be used as
-weights to construct weighted estimator. This leads to Bayesian model
+than one models well supported by the data and it is uncertain which one
+should be chosen as the best model, the posterior model probabilities can be
+used as weights to construct weighted estimator. This leads to Bayesian model
 averaging. See, e.g., \cite{Raftery:1997vx,Clyde:1999vx,Draper:1995vx}, for
 more discussions and examples.
 
@@ -587,16 +584,16 @@ uniform, as long as the model set $\calM$ is finite.
 The Bayes factor, $B_{k_1k_2}$, can be interpreted as the evidence provided
 by the data in favor of model $\calM_{k_1}$ against model $\calM_{k_2}$. As
 noted earlier, the marginal likelihood $p(\data|\calM_k)$ is also called the
-evidence supporting model $\calM_k$. In \cite{Jeffreys:1961ua} it is
-suggested that the Bayes factor can be interpreted on a $\log_{10}$ scale.
-His interpretations are reproduced in Table~\ref{tab:bayes factor log10
-scale}. The interpretation of the Bayes factor can be application dependent.
-The Jeffreys' interpretation, and a similar scale based on $2\log
-B_{k_1k_2}$, which is on the same scale as the likelihood ratio test
-\cite{Kass:1995vb}, are only general guidelines. Other interpretations can be
-more suitable for specific applications. For example, \cite{Kass:1995vb}
-mentioned that for forensic evidence to be conclusive in a criminal trial,
-the posterior odds of guilt against innocence need to be at least 1,000.
+evidence supporting model $\calM_k$. Jeffrey \cite{Jeffreys:1961ua} suggested
+that the Bayes factor can be interpreted on a $\log_{10}$ scale. The
+interpretations are reproduced in Table~\ref{tab:bayes factor log10 scale}.
+The interpretation of the Bayes factor can be application dependent. The
+Jeffreys' interpretation, and a similar scale based on $2\log B_{k_1k_2}$,
+which is on the same scale as the likelihood ratio test \cite{Kass:1995vb},
+are only general guidelines. Other interpretations can be more suitable for
+specific applications. For example, \cite{Kass:1995vb} mentioned that for
+forensic evidence to be conclusive in a criminal trial, the posterior odds of
+guilt against innocence need to be at least 1,000.
 
 \input{tab/bayes-factor-scale}
 
@@ -605,11 +602,11 @@ be used when the set of candidate models is finite, it is not necessarily an
 issue for many interesting cases. As we will see later in the next chapter,
 evaluating the marginal likelihood by simulating samples from the model
 posterior can be relatively easy compared to evaluating the full posterior
-probabilities. The ease of computation might offset the limitation.
+probabilities. The ease of computation might offset limitations.
 
-The calculation of the Bayes factor can be made exact using analytical results
-only occasionally. In most applications of interest, approximations has to be
-used. Two approaches are widely used. One is to use Monte Carlo
+The calculation of the Bayes factor can be made exact using analytical
+results only occasionally. In most applications of interest, approximations
+have to be used. Two approaches are widely used. One is to use Monte Carlo
 approximations. Another is based on the asymptotic behavior of the Bayes
 factor. Two of the later are reviewed here.
 
@@ -632,15 +629,15 @@ of \bic. A derivation of \bic can be found in
 Similar to \aic, \bic assumes that the sample size is large enough in order
 to approximate the marginal likelihood properly. In addition, \bic also
 assumes ``good behavior'' of the likelihood function in the sense that the
-\mle is in the high posterior probability region. These assumptions
-restricted the use of \bic in some situations. See \cite{Berger:2001uy}
-for examples where the irregularity of the likelihood function causes the
-\bic method failed. There are other criticism of the \bic strategy. For
-example \cite[][sec.~7.2.3]{Robert:2007tc} argued that the \bic strategy
-eliminated the subjective input into the Bayes modeling since the value of
-\bic does not depend on the prior distribution. However this is equally
-argued as an advantage of this strategy in the case that priors, to which the
-Bayes factors can be very sensitive, are hard to specify.
+\mle is in the high posterior probability region. These assumptions restrict
+the use of \bic in some situations. See \cite{Berger:2001uy} for examples
+where the irregularity of the likelihood function caused the \bic method
+unable to give reasonable results. There are other criticism of the \bic
+strategy. For example \cite[][sec.~7.2.3]{Robert:2007tc} argued that the \bic
+strategy eliminated the subjective input into the Bayes modeling since the
+value of \bic does not depend on the prior distribution. However this is
+equally argued as an advantage of this strategy in the case that priors, to
+which the Bayes factors can be very sensitive, are hard to specify.
 
 Though \bic is not an estimator of the \kldfull, in \cite{Sin:1996vs} it was
 shown that asymptotically \bic is able to choose the simplest model that
@@ -696,12 +693,12 @@ alternative for evaluating the Bayes factor over a range of priors.
 The prior distribution $\pi(\theta_k|\calM_k)$ is chosen by statisticians in
 the modeling process. The choice of the prior distribution is one of the most
 critical and criticized part of Bayesian modeling. In principle, the prior
-distribution shall represent the prior beliefs. That is, it represents how
+distribution should represent the prior beliefs. That is, it represents how
 much is already known about the data generating mechanism and what is
 believed about it before the observation of the data, no more or no less. It
-shall not only describe all knowledge already known, but also more
-importantly preserve all ignorance. If it contains more informations than
-what is actually known, the inference can be biased. In other words, one can
+should not only describe all knowledge already known, but also more
+importantly preserve all ignorance. If it contains more information than what
+is actually known, the inference can be biased. In other words, one can
 always construct a prior distribution such that inference will be biased
 towards one's preference, which is not necessarily rational. Ideally, the
 priors need to be considered carefully on a per problem basis. It is often
@@ -727,7 +724,7 @@ priors.
 \subsubsection{Non-informative priors}
 \label{ssub:Non-informative priors}
 
-In situations where no or little prior information are available, so-called
+In situations where no or little prior information is available, so-called
 ``non-informative'' priors are often used. Many of them are derived from the
 data or the likelihood function of the models.
 
@@ -773,7 +770,7 @@ The above expression states that the Jeffreys prior of the transformed
 parameter $\phi_k$ is the same as the one obtained by changing variable of
 the Jeffreys prior of $\theta_k$. In other words, a change of variable does
 not change the prior under the Jeffreys rule. Another informal interpretation
-is that, the prior shall contain no more information than the observed data
+is that, the prior should contain no more information than the observed data
 do. The Fisher information is widely accepted as an indicator of the amount
 of information brought by the model about the parameter $\theta_k$ given the
 data \cite{Fisher:1956vx}. Therefore, intuitively values of $\theta_k$ for
@@ -831,8 +828,8 @@ In \cite{Zhou2013} the results of using non-informative priors for the
 Bayesian analysis of the \pet compartmental model were obtained. Here we
 consider the simulated data (see Section~\ref{sec:Simulated and real pet
 data}) and using Normally distributed errors (see Section~\ref{sec:Error
-models}). An inver Gamma distribution approximation to the Jeffreys prior was
-used for the precision parameter of the Normal distribution. Uniform
+models}). An inverse Gamma distribution approximation to the Jeffreys prior
+was used for the precision parameter of the Normal distribution. Uniform
 distributions are used for the $\theta_{1:r}$ and $\phi_{1:r}$ parameters
 (see Section~\ref{sec:Application to positron emission tomography} for the
 parameterization). The interval of the uniform distributions are the same as
@@ -852,7 +849,7 @@ those of \aicc and \bic.
 
 When the parameters bear real world meaning, it may be possible to construct
 informative priors. For some applications, calibrating an informative prior
-requires substantial expertise and some model specific informations.
+requires substantial expertise and some model specific information.
 Nonetheless, there are also some general methods.
 
 When the parameter space is finite, it might be possible to obtain subjective
@@ -864,7 +861,7 @@ probabilities of the parameter falling into each of the partition
 
 A more systematic approach is the \emph{maximum entropy priors}
 \cite{Jaynes:1989vx}. Assume that some characteristics of the parameter vector
-$\theta_k$ in the model $\calM_k$ is known in the form of prior expectations,
+$\theta_k$ in the model $\calM_k$ are known in the form of prior expectations,
 \begin{equation}
   \Exp_{\pi}[h_i(\theta_k)|\calM_k] = \gamma_i, \qquad\text{for } i =
   1,\dots,K
@@ -878,12 +875,12 @@ $h_2(x) = x^2$ in the univariate case. In finite setting, define
   \calE(\pi) = -\sum_{\theta_k\in\Theta_k}
   \pi(\theta_k|\calM_k)\log \pi (\theta_k|\calM_k)
 \end{equation}
-where $\Theta_k$ is the parameter space. And the maximum entropy prior is the
+where $\Theta_k$ is the parameter space.The maximum entropy prior is the
 $\pi$ that maximizes $\calE$ under the constraints of Equations~\eqref{eq:exp
   constraints}.
 
 This can be extended to continuous case by introducing a reference
-distribution, say $\pi_0(\theta_k)$. And define the entropy as the negative
+distribution, say $\pi_0(\theta_k)$. Define the entropy as the negative
 \kld between $\pi_0(\theta_k)$ and $\pi(\theta_k|\calM_k)$,
 \begin{equation}
   \calE(\pi) = -\int \pi_0(\theta_k)\log\Round[bigg]{
@@ -961,7 +958,7 @@ irreversible (trapped) models yield infinite $V_D$ estimates and it is
 generally known in advance that the tracer employed will exhibit reversible
 dynamics.
 
-With these informations we can then construct informative priors for the
+With this information we can then construct informative priors for the
 parameters of interest. More technical details can be found in
 \cite{Zhou2013}. In particular, truncated Normal distributions are used as
 the priors for the parameters given all the upper and lower bounds.
@@ -998,7 +995,7 @@ evidence against a model) to evaluate the sensitivity problem
 
 We have reviewed a few model selection methods in this chapter. The
 information-theoretic approach is well understood and has been practiced for
-a long history. The Bayesian approach has gain substantial interests in the
+a long history. The Bayesian approach has gain substantial interest in the
 last few decades. The computation of the integrations required by Bayesian
 model comparison will be reviewed in the next chapter.
 
@@ -1006,7 +1003,7 @@ The Bayesian approach can be appealing in at least two situations. First,
 when there are substantial prior knowledge about the underlying data
 generating mechanisms. The Bayesian framework provides a way to incorporate
 these information to lead to rational decisions. Even when no or little prior
-informations are available, Bayesian approach can be useful when the
+information is available, Bayesian approach can be useful when the
 underlying assumptions about the models or data that lead to the asymptotic
 results regarding the various information criteria are not met, as Bayesian
 model comparison imposes very few assumptions on the form of models. For
@@ -1014,7 +1011,7 @@ example, through the running example of this thesis, the \pet compartmental
 model, we have found that Bayesian model selection even with vague priors can
 provide significant improvement over methods such as \aicc or \bic which is
 only an approximation to the Bayes factor. The results can be further
-improved via using informative priors.
+improved via informative priors.
 
 Despite all the advantages, using Bayesian model comparison also has
 considerably higher computational cost since many high dimensional
