@@ -11,11 +11,10 @@ components in mixture models. Often, there can be more than one model that
 can be potentially used to describe the data and to make predictions or for
 other purposes. However, some models might be better than others in the sense
 that the estimation and prediction based on them have smaller errors or
-variances, etc. Some models are more simpler than others while providing
-comparable accuracy. In many application areas, model selection is important
-for the purpose of identifying the underlying reasons of certain phenomena
-observed through the data. It is also important when finding the best
-estimation or prediction procedures for some applications.
+variances, etc. Some models are simpler than others while providing
+comparable accuracy. In many application areas, model selection is also
+important for the purpose of identifying the underlying reasons of certain
+phenomena observed through the data.
 
 Bayesian model comparison has been studied and practiced for a long time.
 There are considerable computational difficulties when using this approach,
@@ -28,7 +27,7 @@ multimodal distributions in many situations.
 Population based algorithms have been developed in recent decades. However,
 there is little literature on its application to Bayesian model comparison.
 This thesis presents a framework based on sequential Monte Carlo (\smc)
-algorithms, within which Bayesian model comparison can be carried out in an
+algorithms, within which Bayesian model comparison can be carried out in a
 (semi-) automatic fashion while better accuracy compared to some other recent
 developments can be obtained. This is made possible through the use of
 various adaptive strategies.
@@ -86,20 +85,21 @@ column is $\partial f_i(\theta)/\partial\theta_j$.
 
 To avoid introducing too many notations, some notations might be reused if
 their meanings are clear in context and their usage is limited to a
-particular section where it is relevant. These and some other notations are
-defined when they are used.
+particular section where they are relevant. These and other notations are
+defined when they are encountered the first time.
 
 \section{Outline}
 \label{sec:Outline}
 
-This thesis is concerned with the methodology of using \smc algorithms for the
-purpose of Bayesian model comparison and their practical implementations.
+This thesis is concerned with the methodology of using \smc algorithms for
+the purpose of Bayesian model comparison and their practical implementations.
+It is structured as the following.
 \begin{description}
   \item[Chapter 2] introduces the positron emission tomography (\pet)
   compartmental model. It is a realistic model that will be used as a running
   example throughout this thesis to demonstrate various methodologies. Work
-  on the application of Bayesian model comparison to \pet compartmental
-  models was published in \cite{Zhou2013}.
+  on the application of Bayesian model comparison to the \pet compartmental
+  model was published in \cite{Zhou2013}.
   \item[Chapter 3] reviews some commonly used model selection methods. In
   particular some information-theoretic selection criteria and the Bayesian
   approach. By comparison, it will be shown that Bayesian model comparison is
@@ -113,6 +113,6 @@ purpose of Bayesian model comparison and their practical implementations.
   strategies will be discussed. This chapter is an extension to
   \cite{Zhou:2013vx} and \cite{Zhou:2012uz}.  
   \item[Chapter 6] presents a \cpp library for the practical implementations
-  of \smc algorithms. Parallel computing is of particular interest of this
-  work. Parts of this chapter is based on \cite{vsmcjss}.
+  of \smc algorithms. Parallel computing is of particular interest. Parts of
+  this chapter is based on \cite{vsmcjss}.
 \end{description}
