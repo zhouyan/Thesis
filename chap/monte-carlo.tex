@@ -685,7 +685,7 @@ sampler. A distribution, say $\eta$ with the following property is chosen,
 \end{equation}
 In other words, $\pi$ is a marginal of $\eta$. Then the Gibbs sampler is
 constructed with the full conditionals of $\eta$ instead of $\pi$. The
-subchain of the resulting Markov chain that corresponds to the marginal
+sub-chain of the resulting Markov chain that corresponds to the marginal
 $\pi$ is then $\pi$-invariant. When such a technique is used, there are many
 possible choices of $\eta$ to complete $\pi$. Some applications provide
 natural choices, such as the aforementioned missing data models.
@@ -1185,7 +1185,7 @@ $\gamma$, to ensure good performance and indeed a finite variance estimator.
 
 The method described above can be used for most \mcmc algorithms, such as the
 Metropolis-Hastings algorithm, the Gibbs sampling and population \mcmc (by
-only using the subchain that corresponds to the distribution of interest).
+only using the sub-chain that corresponds to the distribution of interest).
 
 \paragraph{Results for \pet compartmental model}
 
@@ -1335,7 +1335,7 @@ to approximate this path sampling estimator. Given samples
 $\{X_0^{(i)},\dots,X_T^{(i)}\}_{i=1}^N$ from $N$ iterations of a population
 \mcmc sampler, one can approximate the expectation under distribution
 $\pi_{\alpha} = \pi_{\alpha(t/T)} = \pi_t$ by the empirical average of the
-subchain $\{X_t^{(i)}\}_{i=1}^N$. The integration~\eqref{eq:path integral}
+sub-chain $\{X_t^{(i)}\}_{i=1}^N$. The integration~\eqref{eq:path integral}
 can be approximated with a numerical integration scheme such as the
 Trapezoidal rule. This leads to the following estimator,
 \begin{equation}

@@ -12,7 +12,7 @@ information-theoretic approaches. The most important one of them is perhaps
 the Akaike's information criterion (\aic; \cite{Akaike:1973uc,Akaike:1974ih}).
 A few other closely related methods are also reviewed in this section.
 Section~\ref{sec:Bayesian model comparison} reviews the Bayesian approach to
-model comparison and selection. This chapter is concluded by a discussion of
+model comparison and selection. This chapter is concluded by discussions of
 the methods reviewed.
 
 \section{Information-theoretic approach}
@@ -31,7 +31,7 @@ this measure of discrepancy.
 Assume that the distribution of data is continuous and has a density function
 $g$. Let $f(x) = f(x|\theta)$ be the density function of some continuous
 parametric distribution, where $\theta$ is the parameter vector. The \kld
-between $f$ and $g$ is defined by,
+between $g$ and $f$ is defined by,
 \begin{equation}
   D_{\kl}(g,f) = \int g(x)\log\Round[bigg]{\frac{g(x)}{f(x|\theta)}}\intd x
   \label{eq:kl}
@@ -42,20 +42,20 @@ approximate $g$. The \kld is always nonnegative and equals to zero if and
 only if $g(x) = f(x)$ everywhere \cite[][sec.~6.8]{Burnham:2002wc}. The
 concept can be generalized to discrete distributions and more general
 settings \cite[][sec.~2.1.3]{Burnham:2002wc}. For the purpose of simplicity,
-in the remainder of this section, we will assume that the distributions under
+in the remainder of this section, we will assume that distributions under
 discussion are continuous.
 
-A procedure of model selection under this theme is thus finding the model
-that has the minimum \kld between the true data generating distribution and
-the model distribution. There are often a set of candidate models. Each model
+A procedure of model selection under this theme is thus finding models
+that have the minimum \kld between the true data generating distribution and
+the model distribution. There is often a set of candidate models. Each model
 is defined by a parametric distribution. Therefore model selection can be
 viewed as a two-step process. First, for each model a value of the parameter
 vector is found such that the \kld is minimized within this model across the
-parameter space. Second, a model with the smallest \kld among all models are
+parameter space. Second, models with the smallest \kld among all models are
 selected.
 
 It is clear that the calculation of $D_{\kl}(g,f)$ relies on the knowledge of
-both $g$ which is unknown, and $f$ as well as the value of the parameter
+both $f$ and $g$ which is unknown, as well as the value of the parameter
 vector $\theta$. Rewrite Equation~\eqref{eq:kl} as the following,
 \begin{align}
   D_{\kl}(g,f)
@@ -70,25 +70,25 @@ denote an estimator of it, where $\data$ is the data generated from $g$. We
 have the minimum and estimated \kld,
 \begin{align}
   \tilde{D}_{\kl}(g,f) &= \text{Constant} - \Exp_g[\log f(X|\tilde\theta)], \\
-  \hat{D}_{\kl}(g,f) &= \text{Constant} - \Exp_g[\log f(X|\hat\theta(\data))].
+  \hat{D}_{\kl}(g,f) &= \text{Constant} - \Exp_g[\log f(X|\hat\theta(\data))],
 \end{align}
-Since $\hat\theta(\data)\ne\tilde\theta$ for (almost) all data $\data$, we
-have $\hat{D}_{\kl}(g,f) > \tilde{D}_{\kl}(g,f)$. An alternative criterion is
-the expected value of $\hat{D}_{\kl}(g,f)$,
+respectively. Since $\hat\theta(\data)\ne\tilde\theta$ for (almost) all data
+$\data$, we have $\hat{D}_{\kl}(g,f) > \tilde{D}_{\kl}(g,f)$. An alternative
+criterion is the expected value of $\hat{D}_{\kl}(g,f)$,
 \begin{equation}
   \bar{D}_{\kl} = \text{Constant} -
   \Exp_{\hat\theta}\Exp_g[\log f(X|\hat\theta(\data))]
   \label{eq:expected kl}
 \end{equation}
 where the outer expectation is with respect to $g$ and integrates out the
-estimated parameter $\hat\theta(\data)$. It is again almost always larger than
-the minimum relative \kld. However, using the expected \kld as a model
-selection criterion allows us to select models that \emph{on average} minimize
-the estimated \kld. Note that we cannot compute this term analytically since
-it depends on the true model $g$, which is assumed to be unknown. The model
+estimated parameter $\hat\theta(\data)$. It is again almost always larger
+than the minimum \kld. However, using the expected \kld as a model selection
+criterion allows us to select models that \emph{on average} minimize the
+estimated \kld. Note that we cannot compute this term analytically since it
+depends on the true model $g$, which is assumed to be unknown. The model
 selection criteria discussed below rely on approximations of this quantity.
-Consequently, these methods attempt to select the model that on average
-minimizes, over a set of models, the expected \kld.
+These methods attempt to select the model that asymptotically minimizes, over
+a set of models, the expected \kld.
 
 \subsection{Akaike's information criterion}
 \label{sub:Akaike's information criteria}
@@ -222,7 +222,7 @@ refine the \aic approximation. More importantly, such refinement of \aic
 relies on assumptions about the explicit form of the true model $g$ or one
 that closely imitates it. When the form of the model is drastically different
 from the one used to derive criteria such as \aicc, poor results of model
-selection is likely to be obtained as we have seen here.
+selection are likely to be obtained as we have seen here.
 
 \subsection{Takeuchi's information criterion}
 \label{sub:Takeuchi's information criterion}
@@ -255,7 +255,7 @@ various estimator of the bias correction term,
 $\tr(H(\tilde\theta)K(\tilde\theta)^{-1})$, has been developed (see e.g.,
 \cite{Claeskens:2008tq}). If the \mle is well behaved \cite{Lehmann:1983vx},
 then we can substitute the \mle into Equation~\eqref{eq:tic} and use
-empirical averages as estimates of $H(\hat\theta)K(\hat\theta)^{-1}$. The
+empirical averages as estimates of $tr(H(\hat\theta)K(\hat\theta)^{-1})$. The
 explicit form of the bias correction term can also be derived for some
 models. For example, see \cite[][sec.~6.6]{Burnham:2002wc}. This allows more
 accurate evaluation of \tic.
@@ -368,7 +368,7 @@ The performance of cross-validation for model selection depends on both the
 choice of the loss function and the partition of the sample. There is a large
 amount of literature on cross-validation for various model selection
 problems. For some models, specific choice of the function $\gamma$ were
-proposed. For example, the \press statistic shown earlier and its more robust
+proposed, for example, the \press statistic shown earlier and its more robust
 variant such as replacing the squared error by the absolute error
 \cite[][sec.~2.9]{Claeskens:2008tq}. Also as argued in the same book, the use
 of $\gamma(x|\theta) = -\log f(x|\theta)$ is a sensible choice for many
@@ -407,7 +407,7 @@ thesis.
 A treatment of Bayesian modeling from a decision-theoretic perspective can be
 found in \cite{Robert:2007tc}. Formal mathematical representations can also
 be found in \cite[][sec.~5.1 and sec.~6.1]{Bernardo:1994vd}. Notions of
-rational decisions in the context of uncertainty was also made precise in the
+rational decisions in the context of uncertainty were also made precise in the
 form of axioms in \cite{DeFinetti:1974tg,DeFinetti:1975ua}. It is assumed
 that a rational decision cannot be considered separately from rational
 beliefs. And rational beliefs should be built upon available information (the
@@ -527,9 +527,9 @@ Third, and perhaps a more important factor, the Bayesian framework can be
 applied to a wider range of applications compared to methods based on
 asymptotic behaviors of the data. There are very minimal assumptions about
 the models under consideration. Model selection methods reviewed earlier
-often require the well behavior of estimator, or sufficient large sample size
-among other things. In contrast, within Bayesian framework, the regularity of
-the likelihood function is not an issue as long as the integrations in
+often require the well behavior of an estimator, or a sufficient large sample
+size etc. In contrast, within Bayesian framework, the regularity of the
+likelihood function is not an issue as long as the integrations in
 Equation~\eqref{eq:post model prob} are finite. In addition, though large
 sample size can be beneficial in the sense that it can reduce the uncertainty
 of the model selection results, it is not necessary. The uncertainty of model
@@ -542,7 +542,7 @@ wide range of applications.
 \label{sub:Bayes factor}
 
 When the model set $\calM$ is finite, we can find the model with the highest
-posterior probability by compare models pairwise. To compare the posterior
+posterior probability by comparing models pairwise. To compare the posterior
 probabilities of two models, say $\calM_{k_1}$ and $\calM_{k_2}$, one only
 needs to compute their ratio. Recall Equation~\eqref{eq:post model prob}, the
 ratio can be written as,
@@ -584,8 +584,8 @@ uniform, as long as the model set $\calM$ is finite.
 The Bayes factor, $B_{k_1k_2}$, can be interpreted as the evidence provided
 by the data in favor of model $\calM_{k_1}$ against model $\calM_{k_2}$. As
 noted earlier, the marginal likelihood $p(\data|\calM_k)$ is also called the
-evidence supporting model $\calM_k$. Jeffrey \cite{Jeffreys:1961ua} suggested
-that the Bayes factor can be interpreted on a $\log_{10}$ scale. The
+evidence supporting model $\calM_k$. Jeffrey suggested that the Bayes factor
+can be interpreted on a $\log_{10}$ scale \cite{Jeffreys:1961ua}. The
 interpretations are reproduced in Table~\ref{tab:bayes factor log10 scale}.
 The interpretation of the Bayes factor can be application dependent. The
 Jeffreys' interpretation, and a similar scale based on $2\log B_{k_1k_2}$,
@@ -610,7 +610,7 @@ have to be used. Two approaches are widely used. One is to use Monte Carlo
 approximations. Another is based on the asymptotic behavior of the Bayes
 factor. Two of the later are reviewed here.
 
-\subsubsection{Bayesian information criteria}
+\subsubsection{Bayesian information criterion}
 \label{ssub:Bayesian information criteria}
 
 The Bayesian information criterion (\bic) was developed as a large sample
