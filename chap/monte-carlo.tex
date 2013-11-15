@@ -1020,7 +1020,7 @@ $X^{t_2}$ have the same distribution for any two arbitrary time points $t_1$
 and $t_2$. Therefore standard tests can be used to compare the distribution of
 samples $(X^t,\dots,X^{t+p-1})$ and $(X^{t+p},\dots,X^{t+2p})$. It should be
 noted that the correlations between samples should be taken into
-considerations. One solution is to use sub-samples. A \emph{batch size} $G$ is
+consideration. One solution is to use sub-samples. A \emph{batch size} $G$ is
 introduced. Quasi-independent samples
 $(X^{t_1+G},X^{t_1+2G},\dots,X^{t_1+pG})$ and
 $(X^{t_2+G},X^{t_2+2G},\dots,X^{t_2+pG})$ are used to conduct the tests. See
@@ -1098,8 +1098,8 @@ proposed value, $X^{(i)}$ are the accepted values and the distribution
 $q(\cdot|x^t)$ is simply the proposal distribution. This approach is more
 robust to trapping state than the simple plots of averages.
 
-For example, consider an independent Metropolis-Hastings algorithm with
-proposal $\eta$ have only one high probability region $A$ while the target
+For example, consider an independent Metropolis-Hastings algorithm whose
+proposal $\eta$ has only one high probability region $A$ while the target
 $\pi$ has two high probability regions $A$ and $B$ such that $Pr(x\in
 A)\approx\Pr(x\in B)$. The chain is likely to be trapped in $A$ and $S^N$
 might appear to be stable. However, $\varphi_{\mh-\is}^N$ is much less stable
@@ -1146,7 +1146,7 @@ estimator of $p(\data)$ can be obtained by the harmonic mean
 Unfortunately this estimator can suffer instability problem when samples with
 small likelihoods are generated. In fact this estimator does not always have a
 finite variance and therefore in general does not satisfy a Central Limit
-Theorem. An improvement seen in \cite{Kass:1995vb} is,
+Theorem (\clt). An improvement seen in \cite{Kass:1995vb} is,
 \begin{equation}
   \widehat{p(\data)}_{\ghm}^N = \Round[bigg]{
     \frac{1}{N}\sum_{i=1}^N
@@ -1163,9 +1163,9 @@ It can be seen that the distribution $\gamma$ plays a role similar to that of
 the target distribution for the importance sampling in the sense that the
 posterior distribution now acts as a proposal distribution. For similar
 reasons, high efficiency is most likely to be obtained when $\gamma$ is
-roughly proportional to $f(\data|\theta)$ \cite{Kass:1995vb}. And the above
+roughly proportional to $f(\data|\theta)$ \cite{Kass:1995vb}. The above
 equation suggests that the estimator has a finite variance if the tails of
-$\gamma$ is thin enough compared to the posterior distribution
+$\gamma$ are thin enough compared to the posterior distribution
 $\pi(\theta|\data)$. In \cite{Gelfand:1994ux} the use of a multivariate Normal
 distribution with moments approximated from the samples as a natural choice of
 $\gamma$ was suggested. In addition, the variance of the estimator can also be
@@ -1185,7 +1185,7 @@ $\gamma$, to ensure good performance and indeed a finite variance estimator.
 
 The method described above can be used for most \mcmc algorithms, such as the
 Metropolis-Hastings algorithm, the Gibbs sampling and population \mcmc (by
-only using the subchain that corresponding to the distribution of interest).
+only using the subchain that corresponds to the distribution of interest).
 
 \paragraph{Results for \pet compartmental model}
 
@@ -1210,18 +1210,18 @@ There is a 10,000 iterations used for adaptation (the burn-in period) and
 that the long burn-in period is more than enough for the majority of the
 samplers to converge well. The generalized harmonic mean estimator
 $\hat\varphi_{\ghm}^N$ is used to compute the Bayes factor. The model
-selection results, along with that from \aic and \bic methods for the purpose
+selection results, along with those from \aic and \bic methods for the purpose
 of comparison, are shown in Figure~\ref{fig:pet mo}. It can be seen that the
 Bayesian model selection results shows more plausible structure than the
 information criteria. With the information criteria, the distribution of the
 model orders across the image appears to be more or less random while the
 Bayesian results show some structure with more active regions within the brain
-have higher order models. See also the discussion in \cite{Zhou2013} and
+have higher order models. See also the discussions in \cite{Zhou2013} and
 references therein.
 
 \afterpage{\input{fig/pet_mo}\clearpage}
 
-The convergence results for this simulation was already shown in
+The convergence results for this simulation were already shown in
 Figure~\ref{fig:pet diag ratio}. It should be noted that, though as shown in
 Figure~\ref{fig:pet vd mean}, accurate estimation of the parameter $V_D$ does
 not really need this many iterations. However, accurate estimation of the
@@ -1283,13 +1283,16 @@ the identity,
 \end{align}
 and using a Gibbs sampler operating on $\theta_{i:p}$ with
 $\pi(\theta_{i:p}|\data,\theta_{1:i-1}^*)$ as the target distribution and an
-estimator similar to that in Equation~\eqref{eq:est gibbs first}.
+estimator similar to that in Equation~\eqref{eq:est gibbs first}. This is
+possible because all the full conditionals required to construct such a Gibbs
+sampler can be sampled from, otherwise the original Gibbs sampler cannot be
+constructed.
 
 In addition to the usual requirement of a Gibbs sampler, that all the full
 conditionals can be sampled from, this method also requires that all these
 densities are known including their normalizing constants, and thus can be
-computed point-wise. The advantage is that this estimator does not suffer from
-the instability problem as the harmonic mean estimator and its
+computed point-wise. The advantage is that this estimator does not suffer
+from the instability problem like the harmonic mean estimator and its
 generalizations. Only averages of full conditionals are involved in the
 calculation, which are less sensitive to extreme small values.
 
@@ -1332,7 +1335,7 @@ to approximate this path sampling estimator. Given samples
 $\{X_0^{(i)},\dots,X_T^{(i)}\}_{i=1}^N$ from $N$ iterations of a population
 \mcmc sampler, one can approximate the expectation under distribution
 $\pi_{\alpha} = \pi_{\alpha(t/T)} = \pi_t$ by the empirical average of the
-subchain $\{X_t^{(i)}\}_{i=1}^N$. And the integration~\eqref{eq:path integral}
+subchain $\{X_t^{(i)}\}_{i=1}^N$. The integration~\eqref{eq:path integral}
 can be approximated with a numerical integration scheme such as the
 Trapezoidal rule. This leads to the following estimator,
 \begin{equation}
@@ -1351,7 +1354,7 @@ integration. It is clear that the smaller the interval
 $[\alpha_{t-1},\alpha_t]$ (closer the distribution $\pi_{t-1}$ and $\pi_t$),
 the smaller the bias. However, this can come into conflict with the
 convergence speed of the population \mcmc algorithm. As discussed earlier, in
-this setting, the global moves can potentially mixes slowly. For example, for
+this setting, the global moves can potentially mix slowly. For example, for
 the one-compartment \pet model and using the sequence of
 distributions~\eqref{eq:power post}, the optimal placement that results in an
 acceptance rate of globals close to $0.234$ has only six chains. The path
@@ -1390,9 +1393,9 @@ simulation of the posterior model probabilities. It can be difficult to
 implement though conceptually appealing. Other algorithms can be used to
 approximate the marginal likelihood and thus the Bayes factor using various
 estimators. The harmonic mean estimator and its generalizations can be
-calculated for most \mcmc algorithms. However, they suffer the stability
-issues. For the Gibbs sampling and the Metropolis-Hastings algorithm, there
-exist more stable estimators. However, they require knowledge of certain
+calculated for most \mcmc algorithms. However, they suffer stability issues.
+For the Gibbs sampling and the Metropolis-Hastings algorithm, there exist
+more stable estimators. However, they require knowledge of certain
 distributions that are not always available. Population \mcmc can also use
 the path sampling estimator. There is a trade-off between convergence speed
 and the accuracy of the estimator in term of its bias.
@@ -1413,7 +1416,7 @@ the importance sampling. A recent develop, particle \mcmc
 \cite{Andrieu:2010gc} combines the strength of \mcmc and \smc by using \smc
 samplers as proposal in the Metropolis-Hastings algorithm or the Gibbs
 sampling. This chapter is far from a complete review of the topic on Monte
-Carlo methods. The algorithms reviewed are widely used for the purpose of of
+Carlo methods. The algorithms reviewed are widely used for the purpose of
 Bayesian model comparison. They have become standard tools of statisticians
 for Bayesian computation. In the next chapter, we will study the use of \smc
 for this purpose in detail. Some novel algorithms will be introduced.
