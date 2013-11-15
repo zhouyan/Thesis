@@ -12,7 +12,7 @@ extensive experience.
 
 In recent years, there is a tendency of considering population based
 algorithms. A common theme in these algorithms is that, instead of simulating
-directly from complex target distribution, related yet simpler distributions
+directly from a complex target distribution, related yet simpler distributions
 are used to ``help'' the simulation. One such algorithm, which is essentially
 a generalization of the Metropolis-Hastings algorithm, population \mcmc is
 reviewed in Section~\ref{sub:Population mcmc}, in which the easier to simulate
@@ -21,16 +21,16 @@ Another population based algorithm, \smc sampler, is the central topic of this
 chapter
 
 Sequential Monte Carlo (\smc) samplers, in various forms has been around for
-more than a decade and widely used in many fields. Until recently there has
-been little interest in using it for Bayesian model comparison for a few
-reasons. One of the more important one is that, when \mcmc algorithms are
-available, \smc could cost more computational resources than a well designed
-\mcmc algorithm. However we believe there are at least two important reasons
-that \smc can be preferable to \mcmc for the purpose of Bayesian model
-comparison. First, it provides a generic and robust framework for simulation
-from complex distributions that are difficult for \mcmc algorithms, especially
-for high dimensional multimodal distributions. Though it is not impossible to
-design \mcmc algorithms for the same problems, it can be hugely difficult in
+many years and widely used in many fields. Until recently there has been
+little interest in using it for Bayesian model comparison for a few reasons.
+One of the more important one is that, when \mcmc algorithms are available,
+\smc could cost more computational resources than a well designed \mcmc
+algorithm. However we believe there are at least two important reasons that
+\smc can be preferable to \mcmc for the purpose of Bayesian model comparison.
+First, it provides a generic and robust framework for simulation from complex
+distributions that are difficult for \mcmc algorithms, especially for high
+dimensional multimodal distributions. Though it is not impossible to design
+\mcmc algorithms for the same problems, it can be hugely difficult in
 practice. The \smc framework provides an alternative that is easy to use. It
 has the potential to enable statisticians to construct more realistic, useful
 models that were previously difficult to use due to the computational
@@ -61,7 +61,7 @@ the remainder of this section, sequential importance sampling and resampling
 algorithms are introduced. Then how they are generalized to \smc samplers for
 the purpose of the current work are discussed. To simplify the discussion, we
 will assume that the distributions are continuous and their density functions
-which will also be denoted by $\{\pi_t\}_{t\ge0}$.
+will also be denoted by $\{\pi_t\}_{t\ge0}$.
 
 \subsection{Sequential importance sampling and resampling}
 \label{sub:Sequential importance sampling and resampling}
@@ -93,7 +93,7 @@ and thus
 \end{align}
 The importance sampling approximation of $\Exp_{\pi_t}[\varphi_t(X_{0:t})]$
 can be obtained using $\{W_t^{(i)},X_{0:t}^{(i)}\}_{i=1}^N$, where
-$\varphi_t(\cdot)$ is some function of interest.
+$\varphi_t$ is some function of interest.
 
 However, this approach fails as $t$ becomes large. The weights tend to become
 concentrated on a few particles as the discrepancy between $\eta_t$ and
@@ -111,7 +111,7 @@ weights, that is they are scaled such that they sum up to one. In other words,
 the resampling step does not change the expectation of the estimate. In
 practice, the resampling algorithm is usually chosen such that $M = N$ and
 $\bar{W}^{(i)} = 1/N$ for $i=1,\dots,N$. Resampling can be performed at each
-iteration $t$ or adaptively based on some criteria of the discrepancy the
+iteration $t$ or adaptively based on some criteria of the discrepancy bewteen the
 distribution of the particles and the target distribution $\pi_t$, accumulated
 since the last time resampling was performed. One popular quantity used to
 monitor this discrepancy is \emph{effective sample size} (\ess), introduced by
@@ -144,10 +144,10 @@ this approach, for $i = 1,\dots,N$, we have
 where $\Floor{}$ denotes the integer part and $\{R_t^{(i)}\}_{i=1}^N$ are
 distributed according to a multinomial distribution with size $N - \bar{N}_t$
 and weights $(\bar{W}_t^{(i)},\dots,\bar{W}_t^{(N)})$ with
-\begin{align*}
-  \bar{N}_t &= \sum_{i=1}^N\Floor{NW_t^{(i)}} \\
-  \bar{W}_t^{(i)} &= \frac{NW_t^{(i)} - \Floor{NW_t^{(i)}}}{N - \bar{N}_t}
-\end{align*}
+\begin{equation*}
+  \bar{N}_t = \sum_{i=1}^N\Floor{NW_t^{(i)}} \qquad\text{and}\qquad
+  \bar{W}_t^{(i)} = \frac{NW_t^{(i)} - \Floor{NW_t^{(i)}}}{N - \bar{N}_t}
+\end{equation*}
 It was shown that residual resampling can lead to significant variance
 reduction for the importance sampling estimator when compared to the
 multinomial resampling \cite{Douc:2005wa}. It is easy to see that, unlike
@@ -181,12 +181,12 @@ outperform the multinomial resampling.
 the stratified and systematic resampling algorithms can be used together with
 the residual resampling. It operates by first compute the integer part and the
 residual of $NW_t^{(i)}$ for $i = 1,\dots,N$, and then stratified or
-systematic resampling are performed using the residuals as weights. It has the
+systematic resampling is performed using the residuals as weights. It has the
 advantage that the resulting algorithm provide better performance than
 each of the algorithms involved here \cite{Douc:2005wa}.
 
 There are other specialized resampling algorithms. The algorithms shown above
-have a common drawback. They requires the knowledge of all the weights being
+have a common drawback. They require the knowledge of all the weights being
 available before the algorithm can proceed. Therefore in some situations the
 performance of \smc algorithms can be limited by the fact that the resampling
 step cannot be parallelized. Parallelized resampling algorithms is an area
@@ -220,7 +220,7 @@ $\{X_{0:t}^{(i)}\}_{i=1}^N$ reach the distribution $\eta_t(x_{0:t}^{(i)}) =
 \eta_0(x_0^{(i)})\prod_{k=1}^tK_t(x_{t-1}^{(i)}, x_t^{(i)})$ assuming no
 resampling has occurred, where $\eta_0$ is the initial distribution of the
 particles. To correct the discrepancy between $\eta_t$ and $\tilde\pi_t$,
-equation~\eqref{eq:si} is applied and in this case,
+Equation~\eqref{eq:si} is applied and in this case,
 \begin{equation}
   W_t^{(i)} \propto \frac{\tilde\pi_t(X_{0:t}^{(i)})}{\eta_t(X_{0:t}^{(i)})}
   = \frac{\pi_t(X_t^{(i)})\prod_{s=0}^{t-1}L_s(X_{s+1}^{(i)}, X_s^{(i)})}
@@ -273,7 +273,7 @@ $\{\pi_t\}_{t=1}^n$,
 That is, the data is introduced one by one into the posterior. However, this
 scheme can be sensitive to the order of data being introduced. A modification
 is to introduce a batch of data at each iteration, also introduced in
-\cite{Chopin:2002hg}. How many data points to be incorporated in each
+\cite{Chopin:2002hg}. The number of data points to be incorporated in each
 iteration can still be difficult to determine. The more data points introduced
 at each step, the more degeneracy (measured by, e.g., \ess) will be induced.
 It is natural to consider introducing data such that a constant level of
@@ -333,7 +333,7 @@ importance weights. However, this choice is not possible except for trivial
 toy examples. Some sensible alternatives have been proposed in the past.
 
 One approach is to use independent proposals, $K_t(x_{t-1},x_t) =
-\mu_t(x_{t-1})$ for some distribution $\mu_t$ at each iteration. Usually,
+\mu_t(x_t)$ for some distribution $\mu_t$ at each iteration. Usually,
 $\mu_t$ belongs to a family of distributions with parameters determined by
 certain statistics of the particle system of the last generation, for example,
 a multivariate Normal distribution with the mean vector and the covariance
@@ -362,7 +362,7 @@ adaptive algorithms that can improve the performance considerably.
 \label{sub:Optimal and suboptimal backward kernels}
 
 The sequence of backward kernels $\{L_t\}_{t=0}^{T-1}$ should be optimized
-with respect to the sequence of transition kernel $\{K_t\}_{t=0}^T$. Let
+with respect to the sequence of transition kernels $\{K_t\}_{t=1}^T$. Let
 $\eta_t(x_t)$ denote the marginal distribution of $X_t$. That is,
 \begin{equation}
   \eta_t(x_t) = \eta_0(x_0)\prod_{k=1}^tK_k(x_{k-1},x_k)
@@ -443,10 +443,10 @@ drawbacks. Compared to the expression~\eqref{eq:inc weight subopt}, which is
 more intuitive since it considers the transition kernel $K_t$, which depends
 on the current samples, it benefits less from fast mixing kernels. If $\pi_t$
 is not close to $\pi_{t-1}$, then the variance of the incremental weights is
-likely to be large even the kernel $K_t$ mixes fast. Indeed, later we will
-show empirically that, it is preferable to use more distributions rather than
-using multiple passes of \mcmc moves in a single iteration, provided that they
-use the same computational resources.
+likely to be large even when the kernel $K_t$ mixes fast. Indeed, later we
+will show empirically that, it is preferable to use more distributions rather
+than using multiple passes of \mcmc moves in a single iteration, provided
+that they use the same computational resources.
 
 \section{Application to Bayesian model comparison}
 \label{sec:Application to Bayesian model comparison}
@@ -457,7 +457,7 @@ section, we outline common strategies of using \smc samplers for Bayesian
 model comparison. In the next section, we introduce some innovative refinement
 and extensions to existing practices.
 
-As reviewed in Section~\ref{sub:Model choice problems}, The problem of
+As reviewed in Section~\ref{sub:Model choice problems}, the problem of
 interest is characterizing the posterior distribution over
 $\{\calM_k\}_{k\in\calK}$, a set of possible models, with model $\calM_k$
 having parameter vector $\theta_k\in\Theta_k$ which must also usually be
@@ -471,7 +471,7 @@ are three fundamentally different approaches to the computations,
   \item Calculate the evidence, the marginal likelihood $p(\data|\calM_k)$, of
     each model.
   \item Calculate pairwise evidence ratios, the Bayes factor $B_{k_1k_2}$ for
-    two models indexed by $k_1$ and $k_2$.
+    two models $\calM_{k_1}$ and $\calM_{k_2}$ directly.
 \end{enumerate}
 Each approach admits a natural \smc strategy.
 
@@ -501,7 +501,7 @@ scheme such that,
   p(\data|\theta_t,\calM_t)^{\alpha(t/T)},
   \label{eq:geometry_1}
 \end{equation}
-for some monotonically increasing $\alpha:[0,1]\to[0,1]$ such that $\alpha(0)
+for some monotonically increasing $\alpha:[0,1]\to[0,1]$ with $\alpha(0)
 = 0$ and $\alpha(1) = 1$. Other approaches are possible and might prove more
 efficient for some problems (such as the ``data tempering'' approach (see
 Section~\ref{sub:Sequence of distributions}), which \cite{Chopin:2002hg}
@@ -533,8 +533,8 @@ of distributions for each model, starting from the parameter prior and
 sweeping through a sequence of distributions to the posterior.
 
 Numerous strategies are possible to construct such a sequence of
-distributions, but one option is to use for each model $\calM_k$, $k\in\calK$,
-the sequence $\{\pi_t^{(2,k)}\}_{t=0}^{T_k}$, defined by
+distributions, but one option is to use for each model $\calM_k\in\calM$,
+the sequence $\{\pi_t^{(2,k)}\}_{t=0}^{T_k}$, defined by,
 \begin{equation}
   \pi_t^{(2,k)}(\theta_t) \propto
   \pi(\theta_t|\calM_k)p(\data|\theta_t,\calM_k)^{\alpha_k(t/T_k)}.
@@ -549,49 +549,49 @@ Algorithm~\ref{alg:smc2}.
 The estimator of the posterior model probabilities depends upon the approach
 taken to estimate the normalizing constant. Direct estimation of the evidence
 can be performed using the output of this \smc algorithm and the standard
-estimator, termed \smc[2]-\ds below (see also Equation~\eqref{eq:ratio
-  normalized}), is given by,
+estimator, termed \smc[2]-\ds (see also Equation~\eqref{eq:ratio
+  normalized}), given by,
 \begin{equation}
   \sum_{i=1}^N \frac{\pi(\theta_0^{(k,i)}|\calM_k)}{\nu_k(\theta_0^{(k,i)})}
   \times \prod_{t=2}^T \sum_{i=1}^N W_{t-1}^{(k,i)}
   p(\data|\theta_{t-1}^{(k,i)},\calM_k)^{\alpha_k(t/T_k) - \alpha_k([t-1]/T_k)}
   \label{eq:smc2-ds}
 \end{equation}
-where $W_{t-1}^{(k,i)}$ is the normalized importance weights of particle $i$,
-$\theta_{t-1}^{(k,i)}$, during iteration $t-1$ for model $\calM_k$. An
-alternative approach to computing the evidence is also worthy of
+where $W_{t-1}^{(k,i)}$ is the normalized importance weight the $i$\xth
+particle during iteration $t-1$ for model $\calM_k$.
+An alternative approach to computing the evidence is also worthy of
 consideration. As has been suggested, and shown to perform well empirically
-previously \cite{Johansen:2006wm}, it is possible to use all
-of the samples from every generation of an \smc sampler to approximate the
-path sampling estimator and hence to obtain an estimate of the ratio of
-normalizing constants. Section~\ref{sub:Path Sampling via smc2/smc3} provides
-details for the use of path sampling for both this and other \smc algorithms
-discussed later.
+previously \cite{Johansen:2006wm}, it is possible to use all of the samples
+from every generation of an \smc sampler to approximate the path sampling
+estimator and hence to obtain an estimate of the ratio of normalizing
+constants. Section~\ref{sub:Path Sampling via smc2/smc3} provides details for
+the use of path sampling for both this and other \smc algorithms discussed
+later.
 
-The posterior distribution of the parameters conditional upon a particular
-model can also be approximated with,
-\begin{equation*}
-  \hat{\pi}_{T_k}^{(2,k)}(\diff\theta) =
-  \sum\limits_{i=1}^{N} W_{T_k}^{(k,i)}
-  \delta_{\theta^{(k,i)}_{T_k}}(\diff\theta).
-\end{equation*}
-where $\delta_{\theta^{(k,i)}_{T_k}}$ is the Dirac measure.
+% The posterior distribution of the parameters conditional upon a particular
+% model can also be approximated with,
+% \begin{equation*}
+%   \hat{\pi}_{T_k}^{(2,k)}(\diff\theta) =
+%   \sum\limits_{i=1}^{N} W_{T_k}^{(k,i)}
+%   \delta_{\theta^{(k,i)}_{T_k}}(\diff\theta).
+% \end{equation*}
+% where $\delta_{\theta^{(k,i)}_{T_k}}$ is the Dirac measure.
 
 This approach is appealing for several reasons. One is that it is designed to
-estimate directly the quantity of interest: the evidence, producing samples
+estimate directly the quantity of interest, the evidence, producing samples
 from that distribution at the same time. Another advantage of this approach
 over \smc[1] and the \rjmcmc is that it provides as good a characterization of
-each model as is required: it is possible to obtain a good estimate of the
+each model as is required: It is possible to obtain a good estimate of the
 parameters of every model, even those for which the posterior probability is
 small. Perhaps most significant is the fact that this approach does not
 require the design of proposal distributions or Markov kernels which move from
-one model to another: each model is dealt with in isolation. Whilst this may
+one model to another: Each model is dealt with in isolation. Whilst this may
 not be desirable in every situation, there are circumstances in which
 efficient moves between models are almost impossible to devise.
 
 This approach also has some disadvantages. In particular, it is necessary to
 run a separate simulation for each model -- rendering it impossible to deal
-with countable collections of models (although this is not such a substantial
+with countable collections of models (although this is not much a substantial
 problem in many interesting cases). The ease of implementation may often
 offset this limitation.
 
@@ -607,7 +607,7 @@ from a separate \smc sampler starting from its prior) and moves towards the
 posterior of another related model. Then the sampler can continue towards
 another related model.
 
-Given a finite collection of models $\{\calM_k\}$, $k\in\calK$, suppose the
+Given a finite collection of models $\{\calM_k\}_{k\in\calK}$, suppose the
 models are ordered in a sensible way (e.g., $\calM_{k-1}$ is nested within
 $\calM_k$ or $\theta_k$ is of higher dimension than $\theta_{k-1}$). For each
 $k\in\calK$, we consider a sequence of distributions
@@ -619,6 +619,7 @@ $\{\pi_t^{(3,k)}\}_{t=0}^{T_k}$, such that,
   \pi(\theta|\data,\calM_{k+1})
   \bbI_{\{\calM_{k+1}\}}(\calM) = \pi_{0}^{(3,k+1)}(\calM,\theta).
 \end{align*}
+where $(\calM,\theta)$ denote a random variable on the disjoint union space $(\{\calM_k\}\times\Theta_k)\cup(\{\calM_{k+1}\}\times\Theta_{k+1})$.
 When it is possible to construct an \smc sampler that iterates over this
 sequence of distributions, the estimate of the ratio of normalizing constants
 is the Bayes factor estimate of model $\calM_{k+1}$ in favor of model
@@ -632,7 +633,7 @@ distributions is non-increasing. This is unlikely to be the case in
 interesting model comparison problems.
 
 Here we consider a sequence of distributions on the disjoint union space
-$\{\calM_k,\Theta_k\}\cup\{\calM_{k+1},\Theta_{k+1}\},$ with the sequence of
+$(\{\calM_k\}\times\Theta_k\})\cup(\{\calM_{k+1}\}\times\Theta_{k+1}\})$, with the sequence of
 distributions $\{\pi_t^{(3,k)}\}_{t=0}^{T_k}$ defined proportional to that of
 the full posterior (see Section~\ref{sub:Model choice problems}) restricted to
 the space of these two models,
@@ -696,20 +697,19 @@ again monotonically increasing with $\alpha_k(0) = 0$ and $\alpha_k(1) = 1$.
 
 The \smc sampler provides us with a set of weighted samples obtained from a
 sequence of distributions suitable for approximating this integral. At each
-$t$ we can obtain an estimate of the expectation within the integral for
+iteration $t$ we can obtain an estimate of the expectation within the integral for
 $\alpha = \alpha_k(t/T)$ via the usual importance sampling estimator, and this
 integral can then be approximated via numerical integration. Whenever the
 sequence of distributions employed by \smc[3] has appropriate
 differentiability it is also possible to employ path sampling to estimate,
-directly, the Bayes factor via this approach applied to the samples generated
-by that algorithm. In general, given an increasing sequence
+directly, the Bayes factor via this approach. In general, given an increasing sequence
 $\{\alpha_t\}_{t=0}^T$ where $\alpha_0 = 0$ and $\alpha_T = 1$, a family of
 distributions $\{\pi_{\alpha}\}_{\alpha\in[0,1]}$ as before, and an \smc
 sampler that iterates over the sequence of distribution $\{\pi_t =
 \pi_{\alpha_t} = \gamma_{\alpha_t}/Z_{\alpha_t}\}_{t=0}^T$, then with the
 weighted samples $\{W_t^{(i)},X_t^{(i)}\}_{i=1}^N$, and $t = 0,\dots,T$, a
 path sampling estimator of the ratio of normalizing constants $\Xi_T =
-\log(Z_1/Z_0)$ can be approximated (using an elementary trapezoidal scheme) by
+\log(Z_1/Z_0)$ can be approximated (using an elementary Trapezoidal scheme) by,
 \begin{equation}
   \hat\Xi_{T}^{N} = \sum_{t=1}^T
   \frac{1}{2}(\alpha_t - \alpha_{t - 1})(U_t^N + U_{t-1}^N),
@@ -760,9 +760,9 @@ of a million data sets, we consider three typical voxels, shown in
 Figure~\ref{fig:typical real pet}. As we can see, they vary considerably in
 characteristics despite all can be described as ``typical'' \pet data. Most
 graphical presentations will be for these three data sets while summarizing
-statistics such as the reduction of variances will be based on simulation from
-all the real data. The purpose of the current work is to advocate robust and
-self-tuning algorithms. And the variability in the data sets provides
+statistics such as the reduction of variances will be based on simulation for
+all the real data sets. The purpose of the current work is to advocate robust
+and self-tuning algorithms. And the variability in the data sets provides
 excellent test examples. In addition, in this section, the models are
 configured with the non-informative priors without ordering (see
 Section~\ref{sub:Choice of priors}) and thus the parameters are exchangeable,
@@ -795,7 +795,7 @@ integration strategies to reduce the path sampling estimator bias. For
 example, higher order Newton-Cotes rules rather than the Trapezoidal rule can
 be implemented straightforwardly. In the case of \smc it is especially
 straightforward to estimate the required expectations at arbitrary $\alpha$
-and so we cheaply use higher order integration schemes and we can also use
+and so we can use higher order integration schemes. We can also use
 numerical integrations which make use of a finer mesh
 $\{\alpha_t'\}_{t=0}^{T'}$ than $\{\alpha_t\}_{t=0}^T$. Since higher order
 numerical integrations based on approximations of derivatives obtained from
@@ -834,9 +834,7 @@ variance of the importance sampling estimator of an arbitrary test function to
 that of the simple Monte Carlo estimator; the test function itself vanishes
 from the expression as a consequence of this low order expansion.
 
-In our context, $\{W_{t-1}^{(i)}\}_{i=1}^N$ denotes the \emph{normalized
-  weights} at the end of time $t - 1$, and $\{w_t^{(i)}\}_{i=1}^N$ denotes the
-\emph{unnormalized} incremental weights during iteration $t$. The \ess
+In our context, the \ess
 calculated using the current weight of each particle is simply,
 \begin{equation}
   \ess_t = \left[ {\sum_{i=1}^N\left( \frac{W_{t-1}^{(i)}
@@ -844,10 +842,13 @@ calculated using the current weight of each particle is simply,
   \right]^{-1} = \frac{\Round[Big]{\sum_{i=1}^NW_{t-1}^{(i)}w_t^{(i)}}^2}
   {\sum_{j=1}^N\Round[Big]{W_{t-1}^{(j)}}^2\Round[Big]{w_t^{(j)}}^2}
 \end{equation}
+where $\{W_{t-1}^{(i)}\}_{i=1}^N$ denotes the \emph{normalized
+  weights} at the end of time $t - 1$, and $\{w_t^{(i)}\}_{i=1}^N$ denotes the
+\emph{unnormalized} incremental weights during iteration $t$. 
 It is clearly appropriate to use this quantity (which corresponds to the
 coefficient of variation of the current normalized importance weights) to
 assess weight degeneracy and to make decisions about appropriate resampling
-times \cite{DelMoral:2012jq} but it is rather less apparent that it's
+times \cite{DelMoral:2012jq} but it is rather less apparent that it is
 the correct quantity to consider when adaptively specifying a sequence of
 distributions in an \smc sampler.
 
@@ -856,7 +857,7 @@ between proposal and target distributions (on an extended space including the
 full trajectory of the sample paths) since the last resampling time. Fixing
 either the relative or absolute reduction in \ess between successive
 distributions does \emph{not} lead to a common discrepancy between successive
-distributions unless resampling is conducted after every iteration as will be
+\emph{target} distributions unless resampling is conducted after every iteration as will be
 demonstrated below.
 
 When specifying a sequence of distributions it is natural to aim for a similar
@@ -870,16 +871,16 @@ this is via the sample approximation of a Taylor expansion of the relative
 variance of such an estimator exactly as in the \ess.
 
 The exact \ess of an importance sample of size $N$ with proposal $\pi_{t-1}$
-and target $\pi_t$ of \cite{Kong:1994ul} is defined as,
+and target $\pi_t$ is defined as \cite{Kong:1994ul},
 \begin{equation}
   \text{Exact }\ess_t =
-  \frac{N}{1 + \var_{\pi_{t-1}}\Round[Big]{\frac{\diff\pi_t}{\diff\pi_{t-1}}}}
+  \frac{N}{1 + \var_{\pi_{t-1}}\Square[Big]{\frac{\diff\pi_t}{\diff\pi_{t-1}}}}
   \label{eq:essdefinition}
 \end{equation}
 which is widely approximated by the empirical equivalent, replacing the
 denominator with the empirical mean squared normalized importance weights.
 
-In the context of adaptive specification of an SMC tempering schedule, we are
+In the context of adaptive specification of an \smc tempering schedule, we are
 interested in the discrepancy between adjacent distributions, $\pi_{t-1}$ and
 $\pi_t$, and so the \ess defined in Equation~\eqref{eq:essdefinition} is a
 natural quantity to consider.
@@ -888,7 +889,7 @@ However, the \ess as used in the recent \smc literature is invariably computed
 using the empirical mean squared normalized importance weights of the current
 population. If these importance weights have been accumulated over several
 iterations, then they coincide with an \ess based on the excursion since the
-last resampling epoch. The \cess proposed in this work instead uses a weighted
+last resampling epoch. A new quantity, termed \emph{\cess} later, proposed in this work instead uses a weighted
 sample from $\pi_{t-1}$ to approximate exactly the quantity described by
 Equation~\eqref{eq:essdefinition}. The different name is used to distinguish
 this quantity from that usually termed the \ess in the \smc literature.
@@ -900,26 +901,25 @@ $w_{t}^{(i)} \propto (\diff\pi_t/\diff\pi_{t-1})(X_{t-1}^{(i)})$ is simply,
   \text{Exact }\ess_t = \frac{N}{1 + \var_{\pi_{t-1}}
     \Square[Big]{\frac{\diff\pi_t}{\diff\pi_{t-1}}}}
   \approx& \frac{N}{\sum_{i=1}^N W_{t-1}^{(i)}
-    \Round[Big]{\frac{\diff\pi_t}{\diff\pi_{t-1}}(X_{t-1}^{(i)}})^2}\\
+    \Round[Big]{\frac{\diff\pi_t}{\diff\pi_{t-1}}(X_{t-1}^{(i)})^2}}\\
   \approx& \frac{N}{\sum_{i=1}^N W_{t-1}^{(i)}
     \Round[Big]{\frac{w_t^{(i)}}{\sum_{j=1}^N W_{t-1}^{(j)} w_t^{(j)}}}^2},
 \end{align*}
 with the first approximation replacing the expectation under $\pi_{t-1}$ with
 its weighted sample average and the second replacing the normalizing constant
 of the weighting function with its empirical analogue.
-
 Such a procedure leads us to a quantity which we have termed the
 \emph{conditional} \ess (\cess),
 \begin{equation}
   \cess_t = \Square[bigg]{\sum_{i=1}^N N W_{t-1}^{(i)} \Round[bigg]{
-        \frac{w_t^{(i)}}{\sum_{k=1}^N N W_{t-1}^{(k)}w_t^{(k)}}}^2}^{-1}
+        \frac{w_t^{(i)}}{\sum_{j=1}^N N W_{t-1}^{(j)}w_t^{(j)}}}^2}^{-1}
   = \frac{\Round[Big]{\sum_{i=1}^NW_{t-1}^{(i)}w_t^{(i)}}^2}
   {\sum_{j=1}^N \frac{1}{N} W_{t-1}^{(j)} \Round[Big]{w_t^{(j)}}^2}
 \end{equation}
 which is equal to the \ess only when resampling is conducted during every
 iteration. The factor of $1/N$ in the denominator arises from the fact that
 $\{W_{t-1}^{(i)}\}_{i=1}^N$ is normalized to sum to unity rather than to have
-expectation unity: the bracketed term coincides with a sample approximation
+expectation unity. The bracketed term coincides with a sample approximation
 (using the actual sample which is properly weighted to target $\pi_{t-1}$) of
 the expected sum of the unnormalized weights squared divided by the square of
 a sample approximation of the expected sum of unnormalized weights when
@@ -932,7 +932,7 @@ More specifically, in practice, when using \cess to adaptively place
 distributions, a value $\cess^\star \in (0, 1)$ is chosen, and at each
 iteration $t$, $\alpha_t$ is chosen such that $\cess_t = \cess^\star$ (with a
 preset numeric error tolerance). This can be done using an algorithm such as
-binary search in our setting of \smc[1]-\smc[3], since it is clear that
+binary search in our setting of \smc[1]--\smc[3], since it is clear that
 $\cess_t$ is monotonically decreasing when $\alpha_t$ decreases.
 Figure~\ref{fig:adaptive_alpha} shows the variation of $\alpha_t$ when fixed
 reductions in \ess and \cess are used to specify the sequence of distributions

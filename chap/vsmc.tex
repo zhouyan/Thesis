@@ -11,7 +11,7 @@ implementing \smc algorithms on both sequential and parallel hardware.
 The library makes use of some modern \cpp techniques. One should not need to
 be an expert on all of them to use the library. Most of the examples in this
 chapter are self-explanatory to readers with some basic knowledge of \cpp.
-For those interested, Appendix~\appref{sec:Modern C++} serve as a brief
+For those interested, Appendix~\appref{sec:Modern C++} serves as a brief
 introduction to \cpp templates and callable objects, two features used
 extensively in the \vsmc library.
 
@@ -106,14 +106,14 @@ These changes are due to various technical difficulties in increasing the
 clock rates among other reasons, which we will not elaborate further here.
 
 Scientists are ever seeking to solve more complex problems, which often
-requires more computations. To solve larger problems without use significantly
-longer computing time, in the foreseeable future the only way is to use
+require more computations. To solve larger problems without use significantly
+longer computing time in the foreseeable future, the only way is to use
 parallelism.
 
-Parallel computing is also much more economic in both power consumption and
+Parallel computing is also much more economically efficient in both power consumption and
 processors' production than sequential computing \cite{parallel}. In reality,
 it means researchers can invest the same or less amount of funding, yet get
-more computing work done with the same or less time.
+more computing work done with the same or less amount of or time.
 
 \subsubsection{Performance measurement}
 \label{ssub:Performance measurement}
@@ -126,7 +126,7 @@ computational cost. However, in the case of parallel computing, the total
 amount of computation, whether measured as the number of arithmetic operations
 or data operations, cannot reflect the cost in reality. This is due to the
 fact that, today's parallel computers is much more cost efficient when more
-work are parallelized \cite{parallel}. In practice, one is most concerned with
+work is parallelized \cite{parallel}. In practice, one is most concerned with
 the speedup of a parallel program, defined as the ratio between running time
 of a sequential program and the one of a parallel program that does the same
 work.
@@ -145,7 +145,7 @@ is only the case when $P$ is modest in reality),
   S_P \le T_1/T_{\infty}
 \end{equation}
 
-Implementations on different hardwares often are interested in one of the
+Implementations on different hardwares often concern one of the
 three quantities, $T_1$, $T_P$ and $T_{\infty}$. For sequential
 implementations clearly $T_1$ is the only one of interest. For multicore and
 \smp systems, $T_P$ is of interest for a particular value $P$. $T_{\infty}$ is
@@ -166,14 +166,14 @@ the tuning of performance.
 
 Parallel programs are more difficult to construct \emph{correctly} than a
 sequential program. Because its parallel natural, many operations may be
-performed concurrently and may happen with random orders or at the same time.
+performed concurrently and may happen at random orders or at the same time.
 However, due to reasons such as data dependency, some operations have to be
 performed in a deterministic order in order to obtain meaningful results.
 Informally, when two workers try to modify the same location of data, the
 behavior is undefined. This is also called \emph{data race}.
 
-Another difficulties of parallel computing is the tuning and portability of
-performance. Since the development of language such as Fortran and C,
+Another difficulty of parallel computing is the tuning and portability of
+performance. Since the development of languages such as Fortran and C,
 scientists have relied on them to develop portable softwares. There are two
 sides of portability. One is the programming portability, meaning that the
 same source code can be used to build softwares for different platforms with
@@ -191,7 +191,7 @@ particular processor) can often cause large performance differences. More
 recently, devices such as \gpu{}s are even less performance portable. The
 author has seen that the same \opencl \cite{opencl} program can have an order
 of magnitude difference in performance when running on devices from different
-vendors even they have similar raw computational power.
+vendors even though they have similar raw computational power.
 
 We believe that with the development of developer tools for parallel
 computing, such issues will become less common and it will help the wider
@@ -248,16 +248,16 @@ The most noticeable software for \mcmc algorithms is perhaps \bugs \cite{bugs,
   bugsbook}. It provides an easy to use environment for Bayesian modeling
 using the Gibbs sampling. The user needs to specify the model using \bugs
 model specification language, which describe the model variables in a direct
-acyclic graph (\dag) and the data using a similar language. The software
+acyclic graph (\dag) and the data in a similar language. The software
 analyzes the model and choose \mcmc algorithms to do the sampling. It is a
-easy to use practical tool for Bayesian analysis. The output of \bugs are
+easy to use practical tool for Bayesian analysis. The output of \bugs is
 usually analyzed with \rlang, using packages such as \rcoda \cite{rcoda}.
 
 The limitation of \bugs is that the resulting algorithm may not be well tuned
-and it can take a long time to get reasonable results. In particular, it is
+and it can take long time to get reasonable results. In particular, it is
 very difficult for the user to provide input to the algorithm design process.
 The software chooses the algorithm tuning parameters, such as the proposal
-scales for Metropolis random walk algorithms, and even the user has a good
+scales for Metropolis random walk algorithms, and even if the user had a good
 knowledge of what values are more likely to lead to good performance, it is
 difficult for such knowledge being used by the software. In addition, it does
 not allow more flexible design of data structures which can lead to
@@ -280,21 +280,21 @@ module for the \python programming language. It is highly influenced by \bugs
 while providing more flexibility and better performance through \python. The
 \cppbugs \cite{cppbugs} is similar to \pymc but is a library for \cpp. It is
 possible to obtain much better performance using \cppbugs compared to \bugs
-while with only a little more programming efforts. Both \pymc and \cppbugs
+while only a little more programming effort is required. Both \pymc and \cppbugs
 give users access to a general programming language in the process of
-designing the algorithms. Much flexibility and performance are gained through
+designing the algorithms. Much flexibility and better performance are gained through
 this compared to \bugs. On the other hand, to use them to their full
-potentiality the users do need to have good knowledge of the programming
+potentiality, the user does need to have a good knowledge of the programming
 languages.
 
 Overall, for \mcmc algorithms, it is often not very difficult to develop
 application specific software using a general purpose programming language
 such as \rlang or \cpp. And widely used software tends to solve a particular
-class of problems instead of provide a more general framework for
+class of problems instead of providing a more general framework for
 implementation of algorithms. Bayesian inference is certainly one of the more
-important application area of \mcmc. And many softwares have been developed
+important application areas of \mcmc. And many softwares have been developed
 for this purpose, with \bugs being perhaps the most influential and relatively
-more general than other work such as the various \rlang packages that target
+more general than others such as the various \rlang packages targeting
 specific models.
 
 \subsubsection{Software for \protect\smc computing}
@@ -368,15 +368,15 @@ parallel computing.
 There is no lack of interest in using parallel computing for these algorithms.
 For example, \cite{Lee:2010fm} studied the implementation of \smc algorithms
 on massive-parallel hardware (e.g., \gpu). The results are encouraging.
-However, there are yet few softwares for the purpose of implementation of
+However, there are few softwares for the purpose of implementation of
 generic \smc algorithms in parallel computers. The \libbi library is a notable
 exception.
 
-There are also more fundamental work done in this area. One more important
+There is also some fundamental work done in this area. One more important
 aspect is generating random numbers in parallel. Conventional pseudo-\rng
 generates random numbers using an internal state, say $x_t$ and iterates it
 with a deterministic transformation, $x_{t+1} = f(x_t)$. A data dependency
-exists between $x_{t+1}$ and $x_t$, which prevent scalable parallelization.
+exists between $x_{t+1}$ and $x_t$, which prevents scalable parallelization.
 For example, algorithms in \cite{Lee:2010fm} used to generate random numbers
 has a cost greater than $O(N)$ where $N$ is the number of parallel computing
 units. One solution to this problem is using state-less \rng. Informally,
@@ -387,7 +387,7 @@ $\{y_i\}_{i=1}^N$ can be generated in parallel efficiently. The work by
 \cite{Salmon:2011um} provides accessible, high performance state-less \rng. It
 is also used by the \vsmc library.
 
-We believe there is a need of softwares similar to \smctc, which provides a
+We believe there is demand of softwares similar to \smctc, which provides a
 framework for implementation of generic \smc algorithms (in contrast to
 applicable for only a class of models) yet taken full advantage of today's
 parallel computers. The \vsmc library aims to fill this gap. It is less easy
@@ -413,7 +413,7 @@ library are introduced in examples. Interested readers can see the tutorial
 The \vsmc library makes use of \cpp's template generic programming to
 implement general \smc algorithms. The library is formed by a few major
 modules. In the remainder of this chapter, unless stated otherwise, all public
-classes and functions of the library resides in the namespace
+classes and functions of the library reside in the namespace
 \cppinline{vsmc}. Brief discussions of the most important modules are
 discussed below.
 
@@ -446,7 +446,7 @@ allows easy implementation of hybrid parallelization such as \mpi/\openmp.
 
 This module is similar to the two above except it eases the parallelization
 through \opencl, such as for the purpose of General Purpose \gpu Programming
-(\gpgpu). \opencl is a framework for writing programs that can be execute
+(\gpgpu). \opencl is a framework for writing programs that can be executed
 across heterogeneous platforms. \opencl programs can run on either \cpu{}s or
 \gpu{}s.
 
@@ -454,8 +454,7 @@ across heterogeneous platforms. \opencl programs can run on either \cpu{}s or
 \label{sub:Core classes}
 
 There are over two hundred classes, large and small, in the \vsmc library. It
-is beyond the scope of this chapter to document most of them. However, there
-are a few of them play central roles in the implementation of \smc algorithms.
+is beyond the scope of this chapter to document most of them. However, a few of them play central roles in the implementation of \smc algorithms.
 In this section, we provide an overview of them. Many of them are feature
 rich. Instead of document their interfaces here, we will introduce useful
 features through examples later.
@@ -463,9 +462,9 @@ features through examples later.
 \paragraph{Value collection type}
 
 This is actually not a type defined by \vsmc, but a user defined class that
-abstract the collection of values $\{X^{(i)}\}_{i=1}^N$. The library allows
+abstracts the collection of values $\{X^{(i)}\}_{i=1}^N$. The library allows
 much flexibility in the definition of this type. The important thing to note
-here is that this class need to at least abstract the whole collection of all
+here is that this class needs to at least abstract the whole collection of all
 values instead of a single particle. In Section~\ref{sec:The particle system},
 we introduce a readily usable implementation provided by the \vsmc library, on
 top of which users can build application specific classes.
@@ -606,7 +605,7 @@ optional.
 
 A \cppinline{Sampler<T>} object has a sub-object, \cppinline{Particle<T>},
 which contains the type \cppinline{T} object along with other data such as
-the importance weights. Each can be access as the following,
+the importance weights. Each can be accessed as the following,
 \begin{cppcode}
 Sampler<T> sampler(N);
 sampler.particle();         // Reference to Particle<T> object
@@ -635,8 +634,7 @@ $1$ or the special value \cppinline{Dynamic}, in which case
 \cppinline{StateMatrix} provides a member function \cppinline{resize_dim} such
 that the number of variables can be changed at runtime. The third template
 parameter is the type of the state values. Each particle's state is thus a
-vector of length \cppinline{Dim}, indexed from \cppinline{0} to \cppinline{Dim
-  - 1}. To obtain the value at position \cppinline{j} of the vector of
+vector of length \cppinline{Dim}, indexed from \cppinline{0} to \cppinline{Dim - 1}. To obtain the value at position \cppinline{j} of the vector of
 particle \cppinline{i} (the element at the \cppinline{i}\xth raw and
 \cppinline{j}\xth column of the matrix), one can use the \cppinline{state}
 member function,
@@ -713,11 +711,11 @@ design goals for this class,
     characteristics of the model should be possible through this class.
   \item The distribution specification parameter $\alpha$ and the \mcmc
     proposal scales, which are properties of a given generation of the
-    particle system should be associated with this class.
+    particle system, should be associated with this class.
 \end{enumerate}
 This class is outlined as below.
 \cppfile{snippet/gmm_value.cpp}
-First the number of components are set through a template parameter
+First the number of components is set through a template parameter
 \cppinline{R}. Of course, it is possible to make this parameter dynamic and
 changeable at runtime by using \cppinline{Dynamic} for the second template
 parameter of \cppinline{StateMatrix}.
@@ -819,7 +817,7 @@ the following,
 sampler.init(init_f);
 
 Param param = {Mean, Sd};
-smapler.initialize(param);
+sampler.initialize(param);
 \end{cppcode}
 
 \subsection{Parallelized implementation}
@@ -856,7 +854,7 @@ application specific behaviors of this operator. For example, the simulation
 of Normal random variates can now be re-implemented as,
 \cppfile{snippet/init_normal_seq.cpp}
 At a first glance, it takes quite a few more lines than the original
-implementation of \cppinline{init_f}. However, by replace
+implementation of \cppinline{init_f}. However, by replacing
 \cppinline{InitializeSEQ} with \cppinline{InitializeOMP}, without changing
 anything else, the sampler will be using \openmp for parallelization during
 the initialization step.
@@ -870,13 +868,13 @@ only \cppinline{InitializeOMP} need to be changed to
 
 Second, this implementation is also scalable. A few changes allows it to use
 \mpi for parallelization on distributed memory computers. All that need to be
-done is wrap the value collection type with the adapter class
+done is to wrap the value collection type with the adapter class
 \cppinline{StateMPI},
 \begin{cppcode}
 typedef StateMPI<StateMatrix<RawMajor, K, double> > T
 \end{cppcode}
 
-In summary, with almost identical implementation, we can build programs
+In summary, with almost identical implementations, we can build programs
 running on single threaded sequential mode, on multicore processors with
 various parallel programming models or on a distributed memory computer with
 \mpi.
@@ -906,7 +904,7 @@ To add \cppinline{move_f} into the queue of \cppinline{move}'s, call
 \begin{cppcode}
 sampler.move(move_f, false);
 \end{cppcode}
-The second argument, a boolean value, indicate whether the new
+The second argument, a boolean value, indicates whether the new
 \cppinline{move} should be appended to the existing (possibly empty) queue (if
 it is set to \cppinline{false}); or the queue should be cleared before set a
 new one. The queue of the \cppinline{mcmc}'s is manipulated similarly.
@@ -1024,10 +1022,10 @@ $h(X) = (h_1(X),\dots,h_m(X))$ is an $m$-vector function. The importance
 sampling estimate can be obtained by $AW$ where $A$ is an $N$ by $m$ matrix
 where $A(i,j) = h_j(X^{(i)})$ and $W = (W^{(i)},\dots,W^{(N)})^T$ is the
 $N$-vector of normalized weights. To compute this importance sampling
-estimate, one need to define the following evaluation function (or other kinds
+estimate, one needs to define the following evaluation function (or other kinds
 of callable objects),
 \cppfile{snippet/monitor_eval.cpp}
-and add it to the sampler by calling,
+and adds it to the sampler by calling,
 \begin{cppcode}
 sampler.monitor("variable.name", m, monitor_eval);
 \end{cppcode}
@@ -1075,7 +1073,7 @@ log-likelihood in the same way as the \cppinline{GMM} class. We can implement
 the function template as the following,
 \cppfile{snippet/path_eval_f.cpp}
 Other \smc algorithms such Algorithm~\ref{alg:smc3} may have different path
-sampling estimator expression. But the implementation is similar.
+sampling estimator expressions. But the implementation is similar.
 
 \subsection{Example: Adaptive specification of proposal scales}
 \label{sub:Example: Adaptive specification of proposal scales}
@@ -1083,7 +1081,7 @@ sampling estimator expression. But the implementation is similar.
 Now we demonstrate the implementation of a slightly more complex monitor and
 the use of it for the purpose of adaptive specification of proposal scales.
 Consider the \gmm example, as outlined in Section~\ref{sub:Adaptive
-  specification of proposals}, we can use the moments of the parameters to set
+  specification of proposals}. We can use the moments of the parameters to set
 the proposal scales adaptively.
 
 First, we need to create a monitor that records the first two raw moments of
@@ -1101,7 +1099,7 @@ dimension of the monitor. The third, a \cppinline{ConstSingleParticle} type
 object, is similar to \cppinline{SingleParticle} except that now one does not
 have write access to the particles. In other words, one cannot change the
 particle values through it. The last, the output parameter \cppinline{res} is
-of length the dimension of the monitor. The function call need only to store
+of length the dimension of the monitor. The function call needs only to store
 the values of $h(X^{(i)})$ for a single particle. The complete implementation
 is given as below,
 \cppfile{snippet/gmm_moments.cpp}
@@ -1183,19 +1181,18 @@ We use the \tbb implementation as a baseline for comparison. The same \opencl
 implementation are used for all the \cpu and \gpu runtimes. Therefore they are
 not particularly optimized for any of them. For the \gpu implementation, in
 addition to double precision, we also tested a single precision configuration.
-Unlike modern \cpu, which have the same performance for double and single
+Unlike modern \cpu{}s, which have the same performance for double and single
 precision floating point operations (unless \simd instructions are used, the
 performance gain of which can vary considerably among different applications),
-\gpu penalize double precision performance heavily.
+\gpu{}s penalize double precision performance heavily.
 
-For different number of particles, the wall clock time and speed up are
+For different number of particles, the wall clock time and speedup are
 plotted in Figure~\ref{fig:bench-ocl-perf}. With smaller number of particles,
 the \opencl implementations have a high overhead when compared to the \tbb
-implementation. With a large number of particles, \aocl has a similar
-performance as the \tbb implementation. \iocl is about 40\% faster than the
+implementation. With a large number of particles, \aocl has performance similar to that of the \tbb implementation. \iocl is about 40\% faster than the
 \tbb implementation. This is due to more efficient vectorization and compiler
 optimizations. The double precision performance of the NVIDIA \gpu has a
-220\% speedup and the single precision performance has near 1600\% speedup.
+220\% speedup and the single precision performance has nearly 1600\% speedup.
 As a rough reference for the expected performance gain, the \cpu has a
 theoretical peak performance of 24.48 \gflops (floating point operations per
 seconds, measured in the unit $10^9$). The \gpu has a theoretical peak
@@ -1207,9 +1204,9 @@ respectively.
 \label{sub:Performance and productivity}
 
 Performance alone is not enough for a software to be useful. The productivity,
-the efforts need to develop new algorithms, should also be taken into
-consideration. Due the low level natural of \cpp, it certain takes more
-efforts to develop an algorithm using \vsmc than, say \libbi or \biips.
+the efforts needed to develop new algorithms, should also be taken into
+consideration. Due to the low level natural of \cpp, it certainly takes more
+effort to develop an algorithm using \vsmc than, say \libbi or \biips.
 However, \smc does provide a some advantages. First, some application of \smc
 algorithms may not fit into the framework of those softwares. The framework of
 \smc is general enough for them to be implemented with relative ease.
@@ -1220,13 +1217,13 @@ same implementation, as we have seen in Section~\ref{sub:Parallelized
 \begin{enumerate}
   \item Many parallel programming models do not coexist in the same program
     well. Some of them such as \tbb and \cilk has explicit support for
-    \openmp. Much less so can be said for others. Often, some other part of
+    \openmp. Much less so can be said for the others. Often, some other part of
     the program may also be parallelized with a particular programming model
     familiar to the user. In this case, using \vsmc one can often freely
     choose the same one for the \smc algorithm's parallelization. See
     \cite{vsmcjss} for all the programming models supported by the library.
   \item Often an algorithm is first developed on a desktop or laptop with only
-    multicore processors. Later it may be deployed to larger computers to
+    multicore processors. Later it may be deployed on larger computers to
     process bigger data. With \vsmc it is possible to use the implementation
     on a \smp system, with little modifications, for the larger computer. In
     \cite{vsmcjss} there is a full fledged example showing the use \mpi.
@@ -1234,7 +1231,7 @@ same implementation, as we have seen in Section~\ref{sub:Parallelized
 
 Overall, we found the productivity of \vsmc is at a similar level of \smctc.
 For example, the particle filter example in \cite{smctc} can be implemented in
-\vsmc using roughly the same number of lines of code. Consider that there is a
+\vsmc using roughly the same number of lines of code. Considering that there is a
 significant performance gain through parallelization, as seen in
 Section~\ref{sub:Using the SMP module}, we believe the effort of using a \cpp
 library is adequate.
@@ -1245,7 +1242,7 @@ believed that \opencl programming is tedious and hard. Limited by the scope of
 this chapter, the \opencl implementation (distributed with the \vsmc source)
 is not documented in this chapter. Overall the \opencl implementation has
 about 800 lines including both host and device code. It is not an enormous
-increase in effort when compared to the 500 lines \smp implementation. Less
+increase of effort when compared to the 500 lines \smp implementation. Less
 than doubling the code base but gaining more than 15 times performance
 speedup, we consider the programming effort is relatively small. Moreover, the
 \gpu used in the examples is relatively lower end and outdated. With better
@@ -1260,7 +1257,7 @@ makes \opencl programming difficult is the management of the devices. It
 involves the understanding an array of layers of the underlying hardware.
 There are examples\footnote{See \url{https://developer.apple.com/library/mac/samplecode/OpenCL_FFT} for examples}
 where a major part of the program is irrelevant to the algorithm itself. This
-is not the case of using \vsmc. The library provides facilities to manage
+is not the case when using \vsmc. The library provides facilities to manage
 \opencl platforms and devices as well as common operations. The
 implementations of \smc algorithms using \opencl, compared to using the \smp
 module, only requires a marginal addition of efforts to manage the \opencl
@@ -1291,7 +1288,7 @@ samplers is not more difficult than that of an serialized one. The performance
 is more or less close to ideal situations. This may not always be the case in
 reality. However, through all the examples in Chapter~\ref{cha:Sequential
   Monte Carlo for Bayesian Computation}, we have found that there are always
-considerable speed up compared to serialized implementations. The \opencl
+considerable speedup compared to serialized implementations. The \opencl
 module further provides superior performance compared to the \smc module.
 
 There are at least two interested directions of the future development of the

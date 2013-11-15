@@ -2,18 +2,18 @@
 \begin{algorithmic}
   \tophrule
   \STATE \emph{Initialisation:} Set $t\leftarrow0$.
-  \STATE\STATESKIP Sample $X_0^{(i)} = (M_0^{(i)},\theta_0^{(i)})\sim\nu$
+  \STATE\STATESKIP Sample $X_0^{(i)} = (\theta_0^{(i)},\calM_0^{(i)})\sim\nu$
   for some proposal distribution $\nu$ (usually the joint prior).
   \STATE\STATESKIP Weight $W_0^{(i)} \propto w_0(X_0^{(i)}) =
-  {\pi(M_0^{(i)}) \pi(\theta^{(i)}_0|M_0^{(i)})}/
-  {\nu(M_0^{(i)},\theta_0^{(i)})}$.
+  {\pi(\calM_0^{(i)}) \pi(\theta^{(i)}_0|\calM_0^{(i)})}/
+  {\nu(\theta_0^{(i)},\calM_0^{(i)})}$.
   \STATE\STATESKIP Apply resampling if necessary (e.g., if \ess less than some
-  threshold (see Section~\ref{sub:Sequential importance sampling and
+  threshold; see Section~\ref{sub:Sequential importance sampling and
     resampling}).
 
   \STATE \emph{Iteration:} Set $t\leftarrow t + 1$.
   \STATE\STATESKIP Weight $W_t^{(i)} \propto W_{t-1}^{(i)}
-  p(\data|\theta_{t-1}^{(i)},M_{t-1}^{(i)})^{\alpha(t/T) - \alpha([t-1]/T)}$.
+  p(\data|\theta_{t-1}^{(i)},\calM_{t-1}^{(i)})^{\alpha(t/T) - \alpha([t-1]/T)}$.
   \STATE\STATESKIP Apply resampling if necessary.
   \STATE\STATESKIP Sample $X_t^{(i)} \sim K_t(\cdot|X_{t-1}^{(i)})$, a
   $\pi_t^{(1)}$-invariant kernel.
