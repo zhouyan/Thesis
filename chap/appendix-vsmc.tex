@@ -74,7 +74,7 @@ Another significant feature of these devices is that they provide much higher
 data latency than traditional \cpu.
 
 Massive parallel computing is extremely suitable for the \smc algorithms,
-which can have a large number of particles, while each of then need to be
+which can have a large number of particles, while each of them needs to be
 updated using the same \mcmc kernel.
 
 There are two major programming models for general purpose \gpu programming
@@ -150,7 +150,7 @@ into the pipeline, each unit has its own work to do and thus computations are
 carried out in parallel while the data dependencies are correctly maintained.
 
 There are several applications of pipeline in Monte Carlo computing. For
-example, an \mcmc algorithm often need to compute various convergence
+example, an \mcmc algorithm often needs to compute various convergence
 statistics, say $h(X_{0:t})$. Often, this statistic can be written as
 $h(X_{0:t}) = h(X_t, h(X_{0:{t-1}}))$. Instead of compute it after all
 iterations, one can use one thread to update the \mcmc chain and another one

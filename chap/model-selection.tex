@@ -593,7 +593,7 @@ which is on the same scale as the likelihood ratio test \cite{Kass:1995vb},
 are only general guidelines. Other interpretations can be more suitable for
 specific applications. For example, \cite{Kass:1995vb} mentioned that for
 forensic evidence to be conclusive in a criminal trial, the posterior odds of
-guilt against innocence need to be at least 1,000.
+guilt against innocence needs to be at least 1,000.
 
 \input{tab/bayes-factor-scale}
 
@@ -758,14 +758,15 @@ transformation,
   I(\phi_k) = (J(h^{-1}(\phi_k)))^T I(h^{-1}(\phi_k)) 
   (J(h^{-1}(\phi_k)))
 \end{equation*}
-where $J(h^{-1}(\phi_k))$ is the Jacobian matrix. For $\theta_k =
+where $J(h^{-1}(\phi_k))$ is the Jacobian matrix . For $\theta_k =
 h^{-1}(\phi_k)$, it follows,
 \begin{equation*}
   \pi(\phi_k)
   \propto \sqrt{\Abs{I(\theta_k)}\Abs{J(h^{-1}(\phi_k))}}
   \propto \pi(\theta_k)
-  \Abs[bigg]{\frac{\diff\theta_k}{\diff\phi_k}}
+  \Abs[bigg]{\frac{\partial\theta_k}{\partial\phi_k}}
 \end{equation*}
+where the last term is the determinant of the Jacobian transformation.
 The above expression states that the Jeffreys prior of the transformed
 parameter $\phi_k$ is the same as the one obtained by changing variable of
 the Jeffreys prior of $\theta_k$. In other words, a change of variable does

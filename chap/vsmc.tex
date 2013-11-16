@@ -299,7 +299,7 @@ specific models.
 Unlike \mcmc algorithms, even the simplest \smc algorithms can be difficult to
 implement in general purpose programming languages for researchers, as the
 implementations of resampling and other aspects of the algorithms are not
-always straightforward. There is a need for softwares that help researchers to
+always straightforward. There is demand for softwares that help researchers to
 implement complex generic \smc algorithm.
 
 Many \smc algorithms are often more computational intense than typical \mcmc
@@ -859,7 +859,7 @@ There are also other benefits of this implementation. First, if \openmp is not
 available in the user's \cpp environment (e.g., using the popular \clang
 \cite{clang} compiler), one can use the same implementation with other
 parallel programming models. For instance, to use \tbb instead of \openmp,
-only \cppinline{InitializeOMP} need to be changed to
+only \cppinline{InitializeOMP} needs to be changed to
 \cppinline{InitializeTBB}.
 
 Second, this implementation is also scalable. A few changes allows it to use
