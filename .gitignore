@@ -14,6 +14,7 @@
 *.synctex.gz*
 *.toc
 
+cover.pdf
 figure.pdf
 layout.pdf
 outline.pdf
