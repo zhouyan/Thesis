@@ -151,7 +151,7 @@ kernel $K$ and invariant distribution $\pi$, an atom $\alpha$ is
 \end{equation}
 where $K(\alpha,\alpha) = \int_{\alpha}K(x,\alpha)\pi(\diff x)$ and $K^t =
 K\vysmwhtcircle K^{t-1}$. For more general situations, the convergence is
-established through the \emph{total variance norm}, defined for two measure
+established through the \emph{total-variation norm}, defined for two measure
 $\mu_1$ and $\mu_2$ on the space $(E,\calE)$,
 \begin{equation}
   \Norm{\mu_1-\mu_2}_{TV} = \sup_{A\in\calE}\Abs{\mu_1(A) - \mu_2(A)}.
@@ -162,7 +162,7 @@ $\pi$, then
 \begin{equation}
   \lim_{t\to\infty}\Norm{\mu K^t(x,\cdot) - \pi}_{TV} = 0
 \end{equation}
-for every initial distribution $\mu$. And this total variance norm decreases
+for every initial distribution $\mu$. And this total-variation norm decreases
 in $t$. From here, it becomes clear why the recurrence and aperiodicity
 discussed before are important for \mcmc algorithms. Note that the above
 results also implies that, for bounded function $\varphi$,
