@@ -243,8 +243,7 @@ This approach might outperform \rjmcmc when it is difficult to design fast-mixin
 
 We include this approach for completeness and study it empirically later. However, the more direct approaches described in the following sections lead more naturally to easy-to-implement strategies with good performance.
 
-\subsection[SMC2: A direct-evidence-calculation approach]
-{\smc[2]: A direct-evidence-calculation approach}
+\subsection[SMC2: A direct-evidence-calculation approach]{\smc[2]: A direct-evidence-calculation approach}
 \label{sub:smc2: A direct-evidence-calculation approach}
 
 An alternative approach would be to estimate explicitly the evidence associated with each model. We propose to do this by sampling from a sequence of distributions for each model, starting from the parameter prior and sweeping through a sequence of distributions to the posterior.
@@ -272,8 +271,7 @@ This approach is appealing for several reasons. One is that it is designed to es
 
 This approach also has some disadvantages. In particular, it is necessary to run a separate simulation for each model -- rendering it impossible to deal with countable collections of models (although this is not much a substantial problem in many interesting cases). The ease of implementation may often offset this limitation.
 
-\subsection[SMC3: A relative-evidence-calculation approach]
-{\smc[3]: A relative-evidence-calculation approach}
+\subsection[SMC3: A relative-evidence-calculation approach]{\smc[3]: A relative-evidence-calculation approach}
 \label{sub:smc3: A relative-evidence-calculation approach}
 
 A final approach can be thought of as \emph{sequential model comparison}. Rather than estimating the evidence associated with any particular model, we could estimate pairwise evidence ratios directly. The \smc sampler starts with an initial distribution being the posterior of one model (which could comes from a separate \smc sampler starting from its prior) and moves towards the posterior of another related model. Then the sampler can continue towards another related model.
