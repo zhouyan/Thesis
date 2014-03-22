@@ -1,32 +1,28 @@
-\documentclass[
-11pt, fontset=Minion, toclevel=3, colorfullink=false,
-linespread=1.414, lines=30, oneside, onesideheader,
-bib, bibintoc, biblatexstyle=numeric,
-mintcode, minted=cache
-]{mbook}
+\documentclass[showoverfull, draftnote,
+11pt, fontset=Minion, toclevel=3, screen=false, linespread=1.414, lines=30,
+bib, biblatexstyle=numeric, mintcode, minted=cache]{mreport}
 \usepackage{pdfpages}
+\input{macros}
 \ExecuteBibliographyOptions{url=true}
 \ExecuteBibliographyOptions{doi=false}
-
-\input{macros}
-
 \renewbibmacro{in:}
 {\ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}}
 \addbibresource{thesis.bib}
 \addbibresource{extra.bib}
 
+
 \begin{document}
 
-\begingroup
+  \begingroup
   \includepdf[pages=-]{library}
   \frontmatter
   \input{title}
   \tableofcontents
   \listoftables
   \listoffigures
-\endgroup
+  \endgroup
 
-\begingroup
+  \begingroup
   \mainmatter
   \include{chap/acknowledges}
   \include{chap/declarations}
@@ -38,17 +34,17 @@ mintcode, minted=cache
   \include{chap/bayesian-smc}
   \include{chap/vsmc}
   \include{chap/conclusions}
-\endgroup
+  \endgroup
 
-\begingroup
+  \begingroup
   \printbibliography[heading=reference]
-\endgroup
+  \endgroup
 
-\begingroup
+  \begingroup
   \appendix
   \include{chap/appendix-monte-carlo}
   \include{chap/appendix-bayesian-vsmc}
   \include{chap/appendix-vsmc}
-\endgroup
+  \endgroup
 
 \end{document}
