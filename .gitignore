@@ -23,3 +23,5 @@ chap/*.pdf
 pieces/*.pdf
 
 .minted-*
+
+/correction.pdf

@@ -8,12 +8,17 @@
 
 .PHONY : cover
 
+.PHONY : correction
+
 .PHONY : clean
 
 .PHONY : all
 
 thesis :
 	latexmk -f -silent thesis.tex >/dev/null
+
+correction :
+	latexmk -f -silent correction.tex >/dev/null
 
 table :
 	latexmk -f -silent table.tex >/dev/null
