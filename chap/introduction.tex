@@ -1,111 +1,56 @@
 \chapter{Introduction}
 \label{cha:Introduction}
 
+\begin{draftpar}
+This thesis studies the use of sequential Monte Carlo (\smc) algorithms for the purpose of Bayesian model comparison. The main focus of the work is the performance of the Monte Carlo algorithms when used in the context of Bayesian model comparison. Contemporary methodology on model selections and Monte Carlo methods for the purpose of Bayesian model comparison are reviewed. Methodologies of using \smc in the context of Bayesian model comparison are developed. Some extensions to as well as refinements of existing \smc practices are also presented in this work.
+
+The performance of \smc algorithms for the purpose of Bayesian model comparison is studied empirically through various realistic models. Some theoretical results are also derived for non-standard methods. As this thesis covers a wide array of topics, one particular model, the position emission tomography (\pet) compartmental model, is used as a running example for illustrating purpose throughout this thesis. This model is introduced in the next chapter. However, it shall be noted that, this thesis is not concerned with the analysis of the \pet data in general. The particular model used in this thesis is chosen for a few reason. It provides a genuine model selection problem for which different methods can be compared. In the context of Bayesian model comparison, it is also considerably computationally challenging, in the sense that, many widely used Monte Carlo methods might not perform well for practical use. The \smc algorithms are very well suited for this and many other realistic Bayesian model comparison problems. And the advantage of the \smc algorithm can be made more clear through such and other realistic models.
+
+In the remaining of this introduction chapter, the context that motivates the work of the this thesis is first discussed. It is followed by a summary of notations used throughout the thesis. It is concluded with an outline of the structure of the remaining thesis.
+\end{draftpar}
+
 \section{Context}
 \label{sec:Context}
 
-Model comparison and selection are problems found throughout the discipline
-of statistics. It can appear in different forms, such as the choice of
-regressors in regression analysis, or the determination of the number of
-components in mixture models. Often, there can be more than one model that
-can be potentially used to describe the data and to make predictions or for
-other purposes. However, some models might be better than others in the sense
-that the estimation and prediction based on them have smaller errors or
-variances, etc. Some models are simpler than others while providing
-comparable accuracy. In many application areas, model selection is also
-important for the purpose of identifying the underlying reasons of certain
-phenomena observed through the data.
+Model comparison and selection are problems found throughout the discipline of statistics. It can appear in different forms, such as the choice of regressors in regression analysis, or the determination of the number of components in mixture models. Often, there can be more than one model that can be potentially used to describe the data and to make predictions or for other purposes. However, some models might be better than others in the sense that the estimation and prediction based on them have smaller errors or variances, etc. Some models are simpler than others while providing comparable accuracy. In many application areas, model selection is also important for the purpose of identifying the underlying reasons of certain phenomena observed through the data.
+\begin{draftpar}
+Many model selection and comparison methods have been developed throughout the history of statistics. Some of them are developed for particular classes of models while others make little assumptions of the candidate models. This thesis is more concerned with the later.
+\end{draftpar}
 
-Bayesian model comparison has been studied and practiced for a long time.
-There are considerable computational difficulties when using this approach,
-as many high dimensional integrations are involved. The development of Monte
-Carlo algorithms has enabled the practice of Bayesian model comparison for a
-wide range of realistic applications. However, algorithms such as Markov
-chain Monte Carlo (\mcmc) cannot efficiently simulate high dimensional
-multimodal distributions in many situations.
+Bayesian model comparison has been studied and practiced for a long time. There are considerable computational difficulties when using this approach, as many high dimensional integrations are involved. The development of Monte Carlo algorithms has enabled the practice of Bayesian model comparison for a wide range of realistic applications. However, algorithms such as Markov chain Monte Carlo (\mcmc) cannot efficiently simulate high dimensional multimodal distributions in many situations.
+\begin{draftpar}
+In addition, estimators of quantities for the purpose of Bayesian model comparison, such as the Bayes factor, obtained through these algorithms are often unreliable in the sense that with manageable computational cost, the variances are often too large for practical use. In some cases, reliable and efficient estimators can be obtained, yet they are often less generic in the sense that requires knowledges of the models not generally available. In this thesis, we aim to develop algorithms that are both generic, reliable and high performance.
+\end{draftpar}
 
-Population based algorithms have been developed in recent decades. However,
-there is little literature on its application to Bayesian model comparison.
-This thesis presents a framework based on sequential Monte Carlo (\smc)
-algorithms, within which Bayesian model comparison can be carried out in a
-(semi-) automatic fashion while better accuracy compared to some other recent
-developments can be obtained. This is made possible through the use of
-various adaptive strategies.
+Population based algorithms have been developed in recent decades.
+\begin{draftpar}
+They often prove to be more suitable than \mcmc algorithms for simulating high dimensional multimodal models. Reliable estimators of quantities such as the Bayes factor can also be obtained through these algorithms.
+\end{draftpar}
+However, there is little literature on its application to Bayesian model comparison. This thesis presents a framework based on sequential Monte Carlo (\smc) algorithms, within which Bayesian model comparison can be carried out in a (semi-) automatic fashion while better accuracy compared to some other recent developments can be obtained. This is made possible through the use of various adaptive strategies.
 
-This thesis also presents work on the practical implementations of \smc
-algorithms. Compared to \mcmc, practical tools for \smc are relatively fewer.
-In addition, there is interest in the utilization of parallel computing for
-the implementation of \smc algorithms. The work presented in this thesis
-provides a toolbox with which researchers can implement generic \smc
-algorithms on parallel computers with relative ease.
+This thesis also presents work on the practical implementations of \smc algorithms. Compared to \mcmc, practical tools for \smc are relatively fewer. In addition, there is interest in the utilization of parallel computing for the implementation of \smc algorithms. The work presented in this thesis provides a toolbox with which researchers can implement generic \smc algorithms on parallel computers with relative ease.
 
 \section{Notations}
 \label{sec:Notations}
 
-Most notations used in this thesis are introduced and defined in context. A
-few conventions are followed throughout this thesis.
+Most notations used in this thesis are introduced and defined in context. A few conventions are followed throughout this thesis.
 
-Capital Latin letters, such as $X$, are used to denote random variables and
-corresponding lower case letters, such as $x$, are used to denote their
-realizations. In the context of Markov chain, we use notations such as $X^t$
-to denote the random variable to indicate its dependency on time $t$. For
-various Monte Carlo estimators, we use notations such as $X^{(i)}$ to denote
-the random samples, including the case of \mcmc algorithms. The difference
-between $X^t$ and $X^{(i)}$ is to explicitly express that in some algorithms,
-not all samples from a Markov chain are used for estimation purpose. For \smc
-algorithms, we use $X_t^{(i)}$ to denote the particle value of the $i$\xth
-particle at time $t$. For a sequence of variables, such as $X_1,\dots,X_n$,
-we use the notation $X_{1:n}$ to denote the sequence.
+Capital Latin letters, such as $X$, are used to denote random variables and corresponding lower case letters, such as $x$, are used to denote their realizations. In the context of Markov chain, we use notations such as $X^t$ to denote the random variable to indicate its dependency on time $t$. For various Monte Carlo estimators, we use notations such as $X^{(i)}$ to denote the random samples, including the case of \mcmc algorithms. The difference between $X^t$ and $X^{(i)}$ is to explicitly express that in some algorithms, not all samples from a Markov chain are used for estimation purpose. For \smc algorithms, we use $X_t^{(i)}$ to denote the particle value of the $i$\xth particle at time $t$. For a sequence of variables, such as $X_1,\dots,X_n$, we use the notation $X_{1:n}$ to denote the sequence.
 
-The letter $\data$ is used throughout this thesis to denote the data. The
-letter $\Exp$ is used to denote the expectation of random variables. And
-wherever appropriate, $\Exp_{\pi}$ is used to denote the expectation with
-respect to a distribution $\pi$. The letters $\Pr$ is used to denote
-probabilities of random events.
+The letter $\data$ is used throughout this thesis to denote the data. The letter $\Exp$ is used to denote the expectation of random variables. And wherever appropriate, $\Exp_{\pi}$ is used to denote the expectation with respect to a distribution $\pi$. The letters $\Pr$ \dn{are} used to denote probabilities of random events.
 
-For a scalar function of an $n$-vector $\theta = (\theta_1,\dots,\theta_n)^T$,
-say $f(\theta)$, we use the notation,
-  $\frac{\partial^2 f(\theta)}{\partial\theta\partial\theta^T}$
-to denote the Hessian matrix, i.e., a matrix whose element at the $i$\xth row
-and $j$\xth column is $\partial f(\theta)/\partial\theta_i\theta_j$. We also
-use the notation $\frac{\partial f(\theta)}{\partial\theta}$
-to denote the score vector whose $i$\xth element is $\partial
-f(\theta)/\partial\theta_i$. For an $m$-vector function $f(\theta) =
-(f_1(\theta),\dots,f_m(\theta))$, we use the notation
-  $J(f(\theta)) = \frac{\partial f(\theta)}{\partial\theta}$
-to denote the Jacobian matrix whose element at the $i$\xth row and $j$\xth
-column is $\partial f_i(\theta)/\partial\theta_j$.
+For a scalar function of an $n$-vector $\theta = (\theta_1,\dots,\theta_n)^T$, say $f(\theta)$, we use the notation, $\frac{\partial^2 f(\theta)}{\partial\theta\partial\theta^T}$ to denote the Hessian matrix, i.e., a matrix whose element at the $i$\xth row and $j$\xth column is $\partial f(\theta)/\partial\theta_i\theta_j$. We also use the notation $\frac{\partial f(\theta)}{\partial\theta}$ to denote the score vector whose $i$\xth element is $\partial f(\theta)/\partial\theta_i$. For an $m$-vector function $f(\theta) = (f_1(\theta),\dots,f_m(\theta))$, we use the notation $J(f(\theta)) = \frac{\partial f(\theta)}{\partial\theta}$ to denote the Jacobian matrix whose element at the $i$\xth row and $j$\xth column is $\partial f_i(\theta)/\partial\theta_j$.
 
-To avoid introducing too many notations, some notations might be reused if
-their meanings are clear in context and their usage is limited to a
-particular section where they are relevant. These and other notations are
-defined when they are encountered the first time.
+To avoid introducing too many notations, some notations might be reused if their meanings are clear in context and their usage is limited to a particular section where they are relevant. These and other notations are defined when they are encountered the first time.
 
 \section{Outline}
 \label{sec:Outline}
 
-This thesis is concerned with the methodology of using \smc algorithms for
-the purpose of Bayesian model comparison and their practical implementations.
-It is structured as the following.
+This thesis is concerned with the methodology of using \smc algorithms for the purpose of Bayesian model comparison and their practical implementations. It is structured as the following.
 \begin{description}
-  \item[Chapter 2] introduces the positron emission tomography (\pet)
-  compartmental model. It is a realistic model that will be used as a running
-  example throughout this thesis to demonstrate various methodologies. Work
-  on the application of Bayesian model comparison to the \pet compartmental
-  model was published in \cite{Zhou2013}.
-  \item[Chapter 3] reviews some commonly used model selection methods. In
-  particular some information-theoretic selection criteria and the Bayesian
-  approach. By comparison, it will be shown that Bayesian model comparison is
-  of interest for some realistic applications where its use was previously
-  limited by the computational cost.
-  \item[Chapter 4] reviews some Monte Carlo algorithms in the context of
-  Bayesian model comparison. It will be shown that there are considerable
-  difficulties for many problems of interest.
-  \item[Chapter 5] presents a framework based on \smc that can be used for
-  the purpose of Bayesian model comparison. In particular, various adaptive
-  strategies will be discussed. This chapter is an extension to
-  \cite{Zhou:2013vx} and \cite{Zhou:2012uz}.  
-  \item[Chapter 6] presents a \cpp library for the practical implementations
-  of \smc algorithms. Parallel computing is of particular interest. Parts of
-  this chapter is based on \cite{vsmcjss}.
+  \item[Chapter 2] introduces the positron emission tomography (\pet) compartmental model. It is a realistic model that will be used as a running example throughout this thesis to demonstrate various methodologies. Work on the application of Bayesian model comparison to the \pet compartmental model was published in \cite{Zhou2013}.
+  \item[Chapter 3] reviews some commonly used model selection methods. In particular some information-theoretic selection criteria and the Bayesian approach. By comparison, it will be shown that Bayesian model comparison is of interest for some realistic applications where its use was previously limited by the computational cost.
+  \item[Chapter 4] reviews some Monte Carlo algorithms in the context of Bayesian model comparison. It will be shown that there are considerable difficulties for many problems of interest.
+  \item[Chapter 5] presents a framework based on \smc that can be used for the purpose of Bayesian model comparison. In particular, various adaptive strategies will be discussed. This chapter is an extension to \cite{Zhou:2013vx} and \cite{Zhou:2012uz}.
+  \item[Chapter 6] presents a \cpp library for the practical implementations of \smc algorithms. Parallel computing is of particular interest. Parts of this chapter is based on \cite{vsmcjss}.
 \end{description}

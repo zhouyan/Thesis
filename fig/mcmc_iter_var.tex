@@ -3,9 +3,6 @@
   \includegraphics[width=\linewidth]{fig_src/MCMC_Iter_Var}
   \caption[Variance of path sampling estimator and total number of samples
   using \protect\smc algorithm]
-  {Variance of the path sampling estimates and total number of samples
-    using the \smc[2] algorithm. Both samplers use 1,000 particles but with
-    different number of distributions $T$ and passes of \mcmc moves at each
-    iteration $K$. The samplers are configured such that the value of $TK$ is the same for both samplers, and therefore they generate the same total number of samples.}
+  {Variance of the path sampling estimates and total number of samples using the \smc[2] algorithm (on logarithm scale). The variances are calculated from 100 simulations for each sampler configuration. All samplers use 1,000 particles but with different number of distributions $T$ and passes of \mcmc moves at each iteration $K$. And $TK$ is the number of total samples generated. Samplers with the same value of $TK$ have roughly the same computational cost.}
   \label{fig:fast mcmc iter}
 \end{figure}

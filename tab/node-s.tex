@@ -1,4 +1,5 @@
 \newgeometry{hmargin={1in,1in},vmargin={1in,2in},bindingoffset=\mclassbinding}
+
 \begin{table}
   \UseAltLinespread
   \caption
@@ -40,4 +41,38 @@
       \end{minipage}}
   \end{tabu}
 \end{table}
+
+\begin{table}
+  \UseAltLinespread
+  \caption
+  [Model selection results of nonlinear \protect\ode model using the Bayes factor (simple model data)]
+  {Frequencies of models selected by the Bayes factor (\%) for the nonlinear \ode model with data generated from a simple (three components) model.}
+  \label{tab:node-s-mo}
+  \begin{tabu}{X[0.3l]X[0.8c]X[0.8c]X[0.8c]X[0.2r]X[0.2r]X[0.2r]X[0.2r]X[0.2r]}
+    \toprule
+    &&&& \multicolumn{5}{c}{Number of components}\\
+    \cmidrule(lr){5-9}
+    $T$   & Proposal       & Annealing & Algorithm   & $2$ & $  3$ & $4$ & $5$ & $6$ \\ \midrule
+    $10 $ & Manual         & Prior (5) & \pmcmc      & $2$ & $ 96$ & $2$ & $0$ & $0$ \\
+    $30 $ &                &           &             & $0$ & $100$ & $0$ & $0$ & $0$ \\
+    $100$ &                &           &             & $0$ & $100$ & $0$ & $0$ & $0$ \\
+    $500$ & Manual         & Prior (5) & \smc[2]-\ds & $0$ & $100$ & $0$ & $0$ & $0$ \\
+          &                &           & \smc[2]-\ps & $0$ & $100$ & $0$ & $0$ & $0$ \\
+    $500$ & Manual         & Adaptive  & \smc[2]-\ds & $0$ & $100$ & $0$ & $0$ & $0$ \\
+          &                &           & \smc[2]-\ps & $0$ & $100$ & $0$ & $0$ & $0$ \\
+    $500$ & Adaptive       & Adaptive  & \smc[2]-\ds & $0$ & $100$ & $0$ & $0$ & $0$ \\
+          &                &           & \smc[2]-\ps & $0$ & $100$ & $0$ & $0$ & $0$ \\
+    \bottomrule
+    \multicolumn{9}{r}{%
+      \begin{minipage}{\linewidth-2em}\vskip1ex\sffamily
+        $T$: The number of distributions.
+
+        Proposal: The proposal scales of the \mcmc kernels.
+
+        Annealing: The annealing scheme of the distributions,
+        $\alpha_k(t/T_k)$ in Equation~\ref{eq:geometry_2}.
+      \end{minipage}}
+  \end{tabu}
+\end{table}
+
 %\restoregeometry

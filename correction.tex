@@ -1,4 +1,5 @@
 \documentclass[11pt, fontset=Scala]{marticle}
+\usepackage{parskip}
 
 \title{List of corrections}
 \author{Yan Zhou}
@@ -8,14 +9,248 @@
 
 \maketitle
 
+In the following, all page numbers and section numbers refer the corrected thesis.
+
 \section{Response to the internal examiner} % (fold)
 \label{sec:response_to_the_internal_examiner}
+
+The following subsections corresponds to each of the four bullet points of corrections as suggested by the internal examiner.
+
+\subsection{Restructuring the introduction} % (fold)
+\label{sub:restructuring_the_introduction_point_1_}
+
+In Chapter~1 (pp.~4), a few paragraphs are written in the beginning to make the focus of this thesis more clear.
+
+Section~1.1 (pp.~5--6), which motivated the work presented this thesis is enhanced to further emphasize that this thesis is about the use of \textsc{smc} in the context of Bayesian model comparison.
+
+In Chapter~2 (pp.~9), at the beginning of the \textsc{pet} introduction, it is made clear again that it is introduced in a separate chapter only because that it is used through the thesis as a running exampling, not particular to any single following chapter or section. And this thesis is not about the analysis of \textsc{pet} in general.
+
+At the end of the first paragraph in Section~2.1 (pp.~9), it is made clear that the choice of number of compartments presents a model selection problem of interest.
+
+At the end of Section~2.2 (pp.~14), two paragraphs are written to clearly relate how the plasma input model relates to the biochemical process of interest and why the choice of the number of compartments is a model selection problem of interest.
+
+In the paragraph above the new addition, it is made clear that the ``massive univariate'' approach neglects spatial effects.
+
+% subsection introduction_of_the_pet_data_point_1_ (end)
+
+\subsection{Figure captions} % (fold)
+\label{sub:figure_captions_point_2_}
+
+All captions of figures have been revised to more informatively describe the plots.
+
+The time series plots in Figure~5.1 (pp.~108) are reproduced to include the actual observations as points.
+
+% subsection figure_captions_point_2_ (end)
+
+\subsection{Nonlinear ODE simulation} % (fold)
+\label{sub:nonlinear_ode_simulation}
+
+Table~5.6 (pp.~132) and table~5.8 (pp.~134) are added to show the results of the nonlinear \textsc{ode} model selection results. Models of order two to six are shown in the table, from the smallest possible number of components to more those models used to simulated the data. In the results part of Section~5.5.2 (pp.~130), a few sentences are written to summary the results of these two new tables.
+
+% subsection nonlinear_ode_simulation (end)
+
+\subsection{Typographical and grammatical corrections} % (fold)
+\label{sub:typographical_and_grammatical_corrections}
+
+These are listed at the end of this documents
+
+% subsection typographical_and_grammatical_corrections (end)
 
 % section response_to_the_internal_examiner (end)
 
 \section{Response to the external examiner} % (fold)
 \label{sec:response_to_the_external_examiner}
 
+The following subsections corresponds to each of the nine bullet points of corrections as suggested by the external examiner.
+
+\subsection{Main focus of the thesis} % (fold)
+\label{sub:main_focus_of_the_thesis_point_1_}
+
+This has been addressed by new paragraphs in beginning of the introduction chapter
+
+% subsection main_focus_of_the_thesis_point_1_ (end)
+
+\subsection{Focus on Bayesian methods for PET data} % (fold)
+\label{sub:focus_on_bayesian_methods_for_pet_data}
+
+In the beginning of Chapter~2, which introduce the \textsc{pet} data, a short paragraph is added to discuss that the following two chapters are literate reviews and some methods reviewed will be applied to this model. However as the model is used for illustration purpose only, and thus not all model selection methods are considered for this particular data.
+
+% subsection focus_on_bayesian_methods_for_pet_data (end)
+
+\subsection{Derivation of CESS} % (fold)
+\label{sub:derivation_of_cess}
+
+More explanation of the derivation of the \textsc{cess} is written in Section~5.3.2 (pp.~111).
+
+% subsection derivation_of_cess (end)
+
+\subsection{Comment on adjusted evidence estimator} % (fold)
+\label{sub:comment_on_adjusted_evidence_estimator}
+
+Some more discussions on the choice of $\gamma$ is written. In particular, it is made clear that, a multivariate Normal distribution is not necessarily a sufficient condition for ensuring finite variance while on the other hand, a heavier tails distribution such a multivariate $t$ can be more flexible. Citation is also added for the stability conditions of the estimator.
+
+% subsection comment_on_adjusted_evidence_estimator (end)
+
+\subsection{Discussion on adaptive MCMC} % (fold)
+\label{sub:discussion_on_adaptive_mcmc}
+
+A brief discussion on the boundedness and convergence of the adaptive \textsc{mcmc} is written together with references.
+
+% subsection discussion_on_adaptive_mcmc (end)
+
+\subsection{Explanation of PET model selection plot} % (fold)
+\label{sub:explanation_of_pet_model_selection_plot}
+
+In the caption of Figure~4.7 (pp.82), It is made clear that each row shows three slice of the brain, each of which are close to the middle of the brain in the three-dimensional space.
+
+% subsection explanation_of_pet_model_selection_plot (end)
+
+\subsection{Meaning of compartments} % (fold)
+\label{sub:meaning_of_compartments}
+
+This is also suggested by the internal examiner and addressed in the introduction of the data.
+
+% subsection meaning_of_compartments (end)
+
+\subsection{Example of completion} % (fold)
+\label{sub:example_of_completion}
+
+% subsection example_of_completion (end)
+
+\subsection{Nonlinear ODE example} % (fold)
+\label{sub:nonlinear_ode_example}
+
+This is also suggested by the internal examiner. The external examiner suggests that showing the Bayes factor estimator for all models. However, I believe a further improvement is to show the frequencies of each model being selected for two reasons. First, the accuracy of the Bayes factor estimator has being shown and discussed for two models, though not all. But the comparison of algorithms are clear. Second, showing the Bayes factor estimates for each models not really reflects the accuracy of the algorithms for the purpose of model selection. For example, if they are shown in the form of the average estimates of the Bayes factor in favor of the true model and the its simulation standard deviation, they it is not clear whether or not the true model is selected. A positive average and small standard deviation is an indicator that the model selection is accurate, but not necessarily so, especially when the Bayes factor is small and the standard deviation is non-zero (which is of course almost always).
+
+% subsection nonlinear_ode_example (end)
+
 % section response_to_the_external_examiner (end)
+
+\section{Typographical, grammatical and other minor corrections} % (fold)
+\label{sec:typographical_and_grammatical_corrections}
+
+In this section, I list the page numbers of typographical and grammatical corrections. When only a few letters are alternated, only the page numbers are listed. However, when never the changes are more than a few letters, or the changes are difficult to mark in the highlighted version, brief explanations are given.
+
+There might be (very) few places I marked in the highlighted versions of the thesis but failed.
+
+Page 2. Fix a typo in the reference of the last paper.
+
+Page 3. Top.
+
+Page 6. Top.
+
+Page 12. Bottom. Unchanged. The notations are correct and explained in text following them immediately. The second equation is the multiplication of an $r$ elements row vector with a an $r$ elements column vector and it leads to the scalar result. The third is the initial vector. These are also the standard notations used in the \text{pet} literature as in those cited in the surrounding text.
+
+Page 15. Bottom.
+
+Page 16. ``[${}^{11}C$]'' as in ``[${}^{11}$C]diprenorphine'' denotes Carbon-11 as in chemistry. It is not a typo but now made more clear in the text.
+
+Original Page 14. The figure was misplaced and now moved to Page 137.
+
+Page 19. Middle.
+
+Page 22. Top.
+
+Page 23. Bottom.
+
+Page 31. Top. Remove the word ``that'' in the sentence beginning with ``This is because the Bayesian framework...''
+
+Page 32. Top half.
+
+Page 41. Top. Second paragraph
+
+Page 43. Bottom. Remove the word ``Though'' at the beginning of the bottom paragraph.
+
+Page 44--46.
+
+Page 48. Middle.
+
+Page 53. Middle and bottom.
+
+Page 54. Top and bottom.
+
+Page 59. Caption of Figure~4.1
+
+Page 60. Caption of Figure~4.2. It was intended to be ``five times of those tuned'' as said in page 58.
+
+Page 60. Bottom.
+
+Page 64. Bottom.
+
+Page 65. Bottom. Intuitive explanation of the irreversibility of Gibbs sampler with systematic scan.
+
+Page 67.
+
+Page 73. Bottom.
+
+Page 74. Top.
+
+Page 75. Bottom.
+
+Page 76. Bottom.
+
+Page 78. Middle.
+
+Page 79.
+
+Page 82. Top
+
+Page 85. Bottom. Also made clear that the family of distribution is arbitrary as long as they can be indexed by a parameter $\alpha \in [0, 1]$. There is no need, and in fact impossible to define the distributions explicitly in the context.
+
+Page 87. Middle.
+
+Page 88.
+
+Page 89. Bottom.
+
+Page 90.
+
+Page 92. $\bar{R}_t^{(i)}$ is defined in the text immediately following the equation.
+
+Page 93. Bottom.
+
+Page 100. Bottom. The distribution $\pi^{(1)}(\mathcal{M}_k,\theta_k)$, is the target distribution on the joint space of $\mathcal{M}_k$ and $\theta_k$. In this particular case, it is the posterior, which shall be obvious from Equation~5.22. However, as in the context of \textsc{smc}, all intermediate distributions are not really the posterior and for the sake of consistency, throughout the thesis, all target distributions are defined as of the parameters of interest, since whether or not they are indeed some posterior is not particularly relevant for the discussion of Monte Carlo algorithms.
+
+Page 103. Top and bottom.
+
+Page 104. Top.
+
+Page 105. Bottom.
+
+Page 108.
+
+Page 118. Middle
+
+Page 119.
+
+Page 120. Bottom.
+
+Page 121. Bottom.
+
+Page 130. Not sure why the meaning of ``unstable oscillation'' is unclear in the context. It literately means that the state can be oscillating in contrast to being a stable steady state.
+
+Page 139. Bottom.
+
+Page 145. Bottom.
+
+Page 151--153
+
+Page 155.
+
+Page 156. Top.
+
+Page 157. Bottom.
+
+Page 159. Top.
+
+Page 161. Bottom.
+
+Page 171. Bottom.
+
+Page 196. Middle
+
+Page 198. Top.
+
+% section typographical_and_grammatical_corrections (end)
 
 \end{document}
