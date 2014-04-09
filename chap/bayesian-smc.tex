@@ -65,7 +65,7 @@ It was shown that residual resampling can lead to significant variance reduction
 
 \paragraph{Stratified resampling}
 
-This can be seen in \cite{Kitagawa:1996vx}. Let $Q$ denote the generalized inverse function of the cumulative distribution function of a multinomial distribution with size $N$ and weights $(W_1,\dots,W_N)$. That is $Q(x) = i$ for $x\in(\sum_{j=1}^{i-1}W_j,\sum_{j=1}^iW_j]$. The stratified resampling proceeds by first drawing uniform random variates $U_t^{(i)}$ on $((i-1)/N, i/N]$ for $i = 1,\dots,N$, and then setting $I_t^{(i)} = Q(U_t^{(i)})$. The new particles system is formed by $\{X_{0:t}^{(I_t^{(i)})}\}_{i=1}^N$. This algorithm also results in smaller variance of the importance sampling estimator than that of the multinomial resampling \cite{Douc:2005wa}.
+This can be seen in \cite{Kitagawa:1996vx}. Let $Q$ denote the generalized inverse function of the cumulative distribution function of a multinomial distribution with size $N$ and weights $(W_1,\dots,W_N)$. That is $Q(x) = i$ for $x\in(\sum_{j=1}^{i-1}W_j,\sum_{j=1}^iW_j]$. The stratified resampling proceeds by first drawing uniform random variates $U_t^{(i)}$ on $((i-1)/N, i/N]$ for $i = 1,\dots,N$, and then setting $I_t^{(i)} = Q(U_t^{(i)})$. The new particle system is formed by $\{X_{0:t}^{(I_t^{(i)})}\}_{i=1}^N$. This algorithm also results in smaller variance of the importance sampling estimator than that of the multinomial resampling \cite{Douc:2005wa}.
 
 \paragraph{Systematic resampling}
 
@@ -394,7 +394,7 @@ The approximation leading to the \cess, given samples $\{W_{t-1}^{(i)},X_{t-1}^{
     \Round[Big]{\frac{w_t^{(i)}}{\sum_{j=1}^N W_{t-1}^{(j)} w_t^{(j)}}}^2}.
 \end{align*}
 \begin{draftpar}
-The first approximation is obtained by replacing the expectation under $\pi_{t-1}$ with its weighted sample average. That is, given the last generation of the particles system $\{W_{t-1}^{(i)}, X_{t-1}^{(i)}\}_{i=1}^N$, which approximates $\pi_{t-1}$, the variance is expressed and approximated as,
+The first approximation is obtained by replacing the expectation under $\pi_{t-1}$ with its weighted sample average. That is, given the last generation of the particle system $\{W_{t-1}^{(i)}, X_{t-1}^{(i)}\}_{i=1}^N$, which approximates $\pi_{t-1}$, the variance is expressed and approximated as,
 \begin{align*}
   \var_{\pi_{t-1}}\Square[Big]{\frac{\pi_t(X)}{\pi_{t-1}(X)}}
   &= \Exp_{\pi_{t-1}}\Square[Big]{\Round[Big]{\frac{\pi_t(X)}{\pi_{t-1}(X)}}^2} -
@@ -406,7 +406,10 @@ The first approximation is obtained by replacing the expectation under $\pi_{t-1
 The second approximation is simply obtained by rewriting the normalized inremental weights, $\pi_t(X_{t-1})/\pi_{t-1}(X_{t-1})$ as $(\gamma_t(X_{t-1})/\gamma_{t-1}(X_{t-1}))(Z_{t-1}/Z_t)$ where $Z_t$ and $Z_{t-1}$ are the normalizing constants of $\pi_t$ and $\pi_{t-1}$, respectively. Then the ratio of the normalizing constant is replaced by the approximation~\ref{eq:ratio normalized}
 \end{draftpar}
 
-Such a procedure leads us to a quantity which we have termed the \emph{conditional} \ess (\cess). By scaling the above approximation,
+Such a procedure leads us to a quantity which we have termed the \emph{conditional} \ess (\cess).
+\begin{draftpar}
+By scaling the above approximation,
+\end{draftpar}%
 \begin{equation}
   \cess_t = \Square[bigg]{\sum_{i=1}^N N W_{t-1}^{(i)} \Round[bigg]{
         \frac{w_t^{(i)}}{\sum_{j=1}^N N W_{t-1}^{(j)}w_t^{(j)}}}^2}^{-1}
@@ -597,7 +600,7 @@ We compare results from the \smc[2] and population \mcmc algorithms. For the \sm
 
 The results for data generated from the simple model ($r = 3$) and complex model ($r = 5$), again summarizing variability amongst 100 runs of each algorithm, are shown in Table~\ref{tab:node-s} and~\ref{tab:node-c}, respectively.
 \begin{draftpar}
-The model selection results, displayed as the frequencies of each model being selected by the Bayes factor using estimators from each algorithm, are shown in Table~\ref{tab:node-s-mo} and~\ref{tab:node-c-mo}, respectively. It can be seem that all \smc algorithms and the population \mcmc algorithm with sufficient large numbers of distributions can give accurate results of model selection. With a smaller number of distributions, the population \mcmc algorithm may occasionally choose a wrong model. However, the accuracy of the estimators differ considerably among these algorithms.
+The model selection results, displayed as the frequencies of each model being selected by the Bayes factor using estimators from each algorithm, are shown in Table~\ref{tab:node-s-mo} and~\ref{tab:node-c-mo}, respectively. It can be seem that all \smc algorithms and the population \mcmc algorithm with sufficient large numbers of distributions can give accurate results of model selection. With a smaller number of distributions, the population \mcmc algorithm may occasionally choose a wrong model. However, the accuracy of the estimators differs considerably among these algorithms.
 \end{draftpar}
 
 \begingroup
