@@ -1,50 +1,49 @@
 \documentclass[%draftnote,
 11pt, fontset=Minion, toclevel=3, screen=false, linespread=1.414, lines=30,
 bib, biblatexstyle=numeric, mintcode, minted=cache]{mreport}
+
 \usepackage{pdfpages}
 \input{macros}
+
 \ExecuteBibliographyOptions{url=true}
 \ExecuteBibliographyOptions{doi=false}
-\renewbibmacro{in:}
-{\ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}}
+\renewbibmacro{in:}{\ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}}
 \addbibresource{thesis.bib}
-\addbibresource{extra.bib}
-
 
 \begin{document}
 
-  \begingroup
-  \includepdf[pages=-]{library}
-  \frontmatter
-  \input{title}
-  \tableofcontents
-  \listoftables
-  \listoffigures
-  \endgroup
+\begingroup
+\includepdf[pages=-]{library}
+\frontmatter
+\input{title}
+\tableofcontents
+\listoftables
+\listoffigures
+\endgroup
 
-  \begingroup
-  \mainmatter
-  \include{chap/acknowledges}
-  \include{chap/declarations}
-  \include{chap/abstract}
-  \include{chap/introduction}
-  \include{chap/pet}
-  \include{chap/model-selection}
-  \include{chap/monte-carlo}
-  \include{chap/bayesian-smc}
-  \include{chap/vsmc}
-  \include{chap/conclusions}
-  \endgroup
+\begingroup
+\mainmatter
+\include{chap/acknowledges}
+\include{chap/declarations}
+\include{chap/abstract}
+\include{chap/introduction}
+\include{chap/pet}
+\include{chap/model-selection}
+\include{chap/monte-carlo}
+\include{chap/bayesian-smc}
+\include{chap/vsmc}
+\include{chap/conclusions}
+\endgroup
 
-  \begingroup
-  \printbibliography[heading=reference]
-  \endgroup
+\begingroup
+\printbibliography[heading=reference]
+\endgroup
 
-  \begingroup
-  \appendix
-  \include{chap/appendix-monte-carlo}
-  \include{chap/appendix-bayesian-vsmc}
-  \include{chap/appendix-vsmc}
-  \endgroup
+\begingroup
+\appendix
+\include{chap/appendix-monte-carlo}
+\include{chap/appendix-bayesian-vsmc}
+\include{chap/appendix-vsmc}
+\endgroup
 
 \end{document}
